@@ -32,6 +32,7 @@
     },
   "modules": [
     "./configs/rpi/alert.json",
+    "./configs/rpi/sound.json",
     "./configs/rpi/time.json",
     "./configs/rpi/date.json",
     "./configs/rpi/day_of_week.json",
