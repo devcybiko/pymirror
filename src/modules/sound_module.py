@@ -24,3 +24,11 @@ class SoundModule(PMModule):
     def exec(self) -> bool:
         # This module does not need to execute anything periodically
         return False
+
+if __name__ == "__main__":
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound("./sounds/signal.wav") # Replace with your sound file
+    channel = sound.play() # Play the sound and get the Channel object
+    while channel.get_busy():
+        pygame.time.delay(100) # Add a small delay to prevent high CPU usage
+    print("Sound finished playing.")
