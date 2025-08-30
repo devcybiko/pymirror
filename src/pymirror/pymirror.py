@@ -258,6 +258,8 @@ class PyMirror:
                 print("_read_server_queue:", t0-t1)
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
+                t1 = time.time()
+                print("_read_server_queue:", t0-t1)
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 self._render_modules(modules_changed)  # Render only the modules that changed state
                 self._update_screen()  # Update the screen with the rendered modules
