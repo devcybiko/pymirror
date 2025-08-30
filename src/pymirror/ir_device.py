@@ -39,6 +39,7 @@ if __name__ == '__main__':
             key, dir = getKey()
             key = key.decode() # This variable contains the name of the key
             dir = dir.decode() # This variable contains the direction (pressed/released)
+            
             # Only print the name when the key is pressed (and not released)
             if (dir == '01' and key == 'KEY_POWER'):
                 print ("POWER KEY PRESSED!")
