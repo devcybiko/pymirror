@@ -108,7 +108,7 @@ if __name__ == "__main__":
         8: "KEY_LEFT",
         90: "KEY_RIGHT",
         82: "KEY_DOWN",
-        
+        28: "KEY_ENTER"
 
     }
     ir = IRDevice()
