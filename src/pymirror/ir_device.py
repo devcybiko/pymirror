@@ -63,7 +63,6 @@ class IRDevice:
                             result["pressed"] = False
                             self.key_down = True
                     else:
-
                         result["repeat"] = True
                         self.key_down = True
 
