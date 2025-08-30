@@ -17,3 +17,6 @@ class WindowManagerModule(PMModule):
 		print("window_manager", event)
 		if event.key_name == "KEY_TAB" and event.pressed and not event.repeat:
 			self.pm.next_focus_module()
+		else:
+			if self.pm.focus_module:
+				
