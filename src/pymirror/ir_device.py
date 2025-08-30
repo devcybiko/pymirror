@@ -68,7 +68,6 @@ class IRDevice:
                             print(f"Previous key {last_scancode} released (implicit)")
                         print(f"New key {scancode} pressed")
                         key_down = True
-
                         result["repeat"] = True
                         self.key_down = True
 
