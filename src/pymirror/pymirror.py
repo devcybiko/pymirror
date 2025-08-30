@@ -96,10 +96,6 @@ class PyMirror:
             ## See pymirror.PMModule for the expected constructor
             obj = clazz(self, module_config)
 
-            if hasattr(obj, "onWindowManagerEvent"):
-                self.window_manager = obj
-                print("window_manager:", self.window_manager.name)
-
             ## update the module with its position in the pm.modules list
             obj.module_n = len(self.modules)
 
