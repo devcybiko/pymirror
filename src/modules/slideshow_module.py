@@ -25,7 +25,7 @@ class SlideshowModule(PMModule):
 		self.subscribe("KeyboardEvent")
 
 	def _randomize_list()
-		if self.
+		if self._slideshow.randomize
 	def load_folder(self, folder: str):
 		""" Load all photo paths from the given folder """
 		paths = []
