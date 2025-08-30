@@ -11,3 +11,4 @@ sudo apt-get install -y python3-vobject
 sudo apt-get install -y python3-ics
 sudo apt-get install -y python3-icalendar
 sudo apt install lirc
+sudo apt remove python3-lirc
