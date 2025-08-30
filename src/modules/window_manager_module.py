@@ -13,10 +13,9 @@ class WindowManagerModule(PMModule):
 		pass
 
 	def _find_focus_module_n(self):
-		mod_n = None
-			for i in range(0, len(self.pm.modules)):
-				if self.focus_module == self.pm.modules[i]
-					return i
+		for i in range(0, len(self.pm.modules)):
+			if self.focus_module == self.pm.modules[i]
+				return i
 		return None
 	
 	def onRawKeyboardEvent(self, event):
