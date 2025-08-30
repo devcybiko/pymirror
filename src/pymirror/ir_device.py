@@ -106,6 +106,7 @@ if __name__ == "__main__":
         13: "KEY_ASTERISK",
         24: "KEY_UP",
         8: "KEY_LEFT",
+        90: "KEY_RIGHT",
         
 
     }
