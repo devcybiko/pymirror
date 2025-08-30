@@ -11,6 +11,7 @@ import traceback
 
 from pymirror.pmlogger import trace, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
+from pymirror.kebyard_device import KeyboardDevice
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
 from events import * # get all events 
@@ -38,6 +39,7 @@ class PyMirror:
         self.debug = self._config.debug
         self.modules = []
         self.events = []
+        self.keyboard = KeyboardDevice()
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
@@ -106,6 +108,11 @@ class PyMirror:
             # No new events in the queue
             pass
 
+    def _read_keyboard(self):
+        ## add any messages that have come from the keyboard
+        while key_event := keyboard.get_key():
+            print(f"Received event from keyboard: {key_event}")
+                # self.publish_event(event)
 
     def _send_events_to_module(self, module, events):
         if not module.subscriptions: 
@@ -194,6 +201,7 @@ class PyMirror:
         try:
             while True:
                 self._read_server_queue() # read any new events from the server queue
+                self._read_keyboard() # read the keyboard and create any keyboard events
                 self._send_all_events()  # send all new events to the modules
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 self._render_modules(modules_changed)  # Render only the modules that changed state

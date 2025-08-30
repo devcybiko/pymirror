@@ -17,10 +17,11 @@ class KeyboardDevice:
     """
     
     def __init__(self, device_path: Optional[str] = None, grab_device: bool = True):
-        self.device = None
+        self.device = None  # Primary device for reading
         self.device_path = device_path
         self.grab_device = grab_device
         self.is_grabbed = False
+        self.grabbed_devices = []  # List of all grabbed devices
         self._find_and_setup_keyboard()
     
     def _find_keyboard_devices(self) -> List[str]:
@@ -51,12 +52,14 @@ class KeyboardDevice:
         return keyboard_devices
     
     def _find_and_setup_keyboard(self):
-        """Find and setup the first available keyboard device"""
+        """Find and setup keyboard devices, grabbing all if requested"""
         if self.device_path:
             # Use specified device
             try:
                 self.device = InputDevice(self.device_path)
                 print(f"Using specified keyboard device: {self.device_path}")
+                if self.grab_device:
+                    self._grab_device(self.device, self.device_path)
                 return
             except (OSError, PermissionError) as e:
                 print(f"Cannot access specified device {self.device_path}: {e}")
@@ -68,28 +71,57 @@ class KeyboardDevice:
             print("No keyboard devices found!")
             return
         
-        # Try to use the first keyboard device
+        # First, set up the primary device for reading
         for device_path in keyboard_devices:
             try:
                 self.device = InputDevice(device_path)
                 self.device_path = device_path
-                print(f"Using keyboard device: {device_path} - {self.device.name}")
-                
-                # Grab the device exclusively if requested
-                if self.grab_device:
-                    try:
-                        self.device.grab()
-                        self.is_grabbed = True
-                        print(f"Exclusively grabbed keyboard device: {device_path}")
-                        print("Keyboard input will not appear in console")
-                    except OSError as e:
-                        print(f"Warning: Could not grab device exclusively: {e}")
-                        print("Keyboard input may still appear in console")
-                
+                print(f"Using primary keyboard device: {device_path} - {self.device.name}")
                 break
             except (OSError, PermissionError) as e:
                 print(f"Cannot access {device_path}: {e}")
                 continue
+        
+        # Now, if grabbing is requested, grab ALL keyboard devices
+        if self.grab_device and keyboard_devices:
+            print(f"Attempting to grab {len(keyboard_devices)} keyboard device(s) to prevent console echo...")
+            grabbed_count = 0
+            
+            for device_path in keyboard_devices:
+                try:
+                    # Use existing device if it's the primary one, otherwise create new
+                    if device_path == self.device_path and self.device:
+                        device = self.device
+                    else:
+                        device = InputDevice(device_path)
+                    
+                    if self._grab_device(device, device_path):
+                        grabbed_count += 1
+                        if device == self.device:
+                            self.is_grabbed = True
+                    else:
+                        # Close device if we opened it but couldn't grab it (and it's not primary)
+                        if device != self.device:
+                            device.close()
+                            
+                except (OSError, PermissionError) as e:
+                    print(f"Cannot access {device_path}: {e}")
+                    continue
+            
+            print(f"Successfully grabbed {grabbed_count}/{len(keyboard_devices)} keyboard devices")
+            if grabbed_count < len(keyboard_devices):
+                print("Warning: Some keyboard devices could not be grabbed - console echo may still occur")
+            
+    def _grab_device(self, device: InputDevice, device_path: str) -> bool:
+        """Attempt to grab a single device, return True if successful"""
+        try:
+            device.grab()
+            self.grabbed_devices.append(device)
+            print(f"✓ Grabbed: {device_path} - {device.name}")
+            return True
+        except OSError as e:
+            print(f"✗ Could not grab {device_path}: {e}")
+            return False
     
     def get_key_event(self) -> Optional[dict]:
         """
@@ -154,15 +186,26 @@ class KeyboardDevice:
         return key_map.get(key_name, key_name)
     
     def close(self):
-        """Close the keyboard device and release grab if active"""
+        """Close keyboard devices and release all grabs"""
+        # Release all grabbed devices
+        for device in self.grabbed_devices:
+            try:
+                device.ungrab()
+                # Only close devices that aren't our primary device
+                if device != self.device:
+                    device.close()
+                print(f"Released grab on {device.path}")
+            except OSError:
+                pass  # Device might already be released
+        
+        if self.grabbed_devices:
+            print(f"Released grab on {len(self.grabbed_devices)} keyboard device(s)")
+        
+        self.grabbed_devices.clear()
+        self.is_grabbed = False
+        
+        # Close primary device
         if self.device:
-            if self.is_grabbed:
-                try:
-                    self.device.ungrab()
-                    print("Released keyboard device grab")
-                except OSError:
-                    pass  # Device might already be released
-                self.is_grabbed = False
             self.device.close()
             self.device = None
 
