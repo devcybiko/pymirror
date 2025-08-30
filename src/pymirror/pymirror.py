@@ -151,7 +151,6 @@ class PyMirror:
 
     def _convert_events_to_namespace(self):
         """ Convert a list of events to SafeNamespace objects """
-        print(">>>", self.events)
         return [SafeNamespace(**event) if isinstance(event, dict) else event for event in self.events]
 
     def _send_all_events(self):
