@@ -12,7 +12,6 @@ from typing import Optional, Dict, List, Tuple
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
-LUT = {
         69: "KEY_ONE",
         70: "KEY_TWO",
         71: "KEY_THREE",
