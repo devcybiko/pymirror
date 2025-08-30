@@ -113,6 +113,7 @@ class PMWebApi:
             or self._get_file_cache()
             or self._get_api_text(blocking)
         )
+        return self.text
 
     def fetch_json(self, blocking=True):
         result = None
