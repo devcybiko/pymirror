@@ -65,6 +65,9 @@ class PMWebApi:
         cached_text = self.memory_cache.get()
         if not cached_text:
             cached_text = self.file_cache.get()
+            _print(f" | Cached file {self.file_cache.file_info.fname} is valid")
+            self.from_cache = True
+            self.text = cached_text
         if cached_text != None:
         else:
             _print(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
