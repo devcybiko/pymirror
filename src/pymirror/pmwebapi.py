@@ -99,6 +99,9 @@ class PMWebApi:
             _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
             self.text = self.file_cache.read()
             self.from_cache = True
+        ## update the cache if the text has changed
+        self.memory_cache.update(api_text)
+        self.file_cache.update(api_text)
         return self.text
 
     def fetch_json(self, blocking=True):
