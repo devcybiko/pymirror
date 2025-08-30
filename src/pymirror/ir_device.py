@@ -66,36 +66,47 @@ class IRDevice:
         result = None
         
         if self.dev in r:
-            for event in self.dev.read():
-                if event.type == ecodes.EV_MSC:
-                    scancode = event.value
-                    protocol = self.guess_protocol(scancode)
-                    result = self._new_event(protocol, scancode)
+            # Read all available events - this should drain the queue
+            try:
+                events = self.dev.read()  # This returns a list of all available events
+                for event in events:
+                    if event.type == ecodes.EV_MSC:
+                        scancode = event.value
+                        protocol = self.guess_protocol(scancode)
+                        result = self._new_event(protocol, scancode)
 
-                    if scancode == self.last_scancode:
-                        if (
-                            self.key_down
-                            and (now - self.last_time) < self.REPEAT_THRESHOLD
-                        ):
-                            result["repeat"] = True
-                            result["pressed"] = True
+                        if scancode == self.last_scancode:
+                            if (
+                                self.key_down
+                                and (now - self.last_time) < self.REPEAT_THRESHOLD
+                            ):
+                                result["repeat"] = True
+                                result["pressed"] = True
+                            else:
+                                # Same key pressed after key-up threshold - treat as new press
+                                result["pressed"] = True
+                                self.key_down = True
                         else:
-                            # Same key pressed after key-up threshold - treat as new press
+                            # Different key - implicitly release previous key and press new one
+                            if self.last_scancode is not None and self.key_down:
+                                # Previous key was stuck down, implicitly release it
+                                self.key_down = False
                             result["pressed"] = True
                             self.key_down = True
-                    else:
-                        # Different key - implicitly release previous key and press new one
-                        if self.last_scancode is not None and self.key_down:
-                            # Previous key was stuck down, implicitly release it
-                            self.key_down = False
-                        result["pressed"] = True
-                        self.key_down = True
 
-                    self.last_scancode = scancode
-                    self.last_time = now
+                        self.last_scancode = scancode
+                        self.last_time = now
+                        
+                        # Return immediately on first MSC event - process one at a time
+                        if result and result["scancode"]:
+                            result["key_name"] = self.key_name_lut.get(result["scancode"])
+                        return result
 
-                elif event.type == ecodes.EV_SYN:
-                    pass  # end of event batch
+                    elif event.type == ecodes.EV_SYN:
+                        pass  # end of event batch
+            except BlockingIOError:
+                # No more events available
+                pass
 
         # Detect key up (only if no new event was processed)
         if (
