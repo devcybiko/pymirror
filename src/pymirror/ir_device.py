@@ -64,7 +64,6 @@ class IRDevice:
         # Detect key up
         if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
             protocol = self.guess_protocol(self.last_scancode)
-            retul
             result["protocol"] = protocol
             result["scancode"] = self.last_scancode
             result["released"] = True
