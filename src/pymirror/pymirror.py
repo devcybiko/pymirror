@@ -268,6 +268,7 @@ class PyMirror:
                 t1 = time.time()
                 print("_exec_modules:", t1-t0)
 
+                t0 = time.time()
                 self._render_modules(modules_changed)  # Render only the modules that changed state
                 self._update_screen()  # Update the screen with the rendered modules
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
