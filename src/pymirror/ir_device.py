@@ -103,6 +103,7 @@ if __name__ == "__main__":
         21: "KEY_EIGHT",
         9: "KEY_NINE",
         22: "KEY_NUMBERSIGN",
+        
 
     }
     ir = IRDevice()
