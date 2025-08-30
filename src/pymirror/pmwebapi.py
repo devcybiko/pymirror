@@ -108,7 +108,7 @@ class PMWebApi:
         return self.text
 
     def fetch_text(self, blocking=True):
-        return 
+        return self._get_memory_cache
     def fetch_json(self, blocking=True):
         result = None
         try:
