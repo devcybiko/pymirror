@@ -109,7 +109,8 @@ class PMWebApi:
 
     def fetch_text(self, blocking=True):
         return (
-            self._get_memory_cache()or
+            self._get_memory_cache()
+            or
     def fetch_json(self, blocking=True):
         result = None
         try:
