@@ -65,7 +65,7 @@ class IRDevice:
             protocol = self.guess_protocol(self.last_scancode)
             result["protocol"] = protocol
             result["scancode"] = self.last_scancode
-            result["released"] = 
+            result["released"] = True
             print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
             self.key_down = False
             self.last_scancode = None
