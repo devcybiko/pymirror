@@ -63,5 +63,5 @@ class IRDevice:
                 self.key_down = False
                 self.last_scancode = None
 
-except KeyboardInterrupt:
-    print("\nExiting...")
+    except KeyboardInterrupt:
+        print("\nExiting...")
