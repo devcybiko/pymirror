@@ -248,8 +248,8 @@ class PyMirror:
     def run(self):
         try:
             while True:
-                self._read_server_queue() # read any new events from the server queue
                 self._read_keyboard() # read the keyboard and create any keyboard events
+                self._read_server_queue() # read any new events from the server queue
                 self._send_all_events()  # send all new events to the modules
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 self._render_modules(modules_changed)  # Render only the modules that changed state
