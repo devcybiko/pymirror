@@ -251,32 +251,32 @@ class PyMirror:
                 t0 = time.time()
                 # self._read_keyboard() # read the keyboard and create any keyboard events
                 t1 = time.time()
-                print("_read_keyboard:", t1-t0)
+                print("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
                 t1 = time.time()
-                print("_read_server_queue:", t1-t0)
+                print("_read_server_queue:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
                 t1 = time.time()
-                print("_read_server_queue:", t1-t0)
+                print("_read_server_queue:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 t1 = time.time()
-                print("_exec_modules:", t1-t0)
+                print("_exec_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._render_modules(modules_changed)  # Render only the modules that changed state
                 t1 = time.time()
-                print("_exec_modules:", t1-t0)
+                print("_exec_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._update_screen()  # Update the screen with the rendered modules
                 t1 = time.time()
-                print("_update_screen:", t1-t0)
+                print("_update_screen:", f"{(t1-t0)*1000} ms")
 
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
         except Exception as e:
