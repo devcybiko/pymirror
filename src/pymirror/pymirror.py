@@ -261,7 +261,7 @@ class PyMirror:
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
                 t1 = time.time()
-                print("_read_server_queue:", f"{(t1-t0)*1000} ms")
+                print("_send_events_to_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 modules_changed = self._exec_modules() # update / check the state of all modules
@@ -283,7 +283,7 @@ class PyMirror:
                 t1 = time.time()
                 print("(sleep):", f"{(t1-t0)*1000} ms")
                 print("")
-                
+
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
