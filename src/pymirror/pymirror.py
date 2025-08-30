@@ -159,7 +159,8 @@ class PyMirror:
         self.events.clear()  # Clear the events after sending them
 
     def publish_event(self, event: dict):
-        ## should this go on a se
+        ## should this go on a seperate event list?
+        ## if the event 
         if type(event) is dict:
             self.events.append(SafeNamespace(**event))
         elif isinstance(event, SafeNamespace):
