@@ -24,7 +24,7 @@ LUT = {
     }
 
 class IRDevice:
-    def __init__(self, device_path="/dev/input/event0", lut={}):
+    def __init__(self, device_path="/dev/input/event0", lut=LUT):
         self.dev = InputDevice(device_path)
         # Timing thresholds (seconds)
         self.REPEAT_THRESHOLD = 0.10  # repeated keypress interval
