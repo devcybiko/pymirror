@@ -185,7 +185,6 @@ class IRDevice:
             # Remove from tracking dict immediately to prevent repeat releases
             del self.key_last_time[sc]
             keycode = int(sc, 16) if sc.isalnum() else 0
-
             key_name = self.key_map.get(sc, f"IR_{sc}")
             return {
                 'scancode': sc,
