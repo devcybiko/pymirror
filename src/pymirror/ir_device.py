@@ -30,7 +30,7 @@ class IRDevice:
 
     def get_key_event(self):
         try:
-            r, _, _ = select.select([dev], [], [], 0.05)  # 50ms timeout
+            r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
             now = time.time()
 
             if self.dev in r:
