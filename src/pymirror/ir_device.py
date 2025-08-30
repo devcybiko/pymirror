@@ -41,6 +41,7 @@ class IRDevice:
                     result["protocol"] = protocol
                     result["scancode"] = scancode
                     result["repeat"] = False
+                    result["repeat"] = False
 
                     if scancode == self.last_scancode:
                         if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
