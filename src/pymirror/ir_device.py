@@ -89,7 +89,7 @@ class IRDevice:
             result["key_name"] = self.key_name_lut.get(result["scancode"])
 
         if (result):
-            print("...")
+            print("... remote:")
         return result
 
 
