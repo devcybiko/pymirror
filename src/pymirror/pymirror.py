@@ -202,7 +202,8 @@ class PyMirror:
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
-                if 
+                if self.focus_module:
+                    
         self.screen.flush()
 
     def run(self):
