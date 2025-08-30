@@ -45,7 +45,7 @@ class IRDevice:
                 if event.type == ecodes.EV_MSC:
                     scancode = event.value
                     protocol = self.guess_protocol(scancode)
-                    result = self._new_event
+                    result = self._new_event(protoca)
                     result["protocol"] = protocol
                     result["scancode"] = scancode
                     result["repeat"] = False
