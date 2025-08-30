@@ -64,7 +64,7 @@ class IRDevice:
         if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
             protocol = self.guess_protocol(self.last_scancode)
             result["protocol"] = protocol
-            result["scancode"] = self.last
+            result["scancode"] = self.last_scancode
             print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
             self.key_down = False
             self.last_scancode = None
