@@ -108,7 +108,7 @@ class PyMirror:
             mod_n = -1
 
         for _ in range(0, len(self.modules)):
-            mod_n = (mod_n + 1) % len(self.pm.modules)
+            mod_n = (mod_n + 1) % len(self.modules)
             if hasattr(self.modules[mod_n], "onKeyboardEvent"):
                 self.focus_module = self.modules[mod_n]
                 break
