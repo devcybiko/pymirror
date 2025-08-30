@@ -23,6 +23,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
     template = env.from_string(s)
     try:
         # s = template.render(**context)
+        pass
     except Exception as e:
         # _debug(f"Error rendering string '{s}' with context {context}: {e}")
         return dflt if dflt is not None else s
