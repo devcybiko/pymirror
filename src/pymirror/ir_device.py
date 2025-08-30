@@ -28,7 +28,7 @@ class IRDevice:
         else:
             return "Unknown"
 
-print(f"Listening for IR scancodes on {DEVICE_PATH} with key-up detection...")
+    print(f"Listening for IR scancodes on {DEVICE_PATH} with key-up detection...")
 
 try:
     while True:
