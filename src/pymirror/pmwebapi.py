@@ -81,6 +81,8 @@ class PMWebApi:
 
     def _get_api_text(self, blocking):
         api_text = self._fetch_from_api(blocking)
+        if self.error:
+            _error(f"Error fetching API response from {self.url}: {self.error}")
         if api_text != None:
             _print(f" |  | API response from {self.url} is non-null")
             self.from_cache = False
