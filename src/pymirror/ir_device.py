@@ -35,26 +35,51 @@ class IRDevice:
             try:
                 device = InputDevice(device_path)
                 device_name = device.name.lower()
+                capabilities = device.capabilities()
                 
-                # Check if device has IR capabilities by name or capabilities
+                # Check if device has IR capabilities
                 is_ir_device = False
                 
+                # First, exclude obvious non-IR devices
+                keyboard_keywords = ['keyboard', 'kbd', 'key']
+                mouse_keywords = ['mouse', 'pointer', 'touchpad', 'trackball']
+                system_keywords = ['system', 'power', 'sleep', 'lid']
+                
+                is_excluded = any(keyword in device_name for keyword in 
+                                keyboard_keywords + mouse_keywords + system_keywords)
+                
+                if is_excluded:
+                    print(f"Skipping (excluded): {device_path} - {device.name}")
+                    device.close()
+                    continue
+                
                 # Check by device name (common IR receiver names)
-                ir_keywords = ['ir', 'remote', 'receiver', 'lirc', 'mce', 'cir']
+                ir_keywords = ['ir', 'remote', 'receiver', 'lirc', 'mce', 'cir', 'infrared']
                 if any(keyword in device_name for keyword in ir_keywords):
                     is_ir_device = True
+                    print(f"Found IR device by name: {device_path} - {device.name}")
                 
-                # Check by capabilities - IR devices typically have MSC events
-                capabilities = device.capabilities()
+                # Check by capabilities - but be more specific
                 if ecodes.EV_MSC in capabilities:
-                    # Check for MSC_SCAN which is commonly used for IR scancodes
                     msc_events = capabilities[ecodes.EV_MSC]
+                    # IR devices typically have MSC_SCAN
                     if ecodes.MSC_SCAN in msc_events:
+                        # Additional check: IR devices usually don't have extensive keyboard capabilities
+                        if ecodes.EV_KEY in capabilities:
+                            key_events = capabilities[ecodes.EV_KEY]
+                            # If it has too many key events, it's probably a keyboard
+                            if len(key_events) > 50:  # Keyboards typically have 100+ keys
+                                print(f"Skipping (too many keys): {device_path} - {device.name} ({len(key_events)} keys)")
+                                device.close()
+                                continue
+                        
                         is_ir_device = True
+                        print(f"Found IR device by capabilities: {device_path} - {device.name}")
                 
                 if is_ir_device:
                     ir_devices.append(device_path)
-                    print(f"Found IR device: {device_path} - {device.name}")
+                else:
+                    print(f"Not IR device: {device_path} - {device.name}")
                 
                 device.close()
             except (OSError, PermissionError):
