@@ -79,8 +79,6 @@ class WebApiModule(PMCard):
 			self.item_number += 1
 			self.dirty = True
 
-		pass
-
 	def exec(self) -> bool:
 		self.dirty = super().exec()
 
