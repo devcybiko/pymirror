@@ -77,6 +77,6 @@ class IRDevice:
 if __name__ == "__main__":
     ir = IRDevice()
     while True:
-        key = ir.get_key_event()
-        if key:
-            print("event:", key)
+        event = ir.get_key_event()
+        if event:
+            print("event:", event)
