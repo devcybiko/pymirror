@@ -144,7 +144,7 @@ class PyMirror:
             self.publish_event(event)
 
     def _read_remote(self):
-        ## add any messages that have come from the keyboard
+        ## add any messages that have come from the ir remote
         while key_event := self.keyboard.get_key_event():
             _debug(f"Received event from keyboard: {key_event}")
             event = {
