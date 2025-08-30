@@ -173,7 +173,7 @@ class KeyboardDevice:
     def get_key_char(self) -> Optional[str]:
         """
         Get a keyboard character without blocking.
-        Returns None if no key pressed, or the character/key name if pressed.
+        Returns None if no key pressed, or the character/key name if pressed (including repeats).
         """
         event = self.get_key_event()
         if not event or not event['pressed']:
@@ -249,10 +249,13 @@ if __name__ == "__main__":
             event = kbd.get_key_event()
             if event:
                 if event['pressed']:
-                    print(f"Key pressed: {event['key_name']} (code: {event['keycode']})")
+                    repeat_str = " (REPEAT)" if event['repeat'] else ""
+                    print(f"Key pressed: {event['key_name']} (code: {event['keycode']}){repeat_str}")
                     if event['key_name'] == 'KEY_Q':
                         print("Quitting...")
                         break
+                else:
+                    print(f"Key released: {event['key_name']} (code: {event['keycode']})")
             
             # Simulate other work
             time.sleep(0.01)
