@@ -3,6 +3,8 @@ import select
 import time
 from evdev import InputDevice, ecodes
 
+class IRDevice:
+    
 DEVICE_PATH = '/dev/input/event0'
 dev = InputDevice(DEVICE_PATH)
 
