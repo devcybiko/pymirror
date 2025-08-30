@@ -68,6 +68,7 @@ class IRDevice:
             result["protocol"] = protocol
             result["scancode"] = self.last_scancode
             result["released"] = True
+            result["pressed"]
             self.key_down = False
             self.last_scancode = None
         
