@@ -12,10 +12,6 @@ class IRDevice:
         self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
 
 
-# State
-last_scancode = None
-last_time = 0
-key_down = False
 
 def guess_protocol(sc):
     """Basic protocol guess based on scancode (customize per your remote)"""
