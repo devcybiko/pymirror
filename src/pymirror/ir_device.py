@@ -194,7 +194,24 @@ class IRDevice:
                 'pressed': False,
                 'repeat': False
             }
-            
+                                    # Update last press time
+                        self.key_last_time[scancode] = now
+                                                    
+                        keycode = int(scancode, 16) if scancode.isalnum() else 0
+
+                        # Get key name from mapping
+                        key_name = self.key_map.get(keycode, f"IR_{scancode}")
+                        
+                        # Return the key event
+                        return {
+                            'scancode': scancode,
+                            'key_name': key_name,
+                            'keycode': keycode,
+                            'protocol': protocol,
+                            'pressed': True,
+                            'repeat': is_repeat
+                        }
+
         return None
     
     def get_key_char(self) -> Optional[str]:
