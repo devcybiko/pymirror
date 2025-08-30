@@ -59,4 +59,6 @@ class SlideshowModule(PMModule):
 		print("slideshow_module", event)
 		if event.key_name == "KEY_LEFT":
 			self.photo_number = (self.photo_number + len(self.photos) -1) % len(self.photos)
+		if event.key_name == "KEY_LEFT":
+			self.photo_number = (self.photo_number + len(self.photos) -1) % len(self.photos)
 		pass
