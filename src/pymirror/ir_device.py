@@ -17,16 +17,16 @@ class IRDevice:
 
 
 
-def guess_protocol(sc):
-    """Basic protocol guess based on scancode (customize per your remote)"""
-    if sc & 0xFF00 == 0x0000:
-        return "NEC"
-    elif sc & 0xFF00 == 0x0100:
-        return "RC5"
-    elif sc & 0xFF00 == 0x0200:
-        return "Sony"
-    else:
-        return "Unknown"
+    def guess_protocol(sc):
+        """Basic protocol guess based on scancode (customize per your remote)"""
+        if sc & 0xFF00 == 0x0000:
+            return "NEC"
+        elif sc & 0xFF00 == 0x0100:
+            return "RC5"
+        elif sc & 0xFF00 == 0x0200:
+            return "Sony"
+        else:
+            return "Unknown"
 
 print(f"Listening for IR scancodes on {DEVICE_PATH} with key-up detection...")
 
