@@ -153,7 +153,7 @@ class PyMirror:
         """ Convert a list of events to SafeNamespace objects """
         return [SafeNamespace(**event) if isinstance(event, dict) else event for event in self.events]
 
-    def _send_all_events(self):
+    def _send_events_to_modules(self):
         if not self.events: return
         self.events = self._convert_events_to_namespace()  # Convert events to SafeNamespace if needed
         for module in self.modules:
@@ -250,7 +250,7 @@ class PyMirror:
             while True:
                 self._read_keyboard() # read the keyboard and create any keyboard events
                 self._read_server_queue() # read any new events from the server queue
-                self._send_all_events()  # send all new events to the modules
+                self._send_events_to_modules()  # send all new events to the modules
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 self._render_modules(modules_changed)  # Render only the modules that changed state
                 self._update_screen()  # Update the screen with the rendered modules
