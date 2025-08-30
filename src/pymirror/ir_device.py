@@ -27,7 +27,7 @@ class IRDevice:
             return "Unknown"
 
     def _new_event(self):
-        return {'protocol': None, 'scancode': 21, 'repeat': True, 'pressed': False}
+        return {'protocol': None, 'scancode': None, 'repeat': True, 'pressed': False}
 event: {'protocol': 'NEC', 'scancode': 21, 'repeat': True, 'pressed': False}
 event: {'protocol': 'NEC', 'scancode': 21, 'released': True, 'pressed': False}
     def get_key_event(self):
