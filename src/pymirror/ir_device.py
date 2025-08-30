@@ -9,7 +9,7 @@ class IRDevice:
         self.dev = InputDevice(device_path)
         # Timing thresholds (seconds)
         self.REPEAT_THRESHOLD = 0.50  # repeated keypress interval
-        self.KEYUP_THRESHOLD = 0.20  # no signal -> key up
+        self.KEYUP_THRESHOLD = 0.10  # no signal -> key up
         # State
         self.last_scancode = None
         self.last_time = 0
