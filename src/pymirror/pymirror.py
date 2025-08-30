@@ -107,7 +107,6 @@ class PyMirror:
             self.modules.append(obj)
 
     def next_focus_module(self):
-        mod_n = self._find_focus_module_n()
         for i in range(0, len(self.pm.modules)):
             mod_n = (mod_n + 1) % len(self.pm.modules)
             if has_attr(self.pm.modules[mod_n]
