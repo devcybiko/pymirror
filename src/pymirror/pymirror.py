@@ -161,7 +161,8 @@ class PyMirror:
     def publish_event(self, event: dict):
         ## should this go on a seperate event list?
         ## if a module sends an event from inside an event dispatcher
-        ## then it may not get p
+        ## then it may not get processed
+        ## GLS - so for now we put it on the "server_queue"
         if type(event) is dict:
             self.events.append(SafeNamespace(**event))
         elif isinstance(event, SafeNamespace):
