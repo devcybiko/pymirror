@@ -62,6 +62,7 @@ class PMWebApi:
             self.error = e
 
     def fetch_text(self, blocking=True):
+        cached_text = self.memory_
         cached_text = self.file_cache.get()
         if cached_text != None:
             _print(f" | Cached file {self.file_cache.file_info.fname} is valid")
