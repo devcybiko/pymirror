@@ -5,7 +5,7 @@ from evdev import InputDevice, ecodes
 
 # Timing thresholds (seconds)
 self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
-KEYUP_THRESHOLD = 0.30   # no signal -> key up
+self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
 
 class IRDevice:
     def __init__(self, device_path="/dev/input/event0")
@@ -59,7 +59,7 @@ try:
         # print("...")
 
         # Detect key up
-        if key_down and last_scancode is not None and (now - last_time) > KEYUP_THRESHOLD:
+        if key_down and last_scancode is not None and (now - last_time) > self.KEYUP_THRESHOLD:
             protocol = guess_protocol(last_scancode)
             print(f"{protocol}: scancode=0x{last_scancode:X} released")
             key_down = False
