@@ -103,17 +103,17 @@ class PyMirror:
             ## add the module to the list of modules
             self.modules.append(obj)
 
-	def _find_focus_module_n(self):
-		for i in range(0, len(self.pm.modules)):
-			if self.focus_module == self.pm.modules[i]
-				return i
-		return None
-	
-	def _next_focus_module(self):
-		mod_n = self._find_focus_module_n()
-		for i in range(0, len(self.pm.modules)):
-			mod_n = (mod_n + 1) % len(self.pm.modules)
-			if has_attr(self.pm.modules[mod_n]
+    def _find_focus_module_n(self):
+        for i in range(0, len(self.pm.modules)):
+            if self.focus_module == self.pm.modules[i]
+                return i
+        return None
+
+    def _next_focus_module(self):
+        mod_n = self._find_focus_module_n()
+        for i in range(0, len(self.pm.modules)):
+            mod_n = (mod_n + 1) % len(self.pm.modules)
+            if has_attr(self.pm.modules[mod_n]
 
     def _read_server_queue(self):
         ## add any messages that have come from the web server
