@@ -35,7 +35,7 @@ class IRDevice:
             "released": False,
         }
 
-    def get_key_event(self):
+    def get_key_event(self, protocol=None, ):
         r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
         now = time.time()
         result = None
