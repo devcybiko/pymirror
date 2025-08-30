@@ -196,17 +196,6 @@ class IRDevice:
             }
                                                     
 
-                        
-                        # Return the key event
-                        return {
-                            'scancode': scancode,
-                            'key_name': key_name,
-                            'keycode': keycode,
-                            'protocol': protocol,
-                            'pressed': True,
-                            'repeat': is_repeat
-                        }
-
         return None
     
     def get_key_char(self) -> Optional[str]:
