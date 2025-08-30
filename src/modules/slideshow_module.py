@@ -26,7 +26,8 @@ class SlideshowModule(PMModule):
 
 	def _randomize_list()
 		if self._slideshow.randomize:
-			#
+			## randomize the self.photos list
+			
 	def load_folder(self, folder: str):
 		""" Load all photo paths from the given folder """
 		paths = []
