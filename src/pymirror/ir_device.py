@@ -28,8 +28,6 @@ class IRDevice:
         else:
             return "Unknown"
 
-        print(f"Listening for IR scancodes on {DEVICE_PATH} with key-up detection...")
-
 try:
     while True:
         r, _, _ = select.select([dev], [], [], 0.05)  # 50ms timeout
