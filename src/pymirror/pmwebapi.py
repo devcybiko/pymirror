@@ -95,7 +95,7 @@ class PMWebApi:
             or self._get_api_text(blocking)
         )
         if self.text == None:
-            ## the cache is invalid, try to read from file
+            ## the cache is invalid and the api failed, try to read from file
             _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
             self.text = self.file_cache.read()
             self.from_cache = True
