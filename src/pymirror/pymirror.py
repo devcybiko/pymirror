@@ -110,7 +110,7 @@ class PyMirror:
 
     def _read_keyboard(self):
         ## add any messages that have come from the keyboard
-        while key_event := self.keyboard.get_key():
+        while key_event := self.keyboard.get_key_event():
             print(f"Received event from keyboard: {key_event}")
                 # self.publish_event(event)
 
