@@ -86,9 +86,6 @@ class PMWebApi:
             return None
         _print(f" |  | API response from {self.url} is non-null")
         self.from_cache = False
-        ## update the cache if the text has changed
-        self.memory_cache.update(api_text)
-        self.file_cache.update(api_text)
         return api_text
 
     def fetch_text(self, blocking=True):
