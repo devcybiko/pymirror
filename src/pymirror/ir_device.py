@@ -29,7 +29,6 @@ IR_KEY_MAP = {
         90: "KEY_RIGHT",
         82: "KEY_DOWN",
         28: "KEY_ENTER"
-    }
 }
 
 class IRDevice:
