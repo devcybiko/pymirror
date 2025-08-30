@@ -163,12 +163,12 @@ class PyMirror:
         ## if a module sends an event from inside an event dispatcher
         ## then it may not get processed
         ## GLS - so for now we put it on the "server_queue"
-        if type(event) is dict:
-            self.events.append(SafeNamespace(**event))
-        elif isinstance(event, SafeNamespace):
-            self.events.append(event)
-        else:
-            raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
+        # if type(event) is dict:
+        #     self.events.append(SafeNamespace(**event))
+        # elif isinstance(event, SafeNamespace):
+        #     self.events.append(event)
+        # else:
+        #     raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
 
     def _debug(self, module):
         if not module.bitmap: 
