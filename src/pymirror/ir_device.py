@@ -38,7 +38,7 @@ class IRDevice:
             "repeat": False,
             "pressed": False,
             "released": False,
-            "key_name": 
+            "key_name": None
         }
 
     def get_key_event(self):
