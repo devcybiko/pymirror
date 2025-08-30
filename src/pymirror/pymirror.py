@@ -157,7 +157,6 @@ class PyMirror:
         if not self.events: return
         self.events = self._convert_events_to_namespace()  # Convert events to SafeNamespace if needed
         for module in self.modules:
-            if 
             self._send_events_to_module(module, self.events)  # Send all events to the module
         self.events.clear()  # Clear the events after sending them
 
