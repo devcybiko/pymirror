@@ -42,9 +42,9 @@ class PyMirror:
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
+        self.focus_module = None
         self._load_modules()
         self.server.start()  # Start the server to handle incoming events
-        self.focus_module = None
 
     def _load_config(self, config_fname) -> SafeNamespace:
         # read .env file if it exists
