@@ -148,7 +148,7 @@ class PyMirror:
         for event in events:
             if event.event in module.subscriptions:
                 if not event.module or event.module == module.name:
-                module.onEvent(event)
+                    module.onEvent(event)
 
     def _convert_events_to_namespace(self):
         """ Convert a list of events to SafeNamespace objects """
