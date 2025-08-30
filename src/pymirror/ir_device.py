@@ -5,5 +5,6 @@ sock.connect("/var/run/lirc/lircd")
 
 while True:
     data = sock.recv(128)
+    
     if data:
         print(data.decode().strip())
