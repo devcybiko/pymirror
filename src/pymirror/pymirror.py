@@ -276,7 +276,7 @@ class PyMirror:
                 t0 = time.time()
                 self._update_screen()  # Update the screen with the rendered modules
                 t1 = time.time()
-                print("_exec_modules:", t1-t0)
+                print("_update_screen:", t1-t0)
 
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
         except Exception as e:
