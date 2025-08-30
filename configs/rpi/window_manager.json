@@ -1,5 +1,5 @@
 {
-    "module": "cron",
+    "module": "window_manager",
     "cron": {
         "name": "example_cron",
         "first_delay": 1,
