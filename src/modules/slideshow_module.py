@@ -15,6 +15,7 @@ class SlideshowModule(PMModule):
 		self.alt_rect = PMRect(*_str_to_rect(self._slideshow.rect))
 		self.photo_number = 0
 		self.photos = self.load_folder(self._slideshow.folder)
+		self.
 		self.timer = PMTimer(self._slideshow.interval_secs * 1000)
 		self.dirty = False
 		self.path = None
