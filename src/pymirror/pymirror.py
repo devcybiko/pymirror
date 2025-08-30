@@ -161,7 +161,7 @@ class PyMirror:
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
-    def focus_module(self, module):
+    def _focus_module(self, module):
         if not module.bitmap: 
             ## non-rendering modules will not have a bitmap (eg: cron)
             return
