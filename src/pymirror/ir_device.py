@@ -64,7 +64,7 @@ class IRDevice:
                             self.key_down = True
                     else:
                         # Different key - clear previous key state and handle new key
-                        if last_scancode is not None:
+                        if self.last_scancode is not None:
                             print(f"Previous key {last_scancode} released (implicit)")
                         print(f"New key {scancode} pressed")
                         key_down = True
