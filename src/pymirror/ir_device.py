@@ -184,7 +184,7 @@ class IRDevice:
             sc = expired_keys[0]
             # Remove from tracking dict immediately to prevent repeat releases
             del self.key_last_time[sc]
-                        keycode = int(scancode, 16) if scancode.isalnum() else 0
+            keycode = int(scancode, 16) if scancode.isalnum() else 0
 
             key_name = self.key_map.get(sc, f"IR_{sc}")
             return {
