@@ -28,8 +28,7 @@ class IRDevice:
 
     def _new_event(self):
         return {'protocol': None, 'scancode': None, 'repeat': False, 'pressed': False, 'released': False}
-event: {'protocol': 'NEC', 'scancode': 21, 'repeat': True, 'pressed': False}
-event: {'protocol': 'NEC', 'scancode': 21, 'released': True, 'pressed': False}
+
     def get_key_event(self):
         r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
         now = time.time()
