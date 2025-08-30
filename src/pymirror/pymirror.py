@@ -252,11 +252,12 @@ class PyMirror:
                 # self._read_keyboard() # read the keyboard and create any keyboard events
                 t1 = time.time()
                 print("_read_keyboard:", t0-t1)
-                
+
                 t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
                 t1 = time.time()
                 print("_read_server_queue:", t0-t1)
+                
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
                 t1 = time.time()
