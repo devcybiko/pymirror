@@ -29,7 +29,6 @@ class IRDevice:
             return "Unknown"
 
     def get_key_event(self):
-        try:
             r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
             now = time.time()
 
