@@ -74,4 +74,4 @@ class IRDevice:
         
         return result
 
-if __name
+if __name__ == ""
