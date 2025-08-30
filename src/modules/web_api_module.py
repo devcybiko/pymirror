@@ -15,7 +15,7 @@ class WebApiModule(PMCard):
 		self.api = PMWebApi(self._web_api.url, self._web_api.poll_secs, self._web_api.cache_file)
 		self.display_timer = PMTimer(self._web_api.cycle_seconds * 1000)
 		self.dirty = False
-		
+
 		self.response = None
 		self.items = []
 		self.item_number = 0
@@ -77,7 +77,7 @@ class WebApiModule(PMCard):
 		pass
 
 	def exec(self) -> bool:
-		update = super().exec()
+		self.dirty = super().exec()
 
 		if self.response == None or self.display_timer.is_timedout():
 			self.result = self._read_api()
