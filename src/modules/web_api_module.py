@@ -68,7 +68,7 @@ class WebApiModule(PMCard):
 		self.update(self.header, self.body, self.footer)
 		self.item_number += 1
 	
-	def onKeyEvent(self, event):
+	def onKeyboardEvent(self, event):
 		print("web_api_module", event)
 		pass
 
