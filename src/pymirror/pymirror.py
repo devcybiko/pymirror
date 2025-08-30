@@ -147,7 +147,7 @@ class PyMirror:
             return
         for event in events:
             if event.event in module.subscriptions:
-                if event.module 
+                if not event.module or 
                 module.onEvent(event)
 
     def _convert_events_to_namespace(self):
