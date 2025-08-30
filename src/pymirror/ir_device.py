@@ -1,50 +1,34 @@
-#!/usr/bin/env python3
 import subprocess
-import threading
-import queue
-import sys
+import os
 import time
 
-def enqueue_output(out, q):
-    for line in iter(out.readline, b''):
-        q.put(line.decode().strip())
-    out.close()
-
-# Command to run
+# Command: ir-keytable in test mode with all protocols
 cmd = [
     "ir-keytable",
-    "-v",
-    "-t",
+    "-v", "-t",
     "-p", "rc-5,rc-5-sz,jvc,sony,nec,sanyo,mce_kbd,rc-6,sharp,xmp"
 ]
 
-# Start the subprocess
-proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
+# Start subprocess
+proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-# Queue to store stdout lines
-q = queue.Queue()
-
-# Start thread to read stdout
-t = threading.Thread(target=enqueue_output, args=(proc.stdout, q))
-t.daemon = True  # Thread dies with the program
-t.start()
-
-print("Listening for IR key events...")
+# Make stdout non-blocking
+os.set_blocking(proc.stdout.fileno(), False)
 
 try:
     while True:
         try:
-            line = q.get_nowait()  # Non-blocking
-        except queue.Empty:
-            time.sleep(0.1)
-            # No line available, do other work here
-            continue
-        if line:
-            # Example parsing
-            if "scancode" in line:
-                print("IR:", line)
+            line = proc.stdout.readline()
+            if line:
+                print(line.strip())
+        except BlockingIOError:
+            # No data available yet
+            pass
+        
+        # Optional: do other stuff here
+        time.sleep(0.01)
+
 except KeyboardInterrupt:
     print("Exiting...")
     proc.terminate()
-    t.join()
-    sys.exit(0)
+    proc.wait()
