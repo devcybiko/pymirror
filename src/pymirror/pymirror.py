@@ -249,6 +249,7 @@ class PyMirror:
         try:
             while True:
                 # self._read_keyboard() # read the keyboard and create any keyboard events
+                t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
                 self._send_events_to_modules()  # send all new events to the modules
                 modules_changed = self._exec_modules() # update / check the state of all modules
