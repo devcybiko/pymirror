@@ -13,7 +13,7 @@ class IRDevice:
         # State
         self.last_scancode = None
         self.last_time = 0
-        key_down = False
+        self.key_down = False
 
 
 
@@ -42,14 +42,14 @@ try:
                     protocol = guess_protocol(scancode)
 
                     if scancode == self.last_scancode:
-                        if key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
+                        if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
                             print(f"{protocol}: scancode=0x{scancode:X} repeat")
                         else:
                             print(f"{protocol}: scancode=0x{scancode:X} pressed")
-                            key_down = True
+                            self.key_down = True
                     else:
                         print(f"{protocol}: scancode=0x{scancode:X} pressed")
-                        key_down = True
+                        self.key_down = True
 
                     self.last_scancode = scancode
                     self.last_time = now
@@ -59,10 +59,10 @@ try:
         # print("...")
 
         # Detect key up
-        if key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
+        if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
             protocol = guess_protocol(self.last_scancode)
             print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
-            key_down = False
+            self.key_down = False
             self.last_scancode = None
 
 except KeyboardInterrupt:
