@@ -20,7 +20,8 @@ class WindowManagerModule(PMModule):
 	
 	def _next_focus_module(self):
 		mod_n = self._find_focus_module_n()
-		for 
+		for i in range(0, len(self.pm.modules)):
+			
 	def onRawKeyboardEvent(self, event):
 		mod_n = self._find_focus_module_n
 		if event.key_name == "TAB":
