@@ -247,6 +247,7 @@ class PyMirror:
 
     def run(self):
         try:
+                t0 = time.time()
             while True:
                 # self._read_keyboard() # read the keyboard and create any keyboard events
                 t0 = time.time()
