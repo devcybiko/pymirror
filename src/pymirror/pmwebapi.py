@@ -81,7 +81,7 @@ class PMWebApi:
         return cached_text
 
     def _get_api_text(self, blocking):
-        _print("... get_memory_cache")
+        _print("... _get_api_text")
         api_text = self._fetch_from_api(blocking)
         if api_text == None or self.error:
             _error(f"Error fetching API response from {self.url}: {self.error}")
