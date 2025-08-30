@@ -48,6 +48,7 @@ class IRDevice:
                             result["repeat"] = True
                         else:
                             print(f"{protocol}: scancode=0x{scancode:X} pressed")
+                            result["pressed"]
                             self.key_down = True
                     else:
                         print(f"{protocol}: scancode=0x{scancode:X} pressed")
