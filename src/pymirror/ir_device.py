@@ -162,7 +162,7 @@ class IRDevice:
                         return {
                             'scancode': scancode,
                             'key_name': key_name,
-                            'keycode': 
+                            'keycode': keycode
                             'protocol': protocol,
                             'pressed': True,
                             'repeat': is_repeat
