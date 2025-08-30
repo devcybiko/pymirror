@@ -17,7 +17,7 @@ class IRDevice:
 
 
 
-    def guess_protocol(sc):
+    def guess_protocol(self, sc):
         """Basic protocol guess based on scancode (customize per your remote)"""
         if sc & 0xFF00 == 0x0000:
             return "NEC"
