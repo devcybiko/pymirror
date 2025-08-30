@@ -250,6 +250,7 @@ class PyMirror:
             while True:
                 t0 = time.time()
                 # self._read_keyboard() # read the keyboard and create any keyboard events
+                t1 = time.time()
                 t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
                 t1 = time.time()
