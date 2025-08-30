@@ -5,7 +5,7 @@ import time
 from abc import ABC, abstractmethod
 
 from pymirror.pmtimer import PMTimer
-from pymirror.pmlogger import _print, _error, _print, pmlogger, PMLoggerLevel
+from pymirror.pmlogger import _debug, _error, _debug, pmlogger, PMLoggerLevel
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 
@@ -34,7 +34,7 @@ class FileInfo:
 
     def update_stats(self):
         """ Update file info and return True if readable, False otherwise."""
-        _print(f"checking readability of {self.fname}")
+        _debug(f"checking readability of {self.fname}")
         self.reset()
         self.exists = os.path.exists(self.fname)
         if self.exists:
@@ -47,11 +47,11 @@ class FileInfo:
     
     def is_expired(self, timeout_ms):
         if not self.exists:
-            _print(f"file {self.fname} does not exist, so is expired")
+            _debug(f"file {self.fname} does not exist, so is expired")
             return True
         now = time.time()
         last_modified = self.last_modified + timeout_ms / 1000
-        _print(f"checking expiry of {self.fname}: expired={last_modified <= now}, now={now}, last_modified+timeout={last_modified}")
+        _debug(f"checking expiry of {self.fname}: expired={last_modified <= now}, now={now}, last_modified+timeout={last_modified}")
         return last_modified <= now
 
     def save(self, text) -> bool:
@@ -59,7 +59,7 @@ class FileInfo:
         try:
             self.error = None
             with open(self.fname, 'w') as file:
-                _print(f"Saving cache to {self.fname} with {len(text or '')}")
+                _debug(f"Saving cache to {self.fname} with {len(text or '')}")
                 file.write(text or "")
             return True
         except Exception as e:
@@ -74,9 +74,9 @@ class FileInfo:
             with open(self.fname, 'r') as file:
                 text = file.read()
                 if len(text or '') == 0:
-                    _print(f"Read cache from {self.fname}: empty")
+                    _debug(f"Read cache from {self.fname}: empty")
                     text = None
-                _print(f"Read cache from {self.fname}: '{text}'")
+                _debug(f"Read cache from {self.fname}: '{text}'")
                 return text
         except Exception as e:
             self.error = e
@@ -131,21 +131,21 @@ class FileCache(Cache):
     def update(self, text):
         ## write the cache only if it's changed
         if text != self.text:
-            _print(f"text != self.text")
-            _print(f" | text: {text}")
-            _print(f" | self.text: {self.text}")
+            _debug(f"text != self.text")
+            _debug(f" | text: {text}")
+            _debug(f" | self.text: {self.text}")
             self.set(text)
 
     def set(self, text):
         self.text = text
-        _print(f"File cache {self.file_info.fname} set to: {len(text or '')}")
+        _debug(f"File cache {self.file_info.fname} set to: {len(text or '')}")
         self.file_info.save(text or "")
         self.error = self.file_info.error
         if self.error:
             self.invalidate()
 
     def invalidate(self):
-        _print(f"Invalidating file cache {self.file_info.fname}")
+        _debug(f"Invalidating file cache {self.file_info.fname}")
         self.text = None
 
     def read(self):
@@ -154,22 +154,22 @@ class FileCache(Cache):
 
     def get(self):
         """ if the cached file is not expired, return its content """
-        _print(f"Getting file cache {self.file_info.fname}")
+        _debug(f"Getting file cache {self.file_info.fname}")
         if self.text == None:
             ## the cache is invalid
             if not self.file_info.is_expired(self.timeout_ms):
                 # the cache file is still valid
-                _print(f"file not expired... Loading cache from file {self.file_info.fname}")
+                _debug(f"file not expired... Loading cache from file {self.file_info.fname}")
                 self.text = self.file_info.read()
             else:
-                _print(f"file expired... invalidating {self.file_info.fname}")
+                _debug(f"file expired... invalidating {self.file_info.fname}")
                 # the cache is still invalid
                 self.invalidate()
         else:
             # the cache is valid, but...
             if self.file_info.is_expired(self.timeout_ms):
                 # invalidate the cache
-                _print(f"valid cache, but file expired... invalidating {self.file_info.fname}")
+                _debug(f"valid cache, but file expired... invalidating {self.file_info.fname}")
                 self.invalidate()
         self.error = self.file_info.error
         return self.text
