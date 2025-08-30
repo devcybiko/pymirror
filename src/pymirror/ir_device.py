@@ -13,6 +13,16 @@ def handle_ir(channel):
 
 GPIO.add_event_detect(IR_PIN, GPIO.BOTH, callback=handle_ir)
 
+import pigpio
+
+pi = pigpio.pi()
+IR_PIN = 14
+
+def cbf(gpio, level, tick):
+    print(gpio, level, tick)
+
+pi.callback(IR_PIN, pigpio.EITHER_EDGE, cbf)
+
 LUT = {
         69: "KEY_ONE",
         70: "KEY_TWO",
