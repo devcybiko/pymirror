@@ -79,6 +79,7 @@ class WebApiModule(PMCard):
 		if event.key_name == "KEY_RIGHT":
 			self.item_number += 1
 			self.dirty = True
+			self.response = None ## HACK - this forces a redisplay... questionable
 
 	def exec(self) -> bool:
 		self.dirty = super().exec()
