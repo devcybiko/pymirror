@@ -143,9 +143,8 @@ class PyMirror:
             self.publish_event(event)
 
     def _send_events_to_module(self, module, events):
-        
-        # if not module.subscriptions: 
-        #     return
+        if not module.subscriptions: 
+            return
         for event in events:
             if event.event in module.subscriptions:
                 module.onEvent(event)
