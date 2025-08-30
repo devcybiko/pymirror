@@ -7,7 +7,7 @@ from pymirror.pmcard import PMCard
 from pymirror.utils import SafeNamespace, expand_dict
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
-from pymirror.pmlogger import _debug, _print, _error
+from pymirror.pmlogger import _debug, _debug, _error
 
 class WebApiModule(PMCard):
 	def __init__(self, pm, config):
@@ -86,9 +86,9 @@ class WebApiModule(PMCard):
 			self.response = None ## HACK - this forces a redisplay... questionable
 
 	def exec(self) -> bool:
-		_print("web_api_module dirty=", self.dirty)
+		_debug("web_api_module dirty=", self.dirty)
 		self.dirty = super().exec()
-		_print("...  dirty=", self.dirty)
+		_debug("...  dirty=", self.dirty)
 
 		if self.response == None or self.display_timer.is_timedout():
 			self.result = self._read_api()
