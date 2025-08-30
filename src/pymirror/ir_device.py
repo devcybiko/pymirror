@@ -16,7 +16,7 @@ class IRDevice:
         self.key_down = False
         self.lut
 
-    def set_translation_table(self, d: dict):
+    def set_lut(self, d: dict):
         pass
 
     def guess_protocol(self, sc):
