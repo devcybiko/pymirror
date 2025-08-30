@@ -4,7 +4,7 @@ import time
 from evdev import InputDevice, ecodes
 
 class IRDevice:
-    
+    def __init__(self)
 DEVICE_PATH = '/dev/input/event0'
 dev = InputDevice(DEVICE_PATH)
 
