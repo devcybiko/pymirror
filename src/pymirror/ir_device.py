@@ -54,7 +54,6 @@ class IRDevice:
 
                     elif event.type == ecodes.EV_SYN:
                         pass  # end of event batch
-            # print("...")
 
             # Detect key up
             if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
