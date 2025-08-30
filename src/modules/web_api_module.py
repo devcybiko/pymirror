@@ -84,4 +84,4 @@ class WebApiModule(PMCard):
 			self.display_timer.reset()
 			self.dirty = True
 
-		return update
+		return self.dirty
