@@ -282,7 +282,7 @@ if __name__ == "__main__":
     
     # Test the IR device class
     # ir = IRDevice(grab_device=False)  # Usually don't need to grab IR devices
-    ir = IRDevice(path="/d")  # Usually don't need to grab IR devices
+    ir = IRDevice(path="/dev/input/")  # Usually don't need to grab IR devices
     
     if not ir.device:
         print("No IR device found or accessible. Try running with sudo.")
