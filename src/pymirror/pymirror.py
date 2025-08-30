@@ -92,7 +92,7 @@ class PyMirror:
 
             ## create an instance of the class (module)
             ## and pass the PyMirror instance and the module config to it
-            ## See pymirror.PMMModule for the expected constructor
+            ## See pymirror.PModule for the expected constructor
             obj = clazz(self, module_config)
 
             ## GLS - for now, assign the keyboard input to the last module with onKeyboardEvent
