@@ -168,7 +168,7 @@ class PyMirror:
 
     def _focus_render(self,):
         module = self.focus_module
-        print("focus:", self.focus_module)
+        print("focus:", module)
         if not module.bitmap: 
             ## non-rendering modules will not have a bitmap (eg: cron)
             return
