@@ -275,6 +275,9 @@ class PyMirror:
 
                 t0 = time.time()
                 self._update_screen()  # Update the screen with the rendered modules
+                t1 = time.time()
+                print("_exec_modules:", t1-t0)
+
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
