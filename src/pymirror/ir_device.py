@@ -66,6 +66,5 @@ class IRDevice:
             result["protocol"] = protocol
             result["scancode"] = self.last_scancode
             result["released"] = True
-            print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
             self.key_down = False
             self.last_scancode = None
