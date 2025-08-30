@@ -19,4 +19,4 @@ class WindowManagerModule(PMModule):
 			self.pm.next_focus_module()
 		else:
 			if self.pm.focus_module:
-				
+				self.pm.focus_module.
