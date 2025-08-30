@@ -163,7 +163,7 @@ class PyMirror:
         ## if a module sends an event from inside an event dispatcher
         ## then it may not get processed
         ## GLS - so for now we put it on the "server_queue"
-        self.queue.put(event)
+        self.server_queue.put(event)
 
         # if type(event) is dict:
         #     self.events.append(SafeNamespace(**event))
