@@ -101,6 +101,7 @@ class PyMirror:
                 print("FOCUS:", self.focus_module.name)
 
             ## add the module to the list of modules
+            obj.module_n = 
             self.modules.append(obj)
 
     def _find_focus_module_n(self):
