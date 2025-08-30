@@ -20,7 +20,8 @@ class WindowManagerModule(PMModule):
 				self.pm.next_focus_module()
 		else:
 			if self.pm.focus_module:
-				event.event = "KeyboardEvent"
+			if event.pressed and not event.repeat:
+					event.event = "KeyboardEvent"
 				event.module = self.pm.focus_module.name
 				print("... republishing event", event)
 				self.pm.publish_event(event)
