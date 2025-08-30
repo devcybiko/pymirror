@@ -73,3 +73,5 @@ class IRDevice:
             self.last_scancode = None
         
         return result
+
+if __
