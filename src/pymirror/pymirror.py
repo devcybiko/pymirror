@@ -121,7 +121,7 @@ class PyMirror:
         try:
             while event := self.server_queue.get(0):
                 print(f"Received event from server: {event}")
-                self.publish_event(event)
+                # self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
             print("... empty server_queue")
