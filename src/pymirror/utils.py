@@ -18,7 +18,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
         return s
     if not isinstance(s, str):
         return s
-    # s = os.path.expandvars(s)
+    s = os.path.expandvars(s)
     env = Environment(undefined=DebugUndefined)
     template = env.from_string(s)
     try:
