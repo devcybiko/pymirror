@@ -34,6 +34,7 @@ class IRDevice:
         self.last_time = 0
         self.key_down = False
         self.key_name_lut = {}
+        self.event_buffer = []  # Buffer to store events between polls
 
     def set_key_name_lut(self, d: dict):
         self.key_name_lut = d
