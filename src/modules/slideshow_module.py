@@ -24,6 +24,7 @@ class SlideshowModule(PMModule):
 			self.frame_bm.scale(self.bitmap.width, self.bitmap.height, "stretch")
 		self.subscribe("KeyboardEvent")
 
+	def _randomize_list()
 	def load_folder(self, folder: str):
 		""" Load all photo paths from the given folder """
 		paths = []
