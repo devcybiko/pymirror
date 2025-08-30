@@ -62,7 +62,7 @@ class PMWebApi:
             self.error = e
 
     def _get_memory_cache(self):
-        return self.memory_cache.get()
+        cached_text = self.memory_cache.get()
     
     def _get_file_cache(self):
         cached_text = self.file_cache.get()
