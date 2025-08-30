@@ -104,8 +104,6 @@ class PMWebApi:
             self.from_cache = True
         return self.text
 
-        return self.text
-
     def fetch_json(self, blocking=True):
         result = None
         try:
