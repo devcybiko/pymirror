@@ -82,6 +82,6 @@ class WebApiModule(PMCard):
 			self.result = self._read_api()
 			self._display_next_item()
 			self.display_timer.reset()
-			update = True
+			self.dirty = True
 
 		return update
