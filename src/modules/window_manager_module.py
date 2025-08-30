@@ -5,6 +5,7 @@ class WindowManagerModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._window_manager = config.window_manager
+		self.subscribe("RawKeyboardEvent")
 
 	def render(self, force: bool = False) -> bool:
 		pass
