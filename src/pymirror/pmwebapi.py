@@ -86,7 +86,7 @@ class PMWebApi:
             self.from_cache = False
             ## update the cache if the text has changed
             self.memory_cache.update(api_text)
-            self.file_cache.update(self.text)
+            self.file_cache.update(api_text)
         else:
             ## api returned nothing - error or non-blocking read
             _print(f" |  | API response from {self.url} is null (non-blocking or error)")
