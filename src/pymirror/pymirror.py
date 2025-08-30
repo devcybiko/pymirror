@@ -95,6 +95,8 @@ class PyMirror:
             ## See pymirror.PMMModule for the expected constructor
             obj = clazz(self, module_config)
 
+            ## GLS - for now, assign the keyboard input to the last 
+
             ## add the module to the list of modules
             self.modules.append(obj)
 
