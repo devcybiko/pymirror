@@ -102,7 +102,7 @@ if __name__ == "__main__":
         7: "KEY_SEVEN",
         21: "KEY_EIGHT",
         9: "KEY_NINE",
-        
+        25: "KEY_ZERO",
         22: "KEY_NUMBERSIGN",
         13: "KEY_ASTERISK",
         24: "KEY_UP",
