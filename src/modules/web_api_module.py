@@ -77,6 +77,7 @@ class WebApiModule(PMCard):
 			self.dirty = True
 		if event.key_name == "KEY_RIGHT":
 			self.item_number += 1
+			self.dirty = True
 
 		pass
 
