@@ -54,3 +54,4 @@ class SlideshowModule(PMModule):
 			self.dirty = True
 		return self.dirty
 
+def onKeyboardEvent
