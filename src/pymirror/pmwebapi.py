@@ -78,34 +78,6 @@ class PMWebApi:
     def _get_api_text(self):
 
     def fetch_text(self, blocking=True):
-        if not cached_text:
-            _print(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
-            api_text = self._fetch_from_api(blocking)
-            if api_text != None:
-                _print(f" |  | API response from {self.url} is non-null")
-                self.text = api_text
-                self.from_cache = False
-                ## update the cache if the text has changed
-                self.file_cache.update(self.text)
-            else:
-                ## api returned nothing - error or non-blocking read
-                _print(f" |  | API response from {self.url} is null (non-blocking or error)")
-                if self.error:
-                    _error(f"Error fetching API response from {self.url}: {self.error}")
-                    self.text = None
-                    self.from_cache = False
-                else:
-                    if self.text == None:
-                        ## the cache is invalid, try to read from file
-                        _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
-                        self.text = self.file_cache.read()
-                        self.from_cache = True
-                    else:
-                        ## the api returned nothing, keep using the old text
-                        _print(f" |  |  | the api returned nothing, keep using the old text")
-                        self.from_cache = True
-                        pass
-        return self.text
 
     def fetch_json(self, blocking=True):
         result = None
