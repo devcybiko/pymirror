@@ -26,7 +26,7 @@ class IRDevice:
         else:
             return "Unknown"
 
-    def _new_event(self):
+    def _new_event(self, protocol=None, scancode=None):
         return {
             "protocol": None,
             "scancode": None,
