@@ -3,7 +3,7 @@ import select
 import time
 from evdev import InputDevice, ecodes
 
-
+LUT 
 class IRDevice:
     def __init__(self, device_path="/dev/input/event0", lut={}):
         self.dev = InputDevice(device_path)
