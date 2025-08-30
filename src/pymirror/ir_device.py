@@ -32,6 +32,7 @@ class IRDevice:
         r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
         now = time.time()
         result = {}
+        
         if self.dev in r:
             for event in self.dev.read():
                 if event.type == ecodes.EV_MSC:
