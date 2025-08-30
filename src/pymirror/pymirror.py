@@ -120,7 +120,6 @@ class PyMirror:
         ## add any messages that have come from the web server
         try:
             while event := self.server_queue.get(0):
-                print(f"Received event from server: {event}")
                 ## GLS - temporarily do an append
                 self.events.append(event)
                 # self.publish_event(event)
