@@ -115,7 +115,7 @@ class PyMirror:
         for i in range(0, len(self.pm.modules)):
             mod_n = (mod_n + 1) % len(self.pm.modules)
             if hasattr(self.modules[mod_n], "onKeyboardEvent"):
-                self.focus_module = 
+                self.focus_module = self.modules[mod_n]
 
 
     def _read_server_queue(self):
