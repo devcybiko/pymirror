@@ -282,7 +282,7 @@ class PyMirror:
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
                 t1 = time.time()
                 _debug("(sleep):", f"{(t1-t0)*1000} ms")
-                print("")
+                _debug("")
 
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
