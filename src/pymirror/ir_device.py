@@ -92,6 +92,9 @@ class IRDevice:
 
 
 if __name__ == "__main__":
+    lut = {
+        
+    }
     ir = IRDevice()
     while True:
         event = ir.get_key_event()
