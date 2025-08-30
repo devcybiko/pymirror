@@ -28,7 +28,7 @@ class IRDevice:
 
     def _new_event(self, protocol=None, scancode=None):
         return {
-            "protocol": None,
+            "protocol": protocol,
             "scancode": None,
             "repeat": False,
             "pressed": False,
