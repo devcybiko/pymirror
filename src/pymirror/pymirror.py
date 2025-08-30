@@ -122,7 +122,7 @@ class PyMirror:
             while event := self.server_queue.get(0):
                 print(f"Received event from server: {event}")
                 ## GLS - temporarily do an append
-                self.e
+                self.events.append(event)
                 # self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
