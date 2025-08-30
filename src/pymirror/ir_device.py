@@ -11,7 +11,7 @@ class IRDevice:
         self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
         self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
         # State
-        last_scancode = None
+        self.last_scancode = None
         last_time = 0
         key_down = False
 
@@ -41,7 +41,7 @@ try:
                     scancode = event.value
                     protocol = guess_protocol(scancode)
 
-                    if scancode == last_scancode:
+                    if scancode == self.last_scancode:
                         if key_down and (now - last_time) < self.REPEAT_THRESHOLD:
                             print(f"{protocol}: scancode=0x{scancode:X} repeat")
                         else:
@@ -51,7 +51,7 @@ try:
                         print(f"{protocol}: scancode=0x{scancode:X} pressed")
                         key_down = True
 
-                    last_scancode = scancode
+                    self.last_scancode = scancode
                     last_time = now
 
                 elif event.type == ecodes.EV_SYN:
@@ -59,11 +59,11 @@ try:
         # print("...")
 
         # Detect key up
-        if key_down and last_scancode is not None and (now - last_time) > self.KEYUP_THRESHOLD:
-            protocol = guess_protocol(last_scancode)
-            print(f"{protocol}: scancode=0x{last_scancode:X} released")
+        if key_down and self.last_scancode is not None and (now - last_time) > self.KEYUP_THRESHOLD:
+            protocol = guess_protocol(self.last_scancode)
+            print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
             key_down = False
-            last_scancode = None
+            self.last_scancode = None
 
 except KeyboardInterrupt:
     print("\nExiting...")
