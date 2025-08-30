@@ -62,9 +62,9 @@ class PMWebApi:
             self.error = e
 
     def _get_memory_cache(self):
-        
+
     def fetch_text(self, blocking=True):
-        cached_text = self.memory_cache.get()
+        cached_text = 
         if cached_text:
             self.from_cache = False
             self.text = cached_text
