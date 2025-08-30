@@ -39,7 +39,6 @@
     "./configs/rpi/slideshow.json",
     "./configs/rpi/fortune.json",
     "./configs/rpi/news.json",
-    "./configs/rpi/weather.json",
     "./configs/rpi/weather_alert.json",
     "./configs/rpi/forecast.json",
     "./configs/rpi/pymirror_controller.json",
