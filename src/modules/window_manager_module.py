@@ -15,3 +15,4 @@ class WindowManagerModule(PMModule):
 	def onWindowManagerEvent(self, event):
 		mod_n = self._find_focus_module_n
 		if event.key_name == "TAB":
+			self.pm.next_focus_module()
