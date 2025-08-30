@@ -100,7 +100,7 @@ class PMWebApi:
             self.text = self.file_cache.read()
             self.from_cache = True
         ## update the cache if the text has changed
-        self.memory_cache.update(api_text)
+        self.memory_cache.update(self.text)
         self.file_cache.update(api_text)
         return self.text
 
