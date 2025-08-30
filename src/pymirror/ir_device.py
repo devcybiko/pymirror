@@ -2,6 +2,16 @@
 import select
 import time
 from evdev import InputDevice, ecodes
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+IR_PIN = 14
+GPIO.setup(IR_PIN, GPIO.IN)
+
+def handle_ir(channel):
+    print("IR signal detected!")
+
+GPIO.add_event_detect(IR_PIN, GPIO.BOTH, callback=handle_ir)
 
 LUT = {
         69: "KEY_ONE",
