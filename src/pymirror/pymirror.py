@@ -38,7 +38,7 @@ class PyMirror:
         self.debug = self._config.debug
         self.modules = []
         self.events = []
-        self.focus_module = None
+        self.focus_module_ = None
         self.keyboard = KeyboardDevice()
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
