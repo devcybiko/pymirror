@@ -120,7 +120,7 @@ class PyMirror:
         ## add any messages that have come from the web server
         try:
             while event := self.server_queue.get(0):
-                _debug(f"Received event from server: {event}")
+                print(f"Received event from server: {event}")
                 self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
