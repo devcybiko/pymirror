@@ -59,6 +59,7 @@ class WebApiModule(PMCard):
 			return
 		if self.item_number >= len(self.items):
 			self.item_number = 0
+		
 		self.header = self.items[self.item_number].get("header", "")
 		self.body = self.items[self.item_number].get("body", "")
 		self.footer = self.items[self.item_number].get("footer", "") 
