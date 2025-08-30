@@ -8,7 +8,8 @@ import queue
 import argparse
 import traceback
 
-from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
+from pymirror.pmlogger import trace, _debug, 
+, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.keyboard_device import KeyboardDevice
 from pymirror.ir_device import IRDevice
