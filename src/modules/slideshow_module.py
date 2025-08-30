@@ -57,5 +57,6 @@ class SlideshowModule(PMModule):
 
 	def onKeyboardEvent(self, event):
 		print("slideshow_module", event)
-		if event.key_name == ""
+		if event.key_name == "KEY_LEFT":
+			
 		pass
