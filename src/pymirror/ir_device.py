@@ -1,5 +1,9 @@
-import lirc
+import socket
 
-client = lirc.Client()
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+sock.connect("/var/run/lirc/lircd")
 
-print(client.version())
+while True:
+    data = sock.recv(128)
+    if data:
+        print(data.decode().strip())
