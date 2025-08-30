@@ -70,7 +70,6 @@ class WebApiModule(PMCard):
 			self.body = self.header
 			self.header = ""
 		self.update(self.header, self.body, self.footer)
-		self.item_number += 1
 	
 	def onKeyboardEvent(self, event):
 		if event.key_name == "KEY_LEFT":
