@@ -88,23 +88,23 @@ class PMWebApi:
             self.memory_cache.update(api_text)
             self.file_cache.update(api_text)
             return api_text
-            ## api returned nothing - error or non-blocking read
-            _print(f" |  | API response from {self.url} is null (non-blocking or error)")
-            if self.error:
-                _error(f"Error fetching API response from {self.url}: {self.error}")
-                self.text = None
-                self.from_cache = False
+        ## api returned nothing - error or non-blocking read
+        _print(f" |  | API response from {self.url} is null (non-blocking or error)")
+        if self.error:
+            _error(f"Error fetching API response from {self.url}: {self.error}")
+            self.text = None
+            self.from_cache = False
+        else:
+            if self.text == None:
+                ## the cache is invalid, try to read from file
+                _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
+                self.text = self.file_cache.read()
+                self.from_cache = True
             else:
-                if self.text == None:
-                    ## the cache is invalid, try to read from file
-                    _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
-                    self.text = self.file_cache.read()
-                    self.from_cache = True
-                else:
-                    ## the api returned nothing, keep using the old text
-                    _print(f" |  |  | the api returned nothing, keep using the old text")
-                    self.from_cache = True
-                    pass
+                ## the api returned nothing, keep using the old text
+                _print(f" |  |  | the api returned nothing, keep using the old text")
+                self.from_cache = True
+                pass
         return self.text
 
     def fetch_text(self, blocking=True):
