@@ -54,6 +54,6 @@ class SlideshowModule(PMModule):
 			self.dirty = True
 		return self.dirty
 
-def onKeyboardEvent(self, event):
-	print("slideshow_module", event)
-	pass
+	def onKeyboardEvent(self, event):
+		print("slideshow_module", event)
+		pass
