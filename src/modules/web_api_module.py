@@ -52,7 +52,7 @@ class WebApiModule(PMCard):
 		t0 = time.time()
 		self.response = self.api.fetch_json(blocking=False)
 		t1 = time.time()
-		print("_read_api:", int((t1-t0)))
+		print("_read_api:", int((t1-t0)*1000))
 		if not self.response:
 			_error(f"Error fetching data")
 			return False
