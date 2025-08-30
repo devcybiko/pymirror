@@ -281,7 +281,7 @@ if __name__ == "__main__":
     print("Note: You may need to run with sudo for device access")
     
     # Test the IR device class
-    ir = IRDevice(grab_device=False)  # Usually don't need to grab IR devices
+    # ir = IRDevice(grab_device=False)  # Usually don't need to grab IR devices
     
     if not ir.device:
         print("No IR device found or accessible. Try running with sudo.")
