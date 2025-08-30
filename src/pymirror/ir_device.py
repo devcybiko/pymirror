@@ -73,7 +73,7 @@ class IRDevice:
             and (now - self.last_time) > self.KEYUP_THRESHOLD
         ):
             protocol = self.guess_protocol(self.last_scancode)
-            result = self._new_event()
+            result = self._new_event(protocol, )
             result["protocol"] = protocol
             result["scancode"] = self.last_scancode
             result["released"] = True
