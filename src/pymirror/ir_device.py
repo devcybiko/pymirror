@@ -194,8 +194,6 @@ class IRDevice:
                 'pressed': False,
                 'repeat': False
             }
-                                    # Update last press time
-                        self.key_last_time[scancode] = now
                                                     
 
                         # Get key name from mapping
