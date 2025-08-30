@@ -20,7 +20,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
     if not isinstance(s, str):
         return s
     s = os.path.expandvars(s)
-    template = env.from_string(s)
+    template = _env.from_string(s)
     try:
         s = template.render(**context)
     except Exception as e:
