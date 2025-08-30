@@ -191,7 +191,6 @@ class PyMirror:
         sgfx.line_width = 5
         sgfx.color = "#ff0"
         sbm.rectangle(mbm.rect, fill=None)
-        print("FOCUS:", module._moddef.name)
         self.screen.bitmap.gfx_pop()
 
     def full_render(self):
