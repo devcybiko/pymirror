@@ -68,6 +68,9 @@ class WebApiModule(PMCard):
 		self.update(self.header, self.body, self.footer)
 		self.item_number += 1
 	
+	def onKeyEvent():
+		pass
+
 	def exec(self) -> bool:
 		update = super().exec()
 
