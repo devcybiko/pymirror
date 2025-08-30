@@ -34,7 +34,8 @@ class IRDevice:
 
         if self.dev in r:
             for event in self.dev.read():
-                if event.type == ecodes.EV_MSC:
+                if eve
+                nt.type == ecodes.EV_MSC:
                     scancode = event.value
                     protocol = self.guess_protocol(scancode)
                     result = {}
