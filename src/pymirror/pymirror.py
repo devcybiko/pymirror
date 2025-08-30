@@ -114,7 +114,8 @@ class PyMirror:
 
         for i in range(0, len(self.pm.modules)):
             mod_n = (mod_n + 1) % len(self.pm.modules)
-            if has_attr(self.pm.modules[mod_n]
+            if hasattr(obj, "onKeyboardEvent"):
+
 
     def _read_server_queue(self):
         ## add any messages that have come from the web server
