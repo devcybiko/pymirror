@@ -74,8 +74,6 @@ class IRDevice:
         ):
             protocol = self.guess_protocol(self.last_scancode)
             result = self._new_event(protocol, self.last_scancode)
-            result["protocol"] = protocol
-            result["scancode"] = self.last_scancode
             result["released"] = True
             result["pressed"] = False
             self.key_down = False
