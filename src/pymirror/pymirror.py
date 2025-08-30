@@ -110,7 +110,7 @@ class PyMirror:
         if self.focus_module:
             mod_n = self.focus_module.module_n
         else:
-            mod_n = 0
+            mod_n = -1
 
         for i in range(0, len(self.pm.modules)):
             mod_n = (mod_n + 1) % len(self.pm.modules)
