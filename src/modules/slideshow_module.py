@@ -54,7 +54,7 @@ class SlideshowModule(PMModule):
 	def exec(self):
 		if self.timer.is_timedout():
 			self.timer.reset()
-				self.photo_number = (self.photo_number + 1) % len(self.photos)
+			self.photo_number = (self.photo_number + 1) % len(self.photos)
 			self.dirty = True
 		return self.dirty
 
