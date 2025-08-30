@@ -20,13 +20,13 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
         return s
     s = os.path.expandvars(s)
     if "{" in s:
-    env = Environment(undefined=DebugUndefined)
-    template = env.from_string(s)
-    try:
-        s = template.render(**context)
-    except Exception as e:
-        # _debug(f"Error rendering string '{s}' with context {context}: {e}")
-        return dflt if dflt is not None else s
+        env = Environment(undefined=DebugUndefined)
+        template = env.from_string(s)
+        try:
+            s = template.render(**context)
+        except Exception as e:
+            # _debug(f"Error rendering string '{s}' with context {context}: {e}")
+            return dflt if dflt is not None else s
     return s
 
 
