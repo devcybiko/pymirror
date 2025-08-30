@@ -98,7 +98,8 @@ if __name__ == "__main__":
         71: "KEY_THREE",
         68: "KEY_FOUR",
         64: "KEY_FIVE",
-        67: "KEY_"
+        67: "KEY_SIX",
+        
 
     }
     ir = IRDevice()
