@@ -5,8 +5,7 @@ from evdev import InputDevice, ecodes
 
 class IRDevice:
     def __init__(self, device_path="/dev/input/event0")
-DEVICE_PATH = '/dev/input/event0'
-dev = InputDevice(DEVICE_PATH)
+        self.dev = InputDevice(DEVICE_PATH)
 
 # Timing thresholds (seconds)
 REPEAT_THRESHOLD = 0.25  # repeated keypress interval
