@@ -111,7 +111,7 @@ if __name__ == "__main__":
         28: "KEY_ENTER"
     }
     ir = IRDevice()
-    ir.
+    ir.set_key_name_lut(lut)
     while True:
         event = ir.get_key_event()
         if event:
