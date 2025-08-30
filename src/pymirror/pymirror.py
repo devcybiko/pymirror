@@ -96,6 +96,7 @@ class PyMirror:
             obj = clazz(self, module_config)
 
             ## GLS - for now, assign the keyboard input to the last module with onKeyboardEvent
+            
 
             ## add the module to the list of modules
             self.modules.append(obj)
