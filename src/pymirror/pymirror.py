@@ -126,7 +126,6 @@ class PyMirror:
                 # self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
-            print("... empty server_queue")
             pass
 
     def _read_keyboard(self):
