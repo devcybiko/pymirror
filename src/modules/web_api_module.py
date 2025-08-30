@@ -54,7 +54,7 @@ class WebApiModule(PMCard):
 		if not self.response:
 			_error(f"Error fetching data")
 			return False
-		t
+		t0  
 		self._read_items()
 
 	def _display_next_item(self):
