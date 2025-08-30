@@ -97,8 +97,8 @@ class PyMirror:
 
             ## GLS - for now, assign the keyboard input to the last module with onKeyboardEvent
             if hasattr(obj, "onKeyboardEvent"):
-                print("FOCUS:", obj._moddef.name)
                 self.focus_module = obj
+                print("FOCUS:", obj._moddef.name)
 
             ## add the module to the list of modules
             self.modules.append(obj)
