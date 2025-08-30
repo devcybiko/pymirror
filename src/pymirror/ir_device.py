@@ -94,7 +94,7 @@ class IRDevice:
 if __name__ == "__main__":
     lut = {
         69: "KEY_ONE"
-        
+        70: "KEY_TWO",
     }
     ir = IRDevice()
     while True:
