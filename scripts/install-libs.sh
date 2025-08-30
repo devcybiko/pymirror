@@ -10,3 +10,4 @@ sudo apt-get install -y python3-caldav
 sudo apt-get install -y python3-vobject
 sudo apt-get install -y python3-ics
 sudo apt-get install -y python3-icalendar
+sudo apt install lirc
