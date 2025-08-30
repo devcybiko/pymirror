@@ -11,6 +11,7 @@ import traceback
 from pymirror.pmlogger import trace, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.keyboard_device import KeyboardDevice
+from pymirror.keyboard_device import KeyboardDevice
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
 from events import * # get all events 
