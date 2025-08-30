@@ -249,7 +249,7 @@ class PyMirror:
         try:
             while True:
                 t0 = time.time()
-                # self._read_keyboard() # read the keyboard and create any keyboard events
+                self._read_keyboard() # read the keyboard and create any keyboard events
                 t1 = time.time()
                 print("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
