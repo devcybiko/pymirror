@@ -100,7 +100,7 @@ class PyMirror:
                 self.focus_module = obj
                 print("FOCUS:", self.focus_module.name)
 
-            ## add the mo
+            ## update the module with its position in the pm.modules list
             obj.module_n = len(self.modules)
 
             ## add the module to the list of modules
