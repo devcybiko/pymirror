@@ -191,7 +191,7 @@ class PyMirror:
         # else:
         #     raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
 
-    def _debug(self, module):
+    def _stats_for_nerds(self, module):
         if not module.bitmap: 
             ## non-rendering modules will not have a bitmap (eg: cron)
             return
@@ -224,7 +224,7 @@ class PyMirror:
             if module.disabled or not module.bitmap: continue
             module.render(force=True)
             self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
-        if self.debug: self._debug(module)
+        if self.debug: self._stats_for_nerds(module)
         self.screen.flush()  # Flush the screen to show all modules at once
 
     def _exec_modules(self):
@@ -258,7 +258,7 @@ class PyMirror:
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
-                if self.debug: self._debug(module) # draw boxes around each module if debug is enabled
+                if self.debug: self._stats_for_nerds(module) # draw boxes around each module if debug is enabled
                 self._focus_render()
         self.screen.flush()
 
