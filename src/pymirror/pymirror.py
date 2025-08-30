@@ -147,6 +147,7 @@ class PyMirror:
         ## add any messages that have come from the ir remote
         while remote_event := self.remote.get_key_event():
             _debug(f"Received event from remote: {remote_event}")
+            ## translate into 
             event = {
                 "event": "RawKeyboardEvent",
                 "keycode":  remote_event["keycode"],
