@@ -194,7 +194,6 @@ class IRDevice:
                 'pressed': False,
                 'repeat': False
             }
-                                                    
         return None
     
     def get_key_char(self) -> Optional[str]:
