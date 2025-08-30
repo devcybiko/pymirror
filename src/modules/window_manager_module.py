@@ -12,6 +12,6 @@ class WindowManagerModule(PMModule):
 	def exec(self):
 		pass
 
-	def onRawKeyboardEvent(self, event):
+	def onWindowManagerEvent(self, event):
 		mod_n = self._find_focus_module_n
 		if event.key_name == "TAB":
