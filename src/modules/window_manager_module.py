@@ -19,4 +19,5 @@ class WindowManagerModule(PMModule):
 			self.pm.next_focus_module()
 		else:
 			event.event = "KeyboardEvent"
+			
 			self.pm.publish_event(event)
