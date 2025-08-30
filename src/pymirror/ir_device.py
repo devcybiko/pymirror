@@ -17,6 +17,7 @@ class IRDevice:
         self.lut
 
     def set_lut(self, d: dict):
+        self.lut = d
         pass
 
     def guess_protocol(self, sc):
