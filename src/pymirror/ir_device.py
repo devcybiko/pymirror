@@ -101,6 +101,7 @@ if __name__ == "__main__":
         67: "KEY_SIX",
         7: "KEY_SEVEN",
         21: "KEY_EIGHT",
+        9: "KEY_NINE",
         
 
     }
