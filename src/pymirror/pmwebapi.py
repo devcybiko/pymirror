@@ -108,7 +108,7 @@ class PMWebApi:
         return self.text
 
     def fetch_text(self, blocking=True):
-        return (
+        self.text = (
             self._get_memory_cache()
             or self._get_file_cache()
             or self._get_api_text(blocking)
