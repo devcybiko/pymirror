@@ -18,3 +18,4 @@ class WindowManagerModule(PMModule):
 			_debug(f"Alert triggered: {alert.event}")
 			self.publish_event(alert.event)
 		return False
+
