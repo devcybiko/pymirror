@@ -102,7 +102,7 @@ if __name__ == "__main__":
         7: "KEY_SEVEN",
         21: "KEY_EIGHT",
         9: "KEY_NINE",
-        
+        22: "KEY_POUND",
 
     }
     ir = IRDevice()
