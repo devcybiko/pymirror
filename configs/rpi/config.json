@@ -45,5 +45,6 @@
     "./configs/rpi/pymirror_controller.json",
     "./configs/rpi/fps.json",
     "./configs/rpi/cron_test.json"
+    "./configs/rpi/window_manager.json"
   ]
 }
