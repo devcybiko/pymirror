@@ -14,4 +14,4 @@ class WindowManagerModule(PMModule):
 
 	def onRawKeyboardEvent(self, event):
 		if event.key_name == "TAB":
-			for i in range(0, self.pm.modules)
+			for i in range(0, len(self.pm.modules))
