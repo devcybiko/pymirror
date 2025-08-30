@@ -104,6 +104,7 @@ if __name__ == "__main__":
         9: "KEY_NINE",
         22: "KEY_NUMBERSIGN",
         13: "KEY_ASTERISK",
+        24: "KEY_UP",
         
 
     }
