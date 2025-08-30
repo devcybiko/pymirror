@@ -160,26 +160,29 @@ class IRDevice:
                 print(f"Error reading IR data: {e}")
         
         # Check for key releases (timeout based)
-        expired = []
         now = time.time()
+        expired_keys = []
+        
+        # First, collect all expired keys
         for sc, last_time in self.key_last_time.items():
             if now - last_time > self.key_up_timeout:
-                # Key has been released (timed out)
-                key_name = self.key_map.get(sc, f"IR_{sc}")
-                expired.append(sc)
-                
-                return {
-                    'scancode': sc,
-                    'key_name': key_name,
-                    'keycode': int(sc, 16) if sc.isalnum() else 0,
-                    'protocol': "unknown",
-                    'pressed': False,
-                    'repeat': False
-                }
-                
-        # Clean up expired keys
-        for sc in expired:
+                expired_keys.append(sc)
+        
+        # Process one expired key at a time, but remove it immediately
+        if expired_keys:
+            sc = expired_keys[0]
+            # Remove from tracking dict immediately to prevent repeat releases
             del self.key_last_time[sc]
+            
+            key_name = self.key_map.get(sc, f"IR_{sc}")
+            return {
+                'scancode': sc,
+                'key_name': key_name,
+                'keycode': int(sc, 16) if sc.isalnum() else 0,
+                'protocol': "unknown",
+                'pressed': False,
+                'repeat': False
+            }
             
         return None
     
