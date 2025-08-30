@@ -167,7 +167,7 @@ class PyMirror:
         self.screen.bitmap.gfx_pop()
 
     def _focus_render(self,):
-        
+        print("focus:", self.focus_module)
         if not module.bitmap: 
             ## non-rendering modules will not have a bitmap (eg: cron)
             return
