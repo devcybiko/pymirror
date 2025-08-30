@@ -36,7 +36,7 @@ try:
         try:
             line = q.get_nowait()  # Non-blocking
         except queue.Empty:
-            print("...")
+            time.sleep(0.1)
             # No line available, do other work here
             continue
         if line:
