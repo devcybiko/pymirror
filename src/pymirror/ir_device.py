@@ -9,7 +9,7 @@ class IRDevice:
         self.dev = InputDevice(device_path)
         # Timing thresholds (seconds)
         self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
-        self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
+        self.KEYUP_THRESHOLD = 0.30  # no signal -> key up
         # State
         self.last_scancode = None
         self.last_time = 0
@@ -27,7 +27,13 @@ class IRDevice:
             return "Unknown"
 
     def _new_event(self):
-        return {'protocol': None, 'scancode': None, 'repeat': False, 'pressed': False, 'released': False}
+        return {
+            "protocol": None,
+            "scancode": None,
+            "repeat": False,
+            "pressed": False,
+            "released": False,
+        }
 
     def get_key_event(self):
         r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
@@ -46,7 +52,10 @@ class IRDevice:
                     result["pressed"] = False
 
                     if scancode == self.last_scancode:
-                        if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
+                        if (
+                            self.key_down
+                            and (now - self.last_time) < self.REPEAT_THRESHOLD
+                        ):
                             result["repeat"] = True
                         else:
                             result["pressed"] = False
@@ -63,7 +72,11 @@ class IRDevice:
                     pass  # end of event batch
 
         # Detect key up
-        if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
+        if (
+            self.key_down
+            and self.last_scancode is not None
+            and (now - self.last_time) > self.KEYUP_THRESHOLD
+        ):
             protocol = self.guess_protocol(self.last_scancode)
             result = {}
             result["protocol"] = protocol
@@ -72,8 +85,9 @@ class IRDevice:
             result["pressed"] = False
             self.key_down = False
             self.last_scancode = None
-        
+
         return result
+
 
 if __name__ == "__main__":
     ir = IRDevice()
