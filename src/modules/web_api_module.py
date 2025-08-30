@@ -75,6 +75,8 @@ class WebApiModule(PMCard):
 	def onKeyboardEvent(self, event):
 		if event.key_name == "KEY_LEFT":
 			self.item_number += 1
+		if event.key_name == "KEY_LEFT":
+			self.item_number += 1
 		
 		pass
 
