@@ -156,7 +156,7 @@ class IRDevice:
                         keycode = int(scancode, 16) if scancode.isalnum() else 0
 
                         # Get key name from mapping
-                        key_name = self.key_map.get(scancode, f"IR_{scancode}")
+                        key_name = self.key_map.get(, f"IR_{scancode}")
                         
                         # Return the key event
                         return {
