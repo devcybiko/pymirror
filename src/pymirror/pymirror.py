@@ -41,6 +41,7 @@ class PyMirror:
         self.events = []
         self.focus_module = None
         self.keyboard = KeyboardDevice()
+        self.keyboard = KeyboardDevice()
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
