@@ -94,25 +94,6 @@ class IRDevice:
 
 
 if __name__ == "__main__":
-    lut = {
-        69: "KEY_ONE",
-        70: "KEY_TWO",
-        71: "KEY_THREE",
-        68: "KEY_FOUR",
-        64: "KEY_FIVE",
-        67: "KEY_SIX",
-        7: "KEY_SEVEN",
-        21: "KEY_EIGHT",
-        9: "KEY_NINE",
-        25: "KEY_ZERO",
-        22: "KEY_NUMBERSIGN",
-        13: "KEY_ASTERISK",
-        24: "KEY_UP",
-        8: "KEY_LEFT",
-        90: "KEY_RIGHT",
-        82: "KEY_DOWN",
-        28: "KEY_ENTER"
-    }
     ir = IRDevice()
     ir.set_key_name_lut(lut)
 
