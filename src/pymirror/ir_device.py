@@ -47,7 +47,6 @@ class IRDevice:
                         if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
                             result["repeat"] = True
                         else:
-                            print(f"{protocol}: scancode=0x{scancode:X} pressed")
                             result["pressed"] = False
                             self.key_down = True
                     else:
