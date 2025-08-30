@@ -12,6 +12,7 @@ class WindowManagerModule(PMModule):
 	def exec(self):
 		pass
 
+	def _find_
 	def onRawKeyboardEvent(self, event):
 		mod_n = 
 		if event.key_name == "TAB":
