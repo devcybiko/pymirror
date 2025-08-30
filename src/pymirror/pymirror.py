@@ -1,6 +1,5 @@
 import importlib
 import json
-import copy
 import os
 import sys
 import time
@@ -112,7 +111,14 @@ class PyMirror:
         ## add any messages that have come from the keyboard
         while key_event := self.keyboard.get_key_event():
             print(f"Received event from keyboard: {key_event}")
-                # self.publish_event(event)
+            event = {
+                "event": "KeyboardEvent",
+                "keycode":  key_event["keycode"],
+                'key_name': key_event["key_name"],
+                'scancode': key_event["scancode"],
+                'pressed': key_event["pressed"]
+            }
+            self.publish_event(event)
 
     def _send_events_to_module(self, module, events):
         if not module.subscriptions: 
