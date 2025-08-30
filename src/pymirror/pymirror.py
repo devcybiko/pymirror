@@ -273,7 +273,7 @@ class PyMirror:
                 t0 = time.time()
                 self._read_remote() # read the keyboard and create any keyboard events
                 t1 = time.time()
-                _debug("_read_remote:", f"{(t1-t0)*1000} ms")
+                _print("_read_remote:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
