@@ -60,5 +60,5 @@ class SlideshowModule(PMModule):
 		if event.key_name == "KEY_LEFT":
 			self.photo_number = (self.photo_number + len(self.photos) -1) % len(self.photos)
 		if event.key_name == "KEY_RIGHT":
-			self.photo_number = (self.photo_number + len(self.photos) -1) % len(self.photos)
+			self.photo_number = (self.photo_number + 1) % len(self.photos)
 		pass
