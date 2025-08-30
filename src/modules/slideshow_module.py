@@ -62,4 +62,5 @@ class SlideshowModule(PMModule):
 			self.timer.reset()
 		if event.key_name == "KEY_RIGHT":
 			self.photo_number = (self.photo_number + 1) % len(self.photos)
+			self.timer.reset()
 		pass
