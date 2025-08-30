@@ -94,7 +94,6 @@ class PMWebApi:
             _error(f"Error fetching API response from {self.url}: {self.error}")
             self.from_cache = False
             return None
-        else:
             if self.text == None:
                 ## the cache is invalid, try to read from file
                 _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
