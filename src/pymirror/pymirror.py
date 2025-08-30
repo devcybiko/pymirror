@@ -135,8 +135,8 @@ class PyMirror:
                 "keycode":  key_event["keycode"],
                 'key_name': key_event["key_name"],
                 'scancode': key_event["scancode"],
-                'pressed': key_event["pressed"]
-                'pressed': key_event["pressed"]
+                'pressed': key_event["pressed"],
+                'repeat': key_event["repeat"]
             }
             self.publish_event(event)
 
