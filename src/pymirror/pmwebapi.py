@@ -84,7 +84,6 @@ class PMWebApi:
         if api_text == None or self.error:
             _error(f"Error fetching API response from {self.url}: {self.error}")
             return None
-        if api_text != None:
             _print(f" |  | API response from {self.url} is non-null")
             self.from_cache = False
             ## update the cache if the text has changed
