@@ -43,7 +43,6 @@ class IRDevice:
 
     def get_key_event(self):
         r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
-        print("...", r)
         now = time.time()
         result = None
 
