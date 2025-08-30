@@ -8,7 +8,7 @@ class IRDevice:
     def __init__(self, device_path="/dev/input/event0", lut={}):
         self.dev = InputDevice(device_path)
         # Timing thresholds (seconds)
-        self.REPEAT_THRESHOLD =   # repeated keypress interval
+        self.REPEAT_THRESHOLD = 0.10  # repeated keypress interval
         self.KEYUP_THRESHOLD = 0.10  # no signal -> key up
         # State
         self.last_scancode = None
