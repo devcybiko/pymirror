@@ -102,6 +102,7 @@ if __name__ == "__main__":
         7: "KEY_SEVEN",
         21: "KEY_EIGHT",
         9: "KEY_NINE",
+        
         22: "KEY_NUMBERSIGN",
         13: "KEY_ASTERISK",
         24: "KEY_UP",
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     }
     ir = IRDevice()
     ir.set_key_name_lut(lut)
-    
+
     while True:
         event = ir.get_key_event()
         if event:
