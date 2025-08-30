@@ -161,6 +161,20 @@ class PyMirror:
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
+    def focus_module(self, module):
+        if not module.bitmap: 
+            ## non-rendering modules will not have a bitmap (eg: cron)
+            return
+        sbm = self.screen.bitmap
+        mbm = module.bitmap
+        sgfx = sbm.gfx_push()
+        sgfx.font.set_font("DejaVuSans", 24)
+        sbm.rectangle(mbm.rect, fill=None)
+        _time = module._time or 0.0
+        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
+        sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
+        self.screen.bitmap.gfx_pop()
+
     def full_render(self):
         self.screen.bitmap.clear()
         for module in self.modules:
