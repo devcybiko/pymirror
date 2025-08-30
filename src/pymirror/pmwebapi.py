@@ -65,6 +65,7 @@ class PMWebApi:
         cached_text = self.memory_cache.get()
         if cached_text:
             _print(" | Cached memory is valid")
+            self.text = 
     
     def _get_file_cache(self):
         cached_text = self.file_cache.get()
