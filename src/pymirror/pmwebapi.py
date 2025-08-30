@@ -5,7 +5,7 @@ import json
 import time
 import inspect
 
-from pymirror.pmlogger import _print, _print, _error, trace
+from pymirror.pmlogger import _debug, _debug, _error, trace
 from pymirror.utils import SafeNamespace
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
 from pymirror.pmcaches import FileCache, MemoryCache
@@ -62,32 +62,32 @@ class PMWebApi:
             self.error = e
 
     def _get_memory_cache(self):
-        _print("... get_memory_cache")
+        _debug("... get_memory_cache")
         cached_text = self.memory_cache.get()
         if cached_text:
-            _print(" | Cached memory is valid")
+            _debug(" | Cached memory is valid")
             self.from_cache = True
         return cached_text
     
     def _get_file_cache(self):
-        _print("... _get_file_cache")
+        _debug("... _get_file_cache")
         if not self.file_cache:
             return None
         cached_text = self.file_cache.get()
         if cached_text:
-            _print(f" | Cached file {self.file_cache.file_info.fname} is valid")
+            _debug(f" | Cached file {self.file_cache.file_info.fname} is valid")
             self.from_cache = True
         else:
-            _print(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
+            _debug(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
         return cached_text
 
     def _get_api_text(self, blocking):
-        _print("... _get_api_text")
+        _debug("... _get_api_text")
         api_text = self._fetch_from_api(blocking)
         if api_text == None or self.error:
             _error(f"Error fetching API response from {self.url}: {self.error}")
             return None
-        _print(f" |  | API response from {self.url} is non-null")
+        _debug(f" |  | API response from {self.url} is non-null")
         self.from_cache = False
         return api_text
 
@@ -99,7 +99,7 @@ class PMWebApi:
         )
         if self.text == None:
             ## the cache is invalid and the api failed, try to read from file
-            _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
+            _debug(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
             self.text = self.file_cache.read()
             self.from_cache = True
         ## update the cache if the text has changed
@@ -110,7 +110,7 @@ class PMWebApi:
     def fetch_json(self, blocking=True):
         result = None
         try:
-            _print(f"Fetching json from {self.url}...")
+            _debug(f"Fetching json from {self.url}...")
             text = self.fetch_text(blocking=blocking)
             if text:
                 result = json.loads(text)
@@ -121,7 +121,7 @@ class PMWebApi:
     def _fetch_blocking(self, blocking):
         if not blocking:
             return None
-        _print(f"Blocking fetch from {self.url} with method {self.httpx.method}")
+        _debug(f"Blocking fetch from {self.url} with method {self.httpx.method}")
         self.start()
         self.async_loop.run_until_complete(self.task)
         result = self.task.result()
@@ -132,16 +132,16 @@ class PMWebApi:
     def _fetch_non_blocking(self, blocking):
         if blocking:
             return None
-        _print(f"Non-blocking fetch from {self.url} with method {self.httpx.method}")
+        _debug(f"Non-blocking fetch from {self.url} with method {self.httpx.method}")
         if self.task is None:
             self.start()
         ## give asyncio some time to process
         self.async_loop.run_until_complete(asyncio.sleep(self.async_delay))
         if not self.task.done():
-            _print(f"Fetch task NOT completed for {self.url}")
+            _debug(f"Fetch task NOT completed for {self.url}")
             self.error = None ## GLS - resetting error (set because file not found or out of date)
             return None
-        _print(f"Fetch task completed for {self.url}")
+        _debug(f"Fetch task completed for {self.url}")
         result = self.task.result()
         self.cancel()
         return result
@@ -150,10 +150,10 @@ class PMWebApi:
         text = None
         self.error = None
         response = self.fetch(blocking=blocking)
-        _print(f"Fetch response from {self.url}: {response}")
+        _debug(f"Fetch response from {self.url}: {response}")
         if not response:
             return None
-        _print(f"Response status code: {response.status_code}")
+        _debug(f"Response status code: {response.status_code}")
         if response.status_code == 200:
             text = response.text
         else:
@@ -163,9 +163,9 @@ class PMWebApi:
     async def _async_fetch(self):
         async with httpx.AsyncClient(timeout=self.httpx.timeout_secs) as client:
             method = self.httpx.method.upper()
-            _print(f"Fetching {self.url} with method {method}...")
+            _debug(f"Fetching {self.url} with method {method}...")
             # Select the method dynamically
-            _print(f"...headers: {self.httpx.headers}, params: {self.httpx.params}")
+            _debug(f"...headers: {self.httpx.headers}, params: {self.httpx.params}")
             response = await client.request(
                 method,
                 self.url,
@@ -175,7 +175,7 @@ class PMWebApi:
                 json=self.httpx.json if method != "GET" else None,
                 follow_redirects=True
             )
-            _print(f"Received response from {self.url} with status code {response.status_code}")
+            _debug(f"Received response from {self.url} with status code {response.status_code}")
             return response
 
 def main():
