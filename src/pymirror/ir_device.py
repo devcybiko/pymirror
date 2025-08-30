@@ -68,3 +68,5 @@ class IRDevice:
             result["released"] = True
             self.key_down = False
             self.last_scancode = None
+        
+        return result
