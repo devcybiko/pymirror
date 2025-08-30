@@ -20,6 +20,7 @@ class PMWebApi:
         ##
         self.async_loop = asyncio.get_event_loop()
         self.task = None
+        self.mem
         self.file_cache = FileCache(text=None, fname=cache_file, timeout_ms=poll_secs * 1000) if cache_file else None
         self.async_delay = 0.01
         self.httpx = self.set_httpx()
