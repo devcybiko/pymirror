@@ -101,7 +101,7 @@ class PMWebApi:
             self.from_cache = True
         ## update the cache if the text has changed
         self.memory_cache.update(self.text)
-        self.file_cache.update(api_text)
+        self.file_cache.update(self.text)
         return self.text
 
     def fetch_json(self, blocking=True):
