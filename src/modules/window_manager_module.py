@@ -14,7 +14,7 @@ class WindowManagerModule(PMModule):
 		pass
 
 	def onRawKeyboardEvent(self, event):
-		print("window_manager", event)
+		_debug("window_manager", event)
 		if event.key_name == "KEY_TAB":
 			if event.pressed and not event.repeat:
 				self.pm.next_focus_module()
@@ -23,5 +23,5 @@ class WindowManagerModule(PMModule):
 				if event.pressed and not event.repeat:
 					event.event = "KeyboardEvent"
 					event.module = self.pm.focus_module.name
-					print("... republishing event", event)
+					_debug("... republishing event", event)
 					self.pm.publish_event(event)
