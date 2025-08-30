@@ -12,4 +12,4 @@ class WindowManagerModule(PMModule):
 	def exec(self):
 		pass
 
-	
+	def onRawKeyboardEvent
