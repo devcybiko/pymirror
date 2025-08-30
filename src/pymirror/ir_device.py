@@ -100,6 +100,7 @@ if __name__ == "__main__":
         64: "KEY_FIVE",
         67: "KEY_SIX",
         7: "KEY_SEVEN",
+        21: "KEY_EIGHT",
         
 
     }
