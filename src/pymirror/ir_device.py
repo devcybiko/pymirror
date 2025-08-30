@@ -197,7 +197,6 @@ class IRDevice:
                                     # Update last press time
                         self.key_last_time[scancode] = now
                                                     
-                        keycode = int(scancode, 16) if scancode.isalnum() else 0
 
                         # Get key name from mapping
                         key_name = self.key_map.get(keycode, f"IR_{scancode}")
