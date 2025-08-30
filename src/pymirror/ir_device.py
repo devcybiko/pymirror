@@ -62,16 +62,20 @@ class IRDevice:
         }
 
     def get_key_event(self):
-        r, _, _ = select.select([self.dev], [], [], 0)  # Non-blocking (0 timeout)
+        # First, check if we have buffered events to return
+        if self.event_buffer:
+            return self.event_buffer.pop(0)
+        
+        # Use a small timeout to catch events that arrive during this call
+        r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout to catch events
         if r:
             print("...", r)
         now = time.time()
-        result = None
         
         if self.dev in r:
-            # Read all available events - this should drain the queue
+            # Read all available events and buffer them
             try:
-                events = self.dev.read()  # This returns a list of all available events
+                events = self.dev.read()
                 for event in events:
                     if event.type == ecodes.EV_MSC:
                         scancode = event.value
@@ -100,10 +104,11 @@ class IRDevice:
                         self.last_scancode = scancode
                         self.last_time = now
                         
-                        # Return immediately on first MSC event - process one at a time
                         if result and result["scancode"]:
                             result["key_name"] = self.key_name_lut.get(result["scancode"])
-                        return result
+                        
+                        # Buffer this event
+                        self.event_buffer.append(result)
 
                     elif event.type == ecodes.EV_SYN:
                         pass  # end of event batch
@@ -111,9 +116,9 @@ class IRDevice:
                 # No more events available
                 pass
 
-        # Detect key up (only if no new event was processed)
+        # Check for key up
         if (
-            result is None  # No new event
+            not self.event_buffer  # No new events buffered
             and self.key_down
             and self.last_scancode is not None
             and (now - self.last_time) > self.KEYUP_THRESHOLD
@@ -123,12 +128,15 @@ class IRDevice:
             result["released"] = True
             result["pressed"] = False
             self.key_down = False
-            # Don't reset last_scancode here - keep it for reference
+            if result and result["scancode"]:
+                result["key_name"] = self.key_name_lut.get(result["scancode"])
+            self.event_buffer.append(result)
 
-        if result and result["scancode"]:
-            result["key_name"] = self.key_name_lut.get(result["scancode"])
-
-        return result
+        # Return the first buffered event, if any
+        if self.event_buffer:
+            return self.event_buffer.pop(0)
+        
+        return None
 
 
 if __name__ == "__main__":
