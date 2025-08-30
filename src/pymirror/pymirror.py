@@ -145,15 +145,15 @@ class PyMirror:
 
     def _read_remote(self):
         ## add any messages that have come from the ir remote
-        while key_event := self.remote.get_key_event():
-            _debug(f"Received event from keyboard: {key_event}")
+        while remote_event := self.remote.get_key_event():
+            _debug(f"Received event from keyboard: {remote_event}")
             event = {
                 "event": "RawKeyboardEvent",
-                "keycode":  key_event["keycode"],
-                'key_name': key_event["key_name"],
-                'scancode': key_event["scancode"],
-                'pressed': key_event["pressed"],
-                'repeat': key_event["repeat"]
+                "keycode":  remote_event["keycode"],
+                'key_name': remote_event["key_name"],
+                'scancode': remote_event["scancode"],
+                'pressed': remote_event["pressed"],
+                'repeat': remote_event["repeat"]
             }
             self.publish_event(event)
     def _send_events_to_module(self, module, events):
