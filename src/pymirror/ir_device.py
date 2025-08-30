@@ -162,7 +162,7 @@ class IRDevice:
                         return {
                             'scancode': scancode,
                             'key_name': key_name,
-                            'keycode': int(scancode, 16) if scancode.isalnum() else 0,
+                            'keycode': 
                             'protocol': protocol,
                             'pressed': True,
                             'repeat': is_repeat
