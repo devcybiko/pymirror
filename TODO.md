@@ -20,12 +20,17 @@ setterm -cursor off
 cd git/pymirror
 ./run.sh
 
-## Running Module Tets
+## Running Module Tests
 
 - `PYTHONPATH=./src python -m pymirror.pmwebapi`
 
 ## Backlog
 
+1. BUG? The cached news is lasting >120 minutes. And it is only showing 10 elements
+1. News items rotating faster than 30 seconds?
+1. Change color of News Headline to something brighter/bolder/ more readable
+1. add control page element to clear cache
+1. add control page element to restart the pymirror and pull from github (to facilitate config updates without rebooting)
 1. Fix headers on Weather Module
 1. Add Alerts to ICal_Module
 8. if alert card is 'timed', show timer percent. bar
