@@ -138,20 +138,30 @@ class KeyboardDevice:
             try:
                 for event in self.device.read():
                     if event.type == ecodes.EV_KEY:
-                        # Only return key press events (value == 1), not releases (value == 0)
+                        # Handle key press (value == 1), key repeat (value == 2), and key release (value == 0)
                         if event.value == 1:  # Key press
                             return {
                                 'keycode': event.code,
                                 'key_name': ecodes.KEY[event.code] if event.code in ecodes.KEY else f'UNKNOWN_{event.code}',
                                 'scancode': event.code,
-                                'pressed': True
+                                'pressed': True,
+                                'repeat': False
+                            }
+                        elif event.value == 2:  # Key repeat (auto-repeat when held down)
+                            return {
+                                'keycode': event.code,
+                                'key_name': ecodes.KEY[event.code] if event.code in ecodes.KEY else f'UNKNOWN_{event.code}',
+                                'scancode': event.code,
+                                'pressed': True,
+                                'repeat': True
                             }
                         elif event.value == 0:  # Key release
                             return {
                                 'keycode': event.code,
                                 'key_name': ecodes.KEY[event.code] if event.code in ecodes.KEY else f'UNKNOWN_{event.code}',
                                 'scancode': event.code,
-                                'pressed': False
+                                'pressed': False,
+                                'repeat': False
                             }
             except OSError:
                 # Device might have been disconnected
