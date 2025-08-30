@@ -283,6 +283,7 @@ class PyMirror:
                 t1 = time.time()
                 print("(sleep):", f"{(t1-t0)*1000} ms")
                 print("")
+                
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
