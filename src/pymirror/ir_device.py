@@ -12,25 +12,14 @@ from typing import Optional, Dict, List, Tuple
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
-LUT = {
-        69: "KEY_ONE",
-        70: "KEY_TWO",
-        71: "KEY_THREE",
-        68: "KEY_FOUR",
-        64: "KEY_FIVE",
-        67: "KEY_SIX",
-        7: "KEY_SEVEN",
-        21: "KEY_EIGHT",
-        9: "KEY_NINE",
-        25: "KEY_ZERO",
-        22: "KEY_NUMBERSIGN",
-        13: "KEY_ASTERISK",
-        24: "KEY_UP",
-        8: "KEY_LEFT",
-        90: "KEY_RIGHT",
-        82: "KEY_DOWN",
-        28: "KEY_ENTER"
-    }
+    # Add your remote's key mappings here
+    # Format is hex value (without 0x): "KEY_NAME"
+    "40": "KEY_OK",       # Example mapping - center/OK button
+    "45": "KEY_UP",       # Example mapping
+    "44": "KEY_DOWN",     # Example mapping
+    "43": "KEY_LEFT",     # Example mapping
+    "46": "KEY_RIGHT",    # Example mapping
+    # Add more mappings based on your IR remote
 }
 
 class IRDevice:
