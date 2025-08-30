@@ -38,6 +38,8 @@ class IRDevice:
                 if event.type == ecodes.EV_MSC:
                     scancode = event.value
                     protocol = self.guess_protocol(scancode)
+                            result["protocol"] = protocol
+                            result["scancode"] = scancode
 
                     if scancode == self.last_scancode:
                         if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
