@@ -157,6 +157,7 @@ class PyMirror:
                 'repeat': remote_event["repeat"]
             }
             self.publish_event(event)
+
     def _send_events_to_module(self, module, events):
         if not module.subscriptions: 
             return
