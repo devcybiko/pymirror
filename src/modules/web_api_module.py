@@ -14,7 +14,8 @@ class WebApiModule(PMCard):
 		self._web_api = config.web_api
 		self.api = PMWebApi(self._web_api.url, self._web_api.poll_secs, self._web_api.cache_file)
 		self.display_timer = PMTimer(self._web_api.cycle_seconds * 1000)
-
+		self.dirty = False
+		
 		self.response = None
 		self.items = []
 		self.item_number = 0
