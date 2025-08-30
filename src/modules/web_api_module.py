@@ -84,6 +84,7 @@ class WebApiModule(PMCard):
 	def exec(self) -> bool:
 		print("web_api_module dirty=", self.dirty)
 		self.dirty = super().exec()
+		print("web_api_module dirty=", self.dirty)
 
 		if self.response == None or self.display_timer.is_timedout():
 			self.result = self._read_api()
