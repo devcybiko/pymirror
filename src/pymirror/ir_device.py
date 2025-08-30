@@ -79,4 +79,4 @@ if __name__ == "__main__":
     while True:
         key = ir.get_key_event()
         if key:
-            print("")
+            print("event:", key)
