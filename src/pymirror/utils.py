@@ -13,7 +13,7 @@ def snake_to_pascal(snake_str):
     return "".join(word.capitalize() for word in snake_str.split("_"))
 
 
-env = Environment(undefined=DebugUndefined)
+_env = Environment(undefined=DebugUndefined)
 def expand_string(s: str, context: dict, dflt: str = None) -> str:
     if not s:
         return s
