@@ -61,10 +61,10 @@ class IRDevice:
         }
 
     def get_key_event(self):
-        r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
+        r, _, _ = select.select([self.dev], [], [], 0)  # Non-blocking (0 timeout)
         now = time.time()
         result = None
-        print(">>> ", r)
+        
         if self.dev in r:
             for event in self.dev.read():
                 if event.type == ecodes.EV_MSC:
@@ -78,11 +78,17 @@ class IRDevice:
                             and (now - self.last_time) < self.REPEAT_THRESHOLD
                         ):
                             result["repeat"] = True
+                            result["pressed"] = True
                         else:
-                            result["pressed"] = False
+                            # Same key pressed after key-up threshold - treat as new press
+                            result["pressed"] = True
                             self.key_down = True
                     else:
-                        result["repeat"] = True
+                        # Different key - implicitly release previous key and press new one
+                        if self.last_scancode is not None and self.key_down:
+                            # Previous key was stuck down, implicitly release it
+                            self.key_down = False
+                        result["pressed"] = True
                         self.key_down = True
 
                     self.last_scancode = scancode
@@ -91,9 +97,10 @@ class IRDevice:
                 elif event.type == ecodes.EV_SYN:
                     pass  # end of event batch
 
-        # Detect key up
+        # Detect key up (only if no new event was processed)
         if (
-            self.key_down
+            result is None  # No new event
+            and self.key_down
             and self.last_scancode is not None
             and (now - self.last_time) > self.KEYUP_THRESHOLD
         ):
@@ -102,13 +109,11 @@ class IRDevice:
             result["released"] = True
             result["pressed"] = False
             self.key_down = False
-            self.last_scancode = None
+            # Don't reset last_scancode here - keep it for reference
 
         if result and result["scancode"]:
             result["key_name"] = self.key_name_lut.get(result["scancode"])
 
-        if (result):
-            print("... remote:", result)
         return result
 
 
