@@ -181,7 +181,7 @@ class IRDevice:
         
         # Process one expired key at a time, but remove it immediately
         if expired_keys:
-            sc = expired_keys[0]
+            scancode = expired_keys[0]
             # Remove from tracking dict immediately to prevent repeat releases
             del self.key_last_time[sc]
             keycode = int(sc, 16) if sc.isalnum() else 0
