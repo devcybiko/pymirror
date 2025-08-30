@@ -21,5 +21,6 @@ class WindowManagerModule(PMModule):
 		else:
 			if self.pm.focus_module:
 				event.event = "KeyboardEvent"
+				event.module = self.pm.focus_module.name
 				print("... republishing event", event)
 				self.pm.publish_event(event)
