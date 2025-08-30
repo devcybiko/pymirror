@@ -19,6 +19,7 @@ class WebApiModule(PMCard):
 		self.items = []
 		self.item_number = 0
 		self.update(None, "(loading...)", None)  # Initialize with empty strings
+		self.
 
 	def _read_items(self, force: bool = False) -> int:
 		context = {
