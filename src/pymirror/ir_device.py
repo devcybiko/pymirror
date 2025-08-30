@@ -60,6 +60,3 @@ class IRDevice:
             print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
             self.key_down = False
             self.last_scancode = None
-
-        except KeyboardInterrupt:
-            print("\nExiting...")
