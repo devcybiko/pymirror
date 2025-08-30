@@ -1,8 +1,8 @@
-from pymirror.crontab import Crontab
+from pymirror.crontab import WindowManagertab
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _debug
 
-class CronModule(PMModule):
+class WindowManagerModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._cron = config.cron
@@ -10,7 +10,7 @@ class CronModule(PMModule):
 		self.alerts = config.alerts or []
 		if type(self.alerts) is not list:
 			self.alerts = [self.alerts]
-		self.crontab = Crontab([alert.cron for alert in self.alerts])
+		self.crontab = WindowManagertab([alert.cron for alert in self.alerts])
 
 	def render(self, force: bool = False) -> bool:
 		pass
