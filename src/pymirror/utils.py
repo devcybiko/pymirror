@@ -19,7 +19,7 @@ def expand_string(s: str, context: dict, dflt: str = None) -> str:
     if not isinstance(s, str):
         return s
     s = os.path.expandvars(s)
-    if {{}}
+    if "{}"
     env = Environment(undefined=DebugUndefined)
     template = env.from_string(s)
     try:
