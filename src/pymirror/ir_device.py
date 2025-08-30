@@ -186,6 +186,7 @@ class IRDevice:
             del self.key_last_time[sc]
             keycode = int(scancode, 16) if sc.isalnum() else 0
             key_name = self.key_map.get(keycode, f"IR_{sc}")
+            return None
             # return {
             #     'scancode': scancode,
             #     'key_name': key_name,
