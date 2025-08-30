@@ -74,7 +74,7 @@ class PMWebApi:
             _print(f" | Cached file {self.file_cache.file_info.fname} is valid")
             self.from_cache = True
         else:
-                        _print(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
+            _print(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
 
         return cached_text
 
