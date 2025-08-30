@@ -271,7 +271,7 @@ class PyMirror:
                 _debug("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
-                self._read_keyboard() # read the keyboard and create any keyboard events
+                self._read_remote() # read the keyboard and create any keyboard events
                 t1 = time.time()
                 _debug("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
