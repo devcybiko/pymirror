@@ -57,7 +57,7 @@ class WebApiModule(PMCard):
 		t0 = time.time()
 		self._read_items()
 		t1 = time.time()
-		print()
+		print("_read_api")
 
 	def _display_next_item(self):
 		if not self.items:
