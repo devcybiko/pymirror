@@ -4,7 +4,7 @@ import time
 from evdev import InputDevice, ecodes
 
 # Timing thresholds (seconds)
-REPEAT_THRESHOLD = 0.25  # repeated keypress interval
+self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
 KEYUP_THRESHOLD = 0.30   # no signal -> key up
 
 class IRDevice:
@@ -42,7 +42,7 @@ try:
                     protocol = guess_protocol(scancode)
 
                     if scancode == last_scancode:
-                        if key_down and (now - last_time) < REPEAT_THRESHOLD:
+                        if key_down and (now - last_time) < self.REPEAT_THRESHOLD:
                             print(f"{protocol}: scancode=0x{scancode:X} repeat")
                         else:
                             print(f"{protocol}: scancode=0x{scancode:X} pressed")
