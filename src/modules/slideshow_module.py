@@ -22,6 +22,7 @@ class SlideshowModule(PMModule):
 		if self._slideshow.frame:
 			self.frame_bm = PMBitmap().load(self._slideshow.frame)
 			self.frame_bm.scale(self.bitmap.width, self.bitmap.height, "stretch")
+		
 
 	def load_folder(self, folder: str):
 		""" Load all photo paths from the given folder """
