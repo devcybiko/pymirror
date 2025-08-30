@@ -46,6 +46,10 @@ class IRDevice:
                     scancode = event.value
                     protocol = self.guess_protocol(scancode)
                     result = self._new_event
+                    result["protocol"] = protocol
+                    result["scancode"] = scancode
+                    result["repeat"] = False
+                    result["pressed"] = False
 
                     if scancode == self.last_scancode:
                         if (
