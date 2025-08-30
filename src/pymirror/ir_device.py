@@ -29,37 +29,37 @@ class IRDevice:
             return "Unknown"
 
     def get_key_event(self):
-            r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
-            now = time.time()
+        r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
+        now = time.time()
 
-            if self.dev in r:
-                for event in self.dev.read():
-                    if event.type == ecodes.EV_MSC:
-                        scancode = event.value
-                        protocol = self.guess_protocol(scancode)
+        if self.dev in r:
+            for event in self.dev.read():
+                if event.type == ecodes.EV_MSC:
+                    scancode = event.value
+                    protocol = self.guess_protocol(scancode)
 
-                        if scancode == self.last_scancode:
-                            if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
-                                print(f"{protocol}: scancode=0x{scancode:X} repeat")
-                            else:
-                                print(f"{protocol}: scancode=0x{scancode:X} pressed")
-                                self.key_down = True
+                    if scancode == self.last_scancode:
+                        if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
+                            print(f"{protocol}: scancode=0x{scancode:X} repeat")
                         else:
                             print(f"{protocol}: scancode=0x{scancode:X} pressed")
                             self.key_down = True
+                    else:
+                        print(f"{protocol}: scancode=0x{scancode:X} pressed")
+                        self.key_down = True
 
-                        self.last_scancode = scancode
-                        self.last_time = now
+                    self.last_scancode = scancode
+                    self.last_time = now
 
-                    elif event.type == ecodes.EV_SYN:
-                        pass  # end of event batch
+                elif event.type == ecodes.EV_SYN:
+                    pass  # end of event batch
 
-            # Detect key up
-            if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
-                protocol = self.guess_protocol(self.last_scancode)
-                print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
-                self.key_down = False
-                self.last_scancode = None
+        # Detect key up
+        if self.key_down and self.last_scancode is not None and (now - self.last_time) > self.KEYUP_THRESHOLD:
+            protocol = self.guess_protocol(self.last_scancode)
+            print(f"{protocol}: scancode=0x{self.last_scancode:X} released")
+            self.key_down = False
+            self.last_scancode = None
 
         except KeyboardInterrupt:
             print("\nExiting...")
