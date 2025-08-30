@@ -7,6 +7,7 @@ from evdev import InputDevice, ecodes
 class IRDevice:
     def __init__(self, device_path="/dev/input/event0"):
         self.dev = InputDevice(device_path)
+        print()
         # Timing thresholds (seconds)
         self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
         self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
