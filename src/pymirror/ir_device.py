@@ -3,7 +3,26 @@ import select
 import time
 from evdev import InputDevice, ecodes
 
-LUT 
+LUT =    lut = {
+        69: "KEY_ONE",
+        70: "KEY_TWO",
+        71: "KEY_THREE",
+        68: "KEY_FOUR",
+        64: "KEY_FIVE",
+        67: "KEY_SIX",
+        7: "KEY_SEVEN",
+        21: "KEY_EIGHT",
+        9: "KEY_NINE",
+        25: "KEY_ZERO",
+        22: "KEY_NUMBERSIGN",
+        13: "KEY_ASTERISK",
+        24: "KEY_UP",
+        8: "KEY_LEFT",
+        90: "KEY_RIGHT",
+        82: "KEY_DOWN",
+        28: "KEY_ENTER"
+    }
+
 class IRDevice:
     def __init__(self, device_path="/dev/input/event0", lut={}):
         self.dev = InputDevice(device_path)
