@@ -40,7 +40,7 @@ class IRDevice:
                     protocol = self.guess_protocol(scancode)
                     result["protocol"] = protocol
                     result["scancode"] = scancode
-                        result["repeat"] = True
+                    result["repeat"] = True
 
                     if scancode == self.last_scancode:
                         if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
