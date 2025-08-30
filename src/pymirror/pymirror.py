@@ -136,7 +136,7 @@ class PyMirror:
         while key_event := self.keyboard.get_key_event():
             print(f"Received event from keyboard: {key_event}")
             event = {
-                "event": "KeyboardEvent",
+                "event": "RawKeyboardEvent",
                 "keycode":  key_event["keycode"],
                 'key_name': key_event["key_name"],
                 'scancode': key_event["scancode"],
