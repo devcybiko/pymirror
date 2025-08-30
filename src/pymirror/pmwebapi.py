@@ -63,7 +63,7 @@ class PMWebApi:
 
     def fetch_text(self, blocking=True):
         cached_text = self.memory_cache.get()
-        if not chached_text:
+        if not cached_text:
             cached_text = self.file_cache.get()
         if cached_text != None:
             _print(f" | Cached file {self.file_cache.file_info.fname} is valid")
