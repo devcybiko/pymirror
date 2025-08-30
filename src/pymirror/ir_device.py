@@ -84,7 +84,7 @@ class IRDevice:
             self.key_down = False
             self.last_scancode = None
 
-        if result and resu
+        if result and result["scancode"]
         return result
 
 
