@@ -93,7 +93,7 @@ class PMWebApi:
         if self.error:
             _error(f"Error fetching API response from {self.url}: {self.error}")
             self.from_cache = False
-            return None
+        return None
 
     def fetch_text(self, blocking=True):
         self.text = (
