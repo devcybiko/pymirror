@@ -82,6 +82,7 @@ class WebApiModule(PMCard):
 			self.response = None ## HACK - this forces a redisplay... questionable
 
 	def exec(self) -> bool:
+		print()
 		self.dirty = super().exec()
 
 		if self.response == None or self.display_timer.is_timedout():
