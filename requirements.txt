@@ -9,3 +9,4 @@ pygame
 ics
 python-dateutil
 httpx
+lirc
