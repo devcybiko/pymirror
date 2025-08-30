@@ -31,7 +31,7 @@ class PMModule(ABC):
 		self.pm = pm
 		self._moddef = _moddef = PMModuleDef.from_dict(config.moddef.__dict__)
 		self.screen = pm.screen
-		self.module_n = 0 ## PyMirror 
+		self.module_n = 0 ## PyMirror sets this to the index in the pm.modules list
 		self.name = _moddef.name or self.__class__.__name__
 		self.position = _moddef.position
 		self.disabled = _moddef.disabled
