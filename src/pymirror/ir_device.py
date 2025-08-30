@@ -14,7 +14,7 @@ class IRDevice:
         self.last_scancode = None
         self.last_time = 0
         self.key_down = False
-        self.translation_
+        self.l
 
     def set_translation_table(self, d: dict):
         pass
