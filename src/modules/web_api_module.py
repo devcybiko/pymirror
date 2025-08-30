@@ -76,7 +76,7 @@ class WebApiModule(PMCard):
 			self.item_number -= 1
 		if event.key_name == "KEY_RIGHT":
 			self.item_number += 1
-		
+	
 		pass
 
 	def exec(self) -> bool:
