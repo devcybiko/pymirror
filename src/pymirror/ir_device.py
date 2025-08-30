@@ -3,6 +3,7 @@ import subprocess
 import threading
 import queue
 import sys
+import time
 
 def enqueue_output(out, q):
     for line in iter(out.readline, b''):
