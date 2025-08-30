@@ -1,58 +1,44 @@
 #!/usr/bin/env python3
-import lirc
+import select
 import time
+from evdev import InputDevice, ecodes
 
 LUT = {
-        69: "KEY_ONE",
-        70: "KEY_TWO",
-        71: "KEY_THREE",
-        68: "KEY_FOUR",
-        64: "KEY_FIVE",
-        67: "KEY_SIX",
-        7: "KEY_SEVEN",
-        21: "KEY_EIGHT",
-        9: "KEY_NINE",
-        25: "KEY_ZERO",
-        22: "KEY_NUMBERSIGN",
-        13: "KEY_ASTERISK",
-        24: "KEY_UP",
-        8: "KEY_LEFT",
-        90: "KEY_RIGHT",
-        82: "KEY_DOWN",
-        28: "KEY_ENTER"
-    }
+    69: "KEY_ONE", 70: "KEY_TWO", 71: "KEY_THREE", 68: "KEY_FOUR", 64: "KEY_FIVE",
+    67: "KEY_SIX", 7: "KEY_SEVEN", 21: "KEY_EIGHT", 9: "KEY_NINE", 25: "KEY_ZERO",
+    22: "KEY_NUMBERSIGN", 13: "KEY_ASTERISK", 24: "KEY_UP", 8: "KEY_LEFT",
+    90: "KEY_RIGHT", 82: "KEY_DOWN", 28: "KEY_ENTER"
+}
 
 class IRDevice:
-    def __init__(self, program_name="pymirror", lut=LUT):
-        self.program_name = program_name
+    def __init__(self, device_path="/dev/input/event0", lut=LUT):
+        self.dev = InputDevice(device_path)
         self.key_name_lut = lut
-        self.connection = None
-        self.last_command = None
+        
+        # Timing thresholds (seconds)
+        self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
+        self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
+        
+        # State
+        self.last_scancode = None
         self.last_time = 0
         self.key_down = False
-        self.REPEAT_THRESHOLD = 0.10
-        self.KEYUP_THRESHOLD = 0.10
-        self.event_buffer = []
-        
-        # Try different LIRC connection methods
-        try:
-            # Method 1: Try RawConnection (doesn't need lircrc)
-            self.connection = lirc.RawConnection()
-            print(f"Connected to LIRC using RawConnection")
-        except Exception as e:
-            print(f"RawConnection failed: {e}")
-            try:
-                # Method 2: Try LircdConnection without parameters
-                self.connection = lirc.LircdConnection()
-                print(f"Connected to LIRC using LircdConnection")
-            except Exception as e:
-                print(f"LircdConnection failed: {e}")
-                print("Make sure lircd is running and accessible")
-                self.connection = None
 
-    def _new_event(self, command=None):
+    def guess_protocol(self, sc):
+        """Basic protocol guess based on scancode"""
+        if sc & 0xFF00 == 0x0000:
+            return "NEC"
+        elif sc & 0xFF00 == 0x0100:
+            return "RC5"
+        elif sc & 0xFF00 == 0x0200:
+            return "Sony"
+        else:
+            return "Unknown"
+
+    def _new_event(self, protocol=None, scancode=None):
         return {
-            "command": command,
+            "protocol": protocol,
+            "scancode": scancode,
             "repeat": False,
             "pressed": False,
             "released": False,
@@ -60,108 +46,81 @@ class IRDevice:
         }
 
     def get_key_event(self):
-        if not self.connection:
-            return None
-            
-        # First, check if we have buffered events to return
-        if self.event_buffer:
-            return self.event_buffer.pop(0)
-        
+        """Get IR event - adapted from your working ir_scancode_nonblocking.py"""
+        r, _, _ = select.select([self.dev], [], [], 0.05)  # 50ms timeout
         now = time.time()
-        
-        try:
-            # Try to read from LIRC
-            if hasattr(self.connection, 'readline'):
-                # RawConnection method
-                line = self.connection.readline(timeout=0.05)  # 50ms timeout
-            else:
-                # Other connection types
-                line = self.connection.receive(timeout=0.05)
-                
-            if line:
-                # Parse LIRC line format: "code repeat_count button_name remote_name"
-                parts = line.strip().split()
-                if len(parts) >= 3:
-                    code = parts[0]
-                    repeat_count = int(parts[1])
-                    button_name = parts[2]
-                    
-                    result = self._new_event(button_name)
-                    
-                    if button_name == self.last_command:
-                        if (
-                            self.key_down
-                            and (now - self.last_time) < self.REPEAT_THRESHOLD
-                        ):
+        result = None
+
+        if self.dev in r:
+            for event in self.dev.read():
+                if event.type == ecodes.EV_MSC:
+                    scancode = event.value
+                    protocol = self.guess_protocol(scancode)
+                    result = self._new_event(protocol, scancode)
+
+                    if scancode == self.last_scancode:
+                        if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
                             result["repeat"] = True
                             result["pressed"] = True
                         else:
-                            # Same key pressed after threshold - treat as new press
                             result["pressed"] = True
                             self.key_down = True
                     else:
-                        # Different key - implicitly release previous key
-                        if self.last_command is not None and self.key_down:
-                            self.key_down = False
                         result["pressed"] = True
                         self.key_down = True
 
-                    self.last_command = button_name
+                    self.last_scancode = scancode
                     self.last_time = now
                     
-                    # Look up key name
-                    result["key_name"] = button_name
+                    if result and result["scancode"]:
+                        result["key_name"] = self.key_name_lut.get(result["scancode"])
                     
-                    self.event_buffer.append(result)
-                    
-        except Exception as e:
-            # Timeout or other error - that's normal for non-blocking read
-            pass
+                    return result
 
-        # Check for key up
-        if (
-            not self.event_buffer  # No new events buffered
-            and self.key_down
-            and self.last_command is not None
-            and (now - self.last_time) > self.KEYUP_THRESHOLD
-        ):
-            result = self._new_event(self.last_command)
+                elif event.type == ecodes.EV_SYN:
+                    pass  # end of event batch
+
+        # Detect key up
+        if (self.key_down and self.last_scancode is not None and 
+            (now - self.last_time) > self.KEYUP_THRESHOLD):
+            protocol = self.guess_protocol(self.last_scancode)
+            result = self._new_event(protocol, self.last_scancode)
             result["released"] = True
             result["pressed"] = False
-            result["key_name"] = self.last_command
             self.key_down = False
-            self.event_buffer.append(result)
+            
+            if result and result["scancode"]:
+                result["key_name"] = self.key_name_lut.get(result["scancode"])
+            
+            return result
 
-        # Return the first buffered event, if any
-        if self.event_buffer:
-            return self.event_buffer.pop(0)
-        
         return None
 
     def close(self):
-        if self.connection:
-            try:
-                self.connection.close()
-            except:
-                pass
+        """Close the IR device"""
+        if self.dev:
+            self.dev.close()
 
 
 if __name__ == "__main__":
+    print("Testing IR device input. Press remote buttons or Ctrl+C to quit.")
+    print("Note: You may need to run with sudo for device access")
+    
     ir = IRDevice()
-    
-    if not ir.connection:
-        print("Failed to connect to LIRC. Make sure lircd is running.")
-        exit(1)
-    
-    print("Listening for IR commands...")
     
     try:
         while True:
             event = ir.get_key_event()
             if event:
-                print("IR event:", event)
-            time.sleep(0.01)  # Small delay
+                if event['pressed']:
+                    repeat_str = " (REPEAT)" if event['repeat'] else ""
+                    print(f"{event['protocol']}: scancode={event['scancode']:X} key={event['key_name']}{repeat_str}")
+                elif event['released']:
+                    print(f"{event['protocol']}: scancode={event['scancode']:X} key={event['key_name']} RELEASED")
+            
+            time.sleep(0.01)
     except KeyboardInterrupt:
         print("\nExiting...")
     finally:
         ir.close()
+        print("IR device closed.")
