@@ -63,6 +63,8 @@ class PMWebApi:
 
     def _get_memory_cache(self):
         self.memory_cache.get()
+    
+    def
     def fetch_text(self, blocking=True):
         cached_text = 
         if cached_text:
