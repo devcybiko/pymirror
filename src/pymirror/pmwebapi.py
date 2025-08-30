@@ -94,17 +94,6 @@ class PMWebApi:
             _error(f"Error fetching API response from {self.url}: {self.error}")
             self.from_cache = False
             return None
-        if self.text == None:
-            ## the cache is invalid, try to read from file
-            _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
-            self.text = self.file_cache.read()
-            self.from_cache = True
-        else:
-            ## the api returned nothing, keep using the old text
-            _print(f" |  |  | the api returned nothing, keep using the old text")
-            self.from_cache = True
-            pass
-        return self.text
 
     def fetch_text(self, blocking=True):
         self.text = (
