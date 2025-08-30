@@ -10,6 +10,10 @@ class IRDevice:
         # Timing thresholds (seconds)
         self.REPEAT_THRESHOLD = 0.25  # repeated keypress interval
         self.KEYUP_THRESHOLD = 0.30   # no signal -> key up
+# State
+last_scancode = None
+last_time = 0
+key_down = False
 
 
 
