@@ -102,11 +102,6 @@ class PMWebApi:
             _print(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
             self.text = self.file_cache.read()
             self.from_cache = True
-        else:
-            ## the api returned nothing, keep using the old text
-            _print(f" |  |  | the api returned nothing, keep using the old text")
-            self.from_cache = True
-            pass
         return self.text
 
         return self.text
