@@ -51,6 +51,8 @@ class WebApiModule(PMCard):
 		self.api.httpx.params = self._web_api.params.__dict__
 		t0 = time.time()
 		self.response = self.api.fetch_json(blocking=False)
+		t1 = time.time()
+		
 		if not self.response:
 			_error(f"Error fetching data")
 			return False
