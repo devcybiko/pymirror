@@ -8,7 +8,7 @@ import inspect
 from pymirror.pmlogger import _print, _print, _error, trace
 from pymirror.utils import SafeNamespace
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
-from pymirror.pmcaches import FileCache
+from pymirror.pmcaches import FileCache, MemoryCache
 
 # pmlogger.set_level(PMLoggerLevel.DEBUG)
 
