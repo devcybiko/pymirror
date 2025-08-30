@@ -166,7 +166,7 @@ class PyMirror:
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
-    def _focus_render(self,):
+    def _focus_render(self):
         module = self.focus_module
         print("focus:", module)
         if not module or not module.bitmap: 
