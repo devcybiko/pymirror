@@ -13,11 +13,14 @@ class KeyboardDevice:
     """
     Direct keyboard device reader that avoids stdin side effects.
     Reads from /dev/input/eventX devices directly.
+    Can optionally grab the device exclusively to prevent console echo.
     """
     
-    def __init__(self, device_path: Optional[str] = None):
+    def __init__(self, device_path: Optional[str] = None, grab_device: bool = True):
         self.device = None
         self.device_path = device_path
+        self.grab_device = grab_device
+        self.is_grabbed = False
         self._find_and_setup_keyboard()
     
     def _find_keyboard_devices(self) -> List[str]:
@@ -71,6 +74,18 @@ class KeyboardDevice:
                 self.device = InputDevice(device_path)
                 self.device_path = device_path
                 print(f"Using keyboard device: {device_path} - {self.device.name}")
+                
+                # Grab the device exclusively if requested
+                if self.grab_device:
+                    try:
+                        self.device.grab()
+                        self.is_grabbed = True
+                        print(f"Exclusively grabbed keyboard device: {device_path}")
+                        print("Keyboard input will not appear in console")
+                    except OSError as e:
+                        print(f"Warning: Could not grab device exclusively: {e}")
+                        print("Keyboard input may still appear in console")
+                
                 break
             except (OSError, PermissionError) as e:
                 print(f"Cannot access {device_path}: {e}")
@@ -139,28 +154,39 @@ class KeyboardDevice:
         return key_map.get(key_name, key_name)
     
     def close(self):
-        """Close the keyboard device"""
+        """Close the keyboard device and release grab if active"""
         if self.device:
+            if self.is_grabbed:
+                try:
+                    self.device.ungrab()
+                    print("Released keyboard device grab")
+                except OSError:
+                    pass  # Device might already be released
+                self.is_grabbed = False
             self.device.close()
             self.device = None
 
 
-        self.is_setup = False
-    
-
 # Example usage and testing
 if __name__ == "__main__":
-    print("Testing direct keyboard device input. Press keys or 'q' to quit:")
+    print("Testing direct keyboard device input with exclusive grab.")
+    print("This will prevent keystrokes from appearing in the console.")
+    print("Press keys or 'q' to quit:")
     print("Note: You may need to run with sudo for device access")
     
-    # Test the new KeyboardDevice class
-    kbd = KeyboardDevice()
+    # Test the new KeyboardDevice class with grab enabled (default)
+    kbd = KeyboardDevice(grab_device=True)
     
     if not kbd.device:
         print("No keyboard device found or accessible. Try running with sudo.")
         exit(1)
     
     print(f"Using device: {kbd.device_path}")
+    if kbd.is_grabbed:
+        print("Device is exclusively grabbed - keystrokes won't appear in console")
+    else:
+        print("Device is NOT grabbed - keystrokes may appear in console")
+    
     print("Press keys (q to quit):")
     
     try:
@@ -181,4 +207,4 @@ if __name__ == "__main__":
         print("\nInterrupted by Ctrl+C")
     finally:
         kbd.close()
-        print("Keyboard device closed.")
+        print("Keyboard device closed and grab released.")
