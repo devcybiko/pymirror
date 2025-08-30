@@ -151,7 +151,6 @@ class PyMirror:
             event = {
                 "event": "RawKeyboardEvent",
                 "scancode": remote_event["scancode"]
-                "keycode":  remote_event["keycode"],
                 'key_name': remote_event["key_name"],
                 'scancode': remote_event["scancode"],
                 'pressed': remote_event["pressed"],
