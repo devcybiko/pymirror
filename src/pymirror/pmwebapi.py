@@ -70,6 +70,7 @@ class PMWebApi:
         return cached_text
     
     def _get_file_cache(self):
+_get_api_text
         if not self.file_cache:
             return None
         cached_text = self.file_cache.get()
