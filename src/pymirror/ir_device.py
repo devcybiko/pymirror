@@ -76,4 +76,4 @@ class IRDevice:
 
 if __name__ == "__main__":
     ir = IRDevice()
-    while(ir)
+    while ir
