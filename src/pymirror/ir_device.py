@@ -14,10 +14,10 @@ class IRDevice:
         self.last_scancode = None
         self.last_time = 0
         self.key_down = False
-        self.lut = {}
+        self.key_name_lut = {}
 
-    def set_lut(self, d: dict):
-        self.lut = d
+    def set_key_name_lut(self, d: dict):
+        self.key_name_lut = d
         pass
 
     def guess_protocol(self, sc):
