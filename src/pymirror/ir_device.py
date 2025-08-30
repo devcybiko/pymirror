@@ -3,7 +3,7 @@ import select
 import time
 from evdev import InputDevice, ecodes
 
-LUT = l {
+LUT = lut {
         69: "KEY_ONE",
         70: "KEY_TWO",
         71: "KEY_THREE",
