@@ -56,4 +56,4 @@ class SlideshowModule(PMModule):
 
 def onKeyboardEvent(self, event):
 	print("slideshow_module", event)
-	
+	pass
