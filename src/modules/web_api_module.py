@@ -69,7 +69,7 @@ class WebApiModule(PMCard):
 		self.item_number += 1
 	
 	def onKeyEvent(self, event):
-		prin
+		print("web_api_module", event)
 		pass
 
 	def exec(self) -> bool:
