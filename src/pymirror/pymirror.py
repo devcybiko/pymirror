@@ -44,6 +44,7 @@ class PyMirror:
         self._clear_screen = True  # Flag to clear the screen on each loop
         self._load_modules()
         self.server.start()  # Start the server to handle incoming events
+        self.focus_module = None
 
     def _load_config(self, config_fname) -> SafeNamespace:
         # read .env file if it exists
