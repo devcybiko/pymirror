@@ -41,7 +41,7 @@ class IRDevice:
 
                     if scancode == self.last_scancode:
                         if self.key_down and (now - self.last_time) < self.REPEAT_THRESHOLD:
-                            result
+                            result[""]
                             print(f"{protocol}: scancode=0x{scancode:X} repeat")
                         else:
                             print(f"{protocol}: scancode=0x{scancode:X} pressed")
