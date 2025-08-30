@@ -14,7 +14,7 @@ class IRDevice:
         self.last_scancode = None
         self.last_time = 0
         self.key_down = False
-        self.lut
+        self.lut = {}
 
     def set_lut(self, d: dict):
         self.lut = d
