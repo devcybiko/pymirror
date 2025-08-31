@@ -165,7 +165,7 @@ class PyMirror:
         for event in events:
             if event.event in module.subscriptions:
                 if not event.module or event.module == module.name:
-                     _print(f"_send_events_to_module: _send_events_to_module to {module.name} event:", event)
+                    _print(f"_send_events_to_module: _send_events_to_module to {module.name} event:", event)
                     module.onEvent(event)
 
     def _convert_events_to_namespace(self):
