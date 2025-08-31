@@ -316,11 +316,7 @@ class PyMirror:
                 t1 = time.time()
                 _print("_update_screen:", f"{(t1-t0)*1000} ms")
 
-                t0 = time.time()
                 time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
-                t1 = time.time()
-                _print("(sleep):", f"{(t1-t0)*1000} ms")
-                _print("")
 
         except Exception as e:
             traceback.print_exc()  # <-- This _prints the full stack trace to stdout
