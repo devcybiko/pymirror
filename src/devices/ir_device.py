@@ -98,17 +98,23 @@ class IRDevice:
             print("... parts:", parts)
             type = parts[2]
             code = parts[3]
+            event["type"] = type
+            event["code"] = code
+            event["repeat"] = False
+
             if len(words) > 2:
                 parts = words[2].split(" ")
                 print("... ... parts 2:", parts)
                 scancode = parts[2]
                 keycode = int(parts[2], 16)
-                event["type"] = type
-                event["code"] = code
-                event["scancode"] =  parts[2]
+                event["scancode"] = parts[2]
                 event["keycode"] = keycode
                 event["key_name"] = self.key_map.get(keycode, "IR_" + scancode)
-            event["repeat"] = False
+            else:
+                event["scancode"] = None
+                event["keycode"] = None
+                event["key_name"] = None
+
             event["pressed"] = True
         else:
             _error("Unknown ir_test line", line)
