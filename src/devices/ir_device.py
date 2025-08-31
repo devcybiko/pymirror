@@ -190,7 +190,7 @@ class IRDevice:
         event = self._parse_ir_test_line(line)
         return event
         
-    def get_key_event(self, types=["lirc"], repeat=True):
+    def get_key_event(self, types=["lirc"], repeat=False):
         while event := self._get_key_event():
             if not repeat and event["repeat"]:
                 # if we're not interested in repeating events, discard event
