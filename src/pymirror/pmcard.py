@@ -30,7 +30,7 @@ class PMCard(PMModule):
     def is_dirty(self) -> bool:
         dirty = (
             self.dirty
-            self._header.is_dirty()
+            or self._header.is_dirty()
             or self._body.is_dirty()
             or self._footer.is_dirty()
         )
