@@ -43,7 +43,10 @@ class PMServer:
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
             if type(data) == str:
-                data = json.loads(data.strip())
+                try:
+                    data = json.loads(data.strip())
+                except:
+                    
             self.queue.put(data)
             return jsonify({"status": "queued", "action": data})
 
