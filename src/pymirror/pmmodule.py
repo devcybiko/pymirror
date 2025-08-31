@@ -137,12 +137,15 @@ class PMModule(ABC):
         return self.focus
 
     def render_focus(self):
+        print("render_focus:", self.focus)
         if not self.focus:
             return
         gfx = self.bitmap.gfx_push()
         gfx.color = "#ff0"
         gfx.line_width = 5
-        self.bitmap.rectangle(self.bitmap.rect, fill=None)
+        rect = PMRect(0, 0, self.bitmap.rect.width - 1, self.bitmap.rect.height - 1)
+        self.bitmap.rectangle(rect, fill=None)
+        self.bitmap.gfx_pop()
         
     def is_subscribed(self, event_name):
         return event_name in self.subscriptions
