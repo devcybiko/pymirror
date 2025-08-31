@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, jsonify, render_template
 from threading import Thread
 import logging
@@ -42,7 +43,7 @@ class PMServer:
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
             if type(data) == str:
-                data = json.loads(data.)
+                data = json.loads(data.strip())
             self.queue.put(data)
             return jsonify({"status": "queued", "action": data})
 
