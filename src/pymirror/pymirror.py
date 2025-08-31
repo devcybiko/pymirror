@@ -255,10 +255,10 @@ class PyMirror:
                 if module._time:
                     module._time += end_time - start_time  # add on the time taken for module rendering
 
-    def _update_screen(self):
+    def _update_screen(self, modules_changed):
         self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
-            if (not module.disabled) and module.bitmap:
+            if (not module.disabled) and module.bitmap and module in modules_changed:
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
@@ -283,7 +283,7 @@ class PyMirror:
                 self._time(self._send_events_to_modules)
                 modules_changed = self._time(self._exec_modules)
                 self._time(self._render_modules, modules_changed)
-                self._time(self._update_screen)
+                self._time(self._update_screen, modules_changed)
                 # _debug("---")
                 time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
 
