@@ -267,7 +267,7 @@ class PyMirror:
         t0 = time.time()
         fn(**args)
         t1 = time.time()
-        _print(fn, f"{(t1-t0)*1000} ms")
+        _print(fn, ":", f"{(t1-t0)*1000} ms")
 
     def run(self):
         try:
