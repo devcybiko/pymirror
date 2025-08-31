@@ -9,6 +9,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
+from pymirror.pmlogging import _debug, _error, _print
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -75,10 +76,10 @@ class IRDevice:
             
             # Make stdout non-blocking
             os.set_blocking(self.process.stdout.fileno(), False)
-            print(f"IR device initialized: listening for {self.protocols} protocols")
+            _print(f"IR device initialized: listening for {self.protocols} protocols")
             
         except Exception as e:
-            print(f"Failed to start ir-keytable: {e}")
+            _print(f"Failed to start ir-keytable: {e}")
             self.process = None
     
     def _parse_scancode(self, line: str) -> Optional[str]:
@@ -116,59 +117,61 @@ class IRDevice:
         Returns None if no key event, or a dict with key info if pressed.
         """
         if not self.process:
+            _error("Please start the IR process")
             return None
         
         # Check if process is still running
         if self.process.poll() is not None:
-            print("IR process exited, restarting...")
+            _print("IR process exited, restarting...")
             self._start_ir_process()
             return None
             
         # Non-blocking read with small timeout
-        rlist, _, _ = select.select([self.process.stdout], [], [], 0.01)
+        rlist, _, _ = select.select([self.process.stdout], [], [], 0.001)
         
         # Process any new data
-        if self.process.stdout in rlist:
-            try:
-                chunk = self.process.stdout.read(1024)
-                if chunk:
-                    self.buffer += chunk
+        if not self.process.stdout in rlist:
+            return None
+        try:
+            chunk = self.process.stdout.read(1024) or ""
+            self.buffer += chunk
+                
+            # Process complete lines in buffer
+            lines = self.buffer.split("\n")
+            for line in lines:
+                print(line)
+                line = line.strip()
+                if not line:
+                    continue
+
+                now = time.time()
+                scancode = self._parse_scancode(line)
+                
+                if not scancode:
+                    continue
                     
-                    # Process complete lines in buffer
-                    while "\n" in self.buffer:
-                        line, self.buffer = self.buffer.split("\n", 1)
-                        line = line.strip()
-                        if not line:
-                            continue
+                protocol = self._parse_protocol(line)
+                is_repeat = self._is_repeat(line)
+                
+                # Update last press time
+                self.key_last_time[scancode] = now
+                                            
+                keycode = int(scancode, 16) if scancode.isalnum() else 0
 
-                        now = time.time()
-                        scancode = self._parse_scancode(line)
-                        
-                        if not scancode:
-                            continue
-                            
-                        protocol = self._parse_protocol(line)
-                        is_repeat = self._is_repeat(line)
-                        
-                        # Update last press time
-                        self.key_last_time[scancode] = now
-                                                    
-                        keycode = int(scancode, 16) if scancode.isalnum() else 0
-
-                        # Get key name from mapping
-                        key_name = self.key_map.get(keycode, f"IR_{scancode}")
-                        
-                        # Return the key event
-                        return {
-                            'scancode': scancode,
-                            'key_name': key_name,
-                            'keycode': keycode,
-                            'protocol': protocol,
-                            'pressed': True,
-                            'repeat': is_repeat
-                        }
-            except Exception as e:
-                print(f"Error reading IR data: {e}")
+                # Get key name from mapping
+                key_name = self.key_map.get(keycode, f"IR_{scancode}")
+                
+                # Return the key event
+                return {
+                    'scancode': scancode,
+                    'key_name': key_name,
+                    'keycode': keycode,
+                    'protocol': protocol,
+                    'pressed': True,
+                    'repeat': is_repeat
+                }
+        except Exception as e:
+            _error(f"Error reading IR data: {e}")
         
         # Check for key releases (timeout based)
         now = time.time()
@@ -219,22 +222,22 @@ class IRDevice:
                 except subprocess.TimeoutExpired:
                     self.process.kill()
                     self.process.wait()
-                print("IR device closed")
+                _print("IR device closed")
             except Exception as e:
-                print(f"Error closing IR device: {e}")
+                _print(f"Error closing IR device: {e}")
             finally:
                 self.process = None
 
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("Testing IR remote input.")
-    print("Press remote buttons or Ctrl+C to quit")
+    _print("Testing IR remote input.")
+    _print("Press remote buttons or Ctrl+C to quit")
     
     ir = IRDevice()
     
     if not ir.process:
-        print("Failed to start ir-keytable process")
+        _print("Failed to start ir-keytable process")
         exit(1)
     
     try:
@@ -244,14 +247,14 @@ if __name__ == "__main__":
             if event:
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    print(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
+                    _print(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
                 else:
-                    print(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
+                    _print(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
             
             # Simulate other work
             time.sleep(0.01)
     except KeyboardInterrupt:
-        print("\nInterrupted by Ctrl+C")
+        _print("\nInterrupted by Ctrl+C")
     finally:
         ir.close()
-        print("IR device closed.")
+        _print("IR device closed.")
