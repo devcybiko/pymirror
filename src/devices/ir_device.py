@@ -64,6 +64,7 @@ class IRDevice:
 
         if line[0] not in "0123456789": return None
         words = [word.strip() for word in line.split(":")]
+        print("words:", words)
         event = {
             "line": line,
             "time": float(words[0]),
