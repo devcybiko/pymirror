@@ -164,39 +164,32 @@ class IRDevice:
         
         # Check if process is still running
         if self.process.poll() is not None:
-            _debug("IR process exited, restarting...")
+            _error("IR process exited, restarting...")
             self._start_ir_process()
             return None
             
         # Non-blocking read with small timeout
         rlist, _, _ = select.select([self.process.stdout], [], [], 0.001)
-        # Process any new data
-        if not rlist:
-            return None
-        # if not self.process.stdout in rlist:
-        #     return None
-        try:
+        if rlist and self.process.stdiout in rlist:
+            # Process any new data
             chunk = self.process.stdout.read(1024) or ""
             print("chunk:", chunk)
             self.buffer.extend(chunk.split("\n"))
             print("buffer: ", self.buffer)
-            line = ""
-            while self.buffer:
-                line = self.buffer[0].strip()
-                self.buffer = self.buffer[1:]
-                if line:
-                    break
-            _debug("...", line)
-            if not line:
-                return None
 
-            event = self._parse_ir_test_line(line)
-            return event
-        
-        except Exception as e:
-            _error(f"Error reading IR data: {e}")
+        line = ""
+        while self.buffer:
+            line = self.buffer[0].strip()
+            self.buffer = self.buffer[1:]
+            if line:
+                break
+        _debug("...", line)
+        if not line:
             return None
 
+        event = self._parse_ir_test_line(line)
+        return event
+        
     def get_key_event(self, types=["lirc"]):
         while event := self._get_key_event():
             if not types:
