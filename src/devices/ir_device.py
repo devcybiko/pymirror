@@ -202,7 +202,7 @@ class IRDevice:
             if not types:
                 # if no types specified, return all types
                 return event
-            if event.type in types:
+            if event["type"] in types:
                 # if a type is specified, and our event is in it, return it
                 return event
         return None
