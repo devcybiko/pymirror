@@ -252,13 +252,13 @@ class IRDevice:
 
 # Example usage and testing
 if __name__ == "__main__":
-    _debug("Testing IR remote input.")
-    _debug("Press remote buttons or Ctrl+C to quit")
+    print("Testing IR remote input.")
+    print("Press remote buttons or Ctrl+C to quit")
     
     ir = IRDevice()
     
     if not ir.process:
-        _debug("Failed to start ir-keytable process")
+        _error("Failed to start ir-keytable process")
         exit(1)
     
     try:
@@ -266,17 +266,17 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
-                _debug(json.dumps(event, indent=2))
+                print(json.dumps(event, indent=2))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    _debug(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
+                    print(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
                 else:
-                    _debug(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
+                    print(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
             
             # Simulate other work
             time.sleep(0.01)
     except KeyboardInterrupt:
-        _debug("\nInterrupted by Ctrl+C")
+        print("\nInterrupted by Ctrl+C")
     finally:
         ir.close()
-        _debug("IR device closed.")
+        print("IR device closed.")
