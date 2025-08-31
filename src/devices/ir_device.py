@@ -87,7 +87,7 @@ class IRDevice:
                 "keycode": keycode,
                 "repeat": repeat
             }
-        elif words[2].startswith('event'):
+        elif words[1].startswith('event'):
             # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
             # 2869.190079: event type EV_SYN(0x00).
             parts = words[1].replace("(", " ").replace(")", " ")
