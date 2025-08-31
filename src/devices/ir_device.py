@@ -10,7 +10,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _print
+from pymirror.pmlogger import _debug, _error, _debug
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -106,7 +106,7 @@ class IRDevice:
 
             if len(words) > 2:
                 parts = words[2].split()
-                print("... ... parts 2:", parts)
+                _debug("... ... parts 2:", parts)
                 scancode = parts[2]
                 keycode = int(parts[2], 16)
                 event["scancode"] = parts[2]
@@ -179,7 +179,7 @@ class IRDevice:
                 self.buffer = self.buffer[1:]
                 if line:
                     break
-            print("...", line)
+            _debug("...", line)
             if not line:
                 return None
 
@@ -266,7 +266,7 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
-                print(json.dumps(event, indent=2))
+                _debug(json.dumps(event, indent=2))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
                     _debug(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
