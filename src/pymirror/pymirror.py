@@ -263,8 +263,8 @@ class PyMirror:
                 self._focus_render()
         self.screen.flush()
 
-    def _time(self, fn):
-            t0 = time.time()
+    def _time(self, name, fn):
+        t0 = time.time()
 
     def run(self):
         try:
