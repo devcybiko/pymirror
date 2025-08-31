@@ -256,7 +256,6 @@ class PyMirror:
                     module._time += end_time - start_time  # add on the time taken for module rendering
 
     def _update_screen(self, modules_changed):
-        self.screen.bitmap.clear()  # Clear the bitmap before rendering
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
                 start_time = time.time()  # Start timing the module rendering
