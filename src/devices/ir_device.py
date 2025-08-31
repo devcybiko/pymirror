@@ -80,17 +80,17 @@ class IRDevice:
             # 2868.980048: lirc protocol(nec): scancode = 0x19 repeat
             parts = words[1].replace("(", " ").replace(")", " ").split()
             protocol = parts[2]
+            repeat = True if len(parts) > 3 else False
             event["type"] = "lirc"
             event["protocol"] =  protocol
+            event["repeat"] = repeat
 
             parts = words[2].split()
             scancode = parts[2]
             keycode = int(scancode, 16)
-            repeat = True if len(parts) > 3 else False
             event["scancode"] = scancode
             event["keycode"] = keycode
             event["key_name"] = self.key_map.get(keycode, "IR_" + scancode)
-            event["repeat"] = repeat
             event["pressed"] = True
 
         elif words[1].startswith('event'):
