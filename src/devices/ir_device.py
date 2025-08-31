@@ -160,7 +160,7 @@ class IRDevice:
             if not line:
                 return None
 
-            event = self._parse_scancode(line)
+            event = self._parse_ir_test_line(line)
             if not event:
                 return None
             event["key_name"] = self.key_map.get(keycode, f"IR_{scancode}")
