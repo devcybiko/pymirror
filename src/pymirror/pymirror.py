@@ -256,6 +256,7 @@ class PyMirror:
                     module._time += end_time - start_time  # add on the time taken for module rendering
 
     def _update_screen(self, modules_changed):
+        updated = False
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
                 print("... painting", module.name)
@@ -265,7 +266,9 @@ class PyMirror:
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._stats_for_nerds(module) # draw boxes around each module if debug is enabled
                 self._focus_render()
-        self.screen.flush()
+                updated = True
+        if updated:
+            self.screen.flush()
 
     def _time(self, fn, *args):
         t0 = time.time()
