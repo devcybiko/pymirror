@@ -46,7 +46,8 @@ class WindowManagerModule(PMModule):
         if self.focus_module:
             self.focus_module.take_focus(False)
         self.focus_module = new_focus_module
-        self.focus_module.take_focus(True)
+        if self.focus_module:
+            self.focus_module.take_focus(True)
 
     def onRawKeyboardEvent(self, event):
         _debug("window_manager", event)
@@ -55,6 +56,9 @@ class WindowManagerModule(PMModule):
             if event.pressed and not event.repeat:
                 next_focus_module = self._next_focus_module()
                 self.assign_focus(next_focus_module)
+        elif event.key_name in ["KEY_NUMBERSIGN"]:
+            # remove the focus from the module
+            self.assign_focus(None)
         else:
             if self.focus_module:
                 # if we have a focus module selected... then send the keyboard event to it
