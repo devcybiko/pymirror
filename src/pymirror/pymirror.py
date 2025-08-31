@@ -263,9 +263,9 @@ class PyMirror:
                 self._focus_render()
         self.screen.flush()
 
-    def _time(self, fn, args):
+    def _time(self, fn, *args):
         t0 = time.time()
-        fn(**args)
+        fn(*args)
         t1 = time.time()
         _print(fn, ":", f"{(t1-t0)*1000} ms")
 
