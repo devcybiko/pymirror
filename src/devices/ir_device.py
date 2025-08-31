@@ -10,7 +10,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _debug
+from pymirror.pmlogger import _debug, _error, _print
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -183,7 +183,7 @@ class IRDevice:
                 self.buffer = self.buffer[1:]
                 if line:
                     break
-            _debug("...", line)
+            _print("...", line)
             if not line:
                 return None
 
