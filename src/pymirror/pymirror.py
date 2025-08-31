@@ -165,7 +165,7 @@ class PyMirror:
         for event in events:
             if event.event in module.subscriptions:
                 if not event.module or event.module == module.name:
-                     _print("queue: reading event:", event)
+                     _print("_send_events_to_module: _send_events_to_module to  event:", event)
 
                     module.onEvent(event)
 
