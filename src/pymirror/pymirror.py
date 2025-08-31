@@ -273,8 +273,8 @@ class PyMirror:
         try:
             while True:
                 self._time(self._read_keyboard)
-                self._time(self._read_keyboard)
-                self._time(self._read_keyboard)
+                self._time(self._read_remote)
+                self._time(self._read_server_queue)
                 self._time(self._read_keyboard)
                 self._time(self._read_keyboard)
                 # t0 = time.time()
