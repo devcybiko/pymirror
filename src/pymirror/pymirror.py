@@ -265,7 +265,7 @@ class PyMirror:
 
     def _time(self, fn, *args):
         t0 = time.time()
-        fn(*args)
+        result = fn(*args)
         t1 = time.time()
         _print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
 
@@ -276,7 +276,7 @@ class PyMirror:
                 self._time(self._read_remote)
                 self._time(self._read_server_queue)
                 self._time(self._send_events_to_modules)
-                self._time(self._read_keyboard)
+                self._time(self._exec_modules)
                 # t0 = time.time()
                 # self._read_keyboard() # read the keyboard and create any keyboard events
                 # t1 = time.time()
