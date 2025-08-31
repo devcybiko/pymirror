@@ -63,7 +63,8 @@ class IRDevice:
         # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
         # 2869.190079: event type EV_SYN(0x00).
 
-        if line[0] not in "0123456789": return None
+        if line[0] not in "0123456789": 
+            return None
         words = [word.strip() for word in line.split(":")]
         _debug("words:", words)
         event = {
@@ -183,7 +184,7 @@ class IRDevice:
                 return None
 
             event = self._parse_ir_test_line(line)
-            if event["type"] in types:
+            if event and event["type"] in types:
                 return event
             else:
                 return None
