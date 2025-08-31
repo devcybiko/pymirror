@@ -268,7 +268,7 @@ class PyMirror:
         fn(*args)
         t1 = time.time()
         _print("fn:", fn, "type:", type(fn), "name:", getattr(fn, "__name__", "<no name>"))
-_print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
+        _print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
     def run(self):
         try:
             while True:
