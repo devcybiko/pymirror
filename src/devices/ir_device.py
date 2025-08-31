@@ -170,7 +170,7 @@ class IRDevice:
             
         # Non-blocking read with small timeout
         rlist, _, _ = select.select([self.process.stdout], [], [], 0.001)
-        
+        print(rlist)
         # Process any new data
         if not self.process.stdout in rlist:
             return None
