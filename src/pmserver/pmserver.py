@@ -46,7 +46,9 @@ class PMServer:
                 try:
                     data = json.loads(data.strip())
                 except:
-                    _error(f"problem converting '{data}' to git)
+                    msg = f"ERROR: problem converting '{data}' to json"
+                    print(msg)
+                    return jsonify({"status": "error", "msg": msg})
             self.queue.put(data)
             return jsonify({"status": "queued", "action": data})
 
