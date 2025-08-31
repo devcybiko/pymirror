@@ -10,7 +10,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _debug
+from pymirror.pmlogger import _debug, _error, _print
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -65,7 +65,7 @@ class IRDevice:
 
         if line[0] not in "0123456789": return None
         words = [word.strip() for word in line.split(":")]
-        _debug("words:", words)
+        _print("words:", words)
         event = {
             "line": line,
             "time": float(words[0]),
@@ -77,12 +77,12 @@ class IRDevice:
         if words[1].startswith("lirc"):
             # 2869.090042: lirc protocol(nec): scancode = 0x19
             # 2868.980048: lirc protocol(nec): scancode = 0x19 repeat
-            parts = words[1].replace("(", " ").replace(")", " ")
+            parts = words[1].replace("(", " ").replace(")", " ").split()
             protocol = parts[2]
             event["type"] = "lirc"
             event["protocol"] =  protocol
 
-            parts = words[2].split(" ")
+            parts = words[2].split()
             scancode = parts[2]
             keycode = int(scancode, 16)
             repeat = True if len(parts) > 3 else False
@@ -95,7 +95,7 @@ class IRDevice:
         elif words[1].startswith('event'):
             # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
             # 2869.190079: event type EV_SYN(0x00).
-            parts = words[1].replace("(", " ").replace(")", " ").replace(".", " ")
+            parts = words[1].replace("(", " ").replace(")", " ").replace(".", " ").split()
             _debug("... parts:", parts)
             type = parts[2]
             code = parts[3]
@@ -104,7 +104,7 @@ class IRDevice:
             event["repeat"] = False
 
             if len(words) > 2:
-                parts = words[2].split(" ")
+                parts = words[2].split()
                 print("... ... parts 2:", parts)
                 scancode = parts[2]
                 keycode = int(parts[2], 16)
