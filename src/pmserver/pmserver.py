@@ -46,7 +46,7 @@ class PMServer:
                 try:
                     data = json.loads(data.strip())
                 except:
-                    _error("problem co")
+                    _error(f"problem converting '{data}")
             self.queue.put(data)
             return jsonify({"status": "queued", "action": data})
 
