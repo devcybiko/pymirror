@@ -3,6 +3,7 @@
 Non-blocking IR remote input utilities for PyMirror
 Uses ir-keytable to capture IR events without blocking the main loop
 """
+import json
 import subprocess
 import os
 import select
@@ -260,7 +261,7 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
-                print(event)
+                print(json.dumps(event, indent=2))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
                     _debug(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
