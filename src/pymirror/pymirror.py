@@ -230,7 +230,7 @@ class PyMirror:
         updated = False
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
-                print("... painting", module.name)
+                # print("... painting", module.name)
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
@@ -244,7 +244,7 @@ class PyMirror:
         t0 = time.time()
         result = fn(*args)
         t1 = time.time()
-        # _print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
+        _debug(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
         return result
 
     def run(self):
@@ -259,7 +259,7 @@ class PyMirror:
                 self._time(self._update_screen, modules_changed)
                 # _debug("---")
                 time.sleep(0.001) # Sleep for a short time to give pmserver a chance to process web requests
-                _print("...")
+                _debug("...")
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
