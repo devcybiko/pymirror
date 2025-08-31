@@ -280,21 +280,7 @@ class PyMirror:
                 modules_changed = self._time(self._exec_modules)
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen)
-                self._time(self._exec_modules)
-                # t0 = time.time()
-                # self._read_keyboard() # read the keyboard and create any keyboard events
-                # t1 = time.time()
-                # _print("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
-                t0 = time.time()
-                self._read_remote() # read the keyboard and create any keyboard events
-                t1 = time.time()
-                _print("_read_remote:", f"{(t1-t0)*1000} ms")
-
-                t0 = time.time()
-                self._read_server_queue() # read any new events from the server queue
-                t1 = time.time()
-                _print("_read_server_queue:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
