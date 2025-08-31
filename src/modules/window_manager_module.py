@@ -51,6 +51,6 @@ class WindowManagerModule(PMModule):
                 # if we have a focus module selected... then send the keyboard event to it
                 if event.pressed and not event.repeat:
                     event.event = "KeyboardEvent"
-                    event.module = self.pm.focus_module.name
+                    event.module = self.focus_module.name
                     _debug("... republishing event", event)
                     self.pm.publish_event(event)
