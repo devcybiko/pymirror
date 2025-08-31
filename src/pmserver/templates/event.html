@@ -23,9 +23,7 @@
 <script>
 document.getElementById('commandForm').onsubmit = function(e) {
     e.preventDefault();
-    const data = {
-        script: document.getElementById('script').value
-    };
+    const data = document.getElementById('script').value
     console.log('Sending script:', data);
     fetch('/event', {
         method: 'POST',
