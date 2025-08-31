@@ -141,9 +141,9 @@ class PyMirror:
                 'pressed': remote_event["pressed"],
                 'repeat': remote_event["repeat"]
             }
-            print("\n--- ir event")
-            print(event)
-            print("")
+            _debug("\n--- ir event")
+            _debug(event)
+            _debug("")
             self.publish_event(event)
 
     def _send_events_to_module(self, module, events):
