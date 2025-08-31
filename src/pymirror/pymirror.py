@@ -210,13 +210,15 @@ class PyMirror:
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
-    def _focus_render(self):
-        module = self.focus_module
-        if not module or not module.bitmap: 
+    def _focus_render(self, _module):
+        focus_module = self.focus_module
+        if _module != focus_module:
+            return
+        if not focus_module or not focus_module.bitmap: 
             ## non-rendering modules will not have a bitmap (eg: cron)
             return
         sbm = self.screen.bitmap
-        mbm = module.bitmap
+        mbm = focus_module.bitmap
         sgfx = sbm.gfx_push()
         sgfx.line_width = 5
         sgfx.color = "#ff0"
@@ -265,7 +267,7 @@ class PyMirror:
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._stats_for_nerds(module) # draw boxes around each module if debug is enabled
-                self._focus_render()
+                self._focus_render(module)
                 updated = True
         if updated:
             self.screen.flush()
