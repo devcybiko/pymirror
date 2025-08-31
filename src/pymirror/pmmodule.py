@@ -136,7 +136,7 @@ class PMModule(ABC):
         return self.focus
 
     def render_focus(self):
-        _debug("render_focus:", self.focus)
+        print("render_focus:", self.name, self.focus)
         if not self.focus:
             return
         gfx = self.bitmap.gfx_push()

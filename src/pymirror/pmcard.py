@@ -25,6 +25,7 @@ class PMCard(PMModule):
         self._header.clean()
         self._body.clean()
         self._footer.clean()
+        self.dirty = False
 
     def is_dirty(self) -> bool:
         dirty = (
