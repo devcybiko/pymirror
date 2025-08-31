@@ -95,10 +95,12 @@ class IRDevice:
             # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
             # 2869.190079: event type EV_SYN(0x00).
             parts = words[1].replace("(", " ").replace(")", " ").replace(".", " ")
+            print("... parts:", parts)
             type = parts[2]
             code = parts[3]
             if len(parts) > 2:
                 parts = words[2].split(" ")
+                print("... ... parts 2:", parts)
                 scancode = parts[2]
                 keycode = int(parts[2], 16)
                 event["type"] = type
