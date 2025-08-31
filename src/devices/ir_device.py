@@ -9,7 +9,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _print
+from pymirror.pmlogger import _debug, _error, _debug
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -64,7 +64,7 @@ class IRDevice:
 
         if line[0] not in "0123456789": return None
         words = [word.strip() for word in line.split(":")]
-        print("words:", words)
+        _debug("words:", words)
         event = {
             "line": line,
             "time": float(words[0]),
@@ -95,7 +95,7 @@ class IRDevice:
             # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
             # 2869.190079: event type EV_SYN(0x00).
             parts = words[1].replace("(", " ").replace(")", " ").replace(".", " ")
-            print("... parts:", parts)
+            _debug("... parts:", parts)
             type = parts[2]
             code = parts[3]
             event["type"] = type
@@ -141,13 +141,13 @@ class IRDevice:
             
             # Make stdout non-blocking
             os.set_blocking(self.process.stdout.fileno(), False)
-            _print(f"IR device initialized: listening for {self.protocols} protocols")
+            _debug(f"IR device initialized: listening for {self.protocols} protocols")
             
         except Exception as e:
-            _print(f"Failed to start ir-keytable: {e}")
+            _debug(f"Failed to start ir-keytable: {e}")
             self.process = None
             
-    def get_key_event(self) -> Optional[dict]:
+    def get_key_event(self, type="event") -> Optional[dict]:
         """
         Get an IR key event without blocking.
         Returns None if no key event, or a dict with key info if pressed.
@@ -158,7 +158,7 @@ class IRDevice:
         
         # Check if process is still running
         if self.process.poll() is not None:
-            _print("IR process exited, restarting...")
+            _debug("IR process exited, restarting...")
             self._start_ir_process()
             return None
             
@@ -237,22 +237,22 @@ class IRDevice:
                 except subprocess.TimeoutExpired:
                     self.process.kill()
                     self.process.wait()
-                _print("IR device closed")
+                _debug("IR device closed")
             except Exception as e:
-                _print(f"Error closing IR device: {e}")
+                _debug(f"Error closing IR device: {e}")
             finally:
                 self.process = None
 
 
 # Example usage and testing
 if __name__ == "__main__":
-    _print("Testing IR remote input.")
-    _print("Press remote buttons or Ctrl+C to quit")
+    _debug("Testing IR remote input.")
+    _debug("Press remote buttons or Ctrl+C to quit")
     
     ir = IRDevice()
     
     if not ir.process:
-        _print("Failed to start ir-keytable process")
+        _debug("Failed to start ir-keytable process")
         exit(1)
     
     try:
@@ -260,16 +260,17 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
+                print(event)
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    _print(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
+                    _debug(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
                 else:
-                    _print(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
+                    _debug(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
             
             # Simulate other work
             time.sleep(0.01)
     except KeyboardInterrupt:
-        _print("\nInterrupted by Ctrl+C")
+        _debug("\nInterrupted by Ctrl+C")
     finally:
         ir.close()
-        _print("IR device closed.")
+        _debug("IR device closed.")
