@@ -191,7 +191,6 @@ class IRDevice:
         return event
         
     def get_key_event(self, types=["lirc"], repeat=False):
-        print(">>> get_key_event")
         while event := self._get_key_event():
             if not repeat and event["repeat"]:
                 # if we're not interested in repeating events, discard event
@@ -199,7 +198,6 @@ class IRDevice:
             if (not types) or (event["type"] in types):
                 # if we're only interested in certain type, return only that type
                 return event
-        print("<<< get_key_event")
         return None
     
 
