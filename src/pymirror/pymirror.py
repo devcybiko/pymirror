@@ -258,6 +258,7 @@ class PyMirror:
     def _update_screen(self, modules_changed):
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
+                print("... painting", module.name)
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering
@@ -284,8 +285,8 @@ class PyMirror:
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen, modules_changed)
                 # _debug("---")
-                time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
-
+                time.sleep(0.001) # Sleep for a short time to give pmserver a chance to process web requests
+                _print("...")
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
