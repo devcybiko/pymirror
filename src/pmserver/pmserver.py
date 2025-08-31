@@ -42,6 +42,7 @@ class PMServer:
             print(f"Received event {data}")
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
+            print("data: ", type(data))
             if type(data) == str:
                 try:
                     data = json.loads(data.strip())
