@@ -57,8 +57,13 @@ class IRDevice:
         self._start_ir_process()
     
     def _parse_ir_test_line(self, line):
+        # 2869.090042: lirc protocol(nec): scancode = 0x19
+        # 2868.980048: lirc protocol(nec): scancode = 0x19 repeat
+        # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
+        # 2869.190079: event type EV_SYN(0x00).
+
         if line[0] not in "0123456789": return None
-        words = line.split(":")
+        words = [word.strip() for word in line.split(":")]
         event = {
             "line": line,
             "time": float(words[0]),
