@@ -8,7 +8,7 @@ import queue
 import argparse
 import traceback
 
-from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
+from pymirror.pmlogger import trace, _print, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.keyboard_device import KeyboardDevice
 from pymirror.ir_device import IRDevice
@@ -27,13 +27,13 @@ class PyMirror:
         ## by convention, all objects get a copy of the config
         ## so that they can access it without having to pass it around
         ## and they "pluck out" the values they need
-        _debug(f"args: {args}")
+        _print(f"args: {args}")
         self._config = self._load_config(config_fname)
         if args.output_file:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        _debug(f"Using config: {self._config}")
+        _print(f"Using config: {self._config}")
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug
@@ -79,7 +79,7 @@ class PyMirror:
                         expand_dict(config, {})  # Expand environment variables in the config
                         module_config = SafeNamespace(**config)
                     except Exception as e:
-                        _debug(f"Error loading module config from {module_config}: {e}")
+                        _print(f"Error loading module config from {module_config}: {e}")
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
@@ -132,7 +132,7 @@ class PyMirror:
     def _read_keyboard(self):
         ## add any messages that have come from the keyboard
         while key_event := self.keyboard.get_key_event():
-            _debug(f"Received event from keyboard: {key_event}")
+            _print(f"Received event from keyboard: {key_event}")
             event = {
                 "event": "RawKeyboardEvent",
                 "keycode":  key_event["keycode"],
@@ -268,7 +268,7 @@ class PyMirror:
                 t0 = time.time()
                 self._read_keyboard() # read the keyboard and create any keyboard events
                 t1 = time.time()
-                _debug("_read_keyboard:", f"{(t1-t0)*1000} ms")
+                _print("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._read_remote() # read the keyboard and create any keyboard events
@@ -278,36 +278,36 @@ class PyMirror:
                 t0 = time.time()
                 self._read_server_queue() # read any new events from the server queue
                 t1 = time.time()
-                _debug("_read_server_queue:", f"{(t1-t0)*1000} ms")
+                _print("_read_server_queue:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._send_events_to_modules()  # send all new events to the modules
                 t1 = time.time()
-                _debug("_send_events_to_modules:", f"{(t1-t0)*1000} ms")
+                _print("_send_events_to_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 modules_changed = self._exec_modules() # update / check the state of all modules
                 t1 = time.time()
-                _debug("_exec_modules:", f"{(t1-t0)*1000} ms")
+                _print("_exec_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._render_modules(modules_changed)  # Render only the modules that changed state
                 t1 = time.time()
-                _debug("_exec_modules:", f"{(t1-t0)*1000} ms")
+                _print("_exec_modules:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 self._update_screen()  # Update the screen with the rendered modules
                 t1 = time.time()
-                _debug("_update_screen:", f"{(t1-t0)*1000} ms")
+                _print("_update_screen:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
                 time.sleep(0.0) # Sleep for a short time to give pmserver a chance to process web requests
                 t1 = time.time()
-                _debug("(sleep):", f"{(t1-t0)*1000} ms")
-                _debug("")
+                _print("(sleep):", f"{(t1-t0)*1000} ms")
+                _print("")
 
         except Exception as e:
-            traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
+            traceback.print_exc()  # <-- This _prints the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
 
     def _error_screen(self, e):
