@@ -41,7 +41,8 @@ class PMServer:
             print(f"Received event {data}")
             if not data:
                 return jsonify({"error": "Missing 'action'"}), 400
-            if type(data)
+            if type(data) == str:
+                data = json.loads(data.)
             self.queue.put(data)
             return jsonify({"status": "queued", "action": data})
 
