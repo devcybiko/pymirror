@@ -98,7 +98,7 @@ class IRDevice:
             print("... parts:", parts)
             type = parts[2]
             code = parts[3]
-            if len(parts) > 2:
+            if len(words) > 2:
                 parts = words[2].split(" ")
                 print("... ... parts 2:", parts)
                 scancode = parts[2]
