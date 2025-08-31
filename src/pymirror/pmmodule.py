@@ -130,8 +130,7 @@ class PMModule(ABC):
 
     def take_focus(self, state=True):
         self.focus = state
-        if state == True:
-            self.dirty = True
+        self.dirty = True
 
     def has_focus(self):
         return self.focus
