@@ -65,7 +65,7 @@ class IRDevice:
 
         if line[0] not in "0123456789": return None
         words = [word.strip() for word in line.split(":")]
-        _print("words:", words)
+        _debug("words:", words)
         event = {
             "line": line,
             "time": float(words[0]),
@@ -148,7 +148,7 @@ class IRDevice:
             _debug(f"Failed to start ir-keytable: {e}")
             self.process = None
             
-    def get_key_event(self, type="event") -> Optional[dict]:
+    def get_key_event(self, types=["lirc"]) -> Optional[dict]:
         """
         Get an IR key event without blocking.
         Returns None if no key event, or a dict with key info if pressed.
@@ -183,10 +183,14 @@ class IRDevice:
                 return None
 
             event = self._parse_ir_test_line(line)
-            return event
+            if event["type"] in types:
+                return event
+            else:
+                return None
         except Exception as e:
             _error(f"Error reading IR data: {e}")
             return None
+
 
     def _save(self):
         # Check for key releases (timeout based)
