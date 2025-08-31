@@ -28,6 +28,7 @@ class PMCard(PMModule):
 
     def is_dirty(self) -> bool:
         dirty = (
+            self.dirty
             self._header.is_dirty()
             or self._body.is_dirty()
             or self._footer.is_dirty()
@@ -39,6 +40,7 @@ class PMCard(PMModule):
         self._header.render(self.bitmap)
         self._body.render(self.bitmap)
         self._footer.render(self.bitmap)
+        self.render_focus()
         self.clean()
         return True
 
