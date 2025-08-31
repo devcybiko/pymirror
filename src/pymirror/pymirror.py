@@ -281,27 +281,6 @@ class PyMirror:
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen)
 
-
-                t0 = time.time()
-                self._send_events_to_modules()  # send all new events to the modules
-                t1 = time.time()
-                _print("_send_events_to_modules:", f"{(t1-t0)*1000} ms")
-
-                t0 = time.time()
-                modules_changed = self._exec_modules() # update / check the state of all modules
-                t1 = time.time()
-                _print("_exec_modules:", f"{(t1-t0)*1000} ms")
-
-                t0 = time.time()
-                self._render_modules(modules_changed)  # Render only the modules that changed state
-                t1 = time.time()
-                _print("_exec_modules:", f"{(t1-t0)*1000} ms")
-
-                t0 = time.time()
-                self._update_screen()  # Update the screen with the rendered modules
-                t1 = time.time()
-                _print("_update_screen:", f"{(t1-t0)*1000} ms")
-
                 time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
 
         except Exception as e:
