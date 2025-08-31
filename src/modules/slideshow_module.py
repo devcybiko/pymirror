@@ -48,6 +48,7 @@ class SlideshowModule(PMModule):
 		self.bitmap.paste(img_bm, new_x0, new_y0, img_bm)
 		if self.frame_bm:
 			self.bitmap.paste(self.frame_bm, 0, 0, self.frame_bm) ## overlay the frame
+		self.render_focus()
 		self.dirty = False
 		return False
 	
