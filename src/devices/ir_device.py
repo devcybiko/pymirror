@@ -9,7 +9,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogging import _debug, _error, _print
+from pymirror.pmlogger import _debug, _error, _print
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
