@@ -191,10 +191,8 @@ class IRDevice:
                 return None
 
             event = self._parse_ir_test_line(line)
-            if event and event["type"] in types:
-                return event
-            else:
-                return None
+            return event
+        
         except Exception as e:
             _error(f"Error reading IR data: {e}")
             return None
