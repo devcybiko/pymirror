@@ -124,6 +124,7 @@ class PyMirror:
             while event := self.server_queue.get(0):
                 ## GLS - temporarily do an append
                 self.events.append(event)
+                _print("adding event:")
                 # self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
