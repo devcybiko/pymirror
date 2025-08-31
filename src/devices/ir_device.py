@@ -173,9 +173,7 @@ class IRDevice:
         if rlist and self.process.stdout in rlist:
             # Process any new data
             chunk = self.process.stdout.read(1024) or ""
-            print("chunk:", chunk)
             self.buffer.extend(chunk.split("\n"))
-            print("buffer: ", self.buffer)
 
         line = ""
         while self.buffer:
