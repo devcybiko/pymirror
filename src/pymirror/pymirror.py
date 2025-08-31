@@ -280,7 +280,7 @@ class PyMirror:
                 modules_changed = self._time(self._exec_modules)
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen)
-
+                _print("---")
                 time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
 
         except Exception as e:
