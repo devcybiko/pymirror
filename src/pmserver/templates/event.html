@@ -34,11 +34,12 @@ document.getElementById('commandForm').onsubmit = function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('result').innerHTML =
-            '<div class="alert alert-success">Script sent successfully! Redirecting to display...</div>';
-        setTimeout(() => {
-            window.location.href = '/display';
-        }, 1000);
+        document.getElementById('result').innerHTML = data;
+        // document.getElementById('result').innerHTML =
+        //     '<div class="alert alert-success">Script sent successfully! Redirecting to display...</div>';
+        // setTimeout(() => {
+        //     window.location.href = '/display';
+        // }, 1000);
     })
     .catch(error => {
         document.getElementById('result').innerHTML =
