@@ -317,7 +317,7 @@ class PyMirror:
                 _print("_update_screen:", f"{(t1-t0)*1000} ms")
 
                 t0 = time.time()
-                time.sleep(0.0) # Sleep for a short time to give pmserver a chance to process web requests
+                time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
                 t1 = time.time()
                 _print("(sleep):", f"{(t1-t0)*1000} ms")
                 _print("")
