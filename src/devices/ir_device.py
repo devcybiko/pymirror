@@ -275,9 +275,9 @@ if __name__ == "__main__":
                 print(json.dumps(event, indent=2))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    print(f"Key pressed: {event['key_name']} (scancode: 0x{event['scancode']}){repeat_str}")
+                    print(f"Key pressed: {event['key_name']} (scancode: {event['scancode']}){repeat_str}")
                 else:
-                    print(f"Key released: {event['key_name']} (scancode: 0x{event['scancode']})")
+                    print(f"Key released: {event['key_name']} (scancode: {event['scancode']})")
             
             # Simulate other work
             time.sleep(0.01)

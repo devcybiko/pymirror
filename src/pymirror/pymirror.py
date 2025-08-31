@@ -8,7 +8,7 @@ import queue
 import argparse
 import traceback
 
-from pymirror.pmlogger import trace, _print, _print, _info, _warning, _error, _critical, _trace
+from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from devices.keyboard_device import KeyboardDevice
 from devices.ir_device import IRDevice
@@ -27,13 +27,13 @@ class PyMirror:
         ## by convention, all objects get a copy of the config
         ## so that they can access it without having to pass it around
         ## and they "pluck out" the values they need
-        _print(f"args: {args}")
+        _debug(f"args: {args}")
         self._config = self._load_config(config_fname)
         if args.output_file:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        _print(f"Using config: {self._config}")
+        _debug(f"Using config: {self._config}")
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug
@@ -79,7 +79,7 @@ class PyMirror:
                         expand_dict(config, {})  # Expand environment variables in the config
                         module_config = SafeNamespace(**config)
                     except Exception as e:
-                        _print(f"Error loading module config from {module_config}: {e}")
+                        _debug(f"Error loading module config from {module_config}: {e}")
                         sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
@@ -124,7 +124,7 @@ class PyMirror:
             while event := self.server_queue.get(0):
                 ## GLS - temporarily do an append
                 self.events.append(event)
-                _print("queue: reading event:", event)
+                _debug("queue: reading event:", event)
                 # self.publish_event(event)
         except queue.Empty:
             # No new events in the queue
@@ -133,7 +133,7 @@ class PyMirror:
     def _read_keyboard(self):
         ## add any messages that have come from the keyboard
         while key_event := self.keyboard.get_key_event():
-            _print(f"Received event from keyboard: {key_event}")
+            _debug(f"Received event from keyboard: {key_event}")
             event = {
                 "event": "RawKeyboardEvent",
                 "keycode":  key_event["keycode"],
@@ -147,7 +147,7 @@ class PyMirror:
     def _read_remote(self):
         ## add any messages that have come from the ir remote
         while remote_event := self.remote.get_key_event():
-            _print(f"Received event from remote: {remote_event}")
+            _debug(f"Received event from remote: {remote_event}")
             ## translate into raw keyboard event
             event = {
                 "event": "RawKeyboardEvent",
@@ -165,7 +165,7 @@ class PyMirror:
         for event in events:
             if event.event in module.subscriptions:
                 if not event.module or event.module == module.name:
-                    _print(f"_send_events_to_module: _send_events_to_module to {module.name} event:", event)
+                    _debug(f"_send_events_to_module: _send_events_to_module to {module.name} event:", event)
                     module.onEvent(event)
 
     def _convert_events_to_namespace(self):
@@ -268,7 +268,7 @@ class PyMirror:
         t0 = time.time()
         result = fn(*args)
         t1 = time.time()
-        # _print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
+        _print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
         return result
 
     def run(self):
@@ -281,11 +281,11 @@ class PyMirror:
                 modules_changed = self._time(self._exec_modules)
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen)
-                # _print("---")
+                # _debug("---")
                 time.sleep(0.1) # Sleep for a short time to give pmserver a chance to process web requests
 
         except Exception as e:
-            traceback.print_exc()  # <-- This _prints the full stack trace to stdout
+            traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
             self._error_screen(e)  # Display the error on the screen
 
     def _error_screen(self, e):
