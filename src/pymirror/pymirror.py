@@ -264,7 +264,8 @@ class PyMirror:
         self.screen.flush()
 
     def _time(self, fn):
-        
+            t0 = time.time()
+
     def run(self):
         try:
             while True:
