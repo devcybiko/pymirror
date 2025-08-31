@@ -103,6 +103,7 @@ class IRDevice:
             event["code"] = code
             event["scancode"] =  parts[2]
             event["keycode"] = keycode
+            event["repeat"] = False
             event["key_name"] = self.key_map.get(keycode, "IR_" + scancode)
             event["pressed"] = True
         else:
