@@ -263,10 +263,10 @@ class PyMirror:
                 self._focus_render()
         self.screen.flush()
 
-    def _time(self, name, fn):
+    def _time(self, name, fn, args):
         t0 = time.time()
-        fn
-                        t1 = time.time()
+        fn()
+        t1 = time.time()
                 _print("_read_keyboard:", f"{(t1-t0)*1000} ms")
 
 
