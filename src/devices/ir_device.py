@@ -177,8 +177,9 @@ class IRDevice:
         #     return None
         try:
             chunk = self.process.stdout.read(1024) or ""
-            print(chunk)
+            print("chunk:", chunk)
             self.buffer.extend(chunk.split("\n"))
+            print("buffer: ", self.buffer)
             line = ""
             while self.buffer:
                 line = self.buffer[0].strip()
