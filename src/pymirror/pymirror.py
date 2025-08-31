@@ -279,7 +279,7 @@ class PyMirror:
                 self._time(self._send_events_to_modules)
                 modules_changed = self._time(self._exec_modules)
                 self._time(self._render_modules, modules_changed)
-                self._time(self._exec_modules)
+                self._time(self._update_screen)
                 self._time(self._exec_modules)
                 # t0 = time.time()
                 # self._read_keyboard() # read the keyboard and create any keyboard events
