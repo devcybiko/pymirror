@@ -265,6 +265,10 @@ class PyMirror:
 
     def _time(self, name, fn):
         t0 = time.time()
+        fn
+                        t1 = time.time()
+                _print("_read_keyboard:", f"{(t1-t0)*1000} ms")
+
 
     def run(self):
         try:
