@@ -39,7 +39,6 @@ class PyMirror:
         self.debug = self._config.debug
         self.modules = []
         self.events = []
-        self.focus_module = None
         self.keyboard = KeyboardDevice()
         self.remote = IRDevice()
         self.server_queue = queue.Queue()  # Use a queue to manage events
@@ -102,21 +101,6 @@ class PyMirror:
 
             ## add the module to the list of modules
             self.modules.append(obj)
-
-    def next_focus_module(self):
-        if self.focus_module:
-            mod_n = self.focus_module.module_n
-        else:
-            mod_n = -1
-
-        for _ in range(0, len(self.modules)):
-            mod_n = (mod_n + 1) % len(self.modules)
-            if hasattr(self.modules[mod_n], "onKeyboardEvent"):
-                self.focus_module = self.modules[mod_n]
-                break
-        
-        return self.focus_module
-
 
     def _read_server_queue(self):
         ## add any messages that have come from the web server
@@ -210,21 +194,6 @@ class PyMirror:
         sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
-    def _focus_render(self, _module):
-        focus_module = self.focus_module
-        if _module != focus_module:
-            return
-        if not focus_module or not focus_module.bitmap: 
-            ## non-rendering modules will not have a bitmap (eg: cron)
-            return
-        sbm = self.screen.bitmap
-        mbm = focus_module.bitmap
-        sgfx = sbm.gfx_push()
-        sgfx.line_width = 5
-        sgfx.color = "#ff0"
-        sbm.rectangle(mbm.rect, fill=None)
-        self.screen.bitmap.gfx_pop()
-
     def full_render(self):
         self.screen.bitmap.clear()
         for module in self.modules:
@@ -267,7 +236,6 @@ class PyMirror:
                 end_time = time.time()  # End timing the module rendering
                 module._time += end_time - start_time  # add on the time taken for module rendering
                 if self.debug: self._stats_for_nerds(module) # draw boxes around each module if debug is enabled
-                self._focus_render(module)
                 updated = True
         if updated:
             self.screen.flush()
