@@ -170,12 +170,14 @@ class IRDevice:
             
         # Non-blocking read with small timeout
         rlist, _, _ = select.select([self.process.stdout], [], [], 0.001)
-        print(rlist)
         # Process any new data
-        if not self.process.stdout in rlist:
+        if not rlist:
             return None
+        # if not self.process.stdout in rlist:
+        #     return None
         try:
             chunk = self.process.stdout.read(1024) or ""
+            print(chunk)
             self.buffer.extend(chunk.split("\n"))
             line = ""
             while self.buffer:
