@@ -153,7 +153,7 @@ class IRDevice:
             _debug(f"Failed to start ir-keytable: {e}")
             self.process = None
             
-    def get_key_event(self, types=["lirc"]) -> Optional[dict]:
+    def _get_key_event(self) -> Optional[dict]:
         """
         Get an IR key event without blocking.
         Returns None if no key event, or a dict with key info if pressed.
@@ -199,6 +199,16 @@ class IRDevice:
             _error(f"Error reading IR data: {e}")
             return None
 
+    def get_key_event(self, types=["lirc"]):
+        while event := self._get_key_event():
+            if not types:
+                # if no types specified, return all types
+                return event
+            if event.type in types:
+                # if a type is specified, and our event is in it, return it
+                return event
+        return None
+    
 
     def _save(self):
         # Check for key releases (timeout based)
