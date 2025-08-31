@@ -139,12 +139,13 @@ class IRDevice:
             # Process complete lines in buffer
             lines = self.buffer.split("\n")
             for line in lines:
-                print(line)
+                print("...", line)
                 line = line.strip()
                 if not line:
                     continue
 
-                now = time.time()
+                now 
+                time.time()
                 scancode = self._parse_scancode(line)
                 
                 if not scancode:
