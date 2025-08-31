@@ -34,8 +34,7 @@ document.getElementById('commandForm').onsubmit = function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('result').innerHTML = data;
-        // document.getElementById('result').innerHTML =
+        document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';        // document.getElementById('result').innerHTML =
         //     '<div class="alert alert-success">Script sent successfully! Redirecting to display...</div>';
         // setTimeout(() => {
         //     window.location.href = '/display';
