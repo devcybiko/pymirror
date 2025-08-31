@@ -78,29 +78,32 @@ class IRDevice:
             # 2868.980048: lirc protocol(nec): scancode = 0x19 repeat
             lirc = words[1].replace("(", " ").replace(")", " ")
             protocol = lirc[2]
-            scancode = words[2].split(" ")
-            keycode = int(scancode[2], 16)
-            repeat = scancode[3] if len(scancode) > 3 else None
-            event["lirc"] = {
-                "protocol":  protocol,
-                "scancode": scancode[2],
-                "keycode": keycode,
-                "repeat": repeat
-            }
+            scancodes = words[2].split(" ")
+            scancode = scancodes[2]
+            keycode = int(scancode, 16)
+            repeat = True if len(scancodes) > 3 else False
+            event["type"] = "lirc"
+            event["protocol"] =  protocol
+            event["scancode"] = scancode
+            event["keycode"] = keycode
+            event["repeat"] = repeat
+            event["key_name"] = self.key_map.get(keycode, "IR_" + scancode)
+            event["pressed"] = True
+
         elif words[1].startswith('event'):
             # 2869.190079: event type EV_MSC(0x04): scancode = 0x19
             # 2869.190079: event type EV_SYN(0x00).
             parts = words[1].replace("(", " ").replace(")", " ")
             type = parts[2]
             code = parts[3]
-            scancode = words[2].split(" ")
-            keycode = int(scancode[2], 16)
-            event["event"] = {
-                "type":  type,
-                "code": code,
-                "scancode": scancode[2],
-                "keycode": keycode,
-            }
+            scancodes = words[2].split(" ")
+            keycode = int(scancodes[2], 16)
+            event["type"] = type
+            event["code"] = code
+            event["scancode"] =  scancodes[2]
+            event["keycode"] = keycode
+            event["key_name"] = self.key_map.get(keycode, "IR_" + scancode)
+            event["pressed"] = True
         else:
             _error("Unknown ir_test line", line)
             return None
@@ -167,10 +170,6 @@ class IRDevice:
                 return None
 
             event = self._parse_ir_test_line(line)
-            if not event:
-                return None
-            event["key_name"] = self.key_map.get(keycode, f"IR_{scancode}")
-            event["pressed"] = True
             return event
         except Exception as e:
             _error(f"Error reading IR data: {e}")
