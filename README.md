@@ -24,6 +24,160 @@
   - `source .venv/bin/activate`
   - Calendar (here? maybe better in the install_libs.sh)
   - `pip install ics`
+- Bluetooth
+  - `sudo apt install -y bluetooth bluez pi-bluetooth`
+  - `sudo systemctl enable bluetooth`
+  - `sudo systemctl start bluetooth`
+  - `hciconfig` # check the bluetooth connector
+
+  Since your Pi Zero 2 W is headless, connecting a Bluetooth keyboard takes a slightly different approach than on a desktop. Here’s a reliable method for macOS users:
+
+### **2. Put your keyboard in pairing mode**
+
+Follow the keyboard’s instructions to make it discoverable. Usually this involves holding a special “Connect” button until a light flashes.
+
+---
+
+### **3. Use `bluetoothctl` to pair the keyboard**
+
+Run:
+
+```bash
+bluetoothctl
+```
+
+Inside the `bluetoothctl` interactive shell:
+
+```text
+power on
+agent on
+default-agent
+scan on
+```
+
+You should start seeing devices appear:
+
+```text
+[NEW] Device XX:XX:XX:XX:XX:XX MyKeyboard
+```
+
+Once you see your keyboard’s MAC address (e.g., `XX:XX:XX:XX:XX:XX`):
+
+```text
+anker keyboard: 20:73:65:B1:67:67
+pair XX:XX:XX:XX:XX:XX
+trust XX:XX:XX:XX:XX:XX
+connect XX:XX:XX:XX:XX:XX
+```
+
+* `pair` pairs the device
+* `trust` ensures it auto-connects on reboot
+* `connect` immediately connects it
+
+After pairing, type `exit` to leave `bluetoothctl`.
+
+---
+
+### **4. Test the keyboard**
+
+Once paired, your keyboard should work immediately in any console session (SSH or direct).
+
+---
+
+### **5. Optional: Auto-connect on reboot**
+
+Because you used `trust`, the keyboard should reconnect automatically after a reboot. You can double-check by rebooting and running:
+
+```bash
+bluetoothctl info XX:XX:XX:XX:XX:XX
+```
+
+It should show `Connected: yes`.
+
+---
+
+💡 **Tips**
+
+* For headless Pi setups, it’s easier to temporarily connect via USB keyboard to do the initial pairing.
+* Some Bluetooth keyboards require you to press `Enter` after pairing to confirm a PIN; `bluetoothctl` will display it.
+* Keep the Pi close to the keyboard during pairing — the Zero 2 W has only a small built-in Bluetooth antenna.
+
+---
+
+## Mouse/Trackpaad
+
+### **1. Test movement & clicks via `evtest`**
+
+Install `evtest`:
+
+```bash
+sudo apt update
+sudo apt install -y evtest
+```
+
+List all input devices:
+
+```bash
+evtest
+```
+
+You’ll see something like:
+
+```
+/dev/input/event0:    AT Translated Set 2 keyboard
+/dev/input/event1:    Logitech Bluetooth Trackpad
+```
+
+Pick the event number corresponding to your trackpad:
+
+```bash
+sudo evtest /dev/input/event1
+```
+
+Now move your finger or tap the trackpad. You’ll see events printed in the console:
+
+```
+Event: time 1693032761.123456, type 3 (EV_ABS), code 0 (ABS_X), value 123
+Event: time 1693032761.123456, type 3 (EV_ABS), code 1 (ABS_Y), value 456
+Event: time 1.234567, type 1 (EV_KEY), code 272 (BTN_LEFT), value 1
+Event: time 1.234567, type 1 (EV_KEY), code 272 (BTN_LEFT), value 0
+```
+
+* `EV_ABS` = movement (X/Y coordinates)
+* `EV_KEY` = button pressed/released (`BTN_LEFT` = left click)
+
+---
+
+### **2. Optional: Monitor `/dev/input/mice`**
+
+A simpler but lower-level method:
+
+```bash
+sudo cat /dev/input/mice
+```
+
+* Move the trackpad or click: you’ll see a stream of binary characters.
+* Not human-readable, but proves it’s sending input.
+
+---
+
+### **3. Test with SSH + X forwarding (if GUI installed later)**
+
+If you install `xserver-xorg` or a lightweight GUI:
+
+```bash
+sudo apt install -y xserver-xorg xinput
+```
+
+Then you can use `xinput list` to see the trackpad and monitor its behavior graphically.
+
+---
+
+✅ So even headless, `evtest` is the way to **directly confirm movement and clicks**.
+
+If you want, I can give you a **Python snippet that reads the trackpad events in real time**, similar to how you were reading your IR remote, so you can react to gestures programmatically.
+
+Do you want me to do that?
 
 ## Installing Libraries
 
