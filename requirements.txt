@@ -10,3 +10,4 @@ ics
 python-dateutil
 httpx
 lirc
+evdev
