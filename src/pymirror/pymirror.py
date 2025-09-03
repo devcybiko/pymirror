@@ -10,8 +10,6 @@ import traceback
 
 from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
-from devices.keyboard_device import KeyboardDevice
-from devices.ir_device import IRDevice
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
 from events import * # get all events 
@@ -39,8 +37,6 @@ class PyMirror:
         self.debug = self._config.debug
         self.modules = []
         self.events = []
-        self.keyboard = KeyboardDevice()
-        self.remote = IRDevice()
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self.server = PMServer(self._config.server, self.server_queue)
         self._clear_screen = True  # Flag to clear the screen on each loop
@@ -113,38 +109,6 @@ class PyMirror:
         except queue.Empty:
             # No new events in the queue
             pass
-
-    def _read_keyboard(self):
-        ## add any messages that have come from the keyboard
-        while key_event := self.keyboard.get_key_event():
-            _debug(f"Received event from keyboard: {key_event}")
-            event = {
-                "event": "RawKeyboardEvent",
-                "keycode":  key_event["keycode"],
-                'key_name': key_event["key_name"],
-                'scancode': key_event["scancode"],
-                'pressed': key_event["pressed"],
-                'repeat': key_event["repeat"]
-            }
-            self.publish_event(event)
-
-    def _read_remote(self):
-        ## add any messages that have come from the ir remote
-        while remote_event := self.remote.get_key_event():
-            _debug(f"Received event from remote: {remote_event}")
-            ## translate into raw keyboard event
-            event = {
-                "event": "RawKeyboardEvent",
-                "scancode": remote_event["scancode"],
-                'key_name': remote_event["key_name"],
-                'scancode': remote_event["scancode"],
-                'pressed': remote_event["pressed"],
-                'repeat': remote_event["repeat"]
-            }
-            _debug("\n--- ir event")
-            _debug(event)
-            _debug("")
-            self.publish_event(event)
 
     def _send_events_to_module(self, module, events):
         if not module.subscriptions: 
@@ -250,8 +214,6 @@ class PyMirror:
     def run(self):
         try:
             while True:
-                self._time(self._read_keyboard)
-                self._time(self._read_remote)
                 self._time(self._read_server_queue)
                 self._time(self._send_events_to_modules)
                 modules_changed = self._time(self._exec_modules)

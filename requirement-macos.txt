@@ -1,0 +1,12 @@
+caldav
+vobject
+dotenv
+Pillow
+jinja2
+flask
+requests
+pygame
+ics
+python-dateutil
+httpx
+lirc
