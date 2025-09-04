@@ -1,6 +1,7 @@
+dotenv
+icalendar
 caldav
 vobject
-dotenv
 Pillow
 jinja2
 flask
@@ -9,4 +10,3 @@ pygame
 ics
 python-dateutil
 httpx
-lirc
