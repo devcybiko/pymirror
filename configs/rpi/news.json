@@ -32,7 +32,7 @@
         "header": {
             "font_name": "Roboto-Bold",
             "font_size": 40,
-            "text_color": "#000",
+            "text_color": "#fff",
             "text_bg_color": "#066",
             "valign": "center",
             "height": 160
