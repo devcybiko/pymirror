@@ -5,7 +5,7 @@ import time
 from abc import ABC, abstractmethod
 
 from pymirror.pmtimer import PMTimer
-from pymirror.pmlogger import _debug, _error, _debug, pmlogger, PMLoggerLevel
+from pymirror.pmlogger import _debug, _error, _debug, pmlogger, PMLoggerLevel, trace, _trace
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 
@@ -118,8 +118,13 @@ class MemoryCache(Cache):
         self.timer.set_timeout(0)
     
     def get(self):
-        if self.timer.is_timedout():
+        _trace("... get()")
+        is_timedout = self.timer.is_timedout()
+        _trace("... is_timedout", is_timedout)
+        if is_timedout:
+            _trace("... invalidating")
             self.invalidate()
+        _trace("... returning->", self.text)
         return self.text
 
 class FileCache(Cache):

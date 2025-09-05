@@ -4,7 +4,7 @@ import re
 import sys
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
-from .pmlogger import _debug
+from .pmlogger import _debug, _trace, trace, _print
 from dataclasses import fields
 from typing import Dict, Any
 
@@ -165,9 +165,14 @@ def from_dict(cls):
 def to_int(s: str, dflt: int = 0) -> int:
     try:
         return int(s)
-    except ValueError:
+    except ValueError as e:
         return dflt
 
+def to_float(s: str, dflt: float = 0.0) -> float:
+    try:
+        return float(s)
+    except ValueError:
+        return dflt
 
 def has_alpha(text):
     """Check if string contains any alphabetic characters"""
@@ -277,6 +282,35 @@ def strftime_by_example(_example: str) -> str:
     example = result.strip()
     return example
 
+def to_ms(s: str, dflt: int = 0) -> int:
+    _trace("s", s)
+    if type(s) == int:
+        _trace("type(s)", type(s))
+        return s
+    if len(s) == 0:
+        # empty string == 0 ms
+        _trace("empty string")
+        return dflt
+    if len(s) == 1:
+        # single digit == n ms
+        _trace("single digit", s)
+        return to_int(s, dflt)
+    if s[-2] == "ms":
+        # milliseconds
+        _trace("milliseconds", s)
+        return to_int(s[0:-2], dflt)
+    if s[-1] == "s":
+        # seconds
+        _trace("seconds", s, s[:-1])
+        return to_int(s[:-1], dflt) * 1000
+    if s[-1] == "m":
+        minutes = to_int(s[:-1], dflt) * 60 * 1000
+        _trace("minutes", s, s[:-1], minutes)
+        return minutes
+    if s[-1] == "h":
+        _trace("hours", s, s[:-1])
+        return to_float(s[-1], dflt) * 3600 * 1000
+    return to_int(s, dflt)
 
 if __name__ == "__main__":
     tests = [

@@ -73,7 +73,7 @@ class PMLogger:
     # class variable to hold the logger instance
     c_level = None
     c_fn_stack = [""]
-    c_trace = True
+    c_trace = False
 
     def __init__(self, log_file=None, level=PMLoggerLevel.WARNING):
         self.log_file = log_file
@@ -176,7 +176,6 @@ if __name__ == "__main__":
             _warning("This is a warning message.")
             _error("This is an error message.")
     
-    # @trace
     def main():
         pmlogger.set_level(PMLoggerLevel.NONE)
         pmlogger.set_trace(True)

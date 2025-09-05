@@ -5,14 +5,13 @@ import json
 import time
 import inspect
 
-from pymirror.pmlogger import _debug, _debug, _error, trace
+from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
 from pymirror.utils import SafeNamespace
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
 from pymirror.pmcaches import FileCache, MemoryCache
 
-# pmlogger.set_level(PMLoggerLevel.DEBUG)
+# pmlogger.set_level(PMLoggerLevel.WARNING)
 
-# @trace
 class PMWebApi:
     def __init__(self, url: str, poll_secs: int = 3600, cache_file: str = None):
         self.url = url
@@ -62,11 +61,14 @@ class PMWebApi:
             self.error = e
 
     def _get_memory_cache(self):
-        _debug("... get_memory_cache")
+        _debug("... _get_memory_cache")
         cached_text = self.memory_cache.get()
         if cached_text:
             _debug(" | Cached memory is valid")
-            self.from_cache = True
+            self.from_cache = "memory"
+        else:
+            _debug(" | memory cache is invalid")
+            self.from_cache = None
         return cached_text
     
     def _get_file_cache(self):
@@ -76,9 +78,10 @@ class PMWebApi:
         cached_text = self.file_cache.get()
         if cached_text:
             _debug(f" | Cached file {self.file_cache.file_info.fname} is valid")
-            self.from_cache = True
+            self.from_cache = self.file_cache.file_info.fname
         else:
             _debug(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
+            self.from_cache = None
         return cached_text
 
     def _get_api_text(self, blocking):

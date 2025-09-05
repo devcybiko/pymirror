@@ -1,10 +1,11 @@
 import time
-from pymirror.pmlogger import _debug
+from pymirror.pmlogger import _debug, trace
+from pymirror.utils import to_ms
 
 class PMTimer:
     def __init__(self, delay_ms=0, first_timeout_ms=1):
         self.future_time = 0
-        self.delay_ms = delay_ms
+        self.delay_ms = to_ms(delay_ms)
         self.set_future_time(first_timeout_ms)
 
     def reset(self, delay_ms=None):
@@ -28,7 +29,8 @@ class PMTimer:
             self.set_future_time(first_timeout_ms)
 
     def is_timedout(self, reset_ms: int = None):
-        if not self.future_time: return False # disabled timer always returns False
+        if not self.future_time:
+            return False # disabled timer always returns False
         now = time.time()
         if now < self.future_time:
             return False ## we're not timed out yet
