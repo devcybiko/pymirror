@@ -1,6 +1,6 @@
 import os
 from pymirror.pmmodule import PMModule
-from pymirror.pmlogger import _debug
+from pymirror.pmlogger import _print
 
 class PymirrorControllerModule(PMModule):
 	def __init__(self, pm, config):
@@ -15,38 +15,38 @@ class PymirrorControllerModule(PMModule):
 		return False
 
 	def onEvent(self, event):
-		_debug(f"Received event: {event}")
+		_print(f"Received event: {event}")
 		if event.event != "PyMirrorEvent":
-			_debug(f"Received unknown event type: {event.type}")
+			_print(f"Received unknown event type: {event.type}")
 			return
 		
 		if event.debug in [True, False, "true", "false", "on", "off"]:
-			_debug(f"Received debug event: {event.debug}")
+			_print(f"Received debug event: {event.debug}")
 			self.pm.debug = event.debug in [True, "true", "on"]
 			self.pm.full_render()
 
 		if event.refresh: 
-			_debug(f"Received refresh event: {event.refresh}")
+			_print(f"Received refresh event: {event.refresh}")
 			## clear the screen on the next iteration
 			self.pm._clear_screen = True
 
 		if event.purge: 
-			_debug(f"Received purge event: {event.refresh}")
+			_print(f"Received purge event: {event.refresh}")
 			os.system("rm -f caches/*")
 			os.system("src/pmserver/static/output.*")
 
 		if event.remote_display in [True, False, "true", "false", "on", "off"]:
 			if event.remote_display in [False, "false", "off"]:
-				_debug("Received remote display event: Off")
+				_print("Received remote display event: Off")
 				# turn off the screen output (used by the web display)
 				self.screen._screen.output_file = None
 			else:
-				_debug("Received remote display event: True")
+				_print("Received remote display event: True")
 				# turn on the screen output (used by the web display)
 				self.screen._screen.output_file = "./src/pmserver/static/output.jpg"
 
 		if event.reboot: 
-			_debug(f"Received reboot event: {event.reboot}")
+			_print(f"Received reboot event: {event.reboot}")
 			raise Exception("Terminating for reboot")
 
 		if event.error != None: 
