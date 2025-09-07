@@ -35,6 +35,10 @@ class PymirrorControllerModule(PMModule):
 			os.system("rm -f caches/*")
 			os.system("src/pmserver/static/output.*")
 
+		if event.reboot: 
+			_debug(f"Received reboot event: {event.reboot}")
+			raise Exception("Terminating for reboot")
+
 		if event.remote_display in [True, False, "true", "false", "on", "off"]:
 			if event.remote_display in [False, "false", "off"]:
 				_debug("Received remote display event: Off")
