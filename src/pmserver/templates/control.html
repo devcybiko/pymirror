@@ -41,8 +41,9 @@ document.getElementById('controlForm').onsubmit = function(e) {
         event: 'PyMirrorEvent',
         debug: document.getElementById('debug').checked,
         refresh: document.getElementById('refresh').checked,
-        remote_display: document.getElementById('remote_display').checked
-        purge: document.getElementById('purge').checked
+        remote_display: document.getElementById('remote_display').checked,
+        purge: document.getElementById('purge').checked,
+        reboot: document.getElementById('reboot').checked
     };
     console.log('Sending data:', data);
     fetch('/event', {
