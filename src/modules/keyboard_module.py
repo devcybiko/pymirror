@@ -28,5 +28,5 @@ class KeyboardModule(PMModule):
             self.publish_event(event)
 
     def exec(self):
-        self._read_remote()
+        self._read_keyboard()
         return False
