@@ -1,3 +1,4 @@
+import os
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _debug
 
@@ -18,15 +19,22 @@ class PymirrorControllerModule(PMModule):
 		if event.event != "PyMirrorEvent":
 			_debug(f"Received unknown event type: {event.type}")
 			return
+		
 		if event.debug in [True, False, "true", "false", "on", "off"]:
 			_debug(f"Received debug event: {event.debug}")
 			self.pm.debug = event.debug in [True, "true", "on"]
 			self.pm.full_render()
+
 		if event.refresh: 
 			_debug(f"Received refresh event: {event.refresh}")
 			## clear the screen on the next iteration
 			self.pm._clear_screen = True
-		## set the screen output
+
+		if event.purge: 
+			_debug(f"Received purge event: {event.refresh}")
+			os.system("rm -f caches/*")
+			os.system("src/pmserver/static/output.*")
+
 		if event.remote_display in [True, False, "true", "false", "on", "off"]:
 			if event.remote_display in [False, "false", "off"]:
 				_debug("Received remote display event: Off")
