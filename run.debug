@@ -9,8 +9,12 @@ fi
 mkdir -p ./src/pmserver/static
 mkdir -p ./caches/
 
-PYTHONPATH=src \
-    python3 -u -m pymirror.pymirror\
-    --config "$CONFIG" \
-    --output_file="./src/pmserver/static/output.jpg" \
-    --frame_buffer=null 
+while true; do
+    PYTHONPATH=src \
+        python3 -u -m pymirror.pymirror\
+        --config "$CONFIG" \
+        --output_file="./src/pmserver/static/output.jpg" \
+        --frame_buffer=null 
+        date
+        echo "Restarting pymirror..."
+done
