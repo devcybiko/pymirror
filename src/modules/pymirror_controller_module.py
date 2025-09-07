@@ -35,10 +35,6 @@ class PymirrorControllerModule(PMModule):
 			os.system("rm -f caches/*")
 			os.system("src/pmserver/static/output.*")
 
-		if event.reboot: 
-			_debug(f"Received reboot event: {event.reboot}")
-			raise Exception("Terminating for reboot")
-
 		if event.remote_display in [True, False, "true", "false", "on", "off"]:
 			if event.remote_display in [False, "false", "off"]:
 				_debug("Received remote display event: Off")
@@ -48,6 +44,11 @@ class PymirrorControllerModule(PMModule):
 				_debug("Received remote display event: True")
 				# turn on the screen output (used by the web display)
 				self.screen._screen.output_file = "./src/pmserver/static/output.jpg"
+
+		if event.reboot: 
+			_debug(f"Received reboot event: {event.reboot}")
+			raise Exception("Terminating for reboot")
+
 		if event.error != None: 
 			raise Exception(f"PyMirrorController received error event:\n{event.error}")
 
