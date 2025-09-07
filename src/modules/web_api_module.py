@@ -15,7 +15,8 @@ class WebApiModule(PMCard):
 		super().__init__(pm, config)
 		self._web_api = config.web_api
 		print("xxx... poll_time ", self._web_api.poll_time, "to_ms()", to_ms(self._web_api.poll_time))
-		self.api = PMWebApi(self._web_api.url, to_ms(self._web_api.poll_time), self._web_api.cache_file)
+		print("xxx... cache_file", self._web_api.__dict__)
+		self.api = PMWebApi(url=self._web_api.url, poll_time=to_ms(self._web_api.poll_time), cache_file=self._web_api.cache_file)
 		self.display_timer = PMTimer(self._web_api.cycle_time)
 		self.dirty = False
 

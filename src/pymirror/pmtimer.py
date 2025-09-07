@@ -3,10 +3,11 @@ from pymirror.pmlogger import _debug, trace
 from pymirror.utils import to_ms
 
 class PMTimer:
-    def __init__(self, delay_ms=0, first_timeout_ms=1):
+    def __init__(self, delay_time: str | int =0, first_timeout_time=1):
         self.future_time = 0
-        self.delay_ms = to_ms(delay_ms)
-        self.set_future_time(first_timeout_ms)
+        self.delay_ms = to_ms(delay_time)
+        self.first_timeout_ms = to_ms(first_timeout_time)
+        self.set_future_time(first_timeout_time)
 
     def reset(self, delay_ms=None):
         _debug(f"PMTimer.reset()")
@@ -15,12 +16,14 @@ class PMTimer:
         else:
             self.set_future_time(self.delay_ms)
 
-    def set_future_time(self, delay_ms):
+    def set_future_time(self, delay_ms: str | int):
         _debug(f"PMTimer.set_future_time({delay_ms})")
         now = time.time()
-        self.future_time = now + delay_ms / 1000
+        self.future_time = now + to_ms(delay_ms) / 1000
 
-    def set_timeout(self, delay_ms, first_timeout_ms=1):
+    def set_timeout(self, delay_time: str | int, first_timeout_time: str | int = 1):
+        delay_ms = to_ms(delay_time)
+        first_timeout_ms = to_ms(first_timeout_time)
         _debug(f"PMTimer.set_timeout({delay_ms}, {first_timeout_ms})")
         if not delay_ms or delay_ms < 0:
             self.future_time = 0 ## disable timer

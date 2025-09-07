@@ -100,6 +100,34 @@ class Cache(ABC):
     @abstractmethod
     def update(self, text): ...
 
+class MemoryFileCache(Cache):
+    def __init__(self, text=None, timeout_ms=1000, fname=None):
+        print("MemoryFileCache()", text, timeout_ms, fname)
+        self.memory_cache = MemoryCache(text, timeout_ms / 2)
+        self.file_cache = FileCache(text=text, fname=fname, timeout_ms=timeout_ms)
+        self.file_info = self.file_cache.file_info
+    
+    def set(self, text):
+        self.memory_cache.set(text)
+        self.file_cache.set(text)
+    
+    def update(self, text):
+        if text != self.text:
+            self.set(text)
+
+    def invalidate(self):
+        self.memory_cache.invalidate()
+        self.file_cache.invalidate()
+
+    def get(self):
+        text = self.memory_cache.get()
+        if not text:
+            text = self.file_cache.get()
+        return text
+
+    def read(self):
+        return self.file_cache.read()
+
 class MemoryCache(Cache):
     def __init__(self, text=None, timeout_ms=1000):
         self.timer = PMTimer(timeout_ms)
@@ -129,6 +157,7 @@ class MemoryCache(Cache):
 
 class FileCache(Cache):
     def __init__(self, text=None, timeout_ms=1000, fname=None):
+        print("FileCache()", fname)
         self.file_info = FileInfo(fname)
         self.timeout_ms = timeout_ms
         self.text = text

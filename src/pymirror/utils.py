@@ -284,9 +284,9 @@ def strftime_by_example(_example: str) -> str:
 
 def to_ms(s: str, dflt: int = 0) -> int:
     _trace("s", s)
-    if type(s) == int:
+    if type(s) == int or type(s) == float:
         _trace("type(s)", type(s))
-        return s
+        return int(s)
     if len(s) == 0:
         # empty string == 0 ms
         _trace("empty string")

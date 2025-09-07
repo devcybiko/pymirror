@@ -6,21 +6,20 @@ import time
 import inspect
 
 from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
-from pymirror.utils import SafeNamespace
+from pymirror.utils import SafeNamespace, to_ms
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
-from pymirror.pmcaches import FileCache, MemoryCache
+from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 
 class PMWebApi:
-    def __init__(self, url: str, poll_secs: int = 3600, cache_file: str = None):
+    def __init__(self, url: str, poll_time: str = "1h", cache_file: str = None):
         self.url = url
-        self.poll_secs = poll_secs
         ##
         self.async_loop = asyncio.get_event_loop()
         self.task = None
-        self.memory_cache = MemoryCache(text=None, timeout_ms=poll_secs * 1000)
-        self.file_cache = FileCache(text=None, fname=cache_file, timeout_ms=poll_secs * 1000) if cache_file else None
+        print("webapi:", url, poll_time, cache_file)
+        self.file_cache = MemoryFileCache(text=None, fname=cache_file, timeout_ms=to_ms(poll_time)) if cache_file else None
         self.async_delay = 0.01
         self.httpx = self.set_httpx()
         self.error = None
@@ -54,60 +53,38 @@ class PMWebApi:
 
     def fetch(self, blocking=True):
         try:
-            return self._fetch_blocking(blocking) \
-                or self._fetch_non_blocking(blocking)
+            return self._fetch_response_blocking(blocking) \
+                or self._fetch_response_non_blocking(blocking)
         except Exception as e:
             self.cancel()
             self.error = e
-
-    def _get_memory_cache(self):
-        _debug("... _get_memory_cache")
-        cached_text = self.memory_cache.get()
-        if cached_text:
-            _debug(" | Cached memory is valid")
-            self.from_cache = "memory"
-        else:
-            _debug(" | memory cache is invalid")
-            self.from_cache = None
-        return cached_text
     
-    def _get_file_cache(self):
-        _debug("... _get_file_cache")
-        if not self.file_cache:
-            return None
-        cached_text = self.file_cache.get()
-        if cached_text:
-            _debug(f" | Cached file {self.file_cache.file_info.fname} is valid")
-            self.from_cache = self.file_cache.file_info.fname
-        else:
-            _debug(f" | Cached file {self.file_cache.file_info.fname} is invalid / timed out")
-            self.from_cache = None
-        return cached_text
-
-    def _get_api_text(self, blocking):
-        _debug("... _get_api_text")
-        api_text = self._fetch_from_api(blocking)
-        if api_text == None or self.error:
-            _error(f"Error fetching API response from {self.url}: {self.error}")
-            return None
-        _debug(f" |  | API response from {self.url} is non-null")
-        self.from_cache = False
-        return api_text
-
     def fetch_text(self, blocking=True):
-        self.text = (
-            self._get_memory_cache()
-            or self._get_file_cache()
-            or self._get_api_text(blocking)
-        )
-        if self.text == None:
-            ## the cache is invalid and the api failed, try to read from file
-            _debug(f" |  |  | HARD-Loading cache from file {self.file_cache.file_info.fname}")
-            self.text = self.file_cache.read()
-            self.from_cache = True
-        ## update the cache if the text has changed
-        self.memory_cache.update(self.text)
-        self.file_cache.update(self.text)
+        if self.task:
+            ## we're waiting on a spawned httpx task
+            if blocking:
+                # wait until the task is complete
+                self.async_loop.run_until_complete(self.task)
+            else:
+                # wait a 'tick' to let the underlying event engine run
+                self.async_loop.run_until_complete(asyncio.sleep(self.async_delay))
+            if self.task.done():
+                # if the task is done (either because it completed, timed out, or was blocked)
+                self.response = self.task.result()
+                self.text = self.response.text
+                self.file_cache.set(self.text)
+                self.cancel()
+            else:
+                self.text = self.file_cache.get()
+        else:
+            # the task was never started or it completed
+            # get the file_cache
+            self.text = self.file_cache.get()
+            if self.text == None:
+                self.start()
+                # call fetch_text() recursively to wait for the task to complete
+                # or return the cached value
+                return self.fetch_text(blocking)
         return self.text
 
     def fetch_json(self, blocking=True):
@@ -121,7 +98,7 @@ class PMWebApi:
             self.error = e
         return result
 
-    def _fetch_blocking(self, blocking):
+    def _fetch_response_blocking(self, blocking):
         if not blocking:
             return None
         _debug(f"Blocking fetch from {self.url} with method {self.httpx.method}")
@@ -132,24 +109,23 @@ class PMWebApi:
         self.cancel()
         return result
 
-    def _fetch_non_blocking(self, blocking):
+    def _fetch_response_non_blocking(self, blocking):
         if blocking:
             return None
         _debug(f"Non-blocking fetch from {self.url} with method {self.httpx.method}")
         if self.task is None:
             self.start()
-        ## give asyncio some time to process
         self.async_loop.run_until_complete(asyncio.sleep(self.async_delay))
         if not self.task.done():
             _debug(f"Fetch task NOT completed for {self.url}")
-            self.error = None ## GLS - resetting error (set because file not found or out of date)
+            self.error = None
             return None
         _debug(f"Fetch task completed for {self.url}")
-        result = self.task.result()
+        response = self.task.result()
         self.cancel()
-        return result
+        return response
 
-    def _fetch_from_api(self, blocking=True):
+    def _fetch_text_from_api(self, blocking=True):
         text = None
         self.error = None
         response = self.fetch(blocking=blocking)
@@ -184,7 +160,7 @@ class PMWebApi:
 def main():
     import dotenv
     dotenv.load_dotenv('.secrets')
-    api = PMWebApi("https://httpbin.org/delay/1", poll_secs=10, cache_file='./caches/test.json')
+    api = PMWebApi("https://httpbin.org/delay/1", poll_time="10s", cache_file='./caches/test.json')
 
     result = None
     print("initiate the api call...")
