@@ -9,7 +9,6 @@ fi
 mkdir -p ./src/pmserver/static
 mkdir -p ./caches/
 
-while true; do
     PYTHONPATH=src \
         python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \
@@ -17,4 +16,3 @@ while true; do
         --frame_buffer=null 
         date
         echo "Restarting pymirror..."
-done

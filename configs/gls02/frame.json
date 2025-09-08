@@ -1,0 +1,15 @@
+  {
+    "module": "photo",
+    "moddef": {
+      "name": "test_frame",
+      "position": "0.33,0.33,0.66,1.00",
+      "force_render": true,
+      "force_update": true
+    },
+    "photo": {
+      "path": "./frames/frame.png",
+      "scale": "stretch",
+      "valign": "center",
+      "halign": "center"
+    }
+  }
