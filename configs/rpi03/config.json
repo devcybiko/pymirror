@@ -5,6 +5,7 @@
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
+    "rotate": 180,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
