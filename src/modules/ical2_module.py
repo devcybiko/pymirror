@@ -172,9 +172,10 @@ class Ical2Module(PMModule):
         epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
         now = datetime.now(timezone.utc)
         later = now + timedelta(hours=24 * self._ical2.number_days)
-        cal = Calendar(self.ical_response)
-        events = cal.timeline.included(epoch, later)
-
+        # cal = Calendar(self.ical_response)
+        # events = cal.timeline.included(epoch, later)
+        events = []
+        
         event_str = ""
         all_day_str = ""
         event_cnt = 0
