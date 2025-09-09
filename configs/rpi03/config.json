@@ -34,13 +34,13 @@
   "modules": [
     "./configs/rpi/pymirror_controller.json",
     "./configs/rpi/alert.json",
-    "./configs/gls02/cron.json",
-    "./configs/gls02/sound.json",
-    "./configs/gls02/time.json",
+    "./configs/rpi03/cron.json",
+    "./configs/rpi03/sound.json",
+    "./configs/rpi03/time.json",
     "./configs/rpi/date.json",
-    "./configs/gls02/day_of_week.json",
-    "./configs/gls02/ical2.json",
-    "./configs/gls02/icalendar.json",
+    "./configs/rpi03/day_of_week.json",
+    "./configs/rpi03/ical2.json",
+    "./configs/rpi03/icalendar.json",
     "./configs/rpi/fps.json"
   ]
 }

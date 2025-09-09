@@ -1,0 +1,14 @@
+  {
+    "module": "photo",
+    "moddef": {
+      "disabled": false,
+      "name": "test_photo",
+      "position": "0.33,0.33,0.66,0.0.60"
+    },
+    "photo": {
+      "path": "images/image-7.jpg",
+      "scale": "fill",
+      "valign": "center",
+      "halign": "center"
+    }
+  }

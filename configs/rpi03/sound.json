@@ -1,0 +1,6 @@
+{
+    "module": "sound",
+    "moddef": {
+        "name": "sound_player"
+    }
+}

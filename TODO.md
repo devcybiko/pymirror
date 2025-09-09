@@ -26,6 +26,12 @@ cd git/pymirror
 
 ## Backlog
 
+### Calendar
+
+1. Handle Week starting on Monday vs Sunday
+1. Handle work week 
+1. Handle multiple calendars
+
 1. BUG? The cached news is lasting >120 minutes. And it is only showing 10 elements
 1. News items rotating faster than 30 seconds?
 1. Change color of News Headline to something brighter/bolder/ more readable

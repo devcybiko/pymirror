@@ -1,0 +1,14 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "day_of_week",
+        "position": "top_center",
+        "font_name": "7segment",
+        "font_size": 128
+    },
+    "clock": {
+        "date_format": "+%a:%W",
+        "halign": "center",
+        "valign": "center"
+    }
+}

@@ -120,7 +120,6 @@ class Ical2Module(PMModule):
         for event in self.daily_events:
             if now.date() == event.begin.date():
                 events.append(event)
-                events.append(event)
         return events
 
     def render(self, force) -> bool:
