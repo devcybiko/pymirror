@@ -5,6 +5,7 @@
   "screen": {
     "output_file": null,
     "frame_buffer": "/dev/fb0",
+    "rotate": 180,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
@@ -32,15 +33,15 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "./configs/rpi/pymirror_controller.json",
-    "./configs/rpi/alert.json",
-    "./configs/gls03/cron.json",
-    "./configs/gls03/sound.json",
-    "./configs/gls03/time.json",
+    "./configs/rpi03/pymirror_controller.json",
+    "./configs/rpi03/alert.json",
+    "./configs/rpi03/cron.json",
+    "./configs/rpi03/sound.json",
+    "./configs/rpi03/time.json",
     "./configs/rpi/date.json",
-    "./configs/gls03/day_of_week.json",
-    "./configs/gls03/ical2.json",
-    "./configs/gls03/icalendar.json",
-    "./configs/rpi/fps.json"
+    "./configs/rpi03/day_of_week.json",
+    "./configs/rpi03/ical2.json",
+    "./configs/rpi03/icalendar.json",
+    "./configs/rpi03/fps.json"
   ]
 }

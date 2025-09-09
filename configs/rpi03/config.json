@@ -33,8 +33,8 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
-    "./configs/rpi/pymirror_controller.json",
-    "./configs/rpi/alert.json",
+    "./configs/rpi03/pymirror_controller.json",
+    "./configs/rpi03/alert.json",
     "./configs/rpi03/cron.json",
     "./configs/rpi03/sound.json",
     "./configs/rpi03/time.json",
@@ -42,6 +42,6 @@
     "./configs/rpi03/day_of_week.json",
     "./configs/rpi03/ical2.json",
     "./configs/rpi03/icalendar.json",
-    "./configs/rpi/fps.json"
+    "./configs/rpi03/fps.json"
   ]
 }
