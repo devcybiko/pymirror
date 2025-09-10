@@ -1,43 +1,19 @@
 {
-    "module": "ical2",
+    "module": "ical",
     "moddef": {
         "name": "icalendar2",
         "position": "ical2_strip",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,
-        "disabled": false,
-        "force_render": false
+        "disabled": false
     },
-    "ical2": {
+    "ical": {
         "url": "$ICALDAV_URL",
         "time_format": "Jan 1, 2025 0:00 pm",
-        "number_days": 180
-    },
-    "card": {
-        "header": {
-            "font_name": "Roboto-Regular",
-            "font_size": 32,
-            "text_color": "#000",
-            "text_bg_color": "#088",
-            "height": 72
-        },
-        "body": {
-            "font_name": "Roboto-Regular",
-            "font_size": 40,
-            "text_color": "#0ff",
-            "text_bg_color": "#000",
-            "valign": "center",
-            "halign": "left",
-            "wrap": "none"
-        },
-        "footer": {
-            "font_name": "Roboto-Regular",
-            "font_size": 32,
-            "text_color": "#000",
-            "text_bg_color": "#088",
-            "valign": "bottom",
-            "height": 72
-        }
+        "number_days": 180,
+        "render_mode": "grid",
+        "week_mode": 5,
+        "row_height": null
     }
 }
