@@ -18,8 +18,9 @@
     "date_strip": "0.0,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
-    "ical2_strip": "0.0,0.33,0.66,1.00",
-    "top_left": "0.0,0.15,0.33,0.33",
+    "ical2_strip": "0.00,0.15,0.75,0.95",
+    "icalendar_left_strip": "0.0,0.50,0.49,1.00",
+    "icalendar_right_strip": "0.75,0.15,1.00,0.90",
     "top_center": "0.00,0.00,0.33,0.15",
     "top_center_left": "0.0,0.0,0.15,0.15",
     "top_center_right": "0.15,0.33,0.66,0.33",
@@ -39,7 +40,7 @@
     "./configs/rpi03/sound.json",
     "./configs/rpi03/date.json",
     "./configs/rpi03/ical2.json",
-    "./configs/rpi03/icalendar.json",
+    "./configs/rpi03/ical_right.json",
     "./configs/rpi03/fps.json"
   ]
 }
