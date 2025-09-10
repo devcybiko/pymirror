@@ -221,7 +221,9 @@ def _replace_month_day_year(word):
     result = re.sub(r"(%[bB]) (%-d)([ ,]+)\d{2}", r"\1 \2\3%y", result)
     result = re.sub(r"(%[bB]) (%d)([ ,]+)\d{4}", r"\1 \2\3%Y", result)
     result = re.sub(r"(%[bB]) (%d)([ ,]+)\d{2}", r"\1 \2\3%y", result)
+    result = re.sub(r"(%[bB]) \d{4}$", r"\1 %Y", result)
     result = re.sub(r"(%[bB]) \d{2}$", r"\1 %d", result)
+    result = re.sub(r"(%[bB]) \d{1}$", r"\1 %d", result)
 
     result = re.sub(r"(%[bB])-(%-d)-\d{4}", r"\1-\2-%Y", result)
     result = re.sub(r"(%[bB])-(%-d)-\d{2}", r"\1-\2-%y", result)

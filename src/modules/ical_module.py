@@ -167,7 +167,6 @@ class IcalModule(PMCard):
 
         self.daily_events = daily_events
         self.all_day_events = all_day_events
-
         for event in daily_events:
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"
         for event in all_day_events:
