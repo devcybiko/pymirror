@@ -21,6 +21,7 @@ class ICalConfig:
     max_events: int = 10
     number_days: int = 7
     time_format: str = strftime_by_example("0:00 PM")
+    show_regular_events: bool = True
     show_all_day_events: bool = True
     show_recurring_events: bool = True
     all_day_format: str = strftime_by_example("Jan-1")
@@ -60,13 +61,18 @@ class Ical2Module(PMModule):
         y += dy
         dy = dx
         x = 0
-        now = datetime.now()
+        now = datetime.now().astimezone()
+        today = now
         dow_offset = [1, 2, 3, 4, 5, 6, 0]
         dow = now.weekday()
         now -= timedelta(days=dow_offset[dow])
-        gfx.text_color, gfx.text_bg_color = "yellow", gfx.text_color
+        text_color, text_bg_color = "yellow", gfx.text_color
         for row in range(0, 4):
             for col in range(0, 7):
+                gfx.text_color = text_color
+                gfx.text_bg_color = text_bg_color
+                if now.date() == today.date():
+                    gfx.text_bg_color = "#444"
                 self.bitmap.text_box((x, y, x + dx - 1, y + dy - 1), str(now.month)+"/"+str(now.day), halign="right", valign="top", use_baseline=True)
                 events = self._date_in(now)
                 yy = y + dh
@@ -80,6 +86,7 @@ class Ical2Module(PMModule):
                 x += dx
             y += dy
             x = 0
+        self.bitmap.gfx_pop()
 
 
     def exec(self) -> bool:
@@ -104,14 +111,16 @@ class Ical2Module(PMModule):
                 break
             if event["dtstart"] < now:
                 continue
-            if event["all_day"] and self._ical2.show_all_day_events:
-                all_day_events.append(event)
+            if event["all_day"]:
+                if self._ical2.show_all_day_events:
+                    all_day_events.append(event)
             else:
                 if event.get("rrule", False):
                     if self._ical2.show_recurring_events:
                         daily_events.append(event)
                 else:
-                    daily_events.append(event)
+                    if self._ical2.show_regular_events:
+                        daily_events.append(event)
         self.daily_events = daily_events
         self.all_day_events = all_day_events
         return True # state changed

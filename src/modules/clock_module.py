@@ -1,13 +1,13 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
-from pymirror.utils import SafeNamespace
+from pymirror.utils import SafeNamespace, strftime_by_example
 
 class ClockModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
 		super().__init__(pm, config)
 		self._clock = config.clock
-		self.date_format = "%I:%M:%S %p"
-		self.date_format = self._clock.date_format or "%I:%M:%S %p"
+		self.date_format = strftime_by_example(self._clock.date_format) or "%I:%M:%S %p"
+		print("...", self.date_format)
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)
 

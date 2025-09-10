@@ -15,11 +15,14 @@ from pymirror.ical_parser import IcalParser
 @dataclass
 class ICalConfig:
     url: str = None
+    title: str = "iCalendar"
     cache_file: str = "./caches/ical.json"
     refresh_minutes: int = 60
     max_events: int = 10
     number_days: int = 7
+    title_format: str = strftime_by_example("Jan 2025")
     time_format: str = strftime_by_example("0:00 PM")
+    show_regular_events: bool = True
     show_all_day_events: bool = True
     show_recurring_events: bool = True
     all_day_format: str = strftime_by_example("Jan-1")
@@ -69,22 +72,23 @@ class IcalModule(PMCard):
                 break
             if event.get("dtstart$", "") < now_str:
                 continue
-            if event.get("all_day") and self._ical.show_all_day_events:
-                all_day_events.append(event)
+            if event.get("all_day"):
+                if self._ical.show_all_day_events:
+                    all_day_events.append(event)
             else:
                 if event.get("rrule", False):
                     if self._ical.show_recurring_events:
                         daily_events.append(event)
                 else:
-                    daily_events.append(event)
+                    if self._ical.show_regular_events:
+                        daily_events.append(event)
 
         for event in daily_events:
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"
         for event in all_day_events:
             all_day_str += f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}\n"
         if self._ical.number_days > 1:
-            format = strftime_by_example("Monday, Jan 1")
-            header_str = f"iCalendar\n{now.strftime(format)} - {later.strftime(format)}"
+            header_str = f"{self._ical.title}\n{now.strftime(self._ical.title_format)} - {later.strftime(self._ical.title_format)}"
         self.update(
             header_str,
             (event_str + "\n" + all_day_str) or "No Events to Show",

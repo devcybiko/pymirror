@@ -1,0 +1,47 @@
+{
+    "module": "ical",
+    "moddef": {
+        "name": "icalendar",
+        "position": "icalendar_right_strip",
+        "text_color": "#fff",
+        "text_bg_color": "#000",
+        "font_size": 24,
+        "disabled": false,
+        "force_render": false
+    },
+    "ical": {
+        "url": "$ICALDAV_URL",
+        "title": "Holidays",
+        "time_format": "Jan 2025",
+        "number_days": 180,
+        "show_regular_events": false,
+        "show_all_day_events": true,
+        "show_recurring_events": false
+    },
+    "card": {
+        "header": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "height": 72
+        },
+        "body": {
+            "font_name": "Roboto-Regular",
+            "font_size": 40,
+            "text_color": "#0ff",
+            "text_bg_color": "#000",
+            "valign": "center",
+            "halign": "left",
+            "wrap": "none"
+        },
+        "footer": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "valign": "bottom",
+            "height": 72
+        }
+    }
+}

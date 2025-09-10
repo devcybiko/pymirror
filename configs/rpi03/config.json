@@ -15,7 +15,7 @@
   },
   "positions": {
     "None": "0.0,0.0,0.0,0.0",
-    "top_strip": "0.33,0.0,1.0,0.15",
+    "date_strip": "0.0,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
     "fps_strip": "0.0,0.95,0.33,1.00",
     "ical2_strip": "0.0,0.33,0.66,1.00",
@@ -37,9 +37,7 @@
     "./configs/rpi03/alert.json",
     "./configs/rpi03/cron.json",
     "./configs/rpi03/sound.json",
-    "./configs/rpi03/time.json",
-    "./configs/rpi/date.json",
-    "./configs/rpi03/day_of_week.json",
+    "./configs/rpi03/date.json",
     "./configs/rpi03/ical2.json",
     "./configs/rpi03/icalendar.json",
     "./configs/rpi03/fps.json"

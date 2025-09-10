@@ -1,0 +1,14 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "date",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "position": "date_strip",
+        "font_name": "Roboto_Condensed-BlackItalic",
+        "font_size": 128
+    },
+    "clock": {
+        "date_format": "September 9, 2025"
+    }
+}

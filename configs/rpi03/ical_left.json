@@ -2,7 +2,7 @@
     "module": "ical",
     "moddef": {
         "name": "icalendar",
-        "position": "middle_right",
+        "position": "icalendar_left_strip",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,
@@ -13,6 +13,8 @@
         "url": "$ICALDAV_URL",
         "time_format": "Jan 1, 2025 0:00 pm",
         "number_days": 180,
+        "show_regular_events": true,
+        "show_all_day_events": false,
         "show_recurring_events": false
     },
     "card": {
