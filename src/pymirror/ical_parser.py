@@ -1,6 +1,7 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
 from sys import stderr
+from dateutil.relativedelta import relativedelta
 
 class IcalParser:
     def __init__(self, lines):
@@ -51,8 +52,47 @@ class IcalParser:
         event["rrule"] = self._parse_keyword(event, "RRULE:", "RRULE;")
         return event
 
+    def _rrule_to_dict(self, rrule):
+        words = rrule.split(";")
+        result = {}
+        for word in words:
+            parts = word.split("=")
+            result[parts[0]] = parts[1]
+        return result
+    
+    def _freq_to_timedelta(self, freq):
+        if freq == "YEARLY": return relativedelta(years=1)
+        if freq == "MONTHLY": return relativedelta(months=1)
+        if freq == "WEEKLY": return timedelta(weeks=1)
+        if freq == "DAILY": return timedelta(days=1)
+    
+    def _parse_recurring_events(self, event, start_dt, end_dt):
+        if not event["rrule"]:
+            return [event]
+        # RRULE:FREQ=DAILY;UNTIL=20210220T215959Z
+        results = []
+        rrule = self._rrule_to_dict(event["rrule"])
+        freq = self._freq_to_timedelta(rrule["FREQ"])
+        count = int(rrule.get("COUNT", "100000"))
+        if "UNTIL" in rrule:
+            until_dt, _ = self._parse_datetime(rrule["UNTIL"])
+        else:
+            until_dt = end_dt
+        while event["dtstart"] < until_dt and count > 0:
+            count -= 1
+            if start_dt <= event["dtstart"] and event["dtend"] <= end_dt:
+                event["dtstart$"] = event["dtstart"].isoformat()
+                event["dtend$"] = event["dtend"].isoformat()
+                results.append(event.copy())
+            event["dtstart"] += freq
+            event["dtend"] += freq
+        return results
+
     def _parse_lines(self, lines, i, start_date, end_date) -> tuple[int, dict]:
         event = {}
+        local_tz = datetime.now().astimezone().tzinfo
+        start_dt = datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=local_tz)
+        end_dt = datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=local_tz)
         while i < len(lines):
             i, line = self._parse_line(lines, i)
             if not line: 
@@ -62,10 +102,12 @@ class IcalParser:
                 event = {}
             elif line == "END:VEVENT":
                 event = self._parse_event(event)
-                # print(start_date, event.get("dtstart", ""), event.get("dtend", ""), end_date, file=stderr)
-                if start_date <= event.get("dtstart$", "") and event.get("dtend$", "") <= end_date:
-                        # print(event)
-                        self.results.append(event)
+                events = self._parse_recurring_events(event, start_dt, end_dt)
+                for event in events:
+                    # print(start_date, event.get("dtstart", ""), event.get("dtend", ""), end_date, file=stderr)
+                    if start_date <= event.get("dtstart$", "") and event.get("dtend$", "") <= end_date:
+                            # print(event)
+                            self.results.append(event)
                 event = {}
             else:
                 tokens = ["RRULE:","DTSTART;","DTEND;","DTSTART:","DTEND:","SUMMARY;","SUMMARY:","DESCRIPTION:","DTSTAMP:"]
@@ -82,7 +124,7 @@ def main():
             return obj.isoformat()
         return str(obj)
 
-    with open("./caches/ical2.json", 'r', encoding='utf-8') as file:
+    with open("./caches/ical.json", 'r', encoding='utf-8') as file:
         text = file.read()
     ical_parser = IcalParser(text.split("\n"))
     result = ical_parser.parse("2025-08-01", "2025-12-31")

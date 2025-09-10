@@ -22,6 +22,7 @@ class ICalConfig:
     number_days: int = 7
     time_format: str = strftime_by_example("0:00 PM")
     show_all_day_events: bool = True
+    show_recurring_events: bool = True
     all_day_format: str = strftime_by_example("Jan-1")
 
 class Ical2Module(PMModule):
@@ -106,7 +107,11 @@ class Ical2Module(PMModule):
             if event["all_day"] and self._ical2.show_all_day_events:
                 all_day_events.append(event)
             else:
-                daily_events.append(event)
+                if event.get("rrule", False):
+                    if self._ical2.show_recurring_events:
+                        daily_events.append(event)
+                else:
+                    daily_events.append(event)
         self.daily_events = daily_events
         self.all_day_events = all_day_events
         return True # state changed

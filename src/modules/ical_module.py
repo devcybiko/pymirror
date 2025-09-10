@@ -21,6 +21,7 @@ class ICalConfig:
     number_days: int = 7
     time_format: str = strftime_by_example("0:00 PM")
     show_all_day_events: bool = True
+    show_recurring_events: bool = True
     all_day_format: str = strftime_by_example("Jan-1")
 
 class IcalModule(PMCard):
@@ -71,7 +72,11 @@ class IcalModule(PMCard):
             if event.get("all_day") and self._ical.show_all_day_events:
                 all_day_events.append(event)
             else:
-                daily_events.append(event)
+                if event.get("rrule", False):
+                    if self._ical.show_recurring_events:
+                        daily_events.append(event)
+                else:
+                    daily_events.append(event)
 
         for event in daily_events:
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"

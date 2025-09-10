@@ -12,7 +12,8 @@
     "ical": {
         "url": "$ICALDAV_URL",
         "time_format": "Jan 1, 2025 0:00 pm",
-        "number_days": 180
+        "number_days": 180,
+        "show_recurring_events": false
     },
     "card": {
         "header": {
