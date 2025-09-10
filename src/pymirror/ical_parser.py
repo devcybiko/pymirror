@@ -23,20 +23,19 @@ class IcalParser:
 
     def _parse_datetime(self, dtstr):
         zulu = False
-        if "Z" in dtstr:
-            dtstr = dtstr[0:-1]
+        if dtstr.endswith("Z"):
+            dtstr = dtstr[:-1]
             zulu = True
         if "T" in dtstr:
-            if zulu:
-                dt = datetime.strptime(dtstr, "%Y%m%dT%H%M%S").replace(tzinfo=timezone.utc)
-            else:
-                dt = datetime.strptime(dtstr, "%Y%m%dT%H%M%S")
+            dt = datetime.strptime(dtstr, "%Y%m%dT%H%M%S")
         else:
-            if zulu:
-                dt = datetime.strptime(dtstr, "%Y%m%d").replace(tzinfo=timezone.utc)
-            else:
-                dt = datetime.strptime(dtstr, "%Y%m%d")
-        return dt, dt.isoformat()
+            dt = datetime.strptime(dtstr, "%Y%m%d")
+        if zulu:
+            dt = dt.replace(tzinfo=timezone.utc).astimezone()  # Convert to local time
+        else:
+            # Make all-day events timezone-aware (local time)
+            dt = dt.replace(tzinfo=datetime.now().astimezone().tzinfo)
+        return dt, dt.isoformat()    
 
     def _parse_keyword(self, event, keyword0, keyword1):
         return event.get(keyword0, event.get(keyword1, ":")).split(":", 1)[1]
