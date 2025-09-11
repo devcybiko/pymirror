@@ -13,7 +13,8 @@
         "time_format": "Jan 1, 2025 0:00 pm",
         "number_days": 180,
         "render_mode": "grid",
-        "week_mode": 5,
-        "row_height": null
+        "week_mode": 7,
+        "row_height": null,
+        "holiday_files": ["./holiday_files/pocahontas-availability.json","./holiday_files/birthdays.json"]
     }
 }

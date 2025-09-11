@@ -1,8 +1,10 @@
 # ical_module.py
 # https://openicalmap.org/api/one-call-3#current
 
-from dataclasses import dataclass
+from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+import json
 import time
 from ics import Calendar
 
@@ -30,7 +32,8 @@ class ICalConfig:
     week_mode: int = 7
     row_height: int = None
     rows: int = 1000
-
+    holiday_files: list = field(default_factory=list)
+    
 class IcalModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
@@ -42,12 +45,27 @@ class IcalModule(PMCard):
         self.time_format = strftime_by_example(self._ical.time_format)
         self.daily_events = []
         self.all_day_events = []
+        self.holidays = defaultdict(list)
+        self._read_holidays()
+
+    def _read_holidays(self):
+        for holiday_file in self._ical.holiday_files:
+            with open(holiday_file) as f:
+                holiday_dict = json.load(f)
+            for date, s in holiday_dict.items():
+                self.holidays[date].append(s)
 
     def _date_in(self, now):
         events = []
         for event in self.daily_events:
             if now.date() == event.get("dtstart").date():
                 events.append(event)
+        dtstart_st = now.strftime("%Y-%m-%d")
+        dtstart_day = now.strftime("%m-%d")
+        for holiday in self.holidays[dtstart_st]:
+            events.append(holiday)
+        for holiday in self.holidays[dtstart_day]:
+            events.append(holiday)
         return events
 
     def render_grid(self, force) -> bool:
@@ -97,11 +115,13 @@ class IcalModule(PMCard):
                 self.bitmap.text_box((x, y, x + box_width - 1, y + box_height - 1), str(date.month)+"/"+str(date.day), halign="right", valign="top", use_baseline=True)
                 yy = y + header_height
                 for event in events:
-                    # self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].hour}:{event['dtstart'].minute:02d}", halign="left", valign="top", use_baseline=True)
-                    # yy += header_height
-                    # self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"  {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
-                    # yy += header_height
-                    self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].hour}:{event['dtstart'].minute:02d}: {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
+                    if type(event) is str:
+                        # holiday
+                        self.bitmap.gfx.text_color = "cyan"
+                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event}", halign="left", valign="top", use_baseline=True)                 
+                    else:
+                        self.bitmap.gfx.text_color = text_color
+                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].hour}:{event['dtstart'].minute:02d}: {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
                     yy += header_height
                 self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1))
                 x += box_width
