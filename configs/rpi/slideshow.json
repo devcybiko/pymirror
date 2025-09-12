@@ -9,7 +9,7 @@
         "scale": "fill",
         "valign": "center",
         "halign": "center",
-        "interval_secs": 60,
+        "interval_time": "60s",
         "randomize": true,
         "frame": "./frames/round_frame.png"
       }

@@ -16,7 +16,7 @@ class SlideshowModule(PMModule):
 		self.photo_number = 0
 		self.photos = self.load_folder(self._slideshow.folder)
 		self._randomize_list()
-		self.timer = PMTimer(self._slideshow.interval_secs * 1000)
+		self.timer = PMTimer(self._slideshow.interval_time)
 		self.dirty = False
 		self.path = None
 		self.frame_bm = None
