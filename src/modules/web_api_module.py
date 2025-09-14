@@ -81,8 +81,8 @@ class WebApiModule(PMCard):
 		self.header = self.items[self.item_number].get("header", "")
 		self.body = self.items[self.item_number].get("body", "")
 		self.footer = self.items[self.item_number].get("footer", "") 
-		if self.api.is_from_cache():
-			self.footer = f"(from cache: {self.api.last_date})\n{self.footer}"
+		# if self.api.is_from_cache():
+		# 	self.footer = f"(from cache: {self.api.last_date})\n{self.footer}"
 		if self.body in [None, "", "None"]:
 			self.body = self.header
 			self.header = ""
