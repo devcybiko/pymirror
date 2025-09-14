@@ -8,4 +8,5 @@ python3-caldav
 python3-vobject
 python3-ics
 python3-icalendar
+ir-keytable
 lirc
