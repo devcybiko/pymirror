@@ -46,7 +46,7 @@ class OpenWeatherMapApi(PMWebApi):
         """
         if not params:
             params = self.params.__dict__
-        self.httpx.params=params
+        self._httpx.params=params
         response = self.fetch_json(blocking=False)
         if not response: return None
         weather = PMWeatherData.from_dict(response)

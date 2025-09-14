@@ -56,7 +56,7 @@ class WebApiModule(PMCard):
 	
 	def _read_api(self):
 		_print("read_api")
-		self.api.httpx.params = self._web_api.params.__dict__
+		self.api._httpx.params = self._web_api.params.__dict__
 		self.text = self.api.fetch_text(blocking=False)
 		if not self.text:
 			_print("... api.fetch_text returns None")

@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import re
 import sys
@@ -313,6 +314,18 @@ def to_ms(s: str, dflt: int = 0) -> int:
         _trace("hours", s, s[:-1])
         return to_float(s[-1], dflt) * 3600 * 1000
     return to_int(s, dflt)
+
+def json_loads(s: str, dflt=None) -> dict:
+    try:
+        return json.loads(s)
+    except Exception as e:
+        return dflt
+
+def json_dumps(d: dict, dflt=None, indent=2) -> str:
+    try:
+        return json.dumps(dict, indent=indent)
+    except Exception as e:
+        return dflt
 
 if __name__ == "__main__":
     tests = [
