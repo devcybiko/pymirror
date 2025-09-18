@@ -270,7 +270,6 @@ def main():
             "Overrides the output_file setting in config."
     )
     args = parser.parse_args()
-    args = parser.parse_args()
 
     pm = PyMirror(args.config, SafeNamespace(**vars(args)))
     pm.run()

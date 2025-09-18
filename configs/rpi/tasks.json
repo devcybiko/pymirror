@@ -1,0 +1,12 @@
+{
+    "pmdb": {
+        "url": "sqlite:///pymirror.db"
+    },
+    "tasks": [
+        {
+            "class": "time",
+            "name": "time",
+            "cron": "*:*:00"
+        }
+    ]
+}

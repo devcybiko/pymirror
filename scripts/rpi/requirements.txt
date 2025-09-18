@@ -11,3 +11,6 @@ python-dateutil
 httpx
 lirc
 evdev
+icecream
+munch
+sqlalchemy

@@ -5,10 +5,11 @@ import re
 import sys
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
+from munch import DefaultMunch
 from .pmlogger import _debug, _trace, trace, _print
 from dataclasses import fields
 from typing import Dict, Any
-
+from icecream import ic as icprint
 
 def snake_to_pascal(snake_str):
     return "".join(word.capitalize() for word in snake_str.split("_"))
@@ -315,6 +316,18 @@ def to_ms(s: str, dflt: int = 0) -> int:
         return to_float(s[-1], dflt) * 3600 * 1000
     return to_int(s, dflt)
 
+def json_read(fname: str, dflt=None) -> dict:
+    try:
+        with open(fname, 'r') as file:
+            return json.load(file)
+    except Exception as e:
+        return dflt
+
+def json_write(fname: str, obj: dict) -> bool:
+    with open(fname, 'w') as file:
+        file.write(json_loads(obj))
+        return 
+
 def json_loads(s: str, dflt=None) -> dict:
     try:
         return json.loads(s)
@@ -326,6 +339,14 @@ def json_dumps(d: dict, dflt=None, indent=2) -> str:
         return json.dumps(dict, indent=indent)
     except Exception as e:
         return dflt
+
+def munchify(obj):
+    if isinstance(obj, dict):
+        return DefaultMunch.fromDict({k: munchify(v) for k, v in obj.items()})
+    elif isinstance(obj, list):
+        return [munchify(v) for v in obj]
+    else:
+        return obj
 
 if __name__ == "__main__":
     tests = [

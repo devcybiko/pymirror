@@ -10,3 +10,6 @@ pygame
 ics
 python-dateutil
 httpx
+icecream
+munch
+sqlalchemy
