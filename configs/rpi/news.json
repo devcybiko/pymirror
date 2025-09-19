@@ -1,7 +1,7 @@
 {
-    "module": "web_api",
+    "module": "web_db",
     "moddef": {
-        "name": "newsapi.com",
+        "name": "news",
         "position": "middle_right",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
@@ -9,17 +9,8 @@
         "font_size": 24,
         "disabled": false
     },
-    "web_api": {
-        "cache_file": "./caches/news.json",
-        "poll_time": "60m",
+    "web_db": {
         "cycle_time": "60s",
-        "url": "https://newsapi.org/v2/top-headlines",
-        "params": {
-            "apiKey": "$NEWSAPI_KEY",
-            "country": "us",
-            "pageSize": 100,
-            "category": "business"
-        },
         "display": {
             "total": "{{payload.totalResults}}",
             "max": "100",

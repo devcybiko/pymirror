@@ -3,14 +3,12 @@ import time
 
 from icecream import ic
 from pmtaskmgr.pmtask import PMTask
-from pymirror.crontab import Crontab
-from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _debug
 
-from sqlalchemy import Float, create_engine, Column, Integer, String
+from sqlalchemy import Float, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from pymirror.utils import from_dict
+from pymirror.utils import to_dict
 
 Base = declarative_base()
 
@@ -28,7 +26,7 @@ class TimeTable(Base):
 class TimeTask(PMTask):
     def __init__(self, pmtm, config):
         super().__init__(pmtm, config)
-        ic(self.pmdb)
+        _debug(self.pmdb)
         self.pmdb.create_table(TimeTable)
 
     def exec(self):
@@ -51,7 +49,7 @@ class TimeTask(PMTask):
             utc_time=utc_time,
             utc_datetime=utc_datetime
         )
-        self.pmdb.session.merge(timerec)
-        self.pmdb.session.commit()
+        _debug(to_dict(timerec))
+        self.pmdb.upsert(timerec)
         record = self.pmdb.get(TimeTable, 0)
-        ic(record)
+        _debug(to_dict(record))

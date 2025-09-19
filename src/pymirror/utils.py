@@ -5,7 +5,7 @@ import re
 import sys
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
-from munch import DefaultMunch
+from munch import DefaultMunch, Munch
 from .pmlogger import _debug, _trace, trace, _print
 from dataclasses import fields
 from typing import Dict, Any
@@ -163,6 +163,10 @@ def from_dict(cls):
     cls.from_dict = from_dict
     return cls
 
+def to_list(s: str | list) -> list:
+    if type(s) == list:
+        return s
+    return [s]
 
 def to_int(s: str, dflt: int = 0) -> int:
     try:
@@ -285,6 +289,15 @@ def strftime_by_example(_example: str) -> str:
     result = _replace_month_day_year(result)
     example = result.strip()
     return example
+
+def to_munch(dict) -> Munch:
+    return DefaultMunch.fromDict(dict)
+
+def to_dict(record) -> dict:
+    return {c.name: getattr(record, c.name) for c in record.__table__.columns}
+
+def to_secs(s: str, dflt_secs: int = 0) -> int:
+    return to_ms(s, dflt_secs * 1000) // 1000
 
 def to_ms(s: str, dflt: int = 0) -> int:
     _trace("s", s)

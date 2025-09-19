@@ -1,6 +1,8 @@
 import datetime
 import sys
-from pymirror.utils import has_alpha, to_int
+
+from icecream import ic
+from pymirror.utils import has_alpha, to_int, to_list
 from pymirror.pmlogger import _debug, _print
 
 _SECONDS=0 # seconds index
@@ -9,10 +11,12 @@ _HOURS=2 # hours index
 _DAY=3 # day index
 _MONTH=4 # month index
 _DOW=5 # day-of-week index
-
+_RETURN_STRING=6 # return string (after '|' ) if specified
 class Crontab:
     def __init__(self, crontab: list[str]):
-        self.crontab = self._init_cronlist(crontab or [])
+        # crontab is a list of classic 'cron' patterns ([secs] mins hours day month dow)
+        # plus the cron pattern can have a '|' that is a string to return on matching
+        self.crontab = self._init_cronlist(to_list(crontab) or [])
         self.cronparts_list = [self._parse_cronstring(cron) for cron in self.crontab]
         self.last_crontime = None
         self.crontime = self._update_crontime()
@@ -29,7 +33,10 @@ class Crontab:
         self.cron_now = _cron_now or self._to_cron_int(self.crontime)
         for i in range(len(self.cronparts_list)):
             if self._compare_cronparts(self.cronparts_list[i]):
-                results.append(i)
+                if self.cronparts_list[i][_RETURN_STRING]:
+                    results.append(self.cronparts_list[i][_RETURN_STRING])
+                else:
+                    results.append(i)
         return results
 
     def _convert_slash_date_string(self, date_string: str) -> str:
@@ -136,7 +143,10 @@ class Crontab:
 
     def _init_cronlist(self, cron_strings: list[str] = []):
         crontab = []
-        for cron_string in cron_strings:
+        for _cron_string in cron_strings:
+            parts = _cron_string.split("|", 1)
+            cron_string = parts[0]
+            return_string = "" if len(parts) < 2 else parts[1].strip()
             try:
                 cron_string = cron_string.lower().strip()
                 if "-" in cron_string or ":" in cron_string or "/" in cron_string:
@@ -158,9 +168,9 @@ class Crontab:
                     cron_string = time_str + " " + date_str + " " + dow_str
                 if has_alpha(cron_string):
                     raise Exception("Cron string contains invalid characters")
-                crontab.append(cron_string)
+                crontab.append(cron_string + "|" + return_string)
             except Exception as e:
-                print(f"Error processing cron string: {cron_string}")
+                print(f"Error processing cron string: {cron_string}|{return_string}")
                 sys.exit(1)
         return crontab
 
@@ -176,16 +186,19 @@ class Crontab:
 
     def _parse_cronstring(self, cronstring) -> list[list[str]]:
         result = []
-        cron_parts = cronstring.split(" ")
+        parts = cronstring.split("|", 1)
+        cron_parts = parts[0].split(" ")
+        return_string = parts[1].strip()
         while len(cron_parts) < 6:
             ## if seconds were not specified, default to 00 seconds
             cron_parts = ["0"] + cron_parts
         for cron_part in cron_parts:
             result.append(cron_part.split(","))
+        result.append(return_string)
         return result
 
     def _compare_cronparts(self, cron_parts: list[list[str]]) -> bool:
-        for i in range(len(cron_parts)):
+        for i in range(6):
             if i == _DOW and ("*" not in cron_parts[_DAY]):
                 ## special case: if a day was specified, don't do day-of-week matching
                 continue

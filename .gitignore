@@ -8,3 +8,4 @@ src/pmserver/static/
 *.jnk
 .secrets
 .env
+*.db

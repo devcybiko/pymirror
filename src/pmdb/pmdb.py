@@ -1,9 +1,11 @@
 from dataclasses import dataclass
+from icecream import ic
 from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from pymirror.utils import from_dict
+from pymirror.pmlogger import _debug
 
 Base = declarative_base()
 
@@ -20,15 +22,33 @@ class PMDb:
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
 
-    def create_table(self, table: Table, checkfirst=True):
-        table.__table__.create(self.engine, checkfirst=checkfirst)
+    def create_table(self, table: Table, checkfirst=True, force=False):
+        try:
+            _debug("creating table...")
+            table.__table__.create(self.engine, checkfirst=checkfirst)
+        except Exception as e:
+            _debug("create_table failed...")
+            if force:
+                _debug("...trying to drop it and recreate...")
+                try:
+                    table.__table__.drop(self.engine)
+                    table.__table__.create(self.engine, checkfirst=checkfirst)
+                except Exception as e:
+                    raise e
+            else:
+                raise e
 
-    def to_dict(self, record) -> dict:
-        return {c.name: getattr(record, c.name) for c in record.__table__.columns}
+    def upsert(self, record: Table):
+        self.session.merge(record)
+        self.session.commit()
 
-    def get(self, table: Table, key) -> dict:
+    def get(self, table: Table, key) -> Munch:
         record = self.session.query(table).get(key)
-        return self.to_dict(record)
+        return record
+
+    def get_where(self, table: Table, **kwargs) -> dict:
+        record = self.session.query(table).filter_by(**kwargs).first()
+        return record
 
 if __name__ == "__main__":
     def main():

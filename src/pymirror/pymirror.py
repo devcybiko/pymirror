@@ -8,10 +8,14 @@ import queue
 import argparse
 import traceback
 
+from icecream import ic
+
 from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
+from pmdb.pmdb import PMDb
+
 from events import * # get all events 
 
 def _to_null(s):
@@ -31,7 +35,9 @@ class PyMirror:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        _debug(f"Using config: {self._config}")
+        _print(f"Using config: {self._config}")
+        ic(f"Using config.pmdb: {self._config.pmdb.__dict__}")
+        self.pmdb = PMDb(self._config.pmdb.__dict__) if self._config.pmdb else None
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug

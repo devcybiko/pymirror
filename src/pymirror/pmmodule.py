@@ -29,6 +29,7 @@ class PMModule(ABC):
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm
+        self.pmdb = pm.pmdb
         self._moddef = _moddef = PMModuleDef.from_dict(config.moddef.__dict__)
         self.screen = pm.screen
         self.module_n = 0 ## PyMirror sets this to the index in the pm.modules list

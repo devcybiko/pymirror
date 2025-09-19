@@ -2,14 +2,18 @@ import argparse
 from dataclasses import dataclass
 import importlib
 import os
+import sys
 import time
-from icecream import ic as icprint
+import traceback
+from icecream import ic as ic
 from dotenv import load_dotenv
 from munch import DefaultMunch
 
 from pmdb.pmdb import PMDb, PMDbConfig
+from pmtaskmgr.pmtask import PMTask
+from pymirror.crontab import Crontab
 from pymirror.utils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
-
+from pymirror.pmlogger import _debug
 
 @from_dict
 @dataclass
@@ -20,21 +24,36 @@ class PMTaskMgrConfig:
 class PMTaskMgr:
     def __init__(self, config_fname: str):
         self._config = self._load_config(config_fname)
-        self.pmdb = PMDb(self._config.pmdb)
-        self.tasks = []
+        self.pmdb: PMDb = PMDb(self._config.pmdb)
+        self.tasks: list[PMTask] = []
         self._load_tasks()
+        self.task_dict: dict = self._make_task_dict()
+        self.cronlist = self._make_cronlist()
+        self.crontab = Crontab(self.cronlist)
         pass
     
     def _dbinit():
         pass
 
+    def _make_cronlist(self):
+        cronlist = []
+        for task in self.tasks:
+            cronlist.append(task.cron+"|"+task.name)
+        return cronlist
+
+    def _make_task_dict(self):
+        task_dict = {}
+        for task in self.tasks:
+            task_dict[task.name] = task
+        return task_dict
+
     def _load_config(self, config_fname) -> PMTaskMgrConfig:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        icprint(config_fname)
+        _debug(config_fname)
         config = json_read(config_fname)
-        icprint(config)
+        _debug(config)
         # Load secrets from .secrets file if specified
         secrets_path = config.get("secrets")
         if secrets_path:
@@ -45,7 +64,7 @@ class PMTaskMgr:
         # Expand environment variables in the config
         expand_dict(config, os.environ)
         obj = PMTaskMgrConfig.from_dict(config)
-        icprint(obj)
+        _debug(obj)
         config = munchify(obj)
         return config
 
@@ -63,7 +82,7 @@ class PMTaskMgr:
 
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            icprint(task_config)
+            _debug(task_config)
             mod = importlib.import_module("tasks."+task_config["class"]+"_task")
         
             ## get the class from inside the module
@@ -83,22 +102,35 @@ class PMTaskMgr:
 
     def run(self):
         while True:
-            for task in self.tasks:
+            task_names = self.crontab.check()
+            _debug(task_names)
+            for task_name in task_names: 
+                _debug("calling", task_name)
+                task = self.task_dict[task_name]
                 task.exec()
-                time.sleep(3)
+            time.sleep(1)
             
+def my_excepthook(exc_type, exc_value, exc_traceback):
+    tb = traceback.extract_tb(exc_traceback)
+    project_root = os.path.abspath(os.path.dirname(__file__))
+    filtered_tb = [frame for frame in tb if frame.filename.startswith(project_root)]
+    print(f"{exc_type.__name__}: {exc_value}")
+    for frame in filtered_tb:
+        print(f'  File "{frame.filename}", line {frame.lineno}, in {frame.name}')
+        print(f'    {frame.line}')
 
-def main():
-    parser = argparse.ArgumentParser(description="PMTaskManager")
-    parser.add_argument(
-        "-c", "--config",
-        default="./configs/rpi/tasks.json",
-        help="Path to config JSON file (default: config.json)"
-    )
-
-    args = parser.parse_args()
-    pmtaskmgr = PMTaskMgr(args.config)
-    pmtaskmgr.run()
+sys.excepthook = my_excepthook
 
 if __name__ == "__main__":
+    def main():
+        parser = argparse.ArgumentParser(description="PMTaskManager")
+        parser.add_argument(
+            "-c", "--config",
+            default="./configs/rpi/tasks.json",
+            help="Path to config JSON file (default: config.json)"
+        )
+
+        args = parser.parse_args()
+        pmtaskmgr = PMTaskMgr(args.config)
+        pmtaskmgr.run()
     main()

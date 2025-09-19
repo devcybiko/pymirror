@@ -1,12 +1,25 @@
 {
-    "pmdb": {
-        "url": "sqlite:///pymirror.db"
+  "pmdb": {
+    "url": "sqlite:///pymirror.db"
+  },
+  "tasks": [
+    {
+      "class": "time",
+      "name": "time",
+      "cron": "*:*:0,5,15,25,35,45,55"
     },
-    "tasks": [
-        {
-            "class": "time",
-            "name": "time",
-            "cron": "*:*:00"
-        }
-    ]
+    {
+      "class": "web_api",
+      "name": "news",
+      "cron": "*:*:0,10,20,30,40,50",
+      "rate_limit_time": "1h",
+      "url": "https://newsapi.org/v2/top-headlines",
+      "params": {
+        "apiKey": "$NEWSAPI_KEY",
+        "country": "us",
+        "pageSize": 100,
+        "category": "business"
+      }
+    }
+  ]
 }
