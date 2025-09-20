@@ -79,5 +79,4 @@ class IcalTask(PMTask):
                 events = ical_parser.parse(now, then)
                 self._add_new_events(events)
                 self._remove_deleted_events(events)
-            sys.exit()
             return
