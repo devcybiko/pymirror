@@ -5,20 +5,18 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 import json
-import time
-from ics import Calendar
+from icecream import ic
+from sqlalchemy import and_
 
 from pymirror.pmcard import PMCard
-from pymirror.pmwebapi import PMWebApi
-from pymirror.utils import SafeNamespace, strftime_by_example, to_int
+from pymirror.utils import strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
 from pymirror.pmlogger import _debug, _error
-from pymirror.ical_parser import IcalParser
+from tasks.ical_task import IcalTable
 
 @dataclass
 class ICalConfig:
-    url: str = None
+    calendar_name: str = "gregs_calendar"
     title: str = "iCalendar"
-    cache_file: str = "./caches/ical.json"
     refresh_time: str = "60m"
     max_events: int = 10
     number_days: int = 7
@@ -39,8 +37,6 @@ class IcalModule(PMCard):
         super().__init__(pm, config)
         self._ical = ICalConfig(**config.ical.__dict__)
         self.timer.set_timeout(self._ical.refresh_time)
-        self.ical_response = None
-        self.api = PMWebApi(self._ical.url, self._ical.refresh_time * 60, self._ical.cache_file)
         self.all_day_format = strftime_by_example(self._ical.all_day_format)
         self.time_format = strftime_by_example(self._ical.time_format)
         self.daily_events = []
@@ -121,7 +117,7 @@ class IcalModule(PMCard):
                         self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event}", halign="left", valign="top", use_baseline=True)                 
                     else:
                         self.bitmap.gfx.text_color = text_color
-                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].hour}:{event['dtstart'].minute:02d}: {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
+                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
                     yy += header_height
                 self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1))
                 x += box_width
@@ -143,53 +139,51 @@ class IcalModule(PMCard):
             # return is_dirty # early exit if not timed out
         self.timer.reset(self._ical.refresh_time)
 
-        self.ical_response = self.api.fetch_text(blocking=False)
-        if not self.ical_response:
-            # non-blocking call or error?
-            if self.api.error:
-                _error(f"Failed to fetch iCalendar data from {self.api.url}: {self.api.error}")
-            self.update(
-                "iCalendar",
-                "(loading...)",
-                datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S"),
-            )
-            # wait 1 second and check again
-            self.timer.reset(1000)
-            # render the display in the interim
-            return True
-        # epoch = datetime(1980, 1, 1, tzinfo=timezone.utc)
-        now = datetime.now(timezone.utc)
+        now = datetime.now()
         later = (now + timedelta(hours=24 * self._ical.number_days))
-        now_str = now.strftime("%Y-%m-%d")
-        later_str = later.strftime("%Y-%m-%d")
-        ical_parser = IcalParser(self.ical_response.splitlines())
-        events = ical_parser.parse(now_str, later_str)
+        now_epoch = to_utc_epoch(now)
+        later_epoch = to_utc_epoch(later)
+        self.all_day_events = []
+        self.daily_events = []
+        if self._ical.show_all_day_events:
+            self.all_day_events = to_munch(to_dict(self.pmdb.get_all_where(
+                IcalTable, 
+                and_(
+                    IcalTable.calendar_name == self._ical.calendar_name,
+                    IcalTable.utc_start >= now_epoch,
+                    IcalTable.utc_end <= later_epoch,
+                    IcalTable.all_day == True
+                )
+            )))
+
+        if self._ical.show_regular_events:
+            self.daily_events = to_munch(to_dict(self.pmdb.get_all_where(
+                IcalTable, 
+                and_(
+                    IcalTable.calendar_name == self._ical.calendar_name,
+                    IcalTable.utc_start >= now_epoch,
+                    IcalTable.utc_end <= later_epoch,
+                    IcalTable.rrule == "",
+                    IcalTable.all_day == False
+                )
+            )))
+
+        if self._ical.show_recurring_events:
+            recurring_events = to_munch(to_dict(self.pmdb.get_all_where(
+                IcalTable, 
+                and_(
+                    IcalTable.calendar_name == self._ical.calendar_name,
+                    IcalTable.utc_start >= now_epoch,
+                    IcalTable.utc_end <= later_epoch,
+                    IcalTable.rrule != ""
+                )
+            )))
+            self.daily_events.extend(recurring_events)
         event_str = ""
         all_day_str = ""
-        event_cnt = 0
-        daily_events = []
-        all_day_events = []
-        for event in events:
-            if event_cnt > self._ical.max_events:
-                break
-            if event.get("dtstart$", "") < now_str:
-                continue
-            if event.get("all_day"):
-                if self._ical.show_all_day_events:
-                    all_day_events.append(event)
-            else:
-                if event.get("rrule", False):
-                    if self._ical.show_recurring_events:
-                        daily_events.append(event)
-                else:
-                    if self._ical.show_regular_events:
-                        daily_events.append(event)
-
-        self.daily_events = daily_events
-        self.all_day_events = all_day_events
-        for event in daily_events:
+        for event in self.daily_events:
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"
-        for event in all_day_events:
+        for event in self.all_day_events:
             all_day_str += f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}\n"
         if self._ical.number_days > 1:
             header_str = f"{self._ical.title}\n{now.strftime(self._ical.title_format)} - {later.strftime(self._ical.title_format)}"

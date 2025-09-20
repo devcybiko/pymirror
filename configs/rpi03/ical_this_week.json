@@ -1,8 +1,8 @@
 {
     "module": "ical",
     "moddef": {
-        "name": "icalendar",
-        "position": "icalendar_right_strip",
+        "name": "this_week",
+        "position": "icalendar_this_week",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,
@@ -10,20 +10,20 @@
         "force_render": false
     },
     "ical": {
-        "url": "$ICALDAV_URL",
-        "title": "Holidays",
-        "time_format": "Jan 2025",
-        "number_days": 180,
-        "show_regular_events": false,
-        "show_all_day_events": true,
-        "show_recurring_events": false
+        "calendar_name": "gregs_calendar",
+        "title": "This Week",
+        "time_format": "Sun 0:00",
+        "number_days": 14,
+        "show_regular_events": true,
+        "show_all_day_events": false,
+        "show_recurring_events": true
     },
     "card": {
         "header": {
             "font_name": "Roboto-Regular",
             "font_size": 32,
-            "text_color": "#000",
-            "text_bg_color": "#088",
+            "text_color": "#fff",
+            "text_bg_color": "gray",
             "height": 72
         },
         "body": {
@@ -38,8 +38,8 @@
         "footer": {
             "font_name": "Roboto-Regular",
             "font_size": 32,
-            "text_color": "#000",
-            "text_bg_color": "#088",
+            "text_color": "#fff",
+            "text_bg_color": "gray",
             "valign": "bottom",
             "height": 72
         }

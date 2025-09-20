@@ -39,7 +39,7 @@ class IcalParser:
         return dt, dt.isoformat()    
 
     def _parse_keyword(self, event, keyword0, keyword1):
-        return event.get(keyword0, event.get(keyword1, ":")).split(":", 1)[1]
+        return event.get(keyword0, event.get(keyword1, ":")).split(":", 1)[1].strip()
 
     def _parse_event(self, event):
         dtend = self._parse_keyword(event, "DTEND:", "DTEND;")

@@ -64,8 +64,8 @@ class PMDb:
         record = self.session.query(table).filter_by(**kwargs).first()
         return record
 
-    def get_all_where(self, table: Table, **kwargs) -> list["Table"]:
-        records = self.session.query(table).filter_by(**kwargs)
+    def get_all_where(self, table: Table, where_clause) -> list["Table"]:
+        records = self.session.query(table).filter(where_clause)
         return records
 
     def delete(self, record: Table):

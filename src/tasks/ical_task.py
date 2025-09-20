@@ -1,12 +1,12 @@
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from icecream import ic
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String
 from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils import make_naive, make_hashcode, to_munch
+from pymirror.utils import to_naive, make_hashcode, to_munch, to_utc_epoch
 from pymirror.pmlogger import _debug
 from pymirror.ical_parser import IcalParser
 import requests
@@ -17,9 +17,11 @@ class IcalTable(Base):
     __tablename__ = 'ical'
     id = Column(Integer, primary_key=True)
     calendar_name = Column(String)
-    all_day = Column(String)
-    dtend = Column(DateTime)
+    all_day = Column(Boolean)
     dtstart = Column(DateTime)
+    dtend = Column(DateTime)
+    utc_start = Column(Float)
+    utc_end = Column(Float)
     summary = Column(String)
     description = Column(String)
     rrule = Column(String)
@@ -28,7 +30,7 @@ class IcalTable(Base):
 class IcalTask(PMTask):
     def __init__(self, pmtm, config):
         super().__init__(pmtm, config)
-        self.pmdb.create_table(IcalTable, checkfirst=True, force=False)
+        self.pmdb.create_table(IcalTable, checkfirst=False, force=True)
         self.url = self._task.url
         self.calendar_name = self._task.calendar_name
 
@@ -39,8 +41,10 @@ class IcalTask(PMTask):
             record = IcalTable(
                 calendar_name = self.calendar_name,
                 all_day = event.all_day,
-                dtend=make_naive(event.dtend),
-                dtstart=make_naive(event.dtstart),
+                dtstart=to_naive(event.dtstart),
+                dtend=to_naive(event.dtend),
+                utc_start=to_utc_epoch(event.dtstart),
+                utc_end=to_utc_epoch(event.dtend),
                 summary=event.summary,
                 description=event.description,
                 rrule=event.rrule,

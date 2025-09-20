@@ -4,11 +4,11 @@
         "name": "time",
         "text_color": "#fff",
         "text_bg_color": null,
-        "position": "top_left",
-        "font_name": "7segment.ttf",
+        "position": "0.75,0.0,1.00,0.15",
+        "font_name": "Roboto_Condensed-BlackItalic",
         "font_size": 128
     },
     "clock": {
-        "date_format": "%I:%M:%S"
+        "date_format": "0:00:00"
     }
 }

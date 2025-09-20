@@ -6,10 +6,11 @@ import sys
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 from munch import DefaultMunch, Munch
+import sqlalchemy
 from .pmlogger import _debug, _trace, trace, _print
 from dataclasses import fields
 from typing import Dict, Any
-from icecream import ic as icprint
+from icecream import ic
 import hashlib
 
 def snake_to_pascal(snake_str):
@@ -299,6 +300,9 @@ def to_munch(obj):
     else:
         return obj
 def to_dict(record) -> dict:
+    if isinstance(record, sqlalchemy.orm.query.Query):
+        arr = [to_dict(v) for v in record]
+        return(arr)
     return {c.name: getattr(record, c.name) for c in record.__table__.columns}
 
 def to_secs(s: str, dflt_secs: int = 0) -> int:
@@ -334,6 +338,15 @@ def to_ms(s: str, dflt: int = 0) -> int:
         return to_float(s[-1], dflt) * 3600 * 1000
     return to_int(s, dflt)
 
+def to_utc_epoch(dt) -> float:
+    if dt.tzinfo is None:
+        # Assume naive datetime is UTC
+        dt = dt.replace(tzinfo=datetime.timezone.utc)
+    else:
+        # Convert aware datetime to UTC
+        dt = dt.astimezone(datetime.timezone.utc)
+    return dt.timestamp()
+
 def json_read(fname: str, dflt=None) -> dict:
     try:
         with open(fname, 'r') as file:
@@ -358,7 +371,7 @@ def json_dumps(d: dict, dflt=None, indent=2) -> str:
     except Exception as e:
         return dflt
 
-def make_naive(dt):
+def to_naive(dt):
     if dt is not None and dt.tzinfo is not None:
         return dt.replace(tzinfo=None)
     return dt
