@@ -30,7 +30,7 @@ class IcalTable(Base):
 class IcalTask(PMTask):
     def __init__(self, pmtm, config):
         super().__init__(pmtm, config)
-        self.pmdb.create_table(IcalTable, checkfirst=False, force=True)
+        self.pmdb.create_table(IcalTable, checkfirst=True, force=True)
         self.url = self._task.url
         self.calendar_name = self._task.calendar_name
 

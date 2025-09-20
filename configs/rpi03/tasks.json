@@ -1,0 +1,19 @@
+{
+  "pmdb": {
+    "url": "sqlite:///pymirror.db"
+  },
+  "tasks": [
+    {
+      "class": "time",
+      "name": "time",
+      "cron": "*:*:00"
+    },
+    {
+        "class": "ical",
+        "name": "ical",
+        "cron": "*:30:00",
+        "url": "$ICALDAV_URL",
+        "calendar_name": "gregs_calendar"
+    }
+  ]
+}

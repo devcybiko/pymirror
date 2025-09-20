@@ -6,12 +6,12 @@
     {
       "class": "time",
       "name": "time",
-      "cron": "*:*:0,5,15,25,35,45,55"
+      "cron": "*:*:00"
     },
     {
       "class": "web_api",
       "name": "news",
-      "cron": "*:*:0,10,20,30,40,50",
+      "cron": "*:15:00",
       "rate_limit_time": "1h",
       "url": "https://newsapi.org/v2/top-headlines",
       "params": {
@@ -20,12 +20,6 @@
         "pageSize": 100,
         "category": "business"
       }
-    },{
-        "class": "ical",
-        "name": "ical",
-        "cron": "*:*:*",
-        "url": "$ICALDAV_URL",
-        "calendar_name": "gregs_calendar"
     }
   ]
 }
