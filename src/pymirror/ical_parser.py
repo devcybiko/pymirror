@@ -4,17 +4,17 @@ from sys import stderr
 from dateutil.relativedelta import relativedelta
 
 class IcalParser:
-    def __init__(self, lines):
+    def __init__(self, lines: list[str]):
         self.lines = lines
         pass
 
-    def parse(self, start_date, end_date):
+    def parse(self, start_date: str, end_date: str):
         self.results = []
         self._parse_lines(self.lines, 0, start_date, end_date)
         self.results = sorted(self.results, key=lambda event: event["dtstart$"])
         return self.results
 
-    def _parse_line(self, lines, i) -> tuple[int, str]:
+    def _parse_line(self, lines:list[str], i) -> tuple[int, str]:
         line = lines[i]
         i += 1
         while i < len(lines) and lines[i] and lines[i][0] == ' ':
@@ -50,6 +50,7 @@ class IcalParser:
         event["summary"] = self._parse_keyword(event, "SUMMARY:", "SUMMARY;")
         event["description"] = self._parse_keyword(event, "DESCRIPTION:", "DESCRIPTION;")
         event["rrule"] = self._parse_keyword(event, "RRULE:", "RRULE;")
+        event["uid"] = self._parse_keyword(event, "UID:", "UID;")
         return event
 
     def _rrule_to_dict(self, rrule):

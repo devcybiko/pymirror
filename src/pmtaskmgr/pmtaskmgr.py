@@ -44,6 +44,7 @@ class PMTaskMgr:
     def _make_task_dict(self):
         task_dict = {}
         for task in self.tasks:
+            ic(task.name)
             task_dict[task.name] = task
         return task_dict
 
@@ -51,9 +52,9 @@ class PMTaskMgr:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        _debug(config_fname)
+        ic(config_fname)
         config = json_read(config_fname)
-        _debug(config)
+        ic(config)
         # Load secrets from .secrets file if specified
         secrets_path = config.get("secrets")
         if secrets_path:
@@ -64,7 +65,7 @@ class PMTaskMgr:
         # Expand environment variables in the config
         expand_dict(config, os.environ)
         obj = PMTaskMgrConfig.from_dict(config)
-        _debug(obj)
+        ic(obj)
         config = munchify(obj)
         return config
 
@@ -82,15 +83,17 @@ class PMTaskMgr:
 
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            _debug(task_config)
-            mod = importlib.import_module("tasks."+task_config["class"]+"_task")
-        
+            ic(task_config)
+            module_name = "tasks."+task_config["class"]+"_task"
+            ic(module_name)
+            mod = importlib.import_module(module_name)
+            ic(mod)
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
-            clazz_name = snake_to_pascal(task_config["class"])
+            clazz_name = snake_to_pascal(task_config["class"])+"Task"
             print(f"Loading task class {clazz_name} from {mod.__name__}")
-            clazz = getattr(mod, clazz_name + "Task", None)
+            clazz = getattr(mod, clazz_name, None)
 
             ## create an instance of the class (module)
             ## and pass the PyMirror instance and the module config to it
@@ -103,9 +106,9 @@ class PMTaskMgr:
     def run(self):
         while True:
             task_names = self.crontab.check()
-            _debug(task_names)
+            ic(task_names)
             for task_name in task_names: 
-                _debug("calling", task_name)
+                ic("calling", task_name)
                 task = self.task_dict[task_name]
                 task.exec()
             time.sleep(1)
@@ -119,7 +122,7 @@ def my_excepthook(exc_type, exc_value, exc_traceback):
         print(f'  File "{frame.filename}", line {frame.lineno}, in {frame.name}')
         print(f'    {frame.line}')
 
-sys.excepthook = my_excepthook
+# sys.excepthook = my_excepthook
 
 if __name__ == "__main__":
     def main():

@@ -10,6 +10,7 @@ from .pmlogger import _debug, _trace, trace, _print
 from dataclasses import fields
 from typing import Dict, Any
 from icecream import ic as icprint
+import hashlib
 
 def snake_to_pascal(snake_str):
     return "".join(word.capitalize() for word in snake_str.split("_"))
@@ -290,9 +291,13 @@ def strftime_by_example(_example: str) -> str:
     example = result.strip()
     return example
 
-def to_munch(dict) -> Munch:
-    return DefaultMunch.fromDict(dict)
-
+def to_munch(obj):
+    if isinstance(obj, dict):
+        return DefaultMunch.fromDict({k: munchify(v) for k, v in obj.items()})
+    elif isinstance(obj, list):
+        return [munchify(v) for v in obj]
+    else:
+        return obj
 def to_dict(record) -> dict:
     return {c.name: getattr(record, c.name) for c in record.__table__.columns}
 
@@ -352,6 +357,15 @@ def json_dumps(d: dict, dflt=None, indent=2) -> str:
         return json.dumps(dict, indent=indent)
     except Exception as e:
         return dflt
+
+def make_naive(dt):
+    if dt is not None and dt.tzinfo is not None:
+        return dt.replace(tzinfo=None)
+    return dt
+
+def make_hashcode(*args):
+    s = "|".join(str(a) for a in args)
+    return hashlib.sha256(s.encode()).hexdigest()
 
 def munchify(obj):
     if isinstance(obj, dict):

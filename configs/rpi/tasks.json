@@ -20,6 +20,12 @@
         "pageSize": 100,
         "category": "business"
       }
+    },{
+        "class": "ical",
+        "name": "ical",
+        "cron": "*:*:*",
+        "url": "$ICALDAV_URL",
+        "calendar_name": "gregs_calendar"
     }
   ]
 }

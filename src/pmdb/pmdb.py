@@ -38,17 +38,39 @@ class PMDb:
             else:
                 raise e
 
+    def rollback(self):
+        self.session.rollback()
+
+    def commit(self):
+        try:
+            self.session.commit()
+        except Exception as e:
+            self.rollback()
+            raise e
+
     def upsert(self, record: Table):
         self.session.merge(record)
-        self.session.commit()
+        self.commit()
 
-    def get(self, table: Table, key) -> Munch:
+    def get(self, table: Table, key) -> "Table":
         record = self.session.query(table).get(key)
         return record
 
-    def get_where(self, table: Table, **kwargs) -> dict:
+    def get_all(self, table: Table) -> list["Table"]:
+        records = self.session.query(table).all()
+        return records
+
+    def get_where(self, table: Table, **kwargs) -> "Table":
         record = self.session.query(table).filter_by(**kwargs).first()
         return record
+
+    def get_all_where(self, table: Table, **kwargs) -> list["Table"]:
+        records = self.session.query(table).filter_by(**kwargs)
+        return records
+
+    def delete(self, record: Table):
+        self.session.delete(record)
+        self.commit()
 
 if __name__ == "__main__":
     def main():
