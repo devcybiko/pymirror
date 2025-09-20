@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 
 if [ $# -eq 0 ]; then
     CONFIG="./configs/rpi/tasks.json"
