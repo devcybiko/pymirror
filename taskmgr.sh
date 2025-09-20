@@ -9,7 +9,8 @@ fi
 while true; do
     PYTHONPATH=src \
         python3 -u -m pmtaskmgr.pmtaskmgr \
-        --config "$CONFIG"
+        --config "$CONFIG" \
+        2>&1 >> ./src/pmserver/static/output.log
         date
         echo "Restarting pmtaskmgr..."
         sleep 10
