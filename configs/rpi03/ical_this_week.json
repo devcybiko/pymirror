@@ -11,9 +11,9 @@
     },
     "ical": {
         "calendar_name": "gregs_calendar",
-        "title": "This Week",
+        "title": "This Month",
         "time_format": "Sun 0:00",
-        "number_days": 14,
+        "number_days": 30,
         "show_regular_events": true,
         "show_all_day_events": false,
         "show_recurring_events": true
