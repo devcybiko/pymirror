@@ -11,6 +11,6 @@
         "halign": "center",
         "interval_time": "60s",
         "randomize": true,
-        "frame": "./frames/round_frame.png"
+        "frame": "./frames/white_frame.png"
       }
     }
