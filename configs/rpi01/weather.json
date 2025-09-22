@@ -2,7 +2,7 @@
     "module": "weather",
     "moddef": {
         "name": "weather",
-        "position": "middle_left",
+        "position": "0.00,0.15,0.33,0.50",
         "text_color": "#c0c000",
         "text_bg_color": "#000000",
         "font_name": "DejaVuSans",

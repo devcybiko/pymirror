@@ -2,9 +2,9 @@
     "module": "clock",
     "moddef": {
         "name": "day_of_week",
-        "position": "top_center",
-        "font_name": "7segment",
-        "font_size": 128
+        "position": "0.33,0.00,0.67,0.15",
+        "font_size": 128,
+        "font_name": "Roboto-Italic-VariableFont_wdth,wght.ttf"
     },
     "clock": {
         "date_format": "+%a: %W"
