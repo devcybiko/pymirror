@@ -1,8 +1,8 @@
     {
       "module": "slideshow",
       "moddef": {
-        "name": "test_slideshow",
-        "position": "middle_center"
+        "name": "slideshow",
+        "position": "0.33,0.15,0.67,1.00"
       },
       "slideshow": {
         "folder": "./.pix",

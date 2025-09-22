@@ -2,7 +2,7 @@
     "module": "forecast",
     "moddef": {
         "name": "Weather Forecast",
-        "position": "bottom_left",
+        "position": "0.00,0.50,0.33,0.95",
         "font_size": 24,
         "text_color": "#ff0"
     },

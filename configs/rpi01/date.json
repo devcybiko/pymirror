@@ -2,7 +2,7 @@
     "module": "clock",
     "moddef": {
         "name": "date",
-        "position": "top_right",
+        "position": "0.00,0.00,0.33,0.15",
         "font_name": "7segment.ttf",
         "font_size": 128
     },
