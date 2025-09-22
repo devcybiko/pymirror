@@ -11,7 +11,7 @@
     {
         "class": "ical",
         "name": "ical",
-        "cron": "*:30:00",
+        "cron": "*:*:*",
         "url": "$ICALDAV_URL",
         "calendar_name": "gregs_calendar"
     }

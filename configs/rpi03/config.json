@@ -20,7 +20,8 @@
     "None": "0.0,0.0,0.0,0.0",
     "date_strip": "0.0,0.0,1.0,0.15",
     "alert_strip": "0.30,0.30,0.7,0.7",
-    "fps_strip": "0.0,0.95,0.33,1.00",
+    "fps_strip": "0.0,0.95,0.50,1.00",
+    "status_strip": "0.50,0.95,1.00,1.00",
     "ical2_strip": "0.00,0.15,0.75,0.95",
     "icalendar_this_week": "0.75,0.15,1.00,0.49",
     "icalendar_holidays": "0.75,0.50,1.00,0.90",
@@ -37,6 +38,7 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
   "modules": [
+    "./configs/rpi03/status.json",
     "./configs/rpi03/pymirror_controller.json",
     "./configs/rpi03/alert.json",
     "./configs/rpi03/cron.json",

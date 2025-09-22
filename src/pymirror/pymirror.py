@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from datetime import datetime
 import importlib
 import json
 import os
@@ -17,6 +19,12 @@ from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 
 from events import * # get all events 
+
+@dataclass
+class PMStatus:
+    debug: bool = False
+    remote_display: str = None
+    start_time: datetime = None
 
 def _to_null(s):
     """ Convert a string to None if it is 'null' or 'None' """
@@ -48,6 +56,15 @@ class PyMirror:
         self._clear_screen = True  # Flag to clear the screen on each loop
         self._load_modules()
         self.server.start()  # Start the server to handle incoming events
+        self.status = PMStatus()
+        self.start_time = datetime.now()
+        self.get_status()
+
+    def get_status(self) -> PMStatus:
+        self.status.debug = self.debug
+        self.status.remote_display = self.screen._screen.output_file
+        self.status.start_time = self.start_time
+        return self.status
 
     def _load_config(self, config_fname) -> SafeNamespace:
         # read .env file if it exists
