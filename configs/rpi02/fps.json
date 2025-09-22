@@ -1,0 +1,13 @@
+{
+    "module": "fps",
+    "moddef": {
+        "disabled": false,
+        "name": "fps",
+        "position": "fps_strip",
+        "font_size": 32
+    },
+    "fps": {
+        "valign": "bottom",
+        "halign": "left"
+    }
+}

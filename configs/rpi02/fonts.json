@@ -1,0 +1,14 @@
+{
+    "module": "fonts",
+    "moddef": {
+        "name": "Fonts",
+        "position": "bottom_left",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "font_name": "TNG_Title",
+        "font_size": 48
+    },
+    "fonts": {
+        "delay_ms": 1000
+    }
+}

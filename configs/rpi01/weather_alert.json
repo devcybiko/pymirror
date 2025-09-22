@@ -1,0 +1,37 @@
+{
+    "module": "alert",
+    "debug": false,
+    "moddef": {
+        "name": "Weather Alert",
+        "position": "bottom_left",
+        "subscriptions": ["WeatherAlertEvent"]
+    },
+    "alert": {
+        "header": "Weather Alert",
+        "body": "Weather Alerts Go Here.",
+        "footer": "Alert Footer",
+        "timeout": 1
+    },
+    "card": {
+        "header": {
+            "font_name": "TNG_Credits",
+            "font_size": 24,
+            "text_color": "#000",
+            "text_bg_color": "#f00",
+            "height": 48
+        },
+        "body": {
+            "font_name": "TNG_Credits",
+            "font_size": 24,
+            "text_color": "#ff0",
+            "text_bg_color": "#333"
+        },
+        "footer": {
+            "font_name": "DejaVuSans",
+            "font_size": 24,
+            "text_color": "#000",
+            "text_bg_color": "#fff",
+            "height": 48
+        }
+    }
+}

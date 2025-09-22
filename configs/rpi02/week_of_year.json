@@ -1,0 +1,14 @@
+{
+    "module": "clock",
+    "moddef": {
+        "name": "week_of_year",
+        "position": "top_center_right",
+        "font_name": "7segment",
+        "font_size": 128
+    },
+    "clock": {
+        "date_format": "%W",
+        "halign": "left",
+        "valign": "center"
+    }
+}

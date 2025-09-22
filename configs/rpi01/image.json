@@ -1,0 +1,11 @@
+{
+    "module": "image",
+    "moddef": {
+        "name": "test_image",
+        "position": "middle_center"
+    },
+    "image": {
+        "path": "./images/lena.jpg",
+        "scale": "fit"
+    }
+}
