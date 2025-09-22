@@ -23,6 +23,8 @@ class WebDbModule(PMCard):
 		self.response = None
 		self.update(None, "(loading...)", None)  # Initialize with empty strings
 		self.subscribe("KeyboardEvent")
+		self.items = []
+
 	def _parse_items(self, force: bool = False) -> int:
 		_print("_parse_items")
 		context = {
