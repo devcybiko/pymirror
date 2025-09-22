@@ -1,5 +1,5 @@
 {
-  "debug": true,
+  "debug": false,
   "secrets": ".secrets",
   "force_render": false,
   "screen": {
@@ -34,7 +34,8 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
   },
   "modules": [
-    "./configs/rpi01/alert.json",
+    "./configs/rpi01/fps.json",
+    "./configs/rpi01/status.json",
     "./configs/rpi01/sound.json",
     "./configs/rpi01/time.json",
     "./configs/rpi01/date.json",

@@ -1,0 +1,15 @@
+{
+    "module": "status",
+    "moddef": {
+        "disabled": false,
+        "name": "status",
+        "position": "0.67,0.95,1.00,1.00",
+        "font_size": 24
+    },
+    "status": {
+        "valign": "bottom",
+        "halign": "center",
+        "interval_time": "1m",
+        "time_format": "9/1 0:00 pm"
+    }
+}

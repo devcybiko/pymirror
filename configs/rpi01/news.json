@@ -2,7 +2,7 @@
     "module": "web_db",
     "moddef": {
         "name": "news",
-        "position": "middle_right",
+        "position": "0.67,0.33,1.00,0.95",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
         "font_name": "Roboto-Regular",
