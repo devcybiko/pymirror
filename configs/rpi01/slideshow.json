@@ -5,7 +5,7 @@
         "position": "middle_center"
       },
       "slideshow": {
-        "folder": "./images",
+        "folder": "./.pix",
         "scale": "fill",
         "valign": "center",
         "halign": "center",
