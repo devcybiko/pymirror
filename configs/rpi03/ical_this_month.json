@@ -1,8 +1,8 @@
 {
     "module": "ical",
     "moddef": {
-        "name": "this_week",
-        "position": "icalendar_this_week",
+        "name": "this_month",
+        "position": "icalendar_this_month",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,
@@ -12,7 +12,7 @@
     "ical": {
         "calendar_name": "gregs_calendar",
         "title": "This Month",
-        "time_format": "Sun 0:00",
+        "time_format": "9/11 0:00",
         "number_days": 30,
         "show_regular_events": true,
         "show_all_day_events": false,
@@ -20,7 +20,7 @@
     },
     "card": {
         "header": {
-            "font_name": "Roboto-Regular",
+            "font_name": "Roboto-Bold",
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "gray",

@@ -23,7 +23,7 @@
     "fps_strip": "0.0,0.95,0.50,1.00",
     "status_strip": "0.50,0.95,1.00,1.00",
     "ical2_strip": "0.00,0.15,0.75,0.95",
-    "icalendar_this_week": "0.75,0.15,1.00,0.49",
+    "icalendar_this_month": "0.75,0.15,1.00,0.49",
     "icalendar_holidays": "0.75,0.50,1.00,0.90",
     "top_center": "0.00,0.00,0.33,0.15",
     "top_center_left": "0.0,0.0,0.15,0.15",
@@ -47,7 +47,7 @@
     "./configs/rpi03/time.json",
     "./configs/rpi03/ical2.json",
     "./configs/rpi03/ical_holidays.json",
-    "./configs/rpi03/ical_this_week.json",
+    "./configs/rpi03/ical_this_month.json",
     "./configs/rpi03/fps.json"
   ]
 }
