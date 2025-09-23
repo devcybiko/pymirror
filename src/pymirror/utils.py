@@ -335,7 +335,7 @@ def to_ms(s: str, dflt: int = 0) -> int:
         return minutes
     if s[-1] == "h":
         _trace("hours", s, s[:-1])
-        return to_float(s[-1], dflt) * 3600 * 1000
+        return to_float(s[:-1], dflt) * 60 * 60 * 1000
     return to_int(s, dflt)
 
 def to_utc_epoch(dt) -> float:
