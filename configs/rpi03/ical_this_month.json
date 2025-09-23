@@ -2,7 +2,7 @@
     "module": "ical",
     "moddef": {
         "name": "this_month",
-        "position": "icalendar_this_week",
+        "position": "icalendar_this_month",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,
@@ -20,7 +20,7 @@
     },
     "card": {
         "header": {
-            "font_name": "Roboto-bold",
+            "font_name": "Roboto-Bold",
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "gray",
