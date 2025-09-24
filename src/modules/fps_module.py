@@ -1,11 +1,13 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
+from pymirror.pmtimer import PMTimer
 
 class FpsModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self.last_time = datetime.now()
 		self._fps = config.fps
+		self.timer = PMTimer("1s")
 
 	def render(self, force: bool = False) -> bool:
 		now = datetime.now()
@@ -17,7 +19,10 @@ class FpsModule(PMModule):
 		return True
 
 	def exec(self):
-		return True
+		if self.timer.is_timedout():
+			self.timer().reset()
+			return True
+		return False
 
 	def onEvent(self, event):
 		pass			
