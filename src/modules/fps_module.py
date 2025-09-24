@@ -19,10 +19,10 @@ class FpsModule(PMModule):
 		return True
 
 	def exec(self):
-		if self.timer.is_timedout():
-			self.timer.reset()
-			return True
-		return False
+		# if self.timer.is_timedout():
+		# 	self.timer.reset()
+		# 	return True
+		return True
 
 	def onEvent(self, event):
 		pass			
