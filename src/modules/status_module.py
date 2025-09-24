@@ -19,7 +19,7 @@ class StatusModule(PMModule):
         pmstatus = self.pmstatus
         taskmgr = self.pmstatus.taskmgr
         if taskmgr:
-            tm = f"{int(taskmgr.pstat.delta.total_cpu * 1000 * self.interval_secs)}{glyphs.up} "
+            tm = f"{int(taskmgr.pstat.delta.total_cpu * 1000 / self.interval_secs)}{glyphs.up} "
         else:
             tm = f"{0}{glyphs.down} "
 
