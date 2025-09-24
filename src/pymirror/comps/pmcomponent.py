@@ -2,7 +2,7 @@ from abc import ABC
 from dataclasses import dataclass, fields
 
 from pmgfxlib.pmgfx import PMGfx
-from pymirror.utils import SafeNamespace, from_dict
+from pymirror.utils.utils import SafeNamespace, from_dict
 from pymirror.pmconstants import PMConstants as PMC
 from pmgfxlib.pmbitmap import PMBitmap
 from pymirror.pmrect import PMRect

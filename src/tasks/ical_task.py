@@ -6,7 +6,7 @@ from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils import to_naive, make_hashcode, to_munch, to_utc_epoch
+from pymirror.utils.utils import to_naive, make_hashcode, to_munch, to_utc_epoch
 from pymirror.pmlogger import _debug
 from pymirror.ical_parser import IcalParser
 import requests

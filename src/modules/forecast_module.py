@@ -5,7 +5,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
-from pymirror.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace
 from pymirror.pmlogger import _debug
 
 @dataclass

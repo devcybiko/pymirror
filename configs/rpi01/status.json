@@ -9,7 +9,7 @@
     "status": {
         "valign": "bottom",
         "halign": "center",
-        "interval_time": "1m",
+        "interval_time": "10s",
         "time_format": "9/1 0:00 pm"
     }
 }

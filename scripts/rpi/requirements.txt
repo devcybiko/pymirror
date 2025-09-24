@@ -14,3 +14,4 @@ evdev
 icecream
 munch
 sqlalchemy
+psutil

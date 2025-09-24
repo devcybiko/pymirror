@@ -6,7 +6,7 @@ import time
 import inspect
 
 from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
-from pymirror.utils import SafeNamespace, to_ms
+from pymirror.utils.utils import SafeNamespace, to_ms
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
 from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
 

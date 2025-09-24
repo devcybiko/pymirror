@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from logging import config
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
 
 @dataclass 

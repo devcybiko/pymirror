@@ -9,7 +9,7 @@ from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils import to_secs
+from pymirror.utils.utils import to_secs
 from pymirror.pmlogger import _debug
 
 import requests

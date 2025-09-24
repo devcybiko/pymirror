@@ -1,14 +1,12 @@
-from dataclasses import dataclass
 import json
 import time
 from icecream import ic
-import requests
 import copy
 
 from pymirror.pmcard import PMCard
-from pymirror.utils import expand_dict, to_dict
+from pymirror.utils.utils import expand_dict, to_dict
 from pymirror.pmtimer import PMTimer
-from pymirror.pmlogger import _print, _print, _debug
+from pymirror.pmlogger import _debug
 from tasks.web_api_task import WebApiTable
 
 class WebDbModule(PMCard):
@@ -26,7 +24,7 @@ class WebDbModule(PMCard):
 		self.items = []
 
 	def _parse_items(self, force: bool = False) -> int:
-		_print("_parse_items")
+		_debug("_parse_items")
 		context = {
 			"_n_": 0,
 			"payload": self.response,
@@ -52,26 +50,26 @@ class WebDbModule(PMCard):
 		return len(self.items)
 	
 	def _read_db(self):
-		_print("_read_db")
+		_debug("_read_db")
 		record = self.pmdb.get_where(WebApiTable, name=self.name)
-		ic(to_dict(record))
+		_debug(to_dict(record))
 		self.text = record.result_text
 		if not self.text:
-			_print("... db.get_where() returns None")
+			_debug("... db.get_where() returns None")
 			return
 		if self.last_text == self.text:
-			_print("... db.get_where() returns same value")
+			_debug("... db.get_where() returns same value")
 			return
 		self.last_text = self.text
 		self.last_time = record.last_time
 		self.response = json.loads(self.text)
-		_print("... new response... let's parse it")
+		_debug("... new response... let's parse it")
 		self._parse_items()
 
 	def _display_next_item(self):
-		_print("_display_next_item")
+		_debug("_display_next_item")
 		if not self.items:
-			_print("No items to display")
+			_debug("No items to display")
 			return
 		if self.item_number >= len(self.items):
 			self.item_number = 0
@@ -105,7 +103,7 @@ class WebDbModule(PMCard):
 		_debug("...  dirty=", self.dirty)
 
 		if self.display_timer.is_timedout():
-			_print("... timer: ", time.time(), self.display_timer.future_time)
+			_debug("... timer: ", time.time(), self.display_timer.future_time)
 			self._read_db()
 			self._display_next_item()
 			self.display_timer.reset()

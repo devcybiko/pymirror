@@ -9,7 +9,7 @@ from icecream import ic
 from sqlalchemy import and_
 
 from pymirror.pmcard import PMCard
-from pymirror.utils import strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
+from pymirror.utils.utils import strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
 from pymirror.pmlogger import _debug, _error
 from tasks.ical_task import IcalTable
 
