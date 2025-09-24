@@ -1,5 +1,5 @@
 from pymirror.pmmodule import PMModule
-from pymirror.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace
 from pmgfxlib.pmbitmap import PMBitmap
 
 class PhotoModule(PMModule):

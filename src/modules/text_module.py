@@ -1,6 +1,6 @@
 import copy
 from pymirror.pmmodule import PMModule
-from pymirror.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace
 from pymirror.comps.pmtextcomp import PMTextComp
 
 class TextModule(PMModule):

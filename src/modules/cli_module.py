@@ -5,7 +5,7 @@ import copy
 import subprocess
 
 from pymirror.pmmodule import PMModule
-from pymirror.utils import expand_dict
+from pymirror.utils.utils import expand_dict
 from pymirror.pmcard import PMCard
 
 class CliModule(PMCard):

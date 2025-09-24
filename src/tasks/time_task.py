@@ -8,7 +8,7 @@ from pymirror.pmlogger import _debug
 from sqlalchemy import Float, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from pymirror.utils import to_dict
+from pymirror.utils.utils import to_dict
 
 Base = declarative_base()
 

@@ -2,7 +2,7 @@ import datetime
 import sys
 
 from icecream import ic
-from pymirror.utils import has_alpha, to_int, to_list
+from pymirror.utils.utils import has_alpha, to_int, to_list
 from pymirror.pmlogger import _debug, _print
 
 _SECONDS=0 # seconds index

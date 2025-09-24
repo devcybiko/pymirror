@@ -146,3 +146,49 @@ The last day of the year (December 31).
 BYWEEKNO=-1
 The last week of the year.
 
+
+## Some Unicode Glyphs
+
+## Downward/Negative Direction:
+
+- \u2193 (↓) - Downwards arrow
+- \u25BC (▼) - Black down-pointing triangle
+- \u25BD (▽) - White down-pointing triangle
+- \u2935 (⤵) - Arrow pointing rightwards then curving downwards
+
+## Bad/Negative/Error:
+
+- \u2717 (✗) - Ballot X (cross mark)
+- \u2718 (✘) - Heavy ballot X
+- \u274C (❌) - Cross mark
+- \u274E (❎) - Negative squared cross mark
+- \u26A0 (⚠) - Warning sign
+- \u203C (‼) - Double exclamation mark
+- \u2049 (⁉) - Exclamation question mark
+- \u26D4 (⛔) - No entry sign
+- \u1F6AB (🚫) - No entry sign (emoji)
+
+## Thumbs Down:
+
+- \u1F44E (👎) - Thumbs down sign
+
+## Upward/Positive Direction:
+
+- \u2191 (↑) - Upwards arrow (opposite of ↓)
+- \u25B2 (▲) - Black up-pointing triangle (opposite of ▼)
+- \u25B3 (△) - White up-pointing triangle (opposite of ▽)
+- \u2934 (⤴) - Arrow pointing rightwards then curving upwards (opposite of ⤵)
+
+## Good/Positive/Success:
+
+- \u2713 (✓) - Check mark (opposite of ✗)
+- \u2714 (✔) - Heavy check mark (opposite of ✘)
+- \u2705 (✅) - White heavy check mark (opposite of ❌)
+- \u2611 (☑) - Ballot box with check (opposite of ❎)
+- \u2139 (ℹ) - Information source (opposite of ⚠)
+- \u2728 (✨) - Sparkles (positive indicator)
+- \u2705 (✅) - Check mark button (opposite of 🚫)
+
+## Thumbs Up:
+
+- \u1F44D (👍) - Thumbs up sign (opposite of 👎)

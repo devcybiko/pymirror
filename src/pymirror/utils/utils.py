@@ -1,21 +1,30 @@
 import datetime
 import json
 import os
+import pprint as _pprint
 import re
 import sys
 from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 from munch import DefaultMunch, Munch
 import sqlalchemy
-from .pmlogger import _debug, _trace, trace, _print
-from dataclasses import fields
+from ..pmlogger import _debug, _trace, trace, _print
+from dataclasses import dataclass, fields
 from typing import Dict, Any
 from icecream import ic
 import hashlib
 
+@dataclass
+class Glyphs:
+    yes = '\u25CF'
+    no = '\u25CB'
+    up = '\u25B2'
+    down = '\u25BD'
+
+glyphs = Glyphs()
+
 def snake_to_pascal(snake_str):
     return "".join(word.capitalize() for word in snake_str.split("_"))
-
 
 def expand_string(s: str, context: dict, dflt: str = None) -> str:
     if not s:
@@ -353,6 +362,12 @@ def json_read(fname: str, dflt=None) -> dict:
             return json.load(file)
     except Exception as e:
         return dflt
+
+def pprint(obj):
+    if isinstance(obj, Munch):
+        _pprint.pprint(obj.toDict(), indent=2, width=80)
+    else:
+        _pprint.pprint(obj)
 
 def json_write(fname: str, obj: dict) -> bool:
     with open(fname, 'w') as file:

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 
 from pymirror.pmrect import PMRect
-from pymirror.utils import _NONE_PROXY, from_dict, non_null
+from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null
 from .pmfont import PMFont
 from .pmutils import to_color
 

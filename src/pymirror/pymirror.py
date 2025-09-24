@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 import importlib
 import json
@@ -11,12 +11,14 @@ import argparse
 import traceback
 
 from icecream import ic
+from munch import DefaultMunch, Munch
 
 from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
-from pymirror.utils import snake_to_pascal, expand_dict, SafeNamespace
+from pymirror.utils.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
+from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
 
 from events import * # get all events 
 
@@ -25,7 +27,8 @@ class PMStatus:
     debug: bool = False
     remote_display: str = None
     start_time: datetime = None
-
+    taskmgr: DefaultMunch = field(default_factory=DefaultMunch)
+    
 def _to_null(s):
     """ Convert a string to None if it is 'null' or 'None' """
     if s in ["null", "None"]:
@@ -51,19 +54,28 @@ class PyMirror:
         self.debug = self._config.debug
         self.modules = []
         self.events = []
-        self.server_queue = queue.Queue()  # Use a queue to manage events
-        self.server = PMServer(self._config.server, self.server_queue)
-        self._clear_screen = True  # Flag to clear the screen on each loop
-        self._load_modules()
-        self.server.start()  # Start the server to handle incoming events
-        self.status = PMStatus()
         self.start_time = datetime.now()
+        self.status = None
         self.get_status()
+        self._clear_screen = True  # Flag to clear the screen on each loop
+        self.server_queue = queue.Queue()  # Use a queue to manage events
+        self._load_modules()
+        self.server = PMServer(self._config.server, self.server_queue)
+        self.server.start()  # Start the server to handle incoming events
 
     def get_status(self) -> PMStatus:
+        if not self.status:
+            self.status = PMStatus()
         self.status.debug = self.debug
         self.status.remote_display = self.screen._screen.output_file
         self.status.start_time = self.start_time
+        pids = get_pids_by_cli("pmtaskmgr")
+        if pids:
+            self.status.taskmgr.pids = pids
+            old_pstat = self.status.taskmgr.pstat
+            self.status.taskmgr.pstat = get_pstat_delta(pids[0], old_pstat)
+        else:
+            self.status.taskmgr = DefaultMunch()
         return self.status
 
     def _load_config(self, config_fname) -> SafeNamespace:
