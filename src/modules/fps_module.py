@@ -20,7 +20,7 @@ class FpsModule(PMModule):
 
 	def exec(self):
 		if self.timer.is_timedout():
-			self.timer().reset()
+			self.timer.reset()
 			return True
 		return False
 
