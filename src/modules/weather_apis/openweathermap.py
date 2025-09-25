@@ -5,7 +5,7 @@ from pymirror.pmwebapi import PMWebApi
 from pymirror.utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
 from tasks.web_api_task import WebApiTable
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
-from pymirror.pmlogger import _print
+from pymirror.pmlogger import _debug
 
 def _paragraph_fix(text: str) -> str:
     results = []
@@ -36,10 +36,10 @@ class OpenWeatherMapApi:
         record = to_munch(to_dict(_record))
         self.text = record.result_text
         if not self.text:
-            _print("... db.get_where() returns None")
+            _debug("... db.get_where() returns None")
             return
         if self.last_text == self.text:
-            _print("... db.get_where() returns same value")
+            _debug("... db.get_where() returns same value")
             return
         weather_dict = json_loads(self.text)
         weather = PMWeatherData.from_dict(weather_dict)
