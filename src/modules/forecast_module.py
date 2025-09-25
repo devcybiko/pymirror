@@ -21,7 +21,7 @@ class ForecastModule(PMCard):
         self._forecast = ForecastConfig(**config.forecast.__dict__)
         self.subscribe("WeatherForecastEvent")
         self.dirty = False
-        self.weather_response == None
+        self.weather_response = None
 
     def _load_icon(self, icon_code: str, size: str, width: int = None, height: int = None, scale: str = None) -> PMBitmap:
         # Load the weather icon bitmap based on the icon code and size
