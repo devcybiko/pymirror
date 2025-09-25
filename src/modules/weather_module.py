@@ -33,7 +33,7 @@ class WeatherModule(PMCard):
         self.weather_response = self.api.get_weather_data()
         if not self.weather_response:
             self.update(
-                self.api.config.name,
+                self.api.name,
                 "(loading...)",
                 "",
             )
