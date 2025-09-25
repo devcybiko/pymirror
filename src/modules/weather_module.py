@@ -5,23 +5,23 @@ from datetime import datetime
 from dataclasses import dataclass
 from pymirror.pmcard import PMCard
 from pymirror.pmlogger import _debug
+from pymirror.utils.utils import to_ms, to_secs
 
 @dataclass
 class WeatherConfig:
-    refresh_minutes: int = 15
+    refresh_time: str = "15m"
     degrees: str = "°F"
     datetime_format: str = "%I:%M:%S %p"
-
 
 class WeatherModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
         self._weather = WeatherConfig(**config.weather.__dict__)
-        self.timer.set_timeout(self._weather.refresh_minutes * 60 * 1000) 
+        self.timer.set_timeout(to_ms(self._weather.refresh_time)) 
         self.weather_response = None
         if config.openweathermap:
             from .weather_apis.openweathermap import OpenWeatherMapApi
-            self.api = OpenWeatherMapApi(config.openweathermap)
+            self.api = OpenWeatherMapApi(self.pmdb, "openweather")
         elif config.accuweather:
             from .weather_apis.accuweather import AccuWeatherApi
             self.api = AccuWeatherApi(config.accuweather)
@@ -48,7 +48,7 @@ class WeatherModule(PMCard):
         # convert w.current.dt to a datetime object
         dt_str = f"({daily[0].weather[0].description})\n{datetime.fromtimestamp(weather.dt).strftime(cfg.datetime_format)}"
         self.update(
-            self.api.config.name,
+            self.api.name,
             f"{weather.temp}{cfg.degrees}\n{weather.humidity} %\n{weather.feels_like}{cfg.degrees}",
             dt_str,
         )

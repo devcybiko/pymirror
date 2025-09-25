@@ -8,7 +8,7 @@ from pymirror.pmcard import PMCard
 from pymirror.utils.utils import SafeNamespace, expand_dict, to_ms
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
-from pymirror.pmlogger import _print, _print, _error, _debug
+from pymirror.pmlogger import _debug, _debug, _error, _debug
 
 class WebApiModule(PMCard):
 	def __init__(self, pm, config):
@@ -29,7 +29,7 @@ class WebApiModule(PMCard):
 		self.subscribe("KeyboardEvent")
 
 	def _parse_items(self, force: bool = False) -> int:
-		_print("_parse_items")
+		_debug("_parse_items")
 		context = {
 			"_n_": 0,
 			"payload": self.response,
@@ -55,24 +55,24 @@ class WebApiModule(PMCard):
 		return len(self.items)
 	
 	def _read_api(self):
-		_print("read_api")
+		_debug("read_api")
 		self.api._httpx.params = self._web_api.params.__dict__
 		self.text = self.api.fetch_text(blocking=False)
 		if not self.text:
-			_print("... api.fetch_text returns None")
+			_debug("... api.fetch_text returns None")
 			return
 		if self.last_text == self.text:
-			_print("... api.fetch_text returns same value")
+			_debug("... api.fetch_text returns same value")
 			return
 		self.last_text = self.text
 		self.response = json.loads(self.text)
-		_print("... new response... let's parse it")
+		_debug("... new response... let's parse it")
 		self._parse_items()
 
 	def _display_next_item(self):
-		_print("_display_next_item")
+		_debug("_display_next_item")
 		if not self.items:
-			_print("No items to display")
+			_debug("No items to display")
 			return
 		if self.item_number >= len(self.items):
 			self.item_number = 0
@@ -105,7 +105,7 @@ class WebApiModule(PMCard):
 		_debug("...  dirty=", self.dirty)
 
 		if self.response == None or self.display_timer.is_timedout():
-			_print("... timer: ", time.time(), self.display_timer.future_time)
+			_debug("... timer: ", time.time(), self.display_timer.future_time)
 			self._read_api()
 			self._display_next_item()
 			self.display_timer.reset()

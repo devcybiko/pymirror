@@ -8,7 +8,7 @@ from sqlalchemy.orm import declarative_base
 from pmtaskmgr.pmtask import PMTask
 from pymirror.utils.utils import to_naive, make_hashcode, to_munch, to_utc_epoch
 from pymirror.pmlogger import _debug
-from pymirror.ical_parser import IcalParser
+from pymirror.utils.ical_parser import IcalParser
 import requests
 
 Base = declarative_base()

@@ -20,6 +20,7 @@ class Glyphs:
     no = '\u25CB'
     up = '\u25B2'
     down = '\u25BD'
+    debug = '\u00A4'
 
 glyphs = Glyphs()
 
@@ -384,6 +385,7 @@ def json_dumps(d: dict, dflt=None, indent=2) -> str:
     try:
         return json.dumps(dict, indent=indent)
     except Exception as e:
+        _print(e)
         return dflt
 
 def to_naive(dt):

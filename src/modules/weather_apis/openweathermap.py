@@ -1,24 +1,11 @@
 from dataclasses import dataclass
 from logging import config
+from pmdb.pmdb import PMDb
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
+from tasks.web_api_task import WebApiTable
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
-
-@dataclass 
-class OpenWeatherMapParams:
-    appid: str = ""
-    lat: str = "37.5050"
-    lon: str = "-77.6491"
-    exclude: str = "minutely,hourly"
-    units: str = "imperial"
-    lang: str = "english"
-
-@dataclass
-class OpenWeatherMapConfig:
-    name: str = "OpenWeatherMap"
-    url: str = "https://api.openweathermap.org/data/3.0/onecall"
-    cache_file: str  = "./caches/weather.json"
-    cache_timeout_secs: int = 3600  # Default cache timeout in seconds
+from pymirror.pmlogger import _print
 
 def _paragraph_fix(text: str) -> str:
     results = []
@@ -29,29 +16,41 @@ def _paragraph_fix(text: str) -> str:
         results.append(paragraph)
     return "\n\n".join(results)
 
-class OpenWeatherMapApi(PMWebApi):
+class OpenWeatherMapApi:
     """
     A wrapper for the OpenWeatherMap API that uses PMWebApi.
     This is a convenience function to create an instance of PMWebApi with the OpenWeatherMapConfig.
     """
-    def __init__(self, config: SafeNamespace):
-        self.config = OpenWeatherMapConfig()
-        super().__init__(self.config.url, self.config.cache_timeout_secs, self.config.cache_file)
-        self.params = OpenWeatherMapParams(**config.__dict__)
-    
-    def get_weather_data(self, params = None) -> PMWeatherData:
+    def __init__(self, pmdb: PMDb, name: str):
+        self.pmdb = pmdb
+        self.name = name
+        self.text = ""
+        self.last_text = None
+
+    def get_weather_data(self) -> PMWeatherData:
         """
         Fetches weather data from the OpenWeatherMap API.
         If params are provided, they will be used in the request.
         """
-        if not params:
-            params = self.params.__dict__
-        self._httpx.params=params
-        response = self.fetch_json(blocking=False)
-        if not response: return None
-        weather = PMWeatherData.from_dict(response)
+        _record = self.pmdb.get_where(WebApiTable, name=self.name)
+        record = to_munch(to_dict(_record))
+        self.text = record.result_text
+        if not self.text:
+            _print("... db.get_where() returns None")
+            return
+        if self.last_text == self.text:
+            _print("... db.get_where() returns same value")
+            return
+        weather_dict = json_loads(self.text)
+        weather = PMWeatherData.from_dict(weather_dict)
         if weather.alerts:
             for alert in weather.alerts:
                 if alert.description:
                     alert.description = _paragraph_fix(alert.description)
         return weather
+
+if __name__ == "__main__":
+    pmdb = PMDb({"url":"sqlite:///pymirror.db"})
+    openweathermap = OpenWeatherMapApi(pmdb, "openweather")
+    weather_data = openweathermap.get_weather_data()
+    pprint(weather_data)

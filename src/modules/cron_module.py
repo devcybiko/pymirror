@@ -1,4 +1,4 @@
-from pymirror.crontab import Crontab
+from pymirror.utils.crontab import Crontab
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _debug
 
