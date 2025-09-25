@@ -11,7 +11,7 @@ from munch import DefaultMunch
 
 from pmdb.pmdb import PMDb, PMDbConfig
 from pmtaskmgr.pmtask import PMTask
-from pymirror.crontab import Crontab
+from pymirror.utils.crontab import Crontab
 from pymirror.utils.utils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
 from pymirror.pmlogger import _debug
 

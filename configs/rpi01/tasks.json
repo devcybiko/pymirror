@@ -11,14 +11,29 @@
     {
       "class": "web_api",
       "name": "news",
-      "cron": "*:15:00",
-      "rate_limit_time": "1h",
+      "cron": "*:00:00",
+      "rate_limit_time": "59m",
       "url": "https://newsapi.org/v2/top-headlines",
       "params": {
         "apiKey": "$NEWSAPI_KEY",
         "country": "us",
         "pageSize": 100,
         "category": "business"
+      }
+    },
+    {
+      "class": "web_api",
+      "name": "openweather",
+      "cron": "*:15:00",
+      "rate_limit_time": "59m",
+      "url": "https://api.openweathermap.org/data/3.0/onecall",
+      "params": {
+        "appid": "$OPENWEATHERMAP_API_KEY",
+        "lat": "37.5050",
+        "lon": "-77.6491",
+        "exclude": "minutely,hourly",
+        "units": "imperial",
+        "lang": "english"
       }
     }
   ]

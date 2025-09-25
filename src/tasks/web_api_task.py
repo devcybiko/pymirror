@@ -10,7 +10,7 @@ from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
 from pymirror.utils.utils import to_secs
-from pymirror.pmlogger import _debug
+from pymirror.pmlogger import _debug, _print
 
 import requests
 
@@ -67,7 +67,8 @@ class WebApiTask(PMTask):
                 record.result_text = response.text
                 self.pmdb.upsert(record)
             else:
-                _debug(response)
+                _print(response)
+                _print(response.text)
                 sys.exit()
         except Exception as e:
             _debug(e)

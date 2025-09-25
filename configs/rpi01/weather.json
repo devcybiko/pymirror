@@ -9,7 +9,7 @@
         "font_size": 64
     },
     "weather": {
-        "refresh_minutes": 15,
+        "refresh_time": "15m",
         "degrees": "°F",
         "datetime_format": "%A, %I:%M:%S %p"
     },
