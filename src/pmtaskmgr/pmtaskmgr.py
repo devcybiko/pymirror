@@ -30,7 +30,6 @@ class PMTaskMgr:
         self.task_dict: dict = self._make_task_dict()
         self.cronlist = self._make_cronlist()
         self.crontab = Crontab(self.cronlist)
-        pass
     
     def _dbinit():
         pass
@@ -44,7 +43,7 @@ class PMTaskMgr:
     def _make_task_dict(self):
         task_dict = {}
         for task in self.tasks:
-            ic(task.name)
+            _debug(task.name)
             task_dict[task.name] = task
         return task_dict
 
@@ -52,9 +51,9 @@ class PMTaskMgr:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        ic(config_fname)
+        _debug(config_fname)
         config = json_read(config_fname)
-        ic(config)
+        _debug(config)
         # Load secrets from .secrets file if specified
         secrets_path = config.get("secrets")
         if secrets_path:
@@ -65,7 +64,7 @@ class PMTaskMgr:
         # Expand environment variables in the config
         expand_dict(config, os.environ)
         obj = PMTaskMgrConfig.from_dict(config)
-        ic(obj)
+        _debug(obj)
         config = munchify(obj)
         return config
 
@@ -83,11 +82,11 @@ class PMTaskMgr:
 
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            ic(task_config)
+            _debug(task_config)
             module_name = "tasks."+task_config["class"]+"_task"
-            ic(module_name)
+            _debug(module_name)
             mod = importlib.import_module(module_name)
-            ic(mod)
+            _debug(mod)
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
@@ -104,11 +103,16 @@ class PMTaskMgr:
             self.tasks.append(obj)
 
     def run(self):
+        ## execute each task first time around
+        for task in self.tasks:
+             _debug(task.name)
+             task.exec()
+
         while True:
             task_names = self.crontab.check()
-            ic(task_names)
+            _debug(task_names)
             for task_name in task_names: 
-                ic("calling", task_name)
+                _debug("calling", task_name)
                 task = self.task_dict[task_name]
                 task.exec()
             time.sleep(1)
