@@ -9,6 +9,6 @@
         "font_size": 48
     },
     "fonts": {
-        "delay_ms": 1000
+        "delay_ms": 5000
     }
 }

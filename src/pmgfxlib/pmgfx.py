@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 
 from pymirror.pmrect import PMRect
-from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null
+from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null, pprint
 from .pmfont import PMFont
 from .pmutils import to_color
 
@@ -15,6 +15,8 @@ class PMGfx:
     line_width: int = 1
     font_name: str = "DejaVuSans"
     font_size: int = 64
+    font_baseline: bool = True
+    font_y_offset: int = 0
     font: PMFont = None
     wrap: str = "words"  # "chars", "words", or None
     halign: str = "center"  # "left", "center", "right"
@@ -23,9 +25,13 @@ class PMGfx:
     @classmethod
     def from_dict(cls, config: dict, _gfx: "PMGfx" = _NONE_PROXY) -> "PMGfx":
         gfx = cls()
+        print("...gfx confg")
+        pprint(config)
         gfx.line_width = non_null(config.get('line_width'), _gfx.line_width, 1)
         gfx.font_name = non_null(config.get('font_name'), _gfx.font_name, "DejaVuSans")
         gfx.font_size = non_null(config.get('font_size'), _gfx.font_size, 64)
+        gfx.font_baseline = non_null(config.get('font_baseline'), _gfx.font_baseline, False)
+        gfx.font_y_offset = non_null(config.get('font_y_offset'), _gfx.font_y_offset, 0)
         gfx.set_font(gfx.font_name, gfx.font_size)
         gfx.wrap = non_null(config.get('wrap'), _gfx.wrap, "words")
         gfx.halign = non_null(config.get('halign'), _gfx.halign, "center")
