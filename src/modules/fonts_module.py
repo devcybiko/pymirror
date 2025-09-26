@@ -26,7 +26,8 @@ class FontsModule(PMModule):
 					font_list.append(font_name)
 				else:
 					print(f"Font file {font_file} not found.")
-		return sorted(font_list)
+		# return sorted(font_list)
+		return font_list
 
 	def render(self, force: bool = False) -> int:
 		gfx = self.bitmap.gfx_push()

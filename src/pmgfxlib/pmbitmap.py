@@ -155,11 +155,11 @@ class PMBitmap:
         if fill == -1:
             # Use the gfx.background color if specified
             self._draw.text(
-                (x0, y0), msg, font=self.gfx.font._font, fill=self.gfx._text_color
+                (x0, y0+self.gfx.font_y_offset), msg, font=self.gfx.font._font, fill=self.gfx._text_color
             )
         else:
             # Use the specified fill color
-            self._draw.text((x0, y0), msg, font=self.gfx.font._font, fill=fill)
+            self._draw.text((x0, y0+self.gfx.font_y_offset), msg, font=self.gfx.font._font, fill=fill)
 
     def calculate_text_box(self, lines: str) -> tuple[str, tuple[int, int]]:
         """Calculate the size of the text."""
@@ -183,10 +183,12 @@ class PMBitmap:
         valign: str = "center",
         halign: str = "center",
         clip: bool = False,
-        use_baseline: bool = False
+        use_baseline: bool = None
     ) -> None:
         clip = bool(clip) ## make sure it's zero or one
-        use_baseline = bool(use_baseline) ## move the text down to shift descenders
+        if use_baseline == None:
+            use_baseline =  self.gfx.font_baseline
+        # use_baseline = bool(use_baseline) ## move the text down to shift descenders
         ## renders text in the entire bitmap area
         ## if you want a cliprect, create a PMBitmap with the cliprect size
         ## then render it and paste it into the parent PMBitmap
@@ -234,7 +236,7 @@ class PMBitmap:
                         f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead."
                     )
                 self._draw.text(
-                    (text_x0, text_y0 - baseline),
+                    (text_x0, text_y0 - baseline + self.gfx.font_y_offset),
                     line,
                     fill=(gfx._text_color),
                     font=gfx.font._font,

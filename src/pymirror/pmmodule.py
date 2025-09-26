@@ -19,6 +19,8 @@ class PMModuleDef(ABC):
     text_bg_color: str = None
     font_name: str = "DejaVuSans"
     font_size: int = 64
+    font_baseline: bool = False
+    font_y_offset: int = 0
     subscriptions: list[str] = None
     disabled: bool = False
     force_render: bool = False
