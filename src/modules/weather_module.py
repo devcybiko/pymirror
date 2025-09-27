@@ -69,7 +69,7 @@ class WeatherModule(PMCard):
                 "header": alert.event,
                 "body": alert.description,
                 "footer": f"Expires: {datetime.fromtimestamp(alert.end).strftime(self._weather.datetime_format)}",
-                "timeout": self._weather.refresh_minutes * 60 * 1000
+                "timeout": to_ms(self._weather.refresh_time)
             }
             _debug(f"Publishing weather alert event: {event['event']}")
             self.publish_event(event)

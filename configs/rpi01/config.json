@@ -34,6 +34,7 @@
     "bottom_right": "0.66,0.66,1.00,1.00"
   },
   "modules": [
+    "./configs/rpi01/forecast.json",
     "./configs/rpi01/fps.json",
     "./configs/rpi01/status.json",
     "./configs/rpi01/sound.json",
@@ -44,7 +45,6 @@
     "./configs/rpi01/news.json",
     "./configs/rpi01/weather.json",
     "./configs/rpi01/weather_alert.json",
-    "./configs/rpi01/forecast.json",
     "./configs/rpi01/pymirror_controller.json",
     "./configs/rpi01/cron_test.json",
     "./configs/rpi01/window_manager.json"
