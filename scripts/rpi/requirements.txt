@@ -11,7 +11,7 @@ python-dateutil
 httpx
 lirc
 evdev
-icecream
 munch
 sqlalchemy
 psutil
+json5

@@ -10,7 +10,7 @@ pygame
 ics
 python-dateutil
 httpx
-icecream
 munch
 sqlalchemy
 psutil
+json5

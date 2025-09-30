@@ -1,5 +1,5 @@
 import datetime
-import json
+import json5 as json
 import os
 import pprint as _pprint
 import re
