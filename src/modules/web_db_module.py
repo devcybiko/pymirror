@@ -1,6 +1,5 @@
 import json
 import time
-from icecream import ic
 import copy
 
 from pymirror.pmcard import PMCard

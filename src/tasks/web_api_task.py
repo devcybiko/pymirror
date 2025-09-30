@@ -3,7 +3,6 @@
 from datetime import datetime
 import json
 import time
-from icecream import ic
 from sqlalchemy import Column, DateTime, Integer, String
 from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base

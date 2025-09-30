@@ -5,7 +5,6 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 import json
-from icecream import ic
 from sqlalchemy import and_
 
 from pymirror.pmcard import PMCard

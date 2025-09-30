@@ -25,8 +25,6 @@ class PMGfx:
     @classmethod
     def from_dict(cls, config: dict, _gfx: "PMGfx" = _NONE_PROXY) -> "PMGfx":
         gfx = cls()
-        print("...gfx confg")
-        pprint(config)
         gfx.line_width = non_null(config.get('line_width'), _gfx.line_width, 1)
         gfx.font_name = non_null(config.get('font_name'), _gfx.font_name, "DejaVuSans")
         gfx.font_size = non_null(config.get('font_size'), _gfx.font_size, 64)

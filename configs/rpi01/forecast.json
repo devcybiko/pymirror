@@ -4,7 +4,8 @@
         "name": "Weather Forecast",
         "position": "0.00,0.50,0.33,0.95",
         "font_size": 24,
-        "text_color": "#ff0"
+        "text_color": "#ff0",
+        "force": true
     },
     "forecast": {
         "days": 4,

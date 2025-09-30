@@ -1,6 +1,5 @@
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from icecream import ic
 from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String
 from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base

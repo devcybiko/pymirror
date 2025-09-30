@@ -10,10 +10,9 @@ import queue
 import argparse
 import traceback
 
-from icecream import ic
 from munch import DefaultMunch, Munch
 
-from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
+from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
 from pymirror.utils.utils import snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
@@ -46,8 +45,7 @@ class PyMirror:
             self._config.screen.output_file = _to_null(args.output_file)
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
-        _print(f"Using config: {self._config}")
-        ic(f"Using config.pmdb: {self._config.pmdb.__dict__}")
+        _debug(f"Using config: {self._config}")
         self.pmdb = PMDb(self._config.pmdb.__dict__) if self._config.pmdb else None
         self.screen = PMScreen(self._config.screen)
         self.force_render = False

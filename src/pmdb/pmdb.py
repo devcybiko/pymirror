@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from icecream import ic
 from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker

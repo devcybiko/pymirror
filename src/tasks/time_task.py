@@ -1,7 +1,6 @@
 from datetime import datetime
 import time
 
-from icecream import ic
 from pmtaskmgr.pmtask import PMTask
 from pymirror.pmlogger import _debug
 
