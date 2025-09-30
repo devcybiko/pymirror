@@ -3,7 +3,7 @@ import time
 import copy
 
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import expand_dict, to_dict
+from pymirror.utils.utils import expand_dict, json_loads, to_dict
 from pymirror.pmtimer import PMTimer
 from pymirror.pmlogger import _debug
 from tasks.web_api_task import WebApiTable
@@ -64,7 +64,7 @@ class WebDbModule(PMCard):
 			return
 		self.last_text = self.text
 		self.last_time = record.last_time
-		self.response = json.loads(self.text)
+		self.response = json_loads(self.text)
 		_debug("... new response... let's parse it")
 		self._parse_items()
 

@@ -11,6 +11,7 @@ import time
 import re
 from typing import Optional, Dict, List, Tuple
 from pymirror.pmlogger import _debug, _error, _debug
+from pymirror.utils.utils import json_dumps
 
 # Default IR remote key mapping
 IR_KEY_MAP = {
@@ -272,7 +273,7 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
-                print(json.dumps(event, indent=2))
+                print(json_dumps(event))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
                     print(f"Key pressed: {event['key_name']} (scancode: {event['scancode']}){repeat_str}")

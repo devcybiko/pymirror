@@ -4,7 +4,7 @@ from logging import config
 
 from flask import json
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils.utils import SafeNamespace
+from pymirror.utils.utils import SafeNamespace, json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
 from pymirror.pmlogger import _debug
 
@@ -122,7 +122,7 @@ class AccuWeatherApi(PMWebApi):
             "daily":  f,
             "alerts": None
         }
-        _debug(f"AccuWeatherApi response: {json.dumps(w, indent=2)}")
+        _debug(f"AccuWeatherApi response: {json_dumps(w)}")
         weather = PMWeatherData.from_dict(w)
         return weather
 

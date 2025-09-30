@@ -6,7 +6,7 @@ import time
 import inspect
 
 from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
-from pymirror.utils.utils import SafeNamespace, to_ms
+from pymirror.utils.utils import SafeNamespace, json_loads, to_ms
 from pymirror.pmlogger import pmlogger, PMLoggerLevel
 from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
 
@@ -93,7 +93,7 @@ class PMWebApi:
             _debug(f"Fetching json from {self.url}...")
             text = self.fetch_text(blocking=blocking)
             if text:
-                result = json.loads(text)
+                result = json_loads(text)
         except Exception as e:
             self.error = e
         return result

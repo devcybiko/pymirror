@@ -14,7 +14,7 @@ from munch import DefaultMunch, Munch
 
 from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
-from pymirror.utils.utils import snake_to_pascal, expand_dict, SafeNamespace
+from pymirror.utils.utils import json_read, snake_to_pascal, expand_dict, SafeNamespace
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
@@ -80,9 +80,7 @@ class PyMirror:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        with open(config_fname, 'r') as file:
-            # self.config = SafeNamespace(**json.load(file))
-            config = json.load(file)
+        config = json_read(config_fname)
         # Load secrets from .secrets file if specified
         secrets_path = config.get("secrets")
         if secrets_path:
@@ -101,14 +99,13 @@ class PyMirror:
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
-                with open(module_config, 'r') as file:
-                    try:
-                        config = json.load(file)
-                        expand_dict(config, {})  # Expand environment variables in the config
-                        module_config = SafeNamespace(**config)
-                    except Exception as e:
-                        _debug(f"Error loading module config from {module_config}: {e}")
-                        sys.exit(1)
+                try:
+                    config = json_read(module_config)
+                    expand_dict(config, {})  # Expand environment variables in the config
+                    module_config = SafeNamespace(**config)
+                except Exception as e:
+                    _debug(f"Error loading module config from {module_config}: {e}")
+                    sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
             mod = importlib.import_module("modules."+module_config.module+"_module")

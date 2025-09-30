@@ -8,7 +8,7 @@ from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils.utils import to_secs
+from pymirror.utils.utils import json_dumps, json_loads, to_secs
 from pymirror.pmlogger import _debug, _print
 
 import requests
@@ -41,7 +41,7 @@ class WebApiTask(PMTask):
                 rate_limit_secs = to_secs(self._task.rate_limit_time, 60),
                 retry_after_secs = to_secs(self._task.retry_after_time, 60),
                 result_text = None,
-                params = json.dumps(self._task.params.toDict())
+                params = json_dumps(self._task.params.toDict())
             )
             self.pmdb.upsert(record)
 
@@ -57,7 +57,7 @@ class WebApiTask(PMTask):
                 _debug(f"rate limit not reached for {self.name}, elapsed {elapsed} secs")
                 return
         try:
-            params = json.loads(record.params)
+            params = json_loads(record.params)
             response: requests.Response = requests.get(record.url, params=params)
             rc = response.status_code
             if rc == 200:

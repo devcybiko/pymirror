@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify, render_template
 from threading import Thread
 import logging
 
+from pymirror.utils.utils import json_loads
+
 class PMServer:
     def __init__(self, config, event_queue, host="0.0.0.0", port=8080):
         self.app = Flask(__name__)
@@ -45,7 +47,7 @@ class PMServer:
             print("data: ", type(data))
             if type(data) == str:
                 try:
-                    data = json.loads(data.strip())
+                    data = json_loads(data.strip())
                 except:
                     msg = f"ERROR: problem converting '{data}' to json"
                     print(msg)

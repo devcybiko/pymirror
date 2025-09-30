@@ -8,7 +8,7 @@ import json
 from sqlalchemy import and_
 
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
+from pymirror.utils.utils import json_read, strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
 from pymirror.pmlogger import _debug, _error
 from tasks.ical_task import IcalTable
 
@@ -45,8 +45,7 @@ class IcalModule(PMCard):
 
     def _read_holidays(self):
         for holiday_file in self._ical.holiday_files:
-            with open(holiday_file) as f:
-                holiday_dict = json.load(f)
+            holiday_dict = json_read(holiday_file)
             for date, s in holiday_dict.items():
                 self.holidays[date].append(s)
 

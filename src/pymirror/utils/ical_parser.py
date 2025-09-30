@@ -3,6 +3,8 @@ import json
 from sys import stderr
 from dateutil.relativedelta import relativedelta
 
+from pymirror.utils.utils import json_dumps
+
 class IcalParser:
     def __init__(self, lines: list[str]):
         self.lines = lines
@@ -129,7 +131,7 @@ def main():
         text = file.read()
     ical_parser = IcalParser(text.split("\n"))
     result = ical_parser.parse("2025-08-01", "2025-12-31")
-    print(json.dumps(result, indent=2, default=json_default), file=stderr)
+    print(json_dumps(result, indent=2, default=json_default), file=stderr)
 
 if __name__ == "__main__":
     main()
