@@ -9,7 +9,7 @@ from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndef
 from munch import DefaultMunch, Munch
 import sqlalchemy
 from ..pmlogger import _debug, _trace, trace, _print
-from dataclasses import dataclass, fields
+from dataclasses import asdict, dataclass, fields, is_dataclass
 from typing import Dict, Any
 import hashlib
 
@@ -380,9 +380,27 @@ def json_loads(s: str, dflt=None) -> dict:
     except Exception as e:
         return dflt
 
+def to_dict(obj) -> dict:
+    """Convert any object to dict recursively"""
+    if is_dataclass(obj):
+        # Use __dict__ instead of asdict() to capture all attributes
+        result = {}
+        for key, value in obj.__dict__.items():
+            result[key] = to_dict(value)
+        return result
+    elif hasattr(obj, '__dict__'):
+        return {k: to_dict(v) for k, v in obj.__dict__.items()}
+    elif isinstance(obj, dict):
+        return {k: to_dict(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [to_dict(item) for item in obj]
+    else:
+        return obj
+    
 def json_dumps(d: dict, dflt=None, indent=2) -> str:
+    d = to_dict(d)
     try:
-        return json.dumps(dict, indent=indent)
+        return json.dumps(d, indent=indent)
     except Exception as e:
         _print(e)
         return dflt

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PYTHONPATH=./src python -m modules.weather_apis.openweathermap
+PYTHONPATH=./src python -m models.pmmodel "${@}"
