@@ -2,7 +2,7 @@ import datetime
 import sys
 
 from pymirror.utils.utils import has_alpha, to_int, to_list
-from pymirror.pmlogger import _debug, _print
+from pymirror.pmlogger import _debug
 
 _SECONDS=0 # seconds index
 _MINUTES=1 # minutes index

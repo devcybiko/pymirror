@@ -1,3 +1,4 @@
+from datetime import datetime
 from pymirror.pmcard import PMCard
 
 class AlertModule(PMCard):
@@ -23,6 +24,7 @@ class AlertModule(PMCard):
 			self.disabled = True
 			self.update(None, None, None)
 			self.clean()  # mark the alert as clean
+			self.publish_event({"event": "PyMirrorEvent", "refresh": True})
 		return is_dirty
 
 	def onEvent(self, event) -> None:

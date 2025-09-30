@@ -4,7 +4,8 @@
     "moddef": {
         "name": "Weather Alert",
         "position": "0.00,0.50,0.33,0.95",
-        "subscriptions": ["WeatherAlertEvent"]
+        "subscriptions": ["WeatherAlertEvent"],
+        "bg_color": "#001"
     },
     "alert": {
         "header": "Weather Alert",

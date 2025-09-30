@@ -36,10 +36,11 @@ class PMTextComp(PMComponent):
         self.clean()
 
     def update(self, text: str = None) -> None:
-        if text is not None:
-            self.text = text
-        else:
-            self.text = self._last_text
+        self.text = text
+        # if text is not None:
+        #     self.text = text
+        # else:
+        #     self.text = self._last_text
 
     def is_dirty(self) -> bool:
         """Check if the text has changed since the last render."""

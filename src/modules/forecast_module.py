@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from pymirror.utils.utils import SafeNamespace
-from pymirror.pmlogger import _debug
+from pymirror.pmlogger import _debug, _print
 
 @dataclass
 class ForecastConfig:
@@ -99,6 +99,8 @@ class ForecastModule(PMCard):
 
     def render(self, force: bool = False) -> bool:
         if not (self.dirty or force):
+            return False
+        if not self.weather_response:
             return False
         self.bitmap.clear()
         c = SafeNamespace()

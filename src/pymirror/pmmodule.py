@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
-from pymirror.utils.utils import SafeNamespace, _height, _width, from_dict, non_null
+from pymirror.utils.utils import SafeNamespace, _height, _width, from_dict, non_null, to_munch
 from pymirror.pmlogger import _trace, _debug
 from pymirror.pmrect import PMRect
 
@@ -164,4 +164,4 @@ class PMModule(ABC):
         """ Publish an event to the PM.
         This is used to notify the PM of an event that occurred in the module.
         """
-        self.pm.publish_event(event)
+        self.pm.publish_event(to_munch(event))

@@ -14,7 +14,7 @@ from munch import DefaultMunch, Munch
 
 from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmscreen import PMScreen
-from pymirror.utils.utils import json_read, snake_to_pascal, expand_dict, SafeNamespace
+from pymirror.utils.utils import json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
@@ -161,11 +161,12 @@ class PyMirror:
         self.events.clear()  # Clear the events after sending them
 
     def publish_event(self, event: dict):
+        _debug("publish_event", event)
         ## should this go on a seperate event list?
         ## if a module sends an event from inside an event dispatcher
         ## then it may not get processed
         ## GLS - so for now we put it on the "server_queue"
-        self.server_queue.put(event)
+        self.server_queue.put(to_munch(event))
 
         # if type(event) is dict:
         #     self.events.append(SafeNamespace(**event))
@@ -190,7 +191,7 @@ class PyMirror:
 
     def full_render(self):
         self.screen.bitmap.clear()
-        for module in self.modules:
+        for module in reversed(self.modules):
             if module.disabled or not module.bitmap: continue
             module.render(force=True)
             self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
@@ -199,6 +200,7 @@ class PyMirror:
 
     def _exec_modules(self):
         modules_changed = []
+        
         for module in self.modules:
             if not module.disabled:
                 module._time = 0.0  # Reset the time for each module
@@ -212,6 +214,12 @@ class PyMirror:
 
     def _render_modules(self, modules_changed):
         """ Render all modules that have changed state """
+        if self._clear_screen:
+            _debug("self._clear_screen", self._clear_screen)
+            self.full_render()
+            self._clear_screen = False
+            return
+
         for module in modules_changed:
             if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering

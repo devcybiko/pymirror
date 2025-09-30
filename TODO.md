@@ -12,16 +12,16 @@
 
 ## Alerts
 
+1. ** Force alerts to the foreground **
 8. if alert card is 'timed', show timer percent. bar
 22. Make multiple alerts cycle
+
 
 ## Configuration
 
 6. Hot Reload of config.json
     - if config.json is updated then dispose of old modules and reload
-18. switch to JSON5 for easier JSON editing.
 19. add color palette to config.json
-27. Add strong typing and checks on config data
 1. Font "object" rather than discrete values
 
 ## Text
@@ -32,7 +32,6 @@
 
 ## General
 
-1. Error Handling: weather.py - error checking for bad api results
 1. Error Handling: Better error handling
 17. add device drivers for display
 25. Different display configurations need to be detected and handled (same as device drivers, above?)
