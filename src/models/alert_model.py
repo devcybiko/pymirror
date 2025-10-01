@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from models.pmmodel import PMModel
 
 @dataclass
-class AlertModel(PMModel):
+class AlertModel:
     header: str = None
     body: str = None
     footer: str = None

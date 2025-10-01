@@ -4,7 +4,6 @@
         "name": "Weather Alert",
         "position": "bottom_left",
         "subscriptions": ["WeatherAlertEvent"],
-        "debug": false,
     },
     "alert": {
         "header": "Weather Alert",

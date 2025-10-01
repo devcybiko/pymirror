@@ -3,5 +3,5 @@ from models.pmmodel import PMModel
 
 
 @dataclass
-class PmdbModel(PMModel):
+class PmdbModel:
     url: str

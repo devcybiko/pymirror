@@ -4,7 +4,7 @@ from dataclasses import fields
 import importlib
 from typing import get_type_hints
 from pymirror.utils.utils import json_dumps, json_loads, json_read, snake_to_pascal, to_dict
-from pymirror.pmlogger import trace, trace_method, _trace
+from pymirror.pmlogger import trace, trace_method, _trace, _debug
 
 class Object:
     def __init__(self):
@@ -30,7 +30,7 @@ class PMModel:
             if hasattr(obj, field_name):
                 value = getattr(obj, field_name)
                 expected_type = getattr(expected_type, '__origin__', expected_type)
-                print("###", field_name, expected_type)
+                _debug("###", field_name, expected_type)
                 if value is not None:
                     if isinstance(value, dict):
                         setattr(obj, field_name, value)
@@ -59,7 +59,7 @@ class PMModel:
         model_name = snake_to_pascal(_model_name)
         module = importlib.import_module(f"models.{_model_name}_model")
         clazz_name = f"{model_name}Model"
-        print(f"Loading '{_model_name}' model, class {clazz_name} from {module.__name__}")
+        _debug(f"Loading '{_model_name}' model, class {clazz_name} from {module.__name__}")
         clazz = getattr(module, clazz_name, None)
         if type(values) != dict:
             raise Exception(f"'{_model_name}' expects a dictionary, but got '{values}' ({type(values)})")
@@ -70,7 +70,7 @@ class PMModel:
         else:
             ## get all the default values
             ## then overlay with new values and additional fields
-            print("... trying not strict_names")
+            _debug("... trying not strict_names")
             _trace(clazz, values)
             obj = self._specific_fields(clazz, values)
 
@@ -82,8 +82,8 @@ class PMModel:
             field_name = field.name
             field_value = getattr(obj, field_name)
             field_type = type_hints.get(field_name)
-            print(field_name, field_type)
-            print(">>>", field_name, field_type.__name__, field_value)
+            _debug(field_name, field_type)
+            _debug(">>>", field_name, field_type.__name__, field_value)
             # Check if field value is a dict that should be converted to a model
             if isinstance(field_value, dict) and field_type != dict:
                 # Convert dict to model recursively
@@ -102,13 +102,23 @@ class PMModel:
         for attr_name, attr_value in obj.__dict__.items():
             if attr_name in type_hints:
                 continue
-            print("<<<", attr_name, attr_value, "(non-dataclass)")
+            _debug("<<<", attr_name, attr_value, "(non-dataclass)")
             if isinstance(attr_value, dict):
                 nested_model = self._load_model(attr_name, attr_value, strict_names=strict_names, strict_types=strict_types)
                 if nested_model != None:
                     ## None means model was "commented out" with "_model_name"
                     setattr(obj, attr_name, nested_model)
         return obj
+
+    def _translate_class_to_clazz(self, obj):
+        ## recursively descend into the object converting keys "class" into "clazz"
+        if isinstance(obj, dict):
+            keys = list(obj.keys())
+            for key in keys:
+                if key == "class":
+                    obj["clazz"] = obj.pop("class")
+                else:
+                    self._translate_class_to_clazz(obj[key])
 
     def from_file(self, fname: str, keys: list[str] = None, /, with_model:str=None, strict_names: bool = True, strict_types = True) -> "PMModel":
         """ 
@@ -119,6 +129,8 @@ class PMModel:
         """
         try:
             obj = json_read(fname)
+            self._translate_class_to_clazz(obj)
+            print("with_model", with_model)
             return self.from_dict(obj, keys, with_model=with_model, strict_names=strict_names, strict_types=strict_types)
         except Exception as e:
             raise TypeError(f"error reading file '{fname}. {str(e)}")
@@ -140,8 +152,9 @@ class PMModel:
             for key, value in obj.items():
                 print("trying", key, value)
                 obj = self._load_model(key, value, strict_names=strict_names, strict_types=strict_types)
+                print("...", obj)
                 if obj != None:
-                    print("...", obj)
+                    _debug("...", obj)
                     setattr(result, key, obj)
         return result
     

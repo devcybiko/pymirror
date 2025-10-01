@@ -12,9 +12,11 @@ import traceback
 
 from munch import DefaultMunch, Munch
 
+from models.pmmodel import PMModel
 from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
+from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMScreen
-from pymirror.utils.utils import json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
+from pymirror.utils.utils import expand_dataclass, json_read, pprint, snake_to_pascal, expand_dict, SafeNamespace, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
@@ -76,23 +78,26 @@ class PyMirror:
             self.status.taskmgr = DefaultMunch()
         return self.status
 
-    def _load_config(self, config_fname) -> SafeNamespace:
+    def _load_config(self, config_fname) -> dataclass:
+        pmmodel = PMModel()
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        config = json_read(config_fname)
+        pymirror_config = pmmodel.from_file(config_fname, with_model="pymirror")
+        config = pymirror_config.pymirror
         # Load secrets from .secrets file if specified
-        secrets_path = config.get("secrets")
+        secrets_path = config.secrets
         if secrets_path:
             secrets_path = os.path.expandvars(secrets_path)
         else:
             secrets_path = ".secrets"
         load_dotenv(dotenv_path=secrets_path)
         # Expand environment variables in the config
-        expand_dict(config, os.environ)
-        return SafeNamespace(**config)
+        expand_dataclass(config, os.environ)
+        return config
 
     def _load_modules(self):
+        pmmodel = PMModel()
         for module_config in self._config.modules:
             ## load the module dynamically
             if type(module_config) is str:
@@ -100,21 +105,22 @@ class PyMirror:
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 try:
-                    config = json_read(module_config)
-                    expand_dict(config, {})  # Expand environment variables in the config
-                    module_config = SafeNamespace(**config)
+                    module_config = pmmodel.from_file(module_config)
+                    pprint(module_config.module)
+                    expand_dataclass(module_config, {})  # Expand environment variables in the config
                 except Exception as e:
-                    _debug(f"Error loading module config from {module_config}: {e}")
+                    _error(f"Error loading module config from {module_config}: {e}")
                     sys.exit(1)
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            mod = importlib.import_module("modules."+module_config.module+"_module")
+            clazz_name = module_config.module.clazz
+            mod = importlib.import_module(f"modules.{clazz_name}_module")
         
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
-            clazz_name = snake_to_pascal(module_config.module)
-            print(f"Loading '{module_config.moddef.name}' module, class {clazz_name} from {mod.__name__}")
+            clazz_name = snake_to_pascal(clazz_name)
+            print(f"Loading '{module_config.module.name}' module, class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name + "Module", None)
 
             ## create an instance of the class (module)
@@ -308,7 +314,6 @@ def main():
             "Overrides the output_file setting in config."
     )
     args = parser.parse_args()
-
     pm = PyMirror(args.config, SafeNamespace(**vars(args)))
     pm.run()
 

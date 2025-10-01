@@ -1,3 +1,4 @@
+from models.text_model import TextModel
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.pmtimer import PMTimer
@@ -6,17 +7,17 @@ from pmgfxlib import PMBitmap
 from pymirror.utils.utils import SafeNamespace, non_null
 
 class PMTextComp(PMComponent):
-    def __init__(self, gfx: PMGfx, config: SafeNamespace, x0: int = None, y0: int = None, width: int = None, height: int = None):
-        super().__init__(config)
+    def __init__(self, gfx: PMGfx, config: TextModel, x0: int = None, y0: int = None, width: int = None, height: int = None):
+        super().__init__(gfx, config)
         self.text = self._config.text or ""
-        self.gfx = PMGfx.from_dict(self._config.__dict__, gfx)
-        x0 = non_null(x0, self._config.x0, 0)
-        y0 = non_null(y0, self._config.y0, 0)
+        self.gfx = gfx
+        x0 = non_null(x0, 0)
+        y0 = non_null(y0, 0)
         self.rect = PMRect(x0, y0, 0, 0)
-        self.rect.width = non_null(width, self._config.width, 1)
-        self.rect.height = non_null(height, self._config.height, 1)
+        self.rect.width = non_null(width, 1)
+        self.rect.height = non_null(height, 1)
         self.clip = non_null(self._config.clip, False)
-        self.use_baseline = non_null(self._config.use_baseline, False)
+        self.use_baseline = non_null(self._config.font_baseline, False)
         self.hscroll = non_null(self._config.hscroll, False)
         self._hscroll_delay = 100
         self._hscroll_timer = PMTimer(0)

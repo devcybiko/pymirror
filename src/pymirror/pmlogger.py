@@ -11,7 +11,6 @@ def trace_method(func):
     """Decorator to trace individual methods"""
     # check func is already traced
     if hasattr(func, '_is_traced_'): return func
-    print("xxx", func)
     setattr(func, '_is_traced_', True)
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -74,7 +73,7 @@ class PMLogger:
     # class variable to hold the logger instance
     c_level = None
     c_fn_stack = [""]
-    c_trace = True
+    c_trace = False
 
     def __init__(self, log_file=None, level=PMLoggerLevel.WARNING):
         self.log_file = log_file

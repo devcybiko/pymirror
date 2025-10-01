@@ -1,11 +1,13 @@
+from dataclasses import fields, is_dataclass
 import pygame
+from models.module_model import ModuleModel
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _error, _debug
 
 class SoundModule(PMModule):
-    def __init__(self, pm, config):
+    def __init__(self, pm, config: ModuleModel):
         super().__init__(pm, config)
-        self._sound = config.sound
+        self._sound = config
         self.subscribe(["SoundEvent"])
         # Initialize the mixer
         pygame.mixer.init()

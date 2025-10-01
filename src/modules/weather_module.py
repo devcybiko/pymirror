@@ -3,20 +3,15 @@
 
 from datetime import datetime
 from dataclasses import dataclass
+from models.module_model import ModuleModel
 from pymirror.pmcard import PMCard
 from pymirror.pmlogger import _debug
 from pymirror.utils.utils import to_ms, to_secs
 
-@dataclass
-class WeatherConfig:
-    refresh_time: str = "15m"
-    degrees: str = "°F"
-    datetime_format: str = "%I:%M:%S %p"
-
 class WeatherModule(PMCard):
-    def __init__(self, pm, config):
+    def __init__(self, pm, config: ModuleModel):
         super().__init__(pm, config)
-        self._weather = WeatherConfig(**config.weather.__dict__)
+        self._weather = config.weather
         self.timer.set_timeout(to_ms(self._weather.refresh_time)) 
         self.weather_response = None
         if config.openweathermap:

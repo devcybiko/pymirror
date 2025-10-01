@@ -56,6 +56,46 @@ def expand_dict(config: dict, context: dict, dflt: str = None):
                 elif isinstance(value[i], dict):
                     expand_dict(value[i], context, dflt)
 
+def expand_dataclass(obj, context: dict, dflt: str = None):
+    """Recursively expand environment variables in a dataclass object"""
+    if is_dataclass(obj):
+        # Handle dataclass objects
+        for field in fields(obj):
+            field_name = field.name
+            if hasattr(obj, field_name):
+                field_value = getattr(obj, field_name)
+                
+                if isinstance(field_value, str):
+                    # Expand string values
+                    expanded_value = expand_string(field_value, context, dflt)
+                    setattr(obj, field_name, expanded_value)
+                    
+                elif is_dataclass(field_value):
+                    # Recursively handle nested dataclasses
+                    expand_dataclass(field_value, context, dflt)
+                    
+                elif isinstance(field_value, dict):
+                    # Handle dict fields using existing expand_dict function
+                    expand_dict(field_value, context, dflt)
+                    
+                elif isinstance(field_value, list):
+                    # Handle list fields
+                    for i in range(len(field_value)):
+                        item = field_value[i]
+                        if isinstance(item, str):
+                            field_value[i] = expand_string(item, context, dflt)
+                        elif is_dataclass(item):
+                            expand_dataclass(item, context, dflt)
+                        elif isinstance(item, dict):
+                            expand_dict(item, context, dflt)
+    
+    elif isinstance(obj, dict):
+        # Fallback to dict handling for backward compatibility
+        expand_dict(obj, context, dflt)
+    
+    else:
+        # For other types, do nothing
+        pass
 
 ##
 ## This is a proxy class that returns None for any attribute or item access.

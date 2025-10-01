@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from models.font_mixin import FontMixin
-from models.gfx_mixin import GfxMixin
-from models.pmmodel import PMModel
+from models.mixins.font_mixin import FontMixin
+from models.mixins.gfx_mixin import GfxMixin
+from models.mixins.text_mixin import TextMixin
 
 
 @dataclass
-class ScreenModel(PMModel, FontMixin, GfxMixin):
+class ScreenModel(FontMixin, GfxMixin, TextMixin):
     ## screen
     width: int = 1920
     height: int = 1080

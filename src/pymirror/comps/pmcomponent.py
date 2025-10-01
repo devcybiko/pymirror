@@ -8,9 +8,9 @@ from pmgfxlib.pmbitmap import PMBitmap
 from pymirror.pmrect import PMRect
 
 class PMComponent(ABC):
-	def __init__(self, config: SafeNamespace):
+	def __init__(self, gfx: PMGfx, config: dataclass):
 		self._config = config
-		self.gfx = PMGfx.from_dict(config.__dict__)
+		self.gfx = gfx
 		self.rect = PMRect(0, 0, 0, 0)
 
 	@property

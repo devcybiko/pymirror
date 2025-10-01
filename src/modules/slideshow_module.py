@@ -1,4 +1,5 @@
 from random import random, randint, choice  # Import the functions you need
+from models.module_model import ModuleModel
 from modules.photo_module import PhotoModule
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
@@ -9,7 +10,7 @@ from pymirror.pmrect import PMRect
 import os
 
 class SlideshowModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: ModuleModel):
 		super().__init__(pm, config)
 		self._slideshow = config.slideshow
 		self.alt_rect = PMRect(*_str_to_rect(self._slideshow.rect))
