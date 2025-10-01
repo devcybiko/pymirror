@@ -1,10 +1,10 @@
-    {
-      "module": "slideshow",
-      "moddef": {
+{
+    "module": {
+        "class": "slideshow",
         "name": "test_slideshow",
         "position": "middle_center"
-      },
-      "slideshow": {
+    },
+    "slideshow": {
         "folder": "./images",
         "scale": "fill",
         "valign": "center",
@@ -12,5 +12,5 @@
         "interval_time": "60s",
         "randomize": true,
         "frame": "./frames/round_frame.png"
-      }
     }
+}

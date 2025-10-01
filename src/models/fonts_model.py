@@ -3,5 +3,5 @@ from models.pmmodel import PMModel
 from models.font_mixin import FontMixin
 
 @dataclass
-class TextModel(PMModel):
-    text: str = None
+class FontsModel(PMModel):
+    delay_ms: int

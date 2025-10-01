@@ -1,6 +1,6 @@
 {
-    "module": "fonts",
-    "moddef": {
+    "module": {
+        "class": "fonts",
         "name": "Fonts",
         "position": "bottom_left",
         "text_color": "#fff",

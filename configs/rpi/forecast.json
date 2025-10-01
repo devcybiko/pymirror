@@ -1,15 +1,15 @@
 {
-    "module": "forecast",
-    "moddef": {
-        "name": "Weather Forecast",
-        "position": "bottom_left",
-        "font_size": 24,
-        "text_color": "#ff0"
-    },
-    "forecast": {
-        "days": 4,
-        "days_offset": 0,
-        "lines": 2,
-        "icon_size": "large"
-    }
+  "module": {
+    "class": "forecast",
+    "name": "Weather Forecast",
+    "position": "bottom_left",
+    "font_size": 24,
+    "text_color": "#ff0"
+  },
+  "forecast": {
+    "days": 4,
+    "days_offset": 0,
+    "lines": 2,
+    "icon_size": "large"
+  }
 }

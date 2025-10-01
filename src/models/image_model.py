@@ -3,5 +3,6 @@ from models.pmmodel import PMModel
 from models.font_mixin import FontMixin
 
 @dataclass
-class TextModel(PMModel):
-    text: str = None
+class ImageModel(PMModel):
+    path: str
+    scale: str = "fit"

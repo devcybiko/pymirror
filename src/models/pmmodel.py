@@ -4,7 +4,7 @@ from dataclasses import fields
 import importlib
 from typing import get_type_hints
 from pymirror.utils.utils import json_dumps, json_loads, json_read, snake_to_pascal, to_dict
-from pymirror.pmlogger import trace, trace_method
+from pymirror.pmlogger import trace, trace_method, _trace
 
 class Object:
     def __init__(self):
@@ -41,7 +41,7 @@ class PMModel:
                             setattr(obj, field_name, converted_value)
                         except (ValueError, TypeError) as e:
                             raise TypeError(f"Field '{clazz.__name__}.{field_name}' expected {expected_type.__name__}, got {type(value).__name__}: {value}")
-
+    @trace_method
     def _specific_fields(self, clazz, values):
         field_names = {f.name for f in fields(clazz)}
         valid_values = {k: v for k, v in values.items() if k in field_names}
@@ -53,12 +53,16 @@ class PMModel:
         return obj
 
     def _load_model(self, _model_name, values: dict, /, strict_names: bool = True, strict_types: bool = True):
+        if _model_name.startswith("_"):
+            ## commented-out model
+            return None
         model_name = snake_to_pascal(_model_name)
         module = importlib.import_module(f"models.{_model_name}_model")
         clazz_name = f"{model_name}Model"
         print(f"Loading '{_model_name}' model, class {clazz_name} from {module.__name__}")
         clazz = getattr(module, clazz_name, None)
-        print("clazz", values)
+        if type(values) != dict:
+            raise Exception(f"'{_model_name}' expects a dictionary, but got '{values}' ({type(values)})")
         if strict_names:
             ## allow only the members in the dataclass
             ## extra / unknown members will throw an exception
@@ -66,6 +70,8 @@ class PMModel:
         else:
             ## get all the default values
             ## then overlay with new values and additional fields
+            print("... trying not strict_names")
+            _trace(clazz, values)
             obj = self._specific_fields(clazz, values)
 
         if strict_types:
@@ -84,10 +90,14 @@ class PMModel:
                 if field_type.__name__.endswith("Model"):
                     ## crude way to determine, but...
                     nested_model = self._load_model(field_type.__name__.lower().replace('model', ''), field_value, strict_names=strict_names, strict_types=strict_types)
-                    setattr(obj, field_name, nested_model)
+                    if nested_model != None:
+                        ## None means model was "commented out" with "_model_name"
+                        setattr(obj, field_name, nested_model)
                 else:
                     nested_model = self._load_model(field_name, field_value, strict_names=strict_names, strict_types=strict_types)
-                    setattr(obj, field_name, nested_model)
+                    if nested_model != None:
+                        ## None means model was "commented out" with "_model_name"
+                        setattr(obj, field_name, nested_model)
         # For non-dataclass objects, just iterate __dict__
         for attr_name, attr_value in obj.__dict__.items():
             if attr_name in type_hints:
@@ -95,7 +105,9 @@ class PMModel:
             print("<<<", attr_name, attr_value, "(non-dataclass)")
             if isinstance(attr_value, dict):
                 nested_model = self._load_model(attr_name, attr_value, strict_names=strict_names, strict_types=strict_types)
-                setattr(obj, attr_name, nested_model)
+                if nested_model != None:
+                    ## None means model was "commented out" with "_model_name"
+                    setattr(obj, attr_name, nested_model)
         return obj
 
     def from_file(self, fname: str, keys: list[str] = None, /, with_model:str=None, strict_names: bool = True, strict_types = True) -> "PMModel":
@@ -121,13 +133,16 @@ class PMModel:
         result = Object()
         if with_model:
             obj = self._load_model(with_model, obj, strict_names=strict_names, strict_types=strict_types)
-            setattr(result, with_model, obj)
+            if obj != None:
+                ## None means model was "commented out" with "_model_name"
+                setattr(result, with_model, obj)
         else:
             for key, value in obj.items():
                 print("trying", key, value)
                 obj = self._load_model(key, value, strict_names=strict_names, strict_types=strict_types)
-                print("...", obj)
-                setattr(result, key, obj)
+                if obj != None:
+                    print("...", obj)
+                    setattr(result, key, obj)
         return result
     
     

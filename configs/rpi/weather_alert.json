@@ -1,10 +1,10 @@
 {
-    "module": "alert",
-    "debug": false,
-    "moddef": {
+    "module": {
+        "class": "alert",
         "name": "Weather Alert",
         "position": "bottom_left",
-        "subscriptions": ["WeatherAlertEvent"]
+        "subscriptions": ["WeatherAlertEvent"],
+        "debug": false,
     },
     "alert": {
         "header": "Weather Alert",

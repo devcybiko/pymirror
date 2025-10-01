@@ -3,5 +3,7 @@ from models.pmmodel import PMModel
 from models.font_mixin import FontMixin
 
 @dataclass
-class TextModel(PMModel):
-    text: str = None
+class OpenweathermapModel(PMModel):
+    appid: str
+    lat: str
+    lon: str

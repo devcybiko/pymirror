@@ -1,46 +1,44 @@
 {
-    "module": "web_db",
-    "moddef": {
-        "name": "news",
-        "position": "middle_right",
-        "text_color": "#000000",
-        "text_bg_color": "#c0c0c0",
-        "font_name": "Roboto-Regular",
-        "font_size": 24,
-        "disabled": false
+  "module": {
+    "class": "web_db",
+    "name": "news",
+    "position": "middle_right",
+    "text_color": "#000000",
+    "text_bg_color": "#c0c0c0",
+    "font_name": "Roboto-Regular",
+    "font_size": 24,
+    "disabled": false
+  },
+  "web_db": {
+    "cycle_time": "60s",
+    "total": "{{payload.totalResults}}",
+    "max": "100",
+    "header": "{{_n_}}/{{payload.totalResults}}: {{payload.articles[_n_].title}}",
+    "body": "{{payload.articles[_n_].description}}",
+    "footer": "{{payload.articles[_n_].source.name}} @ {{ payload.articles[_n_].publishedAt.split('T')[0] }} -  {{ payload.articles[_n_].publishedAt.split('T')[1].replace('Z', '') }}"
+  },
+  "card": {
+    "header": {
+      "font_name": "Roboto-Bold",
+      "font_size": 40,
+      "text_color": "#fff",
+      "text_bg_color": "#066",
+      "valign": "center",
+      "height": 160
     },
-    "web_db": {
-        "cycle_time": "60s",
-        "display": {
-            "total": "{{payload.totalResults}}",
-            "max": "100",
-            "header": "{{_n_}}/{{payload.totalResults}}: {{payload.articles[_n_].title}}",
-            "body": "{{payload.articles[_n_].description}}",
-            "footer": "{{payload.articles[_n_].source.name}} @ {{ payload.articles[_n_].publishedAt.split('T')[0] }} -  {{ payload.articles[_n_].publishedAt.split('T')[1].replace('Z', '') }}"
-        }
+    "body": {
+      "font_name": "Roboto-Regular",
+      "font_size": 40,
+      "text_color": "#0ff",
+      "text_bg_color": "#000"
     },
-    "card": {
-        "header": {
-            "font_name": "Roboto-Bold",
-            "font_size": 40,
-            "text_color": "#fff",
-            "text_bg_color": "#066",
-            "valign": "center",
-            "height": 160
-        },
-        "body": {
-            "font_name": "Roboto-Regular",
-            "font_size": 40,
-            "text_color": "#0ff",
-            "text_bg_color": "#000"
-        },
-        "footer": {
-            "font_name": "Roboto-Regular",
-            "font_size": 32,
-            "text_color": "#000",
-            "text_bg_color": "#088",
-            "valign": "bottom",
-            "height": 128
-        }
+    "footer": {
+      "font_name": "Roboto-Regular",
+      "font_size": 32,
+      "text_color": "#000",
+      "text_bg_color": "#088",
+      "valign": "bottom",
+      "height": 128
     }
+  }
 }

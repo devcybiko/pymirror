@@ -1,20 +1,20 @@
 {
-    "module": "cli",
-    "moddef": {
-        "name": "FORTUNE COOKIES",
-        "position": "top_strip"
-    },
-    "cli": {
-        "cycle_seconds": 30,
-        "command": "fortune",
-        "header": "",
-        "body": "{{stdout}}",
-        "footer": ""
-    },
-    "card": {
-        "body": {
-            "text_color": "#0cc",
-            "font_size": 32
-        }
+  "module": {
+    "class": "cli",
+    "name": "FORTUNE COOKIES",
+    "position": "top_strip"
+  },
+  "cli": {
+    "cycle_seconds": 30,
+    "command": "fortune",
+    "header": "",
+    "body": "{{stdout}}",
+    "footer": ""
+  },
+  "card": {
+    "body": {
+      "text_color": "#0cc",
+      "font_size": 32
     }
+  }
 }

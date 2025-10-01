@@ -1,6 +1,6 @@
 {
-    "module": "ir",
-    "moddef": {
+    "module": {
+        "class": "ir",
         "name": "ir"
     }
 }

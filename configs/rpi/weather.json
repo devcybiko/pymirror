@@ -1,6 +1,6 @@
 {
-    "module": "weather",
-    "moddef": {
+    "module": {
+        "class": "weather",
         "name": "weather",
         "position": "middle_left",
         "text_color": "#c0c000",
@@ -44,5 +44,4 @@
             "height": 72
         }
     }
-
 }
