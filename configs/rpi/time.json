@@ -1,14 +1,14 @@
 {
-    "module": "clock",
-    "moddef": {
-        "name": "time",
-        "text_color": "#fff",
-        "text_bg_color": null,
-        "position": "top_left",
-        "font_name": "7segment.ttf",
-        "font_size": 128
-    },
-    "clock": {
-        "date_format": "%I:%M:%S"
-    }
+  "module": {
+    "class": "clock",
+    "name": "time",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "position": "top_left",
+    "font_name": "7segment.ttf",
+    "font_size": 128
+  },
+  "clock": {
+    "date_format": "%I:%M:%S"
+  }
 }

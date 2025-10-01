@@ -1,6 +1,6 @@
 {
-    "module": "analog_clock",
-    "moddef": {
+    "module": {
+        "class": "analog_clock",
         "name": "analog_clock",
         "color": "#c0c000",
         "bg_color": "#000000",

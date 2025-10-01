@@ -11,6 +11,7 @@ def trace_method(func):
     """Decorator to trace individual methods"""
     # check func is already traced
     if hasattr(func, '_is_traced_'): return func
+    print("xxx", func)
     setattr(func, '_is_traced_', True)
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

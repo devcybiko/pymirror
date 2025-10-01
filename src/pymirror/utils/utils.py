@@ -357,11 +357,9 @@ def to_utc_epoch(dt) -> float:
     return dt.timestamp()
 
 def json_read(fname: str, dflt=None) -> dict:
-    try:
-        with open(fname, 'r') as file:
-            return json.load(file)
-    except Exception as e:
-        return dflt
+    with open(fname, 'r') as file:
+        s = file.read()
+        return json_loads(s)
 
 def pprint(obj):
     if isinstance(obj, Munch):
@@ -378,7 +376,13 @@ def json_loads(s: str, dflt=None) -> dict:
     try:
         return json.loads(s)
     except Exception as e:
-        return dflt
+        err_msg = str(e)
+        words = err_msg.split(" ")
+        line_no = int(words[0].split(":")[1])-1
+        col = int(words[5])-1
+        lines = s.split("\n")
+        ptr = ("." * col) + "^"
+        raise ValueError(f"{err_msg}\n{line_no-1}:{lines[line_no-1]}\n{line_no}:{lines[line_no]}\n{line_no}:{ptr}\n{line_no+1}:{lines[line_no+1]}")
 
 def to_dict(obj) -> dict:
     """Convert any object to dict recursively"""
