@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from models.pmmodel import PMModel
 
 @dataclass
-class CliModel:
+class CliConfig:
     cycle_seconds: str
     command: str
     header: str

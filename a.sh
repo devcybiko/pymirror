@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PYTHONPATH=./src python -m models.pmmodel "${@}"
+PYTHONPATH=./src python -m configs.pmconfig "${@}"

@@ -1,11 +1,11 @@
 from dataclasses import fields, is_dataclass
 import pygame
-from models.module_model import ModuleModel
+from configs.module_config import ModuleConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmlogger import _error, _debug
 
 class SoundModule(PMModule):
-    def __init__(self, pm, config: ModuleModel):
+    def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
         self._sound = config
         self.subscribe(["SoundEvent"])

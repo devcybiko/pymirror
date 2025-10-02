@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
-from models.pmmodel import PMModel
 
 @dataclass
-class CronModel:
+class CronConfig:
     first_delay: str
     delay: str
     repeat: str

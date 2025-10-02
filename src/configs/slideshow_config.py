@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from models.pmmodel import PMModel
 
 @dataclass
-class SlideshowModel:
+class SlideshowConfig:
     folder: str
     scale: str = "fill"
     valign: str = "center"

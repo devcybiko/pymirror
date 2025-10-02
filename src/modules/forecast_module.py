@@ -3,7 +3,7 @@
 
 from datetime import datetime
 from dataclasses import dataclass
-from models.module_model import ModuleModel
+from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from pymirror.utils.utils import SafeNamespace
@@ -17,7 +17,7 @@ class ForecastConfig:
     lines: int = 3
 
 class ForecastModule(PMCard):
-    def __init__(self, pm, config: ModuleModel):
+    def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
         self._forecast = config.forecast
         self.subscribe("WeatherForecastEvent")

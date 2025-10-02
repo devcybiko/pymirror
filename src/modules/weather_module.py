@@ -3,13 +3,13 @@
 
 from datetime import datetime
 from dataclasses import dataclass
-from models.module_model import ModuleModel
+from configs.module_config import ModuleConfig
 from pymirror.pmcard import PMCard
 from pymirror.pmlogger import _debug
 from pymirror.utils.utils import to_ms, to_secs
 
 class WeatherModule(PMCard):
-    def __init__(self, pm, config: ModuleModel):
+    def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
         self._weather = config.weather
         self.timer.set_timeout(to_ms(self._weather.refresh_time)) 

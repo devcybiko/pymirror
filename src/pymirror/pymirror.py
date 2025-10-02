@@ -12,7 +12,7 @@ import traceback
 
 from munch import DefaultMunch, Munch
 
-from models.pmmodel import PMModel
+from configs.pmconfig import PMConfig
 from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMScreen
@@ -79,11 +79,11 @@ class PyMirror:
         return self.status
 
     def _load_config(self, config_fname) -> dataclass:
-        pmmodel = PMModel()
+        pmconfig = PMConfig()
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        pymirror_config = pmmodel.from_file(config_fname, with_model="pymirror")
+        pymirror_config = pmconfig.from_file(config_fname, with_config="pymirror")
         config = pymirror_config.pymirror
         # Load secrets from .secrets file if specified
         secrets_path = config.secrets
@@ -97,7 +97,7 @@ class PyMirror:
         return config
 
     def _load_modules(self):
-        pmmodel = PMModel()
+        pmconfig = PMConfig()
         for module_config in self._config.modules:
             ## load the module dynamically
             if type(module_config) is str:
@@ -105,7 +105,7 @@ class PyMirror:
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 try:
-                    module_config = pmmodel.from_file(module_config)
+                    module_config = pmconfig.from_file(module_config)
                     pprint(module_config.module)
                     expand_dataclass(module_config, {})  # Expand environment variables in the config
                 except Exception as e:

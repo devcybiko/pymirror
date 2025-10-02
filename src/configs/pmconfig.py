@@ -11,13 +11,13 @@ class Object:
         pass
 
 @trace
-class PMModel:
+class PMConfig:
     """
-    NOTE: Also used as a "marker" for instantiated Models
+    NOTE: Also used as a "marker" for instantiated Configs
 
-    Pulls in "models" from json or dicts.
-    Models are dataclasses which gives us strong type checking
-    The models are defined in the current package
+    Pulls in "configs" from json or dicts.
+    Configs are dataclasses which gives us strong type checking
+    The configs are defined in the current package
     And they are expected to include default values.
     """
     def __init__(self):
@@ -52,17 +52,17 @@ class PMModel:
                 setattr(obj, k, v)
         return obj
 
-    def _load_model(self, _model_name, values: dict, /, strict_names: bool = True, strict_types: bool = True):
-        if _model_name.startswith("_"):
-            ## commented-out model
+    def _load_config(self, _config_name, values: dict, /, strict_names: bool = True, strict_types: bool = True):
+        if _config_name.startswith("_"):
+            ## commented-out config
             return None
-        model_name = snake_to_pascal(_model_name)
-        module = importlib.import_module(f"models.{_model_name}_model")
-        clazz_name = f"{model_name}Model"
-        _debug(f"Loading '{_model_name}' model, class {clazz_name} from {module.__name__}")
+        config_name = snake_to_pascal(_config_name)
+        module = importlib.import_module(f"configs.{_config_name}_config")
+        clazz_name = f"{config_name}Config"
+        _debug(f"Loading '{_config_name}' config, class {clazz_name} from {module.__name__}")
         clazz = getattr(module, clazz_name, None)
         if type(values) != dict:
-            raise Exception(f"'{_model_name}' expects a dictionary, but got '{values}' ({type(values)})")
+            raise Exception(f"'{_config_name}' expects a dictionary, but got '{values}' ({type(values)})")
         if strict_names:
             ## allow only the members in the dataclass
             ## extra / unknown members will throw an exception
@@ -76,7 +76,7 @@ class PMModel:
 
         if strict_types:
             self._strict_types(clazz, obj)
-        ## iterate over all the values. any dicts will be imported as models
+        ## iterate over all the values. any dicts will be imported as configs
         type_hints = get_type_hints(clazz)
         for field in fields(obj):
             field_name = field.name
@@ -84,30 +84,30 @@ class PMModel:
             field_type = type_hints.get(field_name)
             _debug(field_name, field_type)
             _debug(">>>", field_name, field_type.__name__, field_value)
-            # Check if field value is a dict that should be converted to a model
+            # Check if field value is a dict that should be converted to a config
             if isinstance(field_value, dict) and field_type != dict:
-                # Convert dict to model recursively
-                if field_type.__name__.endswith("Model"):
+                # Convert dict to config recursively
+                if field_type.__name__.endswith("Config"):
                     ## crude way to determine, but...
-                    nested_model = self._load_model(field_type.__name__.lower().replace('model', ''), field_value, strict_names=strict_names, strict_types=strict_types)
-                    if nested_model != None:
-                        ## None means model was "commented out" with "_model_name"
-                        setattr(obj, field_name, nested_model)
+                    nested_config = self._load_config(field_type.__name__.lower().replace('config', ''), field_value, strict_names=strict_names, strict_types=strict_types)
+                    if nested_config != None:
+                        ## None means config was "commented out" with "_config_name"
+                        setattr(obj, field_name, nested_config)
                 else:
-                    nested_model = self._load_model(field_name, field_value, strict_names=strict_names, strict_types=strict_types)
-                    if nested_model != None:
-                        ## None means model was "commented out" with "_model_name"
-                        setattr(obj, field_name, nested_model)
+                    nested_config = self._load_config(field_name, field_value, strict_names=strict_names, strict_types=strict_types)
+                    if nested_config != None:
+                        ## None means config was "commented out" with "_config_name"
+                        setattr(obj, field_name, nested_config)
         # For non-dataclass objects, just iterate __dict__
         for attr_name, attr_value in obj.__dict__.items():
             if attr_name in type_hints:
                 continue
             _debug("<<<", attr_name, attr_value, "(non-dataclass)")
             if isinstance(attr_value, dict):
-                nested_model = self._load_model(attr_name, attr_value, strict_names=strict_names, strict_types=strict_types)
-                if nested_model != None:
-                    ## None means model was "commented out" with "_model_name"
-                    setattr(obj, attr_name, nested_model)
+                nested_config = self._load_config(attr_name, attr_value, strict_names=strict_names, strict_types=strict_types)
+                if nested_config != None:
+                    ## None means config was "commented out" with "_config_name"
+                    setattr(obj, attr_name, nested_config)
         return obj
 
     def _translate_class_to_clazz(self, obj):
@@ -120,38 +120,38 @@ class PMModel:
                 else:
                     self._translate_class_to_clazz(obj[key])
 
-    def from_file(self, fname: str, keys: list[str] = None, /, with_model:str=None, strict_names: bool = True, strict_types = True) -> "PMModel":
+    def from_file(self, fname: str, keys: list[str] = None, /, with_config:str=None, strict_names: bool = True, strict_types = True) -> "PMConfig":
         """ 
-        Pulls all the models from the dict that are defined
-        in the models module.
-        if a model is in "keys[]" but is not in the json
-        then it is imported, added, and the model's defaults are taken
+        Pulls all the configs from the dict that are defined
+        in the configs module.
+        if a config is in "keys[]" but is not in the json
+        then it is imported, added, and the config's defaults are taken
         """
         try:
             obj = json_read(fname)
             self._translate_class_to_clazz(obj)
-            print("with_model", with_model)
-            return self.from_dict(obj, keys, with_model=with_model, strict_names=strict_names, strict_types=strict_types)
+            print("with_config", with_config)
+            return self.from_dict(obj, keys, with_config=with_config, strict_names=strict_names, strict_types=strict_types)
         except Exception as e:
             raise TypeError(f"error reading file '{fname}. {str(e)}")
 
-    def from_string(self, data: str, keys: list[str] = None, /, with_model:str=None, strict_names: bool = True, strict_types = True) -> "PMModel":
+    def from_string(self, data: str, keys: list[str] = None, /, with_config:str=None, strict_names: bool = True, strict_types = True) -> "PMConfig":
         obj = json_loads(data)
         if not obj:
             raise Exception(f"bad json object: '{data[0:20]}...'")
-        return self.from_dict(obj, keys, with_model=with_model, strict_names=strict_names, strict_types=strict_types)
+        return self.from_dict(obj, keys, with_config=with_config, strict_names=strict_names, strict_types=strict_types)
 
-    def from_dict(self, obj: dict, keys: list[str] = None, /, with_model:str = None, strict_names: bool = True, strict_types = True) -> "PMModel":
+    def from_dict(self, obj: dict, keys: list[str] = None, /, with_config:str = None, strict_names: bool = True, strict_types = True) -> "PMConfig":
         result = Object()
-        if with_model:
-            obj = self._load_model(with_model, obj, strict_names=strict_names, strict_types=strict_types)
+        if with_config:
+            obj = self._load_config(with_config, obj, strict_names=strict_names, strict_types=strict_types)
             if obj != None:
-                ## None means model was "commented out" with "_model_name"
-                setattr(result, with_model, obj)
+                ## None means config was "commented out" with "_config_name"
+                setattr(result, with_config, obj)
         else:
             for key, value in obj.items():
                 print("trying", key, value)
-                obj = self._load_model(key, value, strict_names=strict_names, strict_types=strict_types)
+                obj = self._load_config(key, value, strict_names=strict_names, strict_types=strict_types)
                 print("...", obj)
                 if obj != None:
                     _debug("...", obj)
@@ -160,10 +160,10 @@ class PMModel:
     
     
 if __name__ == "__main__":
-    pmmodel = PMModel()
+    pmconfig = PMConfig()
     def test_01_simple():
         foo = "{}"
-        obj = pmmodel.from_string(foo)
+        obj = pmconfig.from_string(foo)
         d = to_dict(obj)
         print("test_01_simple", json_dumps(d))
         if d != {}:
@@ -190,12 +190,12 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{module: {}}"
-        obj = pmmodel.from_string(foo, "moddef")
+        obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
         print(f"'\n{test}\n'")
         print(f"'\n{result}\n'")
         if result != test:
-            raise Exception("test_02_pmmodel_1 failed")
+            raise Exception("test_02_pmconfig_1 failed")
 
     def test_02_pmmodule_2():
         test = \
@@ -218,7 +218,7 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{module: {name: 'weather', color: '#999'}}"
-        obj = pmmodel.from_string(foo, "moddef")
+        obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
         print(f"'\n{test}\n'")
         print(f"'\n{result}\n'")
@@ -247,7 +247,7 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{module: {name: 'weather', color: '#999', 'other': 'Other'}}"
-        obj = pmmodel.from_string(foo, "moddef", strict_names=False)
+        obj = pmconfig.from_string(foo, "moddef", strict_names=False)
         result = json_dumps(obj)
         print(f"'\n{test}\n'")
         print(f"'\n{result}\n'")
@@ -255,13 +255,13 @@ if __name__ == "__main__":
             raise Exception("test_02_pmmodule_3 failed")
 
     def test_03_config_1():
-        obj = pmmodel.from_file("./src/models/test_data/config.json", with_model="pymirror", strict_names=False)
+        obj = pmconfig.from_file("./src/configs/test_data/config.json", with_config="pymirror", strict_names=False)
         result = json_dumps(obj)
         print(f"'\n{result}\n'")
 
     def arg_parser():
         import argparse
-        parser = argparse.ArgumentParser(description="Test PMModel")
+        parser = argparse.ArgumentParser(description="Test PMConfig")
         parser.add_argument("--file", "-f", type=str, help="Input file")
         return parser.parse_args()
 
@@ -274,7 +274,7 @@ if __name__ == "__main__":
         # test_02_pmmodule_3()
         # test_03_config_1()
         if args.file:
-            obj = pmmodel.from_file(args.file, strict_names=False)
+            obj = pmconfig.from_file(args.file, strict_names=False)
             result = json_dumps(obj)
             print(f"'\n{result}\n'")
 

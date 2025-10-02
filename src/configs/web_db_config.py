@@ -1,8 +1,7 @@
-from dataclasses import dataclass, field
-from models.pmmodel import PMModel
+from dataclasses import dataclass
 
 @dataclass
-class WebDbModel:
+class WebDbConfig:
     cycle_time: str = "60s"
     total: str = "{{payload.totalResults}}"
     max: str = "100"

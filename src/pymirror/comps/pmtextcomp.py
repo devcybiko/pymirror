@@ -1,4 +1,4 @@
-from models.text_model import TextModel
+from configs.text_config import TextConfig
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.pmtimer import PMTimer
@@ -7,7 +7,7 @@ from pmgfxlib import PMBitmap
 from pymirror.utils.utils import SafeNamespace, non_null
 
 class PMTextComp(PMComponent):
-    def __init__(self, gfx: PMGfx, config: TextModel, x0: int = None, y0: int = None, width: int = None, height: int = None):
+    def __init__(self, gfx: PMGfx, config: TextConfig, x0: int = None, y0: int = None, width: int = None, height: int = None):
         super().__init__(gfx, config)
         self.text = self._config.text or ""
         self.gfx = gfx

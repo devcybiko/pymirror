@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
-from models.mixins.font_mixin import FontMixin
-from models.mixins.gfx_mixin import GfxMixin
-from models.mixins.text_mixin import TextMixin
+from configs.mixins.font_mixin import FontMixin
+from configs.mixins.gfx_mixin import GfxMixin
+from configs.mixins.text_mixin import TextMixin
 
 @dataclass
-class ModuleModel(GfxMixin, FontMixin, TextMixin):
+class ModuleConfig(GfxMixin, FontMixin, TextMixin):
     ## moddef
     clazz: str = field(default=None, metadata={"json_key": "class"})
     name: str = None

@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
-from models.pmdb_model import PmdbModel
-from models.pmmodel import PMModel
-from models.screen_model import ScreenModel
+from configs.pmdb_config import PmdbConfig
+from configs.screen_config import ScreenConfig
 
 @dataclass
-class PymirrorModel:
-    screen: ScreenModel
-    pmdb: PmdbModel
+class PymirrorConfig:
+    screen: ScreenConfig
+    pmdb: PmdbConfig
     debug: bool = False
     secrets: str = ".secrets"
     force_render: bool = False

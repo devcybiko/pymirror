@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 import copy
 from dataclasses import dataclass
 
-from models.module_model import ModuleModel
-from models.pymirror_model import PymirrorModel
+from configs.module_config import ModuleConfig
+from configs.pymirror_config import PymirrorConfig
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.utils.utils import SafeNamespace, _height, _width, from_dict, non_null, to_munch
@@ -29,13 +29,13 @@ from pymirror.pmrect import PMRect
 #     force_update: bool = False
 
 class PMModule(ABC):
-    def __init__(self, pm, config: PymirrorModel):
+    def __init__(self, pm, config: PymirrorConfig):
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm
         self.pmdb = pm.pmdb
-        self._moddef: ModuleModel = config.module
-        _moddef: ModuleModel = self._moddef
+        self._moddef: ModuleConfig = config.module
+        _moddef: ModuleConfig = self._moddef
         self.screen = pm.screen
         self.module_n = 0 ## PyMirror sets this to the index in the pm.modules list
         self.name = _moddef.name or self.__class__.__name__
