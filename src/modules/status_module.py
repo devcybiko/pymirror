@@ -3,7 +3,7 @@ import os
 import sys
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from pymirror.utils.utils import pprint, strftime_by_example, glyphs, to_secs
+from pymirror.utils.utils import strftime_by_example, glyphs, to_secs
 from pymirror.pmlogger import _debug
 
 class StatusModule(PMModule):
@@ -26,11 +26,11 @@ class StatusModule(PMModule):
 
         self.bitmap.clear()
         self.bitmap.text_box((0, 0, self.bitmap.width-1, self.bitmap.height-1), 
-        	f"{glyphs.debug}:{glyphs.yes if pmstatus.debug else glyphs.no} "\
+            f"{glyphs.debug}:{glyphs.yes if pmstatus.debug else glyphs.no} "\
             f"RM:{glyphs.yes if pmstatus.remote_display else glyphs.no} "
             f"TM:{tm} "
             f"  {pmstatus.start_time.strftime(self._status.time_format)}", 
-        	valign=self._status.valign, halign=self._status.halign)
+            valign=self._status.valign, halign=self._status.halign)
         return True
 
     def exec(self):

@@ -49,7 +49,7 @@ class WindowManagerModule(PMModule):
             self.focus_module.take_focus(True)
 
     def onRawKeyboardEvent(self, event):
-        print("window_manager", event)
+        _debug("window_manager", event)
         if event.key_name in ["KEY_TAB", "KEY_UP", "KEY_DOWN"]:
             # find the next focus module, or choose the first one if none are picked
             if event.pressed and not event.repeat:

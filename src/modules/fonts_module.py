@@ -1,6 +1,7 @@
 import os
 from pymirror.pmmodule import PMModule
 from pymirror.utils.utils import SafeNamespace
+from pymirror.pmlogger import _debug, _error
 
 class FontsModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):
@@ -18,14 +19,14 @@ class FontsModule(PMModule):
 		# Get the path to fontlist.txt relative to the project root
 		with open("./fontlist.txt", 'r') as f:
 			for line in f:
-				print(line)
+				_debug(line)
 				font_file = line.strip().split(":")[0].strip()  # Remove comments and whitespace
 				font_name = os.path.basename(font_file).split('.')[0]  # Get the font name without extension
 				# test if font_file exists
 				if os.path.isfile(font_file):
 					font_list.append(font_name)
 				else:
-					print(f"Font file {font_file} not found.")
+					_error(f"Font file {font_file} not found.")
 		# return sorted(font_list)
 		return font_list
 

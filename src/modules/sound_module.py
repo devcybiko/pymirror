@@ -2,7 +2,7 @@ from dataclasses import fields, is_dataclass
 import pygame
 from configs.module_config import ModuleConfig
 from pymirror.pmmodule import PMModule
-from pymirror.pmlogger import _error, _debug
+from pymirror.pmlogger import _error, _debug, _print
 
 class SoundModule(PMModule):
     def __init__(self, pm, config: ModuleConfig):
@@ -33,4 +33,4 @@ if __name__ == "__main__":
     channel = sound.play() # Play the sound and get the Channel object
     while channel.get_busy():
         pygame.time.delay(100) # Add a small delay to prevent high CPU usage
-    print("Sound finished playing.")
+    _print("Sound finished playing.")

@@ -28,7 +28,7 @@ class PMFader:
         if self.done: return current_color
         now = time.time()
         delta_time = now - self.start_time
-        # print(f"Delta time: {delta_time} seconds")
+        # _print(f"Delta time: {delta_time} seconds")
         percent_fade = delta_time / self.secs
         diff = _scale(self.diff_color_tuple, percent_fade)
         t = _add(self.from_color_tuple, diff)
@@ -39,7 +39,7 @@ class PMFader:
             new_color = self.to_color
         else:
             new_color = color_from_tuple(t)
-        # print(f"Fading color: {t} error: {error}")
+        # _print(f"Fading color: {t} error: {error}")
         return new_color
 
     def is_done(self) -> bool:

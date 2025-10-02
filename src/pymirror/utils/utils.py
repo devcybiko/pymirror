@@ -8,7 +8,7 @@ from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 from munch import DefaultMunch, Munch
 import sqlalchemy
-from ..pmlogger import _debug, _trace, trace, _print
+from ..pmlogger import _debug, _trace, trace, _print, _error
 from dataclasses import asdict, dataclass, fields, is_dataclass
 from typing import Dict, Any
 import hashlib
@@ -404,8 +404,16 @@ def json_read(fname: str, dflt=None) -> dict:
 def pprint(obj):
     if isinstance(obj, Munch):
         _pprint.pprint(obj.toDict(), indent=2, width=80)
+    elif is_dataclass(obj):
+        pprint(asdict(obj))
+    elif hasattr(obj, '__dict__'):
+        print(f"=== {obj.__class__.__name__} Object Members ===")
+        print(f"Type: {type(obj).__name__}")
+        print("Instance attributes:")
+        _pprint.pprint(vars(obj), indent=2, width=80)
     else:
-        _pprint.pprint(obj)
+        # Fallback for objects without __dict__ (built-in types, etc.)
+        _pprint.pprint(obj, indent=2, width=80)
 
 def json_write(fname: str, obj: dict) -> bool:
     with open(fname, 'w') as file:
@@ -546,18 +554,18 @@ if __name__ == "__main__":
         strftime = strftime_by_example(test["test"])
         result = test_date_time.strftime(strftime)
         if result != test["expected"]:
-            print(f"Test failed for '{test['test']}->{strftime}': expected '{test['expected']}', got '{result}'")
+            _print(f"Test failed for '{test['test']}->{strftime}': expected '{test['expected']}', got '{result}'")
             sys.exit(1)
 
-    print("-- PM TESTS--")
+    _print("-- PM TESTS--")
     test_date_time2 = datetime.datetime.strptime("1/2/1970T13:02:03", "%m/%d/%YT%H:%M:%S")
     for test in tests2:
         strftime = strftime_by_example(test["test"])
         result = test_date_time2.strftime(strftime)
         if result != test["expected"]:
-            print(f"Test failed for '{test['test']}->{strftime}': expected '{test['expected']}', got '{result}'")
+            _error(f"Test failed for '{test['test']}->{strftime}': expected '{test['expected']}', got '{result}'")
             sys.exit(1)
-        # print(
+        # _print(
         #     test,
         #     "->",
         #     strftime,

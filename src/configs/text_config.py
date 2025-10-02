@@ -5,4 +5,4 @@ from configs.mixins.text_mixin import TextMixin
 @dataclass
 class TextConfig(TextMixin, FontMixin):
     text: str = None
-    height: int = 32
+    height: int = None

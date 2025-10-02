@@ -9,16 +9,16 @@ from pymirror.utils.utils import SafeNamespace, non_null
 class PMTextComp(PMComponent):
     def __init__(self, gfx: PMGfx, config: TextConfig, x0: int = None, y0: int = None, width: int = None, height: int = None):
         super().__init__(gfx, config)
-        self.text = self._config.text or ""
+        self.text = self._comp.text or ""
         self.gfx = gfx
         x0 = non_null(x0, 0)
         y0 = non_null(y0, 0)
         self.rect = PMRect(x0, y0, 0, 0)
         self.rect.width = non_null(width, 1)
-        self.rect.height = non_null(height, 1)
-        self.clip = non_null(self._config.clip, False)
-        self.use_baseline = non_null(self._config.font_baseline, False)
-        self.hscroll = non_null(self._config.hscroll, False)
+        self.rect.height = non_null(config.height, height, 1)
+        self.clip = non_null(self._comp.clip, False)
+        self.use_baseline = non_null(self._comp.font_baseline, False)
+        self.hscroll = non_null(self._comp.hscroll, False)
         self._hscroll_delay = 100
         self._hscroll_timer = PMTimer(0)
         if self.hscroll:
@@ -31,6 +31,7 @@ class PMTextComp(PMComponent):
         if not self.text:
             return
         gfx = bitmap.gfx_push(self.gfx)
+        gfx.merge(self._comp)
         lines = gfx.font.text_split(self.text, self.rect, gfx.wrap)
         bitmap.text_box(self.rect, lines, valign=gfx.valign, halign=gfx.halign, clip=self.clip, use_baseline=self.use_baseline)
         bitmap.gfx_pop()

@@ -8,7 +8,7 @@ import inspect
 
 from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
 from pymirror.utils.utils import SafeNamespace, json_loads, to_ms
-from pymirror.pmlogger import pmlogger, PMLoggerLevel
+from pymirror.pmlogger import pmlogger, PMLoggerLevel, _print
 from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
@@ -110,40 +110,40 @@ def main():
     api = PMWebApi("https://httpbin.org/delay/2", poll_time="10s", cache_file='./caches/test.json')
 
     result = None
-    print("initiate the api call...")
+    _print("initiate the api call...")
     while result is None:
-        print("...")
+        _print("...")
         result = api.fetch_json(blocking=False)
         if api.error:
             _error(f"first loop: Error fetching json from {api.url}:\n{repr(api.error)}")
             sys.exit(1)
         time.sleep(0.1)
-    print("result", result)
-    print("end of first loop...")
+    _print("result", result)
+    _print("end of first loop...")
 
     result = None
     while result is None:
-        print("...")
+        _print("...")
         result = api.fetch_json(blocking=False)
         if api.error:
             _error(f"second loop: Error fetching json from {api.url}:\n{repr(api.error)}")
             sys.exit(1)
         time.sleep(0.1)
-    print("result", result)
-    print("end of second loop...")
+    _print("result", result)
+    _print("end of second loop...")
     api.reset()
-    print("... reset()")
+    _print("... reset()")
 
     result = None
     while result is None:
-        print("...")
+        _print("...")
         result = api.fetch_json(blocking=False)
         if api.error:
             _error(f"second loop: Error fetching json from {api.url}:\n{repr(api.error)}")
             sys.exit(1)
         time.sleep(0.1)
-    print("result", result)
-    print("end of third loop...")
+    _print("result", result)
+    _print("end of third loop...")
 
 if __name__ == "__main__":
     main()

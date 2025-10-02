@@ -52,15 +52,8 @@ class PMModule(ABC):
         self.bitmap = None
         rect = self._compute_rect(self.position)
         if rect:
-            self.bitmap = PMBitmap(rect.width, rect.height, _moddef.__dict__)
+            self.bitmap = PMBitmap(rect.width, rect.height, _moddef)
             self.bitmap.rect = rect
-            # gfx.color = non_null(_moddef.color, self.screen.bitmap.gfx.color, gfx.color)
-            # gfx.bg_color = non_null(_moddef.bg_color, self.screen.bitmap.gfx.bg_color, gfx.bg_color)
-            # gfx.text_color = non_null(_moddef.text_color, self.screen.bitmap.gfx.text_color, gfx.text_color)
-            # gfx.text_bg_color = non_null(_moddef.text_bg_color, self.screen.bitmap.gfx.text_bg_color, gfx.text_bg_color)
-            # font_name = non_null(_moddef.font_name, self.screen.bitmap.gfx.font_name, gfx.font_name)
-            # font_size = non_null(_moddef.font_size, self.screen.bitmap.gfx.font_size, gfx.font_size)
-            # gfx.set_font(font_name, font_size)
         self.subscribe(_moddef.subscriptions or [])
 
     def _compute_rect(self, position: str = None) -> tuple:

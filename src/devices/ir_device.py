@@ -10,7 +10,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _debug
+from pymirror.pmlogger import _debug, _error, _print
 from pymirror.utils.utils import json_dumps
 
 # Default IR remote key mapping
@@ -259,8 +259,8 @@ class IRDevice:
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("Testing IR remote input.")
-    print("Press remote buttons or Ctrl+C to quit")
+    _print("Testing IR remote input.")
+    _print("Press remote buttons or Ctrl+C to quit")
     
     ir = IRDevice()
     
@@ -273,17 +273,17 @@ if __name__ == "__main__":
             # Test raw event method
             event = ir.get_key_event()
             if event:
-                print(json_dumps(event))
+                _print(json_dumps(event))
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    print(f"Key pressed: {event['key_name']} (scancode: {event['scancode']}){repeat_str}")
+                    _print(f"Key pressed: {event['key_name']} (scancode: {event['scancode']}){repeat_str}")
                 else:
-                    print(f"Key released: {event['key_name']} (scancode: {event['scancode']})")
+                    _print(f"Key released: {event['key_name']} (scancode: {event['scancode']})")
             
             # Simulate other work
             time.sleep(0.01)
     except KeyboardInterrupt:
-        print("\nInterrupted by Ctrl+C")
+        _print("\nInterrupted by Ctrl+C")
     finally:
         ir.close()
-        print("IR device closed.")
+        _print("IR device closed.")

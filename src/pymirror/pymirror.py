@@ -13,10 +13,10 @@ import traceback
 from munch import DefaultMunch, Munch
 
 from configs.pmconfig import PMConfig
-from pymirror.pmlogger import trace, _debug, _debug, _info, _warning, _error, _critical, _trace
+from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMScreen
-from pymirror.utils.utils import expand_dataclass, json_read, pprint, snake_to_pascal, expand_dict, SafeNamespace, to_munch
+from pymirror.utils.utils import expand_dataclass, json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
@@ -106,7 +106,6 @@ class PyMirror:
                 ## the file should be in JSON format
                 try:
                     module_config = pmconfig.from_file(module_config)
-                    pprint(module_config.module)
                     expand_dataclass(module_config, {})  # Expand environment variables in the config
                 except Exception as e:
                     _error(f"Error loading module config from {module_config}: {e}")
@@ -120,7 +119,7 @@ class PyMirror:
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(clazz_name)
-            print(f"Loading '{module_config.module.name}' module, class {clazz_name} from {mod.__name__}")
+            _print(f"Loading '{module_config.module.name}' module, class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name + "Module", None)
 
             ## create an instance of the class (module)
@@ -238,7 +237,7 @@ class PyMirror:
         updated = False
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
-                # print("... painting", module.name)
+                # _print("... painting", module.name)
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering

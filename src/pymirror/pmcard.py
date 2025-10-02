@@ -7,7 +7,7 @@ from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmtextcomp import PMTextComp
 from pymirror.pmmodule import PMModule
-from pymirror.utils.utils import from_dict, non_null
+from pymirror.utils.utils import from_dict, non_null, pprint
 
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):
@@ -18,9 +18,26 @@ class PMCard(PMModule):
         self._card.header = non_null(self._card.header, TextConfig())
         self._card.body = non_null(self._card.body, TextConfig())
         self._card.footer = non_null(self._card.footer, TextConfig())
-        self._header = PMTextComp(self.bitmap.gfx, self._card.header, width=self.bitmap.width, height=non_null(self._card.header.height, self.bitmap.gfx.font.height, 1))
-        self._footer = PMTextComp(self.bitmap.gfx, self._card.footer, y0=self.bitmap.height - non_null(self._card.footer.height, self.bitmap.gfx.font.height, 0), width=self.bitmap.width)
-        self._body = PMTextComp(self.bitmap.gfx, self._card.body, y0=self._header.height, height=self.bitmap.height - self._header.height - self._footer.height, width=self.bitmap.width)
+        self._header = self._make_header()
+        self._footer = self._make_footer()
+        self._body = self._make_body()
+
+    def _make_header(self):
+        width = self.bitmap.width
+        height = non_null(self._card.header.height, self.bitmap.gfx.font.height, 1)
+        return PMTextComp(self.bitmap.gfx, self._card.header, width=width, height=height)
+
+    def _make_footer(self):
+        footer_height = non_null(self._card.footer.height, self.bitmap.gfx.font.height, 1)
+        y0 = self.bitmap.height - footer_height
+        width = self.bitmap.width
+        return PMTextComp(self.bitmap.gfx, self._card.footer, y0=y0, width=width)
+
+    def _make_body(self):
+        y0 = self._header.height
+        height = self.bitmap.height - self._header.height - self._footer.height
+        width = self.bitmap.width
+        return PMTextComp(self.bitmap.gfx, self._card.body, y0=y0, width=width, height=height)
 
     def update(self, header: str, body: str, footer: str) -> None:
         self._header.update(header)

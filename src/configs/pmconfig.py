@@ -130,7 +130,7 @@ class PMConfig:
         try:
             obj = json_read(fname)
             self._translate_class_to_clazz(obj)
-            print("with_config", with_config)
+            _debug("with_config", with_config)
             return self.from_dict(obj, keys, with_config=with_config, strict_names=strict_names, strict_types=strict_types)
         except Exception as e:
             raise TypeError(f"error reading file '{fname}. {str(e)}")
@@ -150,9 +150,9 @@ class PMConfig:
                 setattr(result, with_config, obj)
         else:
             for key, value in obj.items():
-                print("trying", key, value)
+                _debug("trying", key, value)
                 obj = self._load_config(key, value, strict_names=strict_names, strict_types=strict_types)
-                print("...", obj)
+                _debug("...", obj)
                 if obj != None:
                     _debug("...", obj)
                     setattr(result, key, obj)
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         foo = "{}"
         obj = pmconfig.from_string(foo)
         d = to_dict(obj)
-        print("test_01_simple", json_dumps(d))
+        _debug("test_01_simple", json_dumps(d))
         if d != {}:
             raise Exception("test_01_simple failed")
 
@@ -192,8 +192,8 @@ if __name__ == "__main__":
         foo = "{module: {}}"
         obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
-        print(f"'\n{test}\n'")
-        print(f"'\n{result}\n'")
+        _debug(f"'\n{test}\n'")
+        _debug(f"'\n{result}\n'")
         if result != test:
             raise Exception("test_02_pmconfig_1 failed")
 
@@ -220,8 +220,8 @@ if __name__ == "__main__":
         foo = "{module: {name: 'weather', color: '#999'}}"
         obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
-        print(f"'\n{test}\n'")
-        print(f"'\n{result}\n'")
+        _debug(f"'\n{test}\n'")
+        _debug(f"'\n{result}\n'")
         if result != test:
             raise Exception("test_02_pmmodule_2 failed")
 
@@ -249,15 +249,15 @@ if __name__ == "__main__":
         foo = "{module: {name: 'weather', color: '#999', 'other': 'Other'}}"
         obj = pmconfig.from_string(foo, "moddef", strict_names=False)
         result = json_dumps(obj)
-        print(f"'\n{test}\n'")
-        print(f"'\n{result}\n'")
+        _debug(f"'\n{test}\n'")
+        _debug(f"'\n{result}\n'")
         if result != test:
             raise Exception("test_02_pmmodule_3 failed")
 
     def test_03_config_1():
         obj = pmconfig.from_file("./src/configs/test_data/config.json", with_config="pymirror", strict_names=False)
         result = json_dumps(obj)
-        print(f"'\n{result}\n'")
+        _debug(f"'\n{result}\n'")
 
     def arg_parser():
         import argparse
@@ -267,7 +267,7 @@ if __name__ == "__main__":
 
     def main():
         args = arg_parser()
-        print(args)
+        _debug(args)
         # test_01_simple()
         # test_02_pmmodule_1()
         # test_02_pmmodule_2()
@@ -276,6 +276,6 @@ if __name__ == "__main__":
         if args.file:
             obj = pmconfig.from_file(args.file, strict_names=False)
             result = json_dumps(obj)
-            print(f"'\n{result}\n'")
+            _debug(f"'\n{result}\n'")
 
     main()

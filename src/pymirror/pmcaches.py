@@ -80,7 +80,7 @@ class FileInfo:
                 return text
         except Exception as e:
             self.error = e
-            print(f"Error reading cache {self.fname}: {e}")
+            _print(f"Error reading cache {self.fname}: {e}")
             return None
 
 class Cache(ABC):
@@ -102,7 +102,7 @@ class Cache(ABC):
 
 class MemoryFileCache(Cache):
     def __init__(self, text=None, timeout_ms=1000, fname=None):
-        print("MemoryFileCache()", text, timeout_ms, fname)
+        _print("MemoryFileCache()", text, timeout_ms, fname)
         self.memory_cache = MemoryCache(text, timeout_ms / 2)
         self.file_cache = FileCache(text=text, fname=fname, timeout_ms=timeout_ms)
         self.file_info = self.file_cache.file_info
@@ -157,7 +157,7 @@ class MemoryCache(Cache):
 
 class FileCache(Cache):
     def __init__(self, text=None, timeout_ms=1000, fname=None):
-        print("FileCache()", fname)
+        _print("FileCache()", fname)
         self.file_info = FileInfo(fname)
         self.timeout_ms = timeout_ms
         self.text = text
@@ -212,71 +212,71 @@ if __name__ == "__main__":
     def memtest():
         memcache = MemoryCache("one second later", 1000)
         while memcache.get():
-            print(f"Memory cache: {memcache.get()}")
+            _print(f"Memory cache: {memcache.get()}")
             time.sleep(0.2)
         memcache = MemoryCache("two seconds later", 1000)
         for i in range(2):
-            print(f"Memory cache: {memcache.get()}")
+            _print(f"Memory cache: {memcache.get()}")
             time.sleep(0.2)
         memcache.invalidate()
         while memcache.get():
-            print(f"Memory cache: {memcache.get()}")
+            _print(f"Memory cache: {memcache.get()}")
             time.sleep(0.2)
         memcache.update("testing update")
-        print(f"Memory cache: {memcache.get()}")
+        _print(f"Memory cache: {memcache.get()}")
         time.sleep(0.2)
         if memcache.get() != "testing update":
-            print(f"Memory cache error: value should not have changed")
+            _print(f"Memory cache error: value should not have changed")
         memcache.update("testing update w/ change")
         while memcache.get():
-            print(f"Memory cache: {memcache.get()}")
+            _print(f"Memory cache: {memcache.get()}")
             time.sleep(0.2)
 
     def filetest():
         # filecache = FileCache("", 2000, "caches/test_cache.txt")
         # while filecache.get():
-        #     print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+        #     _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
         #     time.sleep(0.2)
-        # print(f"File cache error: {filecache.error}")
+        # _print(f"File cache error: {filecache.error}")
         # filecache.set("new file cache test")
         # for i in range(2):
-        #     print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+        #     _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
         #     time.sleep(0.2)
-        # print(f"File cache error: {filecache.error}")
+        # _print(f"File cache error: {filecache.error}")
         # filecache.set("third file cache test")
         # while filecache.get():
-        #     print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+        #     _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
         #     time.sleep(0.2)
-        # print(f"File cache error: {filecache.error}")
+        # _print(f"File cache error: {filecache.error}")
         
         # filecache = FileCache("file cache test", 2000, "/bad_file_name.txt")
         # while filecache.get():
-        #     print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+        #     _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
         #     time.sleep(0.2)
-        # print(f"File cache error: {filecache.error}")
+        # _print(f"File cache error: {filecache.error}")
 
         filecache = FileCache("testing update w/ no change", 1000, "caches/test_cache.txt")
         for i in range(2):
-            print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+            _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
             time.sleep(0.2)
-        print(f"File cache error: {filecache.error}")
+        _print(f"File cache error: {filecache.error}")
         filecache.update("testing update w/ no change")
         while filecache.get():
-            print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+            _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
             time.sleep(0.2)
         filecache.set("new file cache test")
-        print(f"File cache error: {filecache.error}")
+        _print(f"File cache error: {filecache.error}")
 
         filecache = FileCache("testing update w/ change", 1000, "caches/test_cache.txt")
         for i in range(2):
-            print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+            _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
             time.sleep(0.2)
-        print(f"File cache error: {filecache.error}")
+        _print(f"File cache error: {filecache.error}")
         filecache.update("testing update with a change")
         while filecache.get():
-            print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
+            _print(f"File cache {filecache.file_info.fname}: {filecache.get()}")
             time.sleep(0.2)
-        print(f"File cache error: {filecache.error}")
+        _print(f"File cache error: {filecache.error}")
 
     memtest()
     filetest()

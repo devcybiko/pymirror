@@ -9,6 +9,7 @@
 ##
 
 import copy
+from dataclasses import dataclass
 from email.mime import image
 from PIL import Image, ImageDraw, ImageColor
 
@@ -25,10 +26,8 @@ RIGHT = 2
 
 
 class PMBitmap:
-    def __init__(
-        self, width: int = None, height: int = None, config: SafeNamespace = {}
-    ):
-        self.gfx = PMGfx.from_dict(config)
+    def __init__(self, width: int = None, height: int = None, config: dataclass = None):
+        self.gfx = PMGfx().merge(config)
         self._gfx_stack = []
         self._rect = PMRect(0, 0, non_null(width, 1) - 1, non_null(height, 1) - 1)
         self._img = Image.new("RGBA", (self._rect.width, self._rect.height), 0)

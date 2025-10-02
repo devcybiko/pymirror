@@ -3,6 +3,8 @@ import os
 from caldav import DAVClient
 import vobject, datetime as dt, pytz
 import dotenv
+from pymirror.pmlogger import _debug
+
 dotenv.load_dotenv(".secrets")
 APPLE_ID_EMAIL = os.getenv("APPLE_ID_EMAIL")
 APPLE_CALDEV_PASSWORD = os.getenv("APPLE_CALDEV_PASSWORD")
@@ -21,7 +23,7 @@ now = dt.datetime.now(pytz.utc)
 three_months_later = now + dt.timedelta(days=90)
 
 for c in cals:
-    print("Calendar:", c.name)
+    _debug("Calendar:", c.name)
     events = c.date_search(start=now, end=three_months_later)
     parsed_events = []
     for event in events:
@@ -44,11 +46,11 @@ for c in cals:
                 start_time = tz.localize(dt.datetime.combine(start_time, dt.time()))
             parsed_events.append((start_time, summary, dtstart, dtend))
         except Exception as e:
-            print("    Error parsing event:", e)
+            _debug("    Error parsing event:", e)
     # Sort events by normalized start_time
     parsed_events.sort(key=lambda tup: tup[0])
-    print(f"  {len(parsed_events)} events in next 3 months (sorted):")
+    _debug(f"  {len(parsed_events)} events in next 3 months (sorted):")
     for start_time, summary, dtstart, dtend in parsed_events:
-        print("    Event:", summary.value if summary else "(no summary)")
-        print("      Start:", dtstart.value if dtstart else "(no start)")
-        print("      End:", dtend.value if dtend else "(no end)")
+        _debug("    Event:", summary.value if summary else "(no summary)")
+        _debug("      Start:", dtstart.value if dtstart else "(no start)")
+        _debug("      End:", dtend.value if dtend else "(no end)")

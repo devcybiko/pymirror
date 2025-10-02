@@ -89,7 +89,7 @@ class PMTaskMgr:
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(task_config["class"])+"Task"
-            print(f"Loading task class {clazz_name} from {mod.__name__}")
+            _debug(f"Loading task class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name, None)
 
             ## create an instance of the class (module)
@@ -119,10 +119,10 @@ def my_excepthook(exc_type, exc_value, exc_traceback):
     tb = traceback.extract_tb(exc_traceback)
     project_root = os.path.abspath(os.path.dirname(__file__))
     filtered_tb = [frame for frame in tb if frame.filename.startswith(project_root)]
-    print(f"{exc_type.__name__}: {exc_value}")
+    _debug(f"{exc_type.__name__}: {exc_value}")
     for frame in filtered_tb:
-        print(f'  File "{frame.filename}", line {frame.lineno}, in {frame.name}')
-        print(f'    {frame.line}')
+        _debug(f'  File "{frame.filename}", line {frame.lineno}, in {frame.name}')
+        _debug(f'    {frame.line}')
 
 # sys.excepthook = my_excepthook
 

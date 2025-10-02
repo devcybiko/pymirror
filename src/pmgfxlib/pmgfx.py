@@ -1,44 +1,46 @@
 from dataclasses import dataclass, fields
 
+from configs.fonts_config import FontsConfig
+from configs.mixins.font_mixin import FontMixin
+from configs.mixins.gfx_mixin import GfxMixin
+from configs.mixins.text_mixin import TextMixin
 from pymirror.pmrect import PMRect
-from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null, pprint
+from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null
 from .pmfont import PMFont
 from .pmutils import to_color
 
 @dataclass
-class PMGfx:
+class PMGfx(GfxMixin, TextMixin, FontMixin):
     ## instance variables
     _color: tuple = (255, 255, 255) 
     _bg_color: tuple = (0, 0, 0) 
     _text_color: tuple = (255, 255, 255)
     _text_bg_color: tuple = None  
-    line_width: int = 1
-    font_name: str = "DejaVuSans"
-    font_size: int = 64
-    font_baseline: bool = True
-    font_y_offset: int = 0
     font: PMFont = None
-    wrap: str = "words"  # "chars", "words", or None
-    halign: str = "center"  # "left", "center", "right"
-    valign: str = "center"
+    
+    def merge(self, config: dataclass) -> "PMGfx":
+        if isinstance(config, TextMixin):
+            self.text_color = non_null(config.text_color, self.text_color, (255, 255, 255))
+            self.text_bg_color = non_null(config.text_bg_color, self.text_bg_color, None)
+            self.wrap = non_null(config.wrap, self.wrap, "words")
+            self.halign = non_null(config.halign, self.halign, "center")
+            self.valign = non_null(config.valign, self.valign, "center")
+            self.clip = non_null(config.clip, self.clip, False)
+            self.hscroll = non_null(config.hscroll, self.hscroll, False)
 
-    @classmethod
-    def from_dict(cls, config: dict, _gfx: "PMGfx" = _NONE_PROXY) -> "PMGfx":
-        gfx = cls()
-        gfx.line_width = non_null(config.get('line_width'), _gfx.line_width, 1)
-        gfx.font_name = non_null(config.get('font_name'), _gfx.font_name, "DejaVuSans")
-        gfx.font_size = non_null(config.get('font_size'), _gfx.font_size, 64)
-        gfx.font_baseline = non_null(config.get('font_baseline'), _gfx.font_baseline, False)
-        gfx.font_y_offset = non_null(config.get('font_y_offset'), _gfx.font_y_offset, 0)
-        gfx.set_font(gfx.font_name, gfx.font_size)
-        gfx.wrap = non_null(config.get('wrap'), _gfx.wrap, "words")
-        gfx.halign = non_null(config.get('halign'), _gfx.halign, "center")
-        gfx.valign = non_null(config.get('valign'), _gfx.valign, "center")
-        gfx.color = non_null(config.get('color'), _gfx.color, (255, 255, 255))
-        gfx.bg_color = non_null(config.get('bg_color'), _gfx.bg_color, (0, 0, 0))
-        gfx.text_color = non_null(config.get('text_color'), _gfx.text_color, (255, 255, 255))
-        gfx.text_bg_color = non_null(config.get('text_bg_color'), _gfx.text_bg_color, None)
-        return gfx
+        if isinstance(config, GfxMixin):
+            self.line_width = non_null(config.line_width, self.line_width, 1)
+            self.color = non_null(config.color, self.color, (255, 255, 255))
+            self.bg_color = non_null(config.bg_color, self.bg_color, (0, 0, 0))
+
+        if isinstance(config, FontMixin):
+            self.font_name = non_null(config.font_name, self.font_name, "DejaVuSans")
+            self.font_size = non_null(config.font_size, self.font_size, 64)
+            self.font_baseline = non_null(config.font_baseline, self.font_baseline, False)
+            self.font_y_offset = non_null(config.font_y_offset, self.font_y_offset, 0)
+            self.set_font( self.font_name,  self.font_size)
+
+        return self
 
     def set_font(self, name: str, size: int) -> None:
         """Set the font for the graphics context."""

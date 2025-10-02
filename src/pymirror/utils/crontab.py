@@ -2,7 +2,7 @@ import datetime
 import sys
 
 from pymirror.utils.utils import has_alpha, to_int, to_list
-from pymirror.pmlogger import _debug
+from pymirror.pmlogger import _debug, _error, _print
 
 _SECONDS=0 # seconds index
 _MINUTES=1 # minutes index
@@ -169,7 +169,7 @@ class Crontab:
                     raise Exception("Cron string contains invalid characters")
                 crontab.append(cron_string + "|" + return_string)
             except Exception as e:
-                print(f"Error processing cron string: {cron_string}|{return_string}")
+                _error(f"Error processing cron string: {cron_string}|{return_string}")
                 sys.exit(1)
         return crontab
 
@@ -255,13 +255,13 @@ if __name__ == "__main__":
         "0 0 0 * * 1,2,3,4,5",
         "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *"
     ]
-    print("Crontab test")
+    _print("Crontab test")
     cron = Crontab(crontab)
     for i in range(len(cron.crontab)):
         if cron.crontab[i] == expected[i]:
-            print("...", crontab[i], "=>", cron.crontab[i])
+            _print("...", crontab[i], "=>", cron.crontab[i])
         else:
-            print("ERROR:", crontab[i], "=>", cron.crontab[i], "Expected:", expected[i])
+            _print("ERROR:", crontab[i], "=>", cron.crontab[i], "Expected:", expected[i])
 
     times = [
         [0, 0, 0, 0, 0, 0],
@@ -276,6 +276,6 @@ if __name__ == "__main__":
         matches = cron.check(time)
         cron.last_crontime = None
         if not matches:
-            print(time, "none matches:")
+            _print(time, "none matches:")
         for i in matches:
-            print("match:", i, time, cron.crontab[i])
+            _print("match:", i, time, cron.crontab[i])

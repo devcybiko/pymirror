@@ -8,6 +8,7 @@ import select
 import glob
 from typing import Optional, List
 from evdev import InputDevice, ecodes
+from pymirror.pmlogger import _debug
 
 class KeyboardDevice:
     """
@@ -43,7 +44,7 @@ class KeyboardDevice:
                     keyboard_keys = [ecodes.KEY_A, ecodes.KEY_SPACE, ecodes.KEY_ENTER, ecodes.KEY_ESC]
                     if any(key in keys for key in keyboard_keys):
                         keyboard_devices.append(device_path)
-                        print(f"Found keyboard device: {device_path} - {device.name}")
+                        _debug(f"Found keyboard device: {device_path} - {device.name}")
                 device.close()
             except (OSError, PermissionError):
                 # Skip devices we can't access
@@ -57,18 +58,18 @@ class KeyboardDevice:
             # Use specified device
             try:
                 self.device = InputDevice(self.device_path)
-                print(f"Using specified keyboard device: {self.device_path}")
+                _debug(f"Using specified keyboard device: {self.device_path}")
                 if self.grab_device:
                     self._grab_device(self.device, self.device_path)
                 return
             except (OSError, PermissionError) as e:
-                print(f"Cannot access specified device {self.device_path}: {e}")
+                _debug(f"Cannot access specified device {self.device_path}: {e}")
         
         # Auto-find keyboard devices
         keyboard_devices = self._find_keyboard_devices()
         
         if not keyboard_devices:
-            print("No keyboard devices found!")
+            _debug("No keyboard devices found!")
             return
         
         # First, set up the primary device for reading
@@ -76,15 +77,15 @@ class KeyboardDevice:
             try:
                 self.device = InputDevice(device_path)
                 self.device_path = device_path
-                print(f"Using primary keyboard device: {device_path} - {self.device.name}")
+                _debug(f"Using primary keyboard device: {device_path} - {self.device.name}")
                 break
             except (OSError, PermissionError) as e:
-                print(f"Cannot access {device_path}: {e}")
+                _debug(f"Cannot access {device_path}: {e}")
                 continue
         
         # Now, if grabbing is requested, grab ALL keyboard devices
         if self.grab_device and keyboard_devices:
-            print(f"Attempting to grab {len(keyboard_devices)} keyboard device(s) to prevent console echo...")
+            _debug(f"Attempting to grab {len(keyboard_devices)} keyboard device(s) to prevent console echo...")
             grabbed_count = 0
             
             for device_path in keyboard_devices:
@@ -105,22 +106,22 @@ class KeyboardDevice:
                             device.close()
                             
                 except (OSError, PermissionError) as e:
-                    print(f"Cannot access {device_path}: {e}")
+                    _debug(f"Cannot access {device_path}: {e}")
                     continue
             
-            print(f"Successfully grabbed {grabbed_count}/{len(keyboard_devices)} keyboard devices")
+            _debug(f"Successfully grabbed {grabbed_count}/{len(keyboard_devices)} keyboard devices")
             if grabbed_count < len(keyboard_devices):
-                print("Warning: Some keyboard devices could not be grabbed - console echo may still occur")
+                _debug("Warning: Some keyboard devices could not be grabbed - console echo may still occur")
             
     def _grab_device(self, device: InputDevice, device_path: str) -> bool:
         """Attempt to grab a single device, return True if successful"""
         try:
             device.grab()
             self.grabbed_devices.append(device)
-            print(f"✓ Grabbed: {device_path} - {device.name}")
+            _debug(f"✓ Grabbed: {device_path} - {device.name}")
             return True
         except OSError as e:
-            print(f"✗ Could not grab {device_path}: {e}")
+            _debug(f"✗ Could not grab {device_path}: {e}")
             return False
     
     def get_key_event(self) -> Optional[dict]:
@@ -165,7 +166,7 @@ class KeyboardDevice:
                             }
             except OSError:
                 # Device might have been disconnected
-                print("Keyboard device disconnected")
+                _debug("Keyboard device disconnected")
                 self.device = None
         
         return None
@@ -204,12 +205,12 @@ class KeyboardDevice:
                 # Only close devices that aren't our primary device
                 if device != self.device:
                     device.close()
-                print(f"Released grab on {device.path}")
+                _debug(f"Released grab on {device.path}")
             except OSError:
                 pass  # Device might already be released
         
         if self.grabbed_devices:
-            print(f"Released grab on {len(self.grabbed_devices)} keyboard device(s)")
+            _debug(f"Released grab on {len(self.grabbed_devices)} keyboard device(s)")
         
         self.grabbed_devices.clear()
         self.is_grabbed = False
@@ -222,25 +223,25 @@ class KeyboardDevice:
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("Testing direct keyboard device input with exclusive grab.")
-    print("This will prevent keystrokes from appearing in the console.")
-    print("Press keys or 'q' to quit:")
-    print("Note: You may need to run with sudo for device access")
+    _debug("Testing direct keyboard device input with exclusive grab.")
+    _debug("This will prevent keystrokes from appearing in the console.")
+    _debug("Press keys or 'q' to quit:")
+    _debug("Note: You may need to run with sudo for device access")
     
     # Test the new KeyboardDevice class with grab enabled (default)
     kbd = KeyboardDevice(grab_device=True)
     
     if not kbd.device:
-        print("No keyboard device found or accessible. Try running with sudo.")
+        _debug("No keyboard device found or accessible. Try running with sudo.")
         exit(1)
     
-    print(f"Using device: {kbd.device_path}")
+    _debug(f"Using device: {kbd.device_path}")
     if kbd.is_grabbed:
-        print("Device is exclusively grabbed - keystrokes won't appear in console")
+        _debug("Device is exclusively grabbed - keystrokes won't appear in console")
     else:
-        print("Device is NOT grabbed - keystrokes may appear in console")
+        _debug("Device is NOT grabbed - keystrokes may appear in console")
     
-    print("Press keys (q to quit):")
+    _debug("Press keys (q to quit):")
     
     try:
         import time
@@ -250,17 +251,17 @@ if __name__ == "__main__":
             if event:
                 if event['pressed']:
                     repeat_str = " (REPEAT)" if event['repeat'] else ""
-                    print(f"Key pressed: {event['key_name']} (code: {event['keycode']}){repeat_str}")
+                    _debug(f"Key pressed: {event['key_name']} (code: {event['keycode']}){repeat_str}")
                     if event['key_name'] == 'KEY_Q':
-                        print("Quitting...")
+                        _debug("Quitting...")
                         break
                 else:
-                    print(f"Key released: {event['key_name']} (code: {event['keycode']})")
+                    _debug(f"Key released: {event['key_name']} (code: {event['keycode']})")
             
             # Simulate other work
             time.sleep(0.01)
     except KeyboardInterrupt:
-        print("\nInterrupted by Ctrl+C")
+        _debug("\nInterrupted by Ctrl+C")
     finally:
         kbd.close()
-        print("Keyboard device closed and grab released.")
+        _debug("Keyboard device closed and grab released.")

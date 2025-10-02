@@ -55,7 +55,7 @@ class IcalTask(PMTask):
                     ## it's okay - duplicate entries are ignored
                     continue
             else:
-                print("ADDED:", record.uid, record.summary, record.description)
+                _debug("ADDED:", record.uid, record.summary, record.description)
 
 
     def _remove_deleted_events(self, events):
@@ -64,7 +64,7 @@ class IcalTask(PMTask):
         records = self.pmdb.get_all(IcalTable)
         for record in records:
              if record.uid not in event_uids:
-                  print("REMOVING:", record.uid, record.summary, record.description)
+                  _debug("REMOVING:", record.uid, record.summary, record.description)
                   self.pmdb.delete(record)
              pass
 

@@ -2,7 +2,7 @@ from datetime import datetime, timezone, timedelta
 import json
 from sys import stderr
 from dateutil.relativedelta import relativedelta
-
+from pymirror.pmlogger import _print
 from pymirror.utils.utils import json_dumps
 
 class IcalParser:
@@ -107,9 +107,9 @@ class IcalParser:
                 event = self._parse_event(event)
                 events = self._parse_recurring_events(event, start_dt, end_dt)
                 for event in events:
-                    # print(start_date, event.get("dtstart", ""), event.get("dtend", ""), end_date, file=stderr)
+                    # _print(start_date, event.get("dtstart", ""), event.get("dtend", ""), end_date, file=stderr)
                     if start_date <= event.get("dtstart$", "") and event.get("dtend$", "") <= end_date:
-                            # print(event)
+                            # _print(event)
                             self.results.append(event)
                 event = {}
             else:
@@ -131,7 +131,7 @@ def main():
         text = file.read()
     ical_parser = IcalParser(text.split("\n"))
     result = ical_parser.parse("2025-08-01", "2025-12-31")
-    print(json_dumps(result, indent=2, default=json_default), file=stderr)
+    _print(json_dumps(result, indent=2, default=json_default), file=stderr)
 
 if __name__ == "__main__":
     main()
