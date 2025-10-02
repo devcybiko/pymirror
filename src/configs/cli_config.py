@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class CliConfig:
-    cycle_seconds: str
+    cycle_seconds: int
     command: str
     header: str
     body: str

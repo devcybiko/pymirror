@@ -12,6 +12,7 @@ class CliModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._cli = config.cli
+		print(">>>", config.cli)
 		self.timer.set_timeout(self._cli.cycle_seconds * 1000)
 		self.update("", "", "")  # Initialize with empty strings
 

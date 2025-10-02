@@ -1,6 +1,6 @@
-    {
-      "module": "slideshow",
-      "moddef": {
+{
+      "module": {
+        "class": "slideshow",
         "name": "slideshow",
         "position": "0.33,0.15,0.67,1.00"
       },

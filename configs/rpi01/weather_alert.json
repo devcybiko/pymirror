@@ -1,11 +1,11 @@
 {
-    "module": "alert",
-    "debug": false,
-    "moddef": {
+    "module": {
+        "class": "alert",
         "name": "Weather Alert",
         "position": "0.00,0.50,0.33,0.95",
         "subscriptions": ["WeatherAlertEvent"],
-        "bg_color": "#001"
+        "bg_color": "#001",
+        "debug": false,
     },
     "alert": {
         "header": "Weather Alert",

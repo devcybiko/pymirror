@@ -6,7 +6,6 @@ class FpsModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self.last_time = datetime.now()
-		self._fps = config.fps
 		self.timer = PMTimer("1s")
 
 	def render(self, force: bool = False) -> bool:
@@ -15,7 +14,7 @@ class FpsModule(PMModule):
 		self.last_time = now
 		fps = 1 / delta.total_seconds() if delta.total_seconds() > 0 else 0
 		self.bitmap.clear()
-		self.bitmap.text_box((0, 0, self.bitmap.width-1, self.bitmap.height-1), f"FPS: {fps:.2f}", valign=self._fps.valign, halign=self._fps.halign)
+		self.bitmap.text_box((0, 0, self.bitmap.width-1, self.bitmap.height-1), f"FPS: {fps:.2f}", valign=self._moddef.valign, halign=self._moddef.halign)
 		return True
 
 	def exec(self):

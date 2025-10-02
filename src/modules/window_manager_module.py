@@ -4,7 +4,6 @@ from pymirror.pmlogger import _debug
 class WindowManagerModule(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._window_manager = config.window_manager
         self.subscribe("RawKeyboardEvent")
         self.focus_module = None
         self.focus_module_n = 0

@@ -433,6 +433,7 @@ def to_dict(obj) -> dict:
             result[key] = to_dict(value)
         return result
     elif hasattr(obj, '__dict__'):
+        return obj
         return {k: to_dict(v) for k, v in obj.__dict__.items()}
     elif isinstance(obj, dict):
         return {k: to_dict(v) for k, v in obj.items()}

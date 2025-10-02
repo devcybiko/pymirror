@@ -6,8 +6,7 @@ class CronModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
 		self._cron = config.cron
-		self.name = self._cron.name
-		self.alerts = config.alerts or []
+		self.alerts = config.cron.alerts or []
 		if type(self.alerts) is not list:
 			self.alerts = [self.alerts]
 		self.crontab = Crontab([alert.cron for alert in self.alerts])

@@ -31,7 +31,7 @@ class WebDbModule(PMCard):
 		self.items = []
 
 		 # extract the maximum number of items to display
-		template_dict = copy.copy(self._web_db.display.__dict__)
+		template_dict = copy.copy(self._web_db.display)
 		expand_dict(template_dict, context)
 		max_items = int(template_dict.get("max", "1"))
 		total_items = int(template_dict.get("total", "1"))
@@ -39,7 +39,7 @@ class WebDbModule(PMCard):
 			total_items = max_items
 		for n in range(total_items):
 			context["_n_"] = n
-			template_dict = copy.copy(self._web_db.display.__dict__)
+			template_dict = copy.copy(self._web_db.display)
 			expand_dict(template_dict, context, "__error__") # extract the 'nth' item to display
 			# if any of the display fields are "__error__", skip this item
 			if "__error__" in template_dict.values():

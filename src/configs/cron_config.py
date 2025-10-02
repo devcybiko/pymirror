@@ -5,4 +5,5 @@ class CronConfig:
     first_delay: str
     delay: str
     repeat: str
-    event: dict = field(default_factory=dict)
+    event: dict = field(default_factory=dict)    
+    alerts: dict = field(default_factory=dict)

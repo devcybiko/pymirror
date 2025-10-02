@@ -14,3 +14,5 @@ class ModuleConfig(GfxMixin, FontMixin, TextMixin):
     disabled: bool = False
     force_render: bool = False
     force_update: bool = False
+    debug: bool = False
+    force: bool = False

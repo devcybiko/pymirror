@@ -1,8 +1,8 @@
 {
-    "module": "status",
-    "moddef": {
-        "disabled": false,
+    "module": {
+        "class": "status",
         "name": "status",
+        "disabled": false,
         "position": "0.67,0.95,1.00,1.00",
         "font_size": 24
     },

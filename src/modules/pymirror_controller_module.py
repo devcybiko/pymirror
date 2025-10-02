@@ -5,7 +5,6 @@ from pymirror.pmlogger import _debug
 class PymirrorControllerModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._pymirror = config.pymirror
 		self.subscribe("PyMirrorEvent")
 
 	def render(self, force: bool = False) -> bool:

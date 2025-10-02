@@ -5,8 +5,6 @@ from pymirror.pmmodule import PMModule
 class IrModule(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._ir = config.ir
-        self.name = self._ir.name
         self.remote = IRDevice()
 
     def render(self, force: bool = False) -> bool:

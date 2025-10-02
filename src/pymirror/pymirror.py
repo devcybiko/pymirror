@@ -60,7 +60,7 @@ class PyMirror:
         self._clear_screen = True  # Flag to clear the screen on each loop
         self.server_queue = queue.Queue()  # Use a queue to manage events
         self._load_modules()
-        self.server = PMServer(self._config.server, self.server_queue)
+        self.server = PMServer(self._config, self.server_queue)
         self.server.start()  # Start the server to handle incoming events
 
     def get_status(self) -> PMStatus:
