@@ -10,11 +10,11 @@
     },
     "ical": {
         "calendar_name": "gregs_calendar",
-        "time_format": "0:00",
+        "time_format": "%H:%M",
         "number_days": 60,
         "render_mode": "grid",
         "week_mode": 5,
         "row_height": 200,
-        "holiday_files": ["./holiday_files/pocahontas-availability.json","./holiday_files/birthdays.json"]
+        "holiday_files": ["./holiday_files/birthdays.json"]
     }
 }

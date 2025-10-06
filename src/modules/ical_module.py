@@ -169,7 +169,12 @@ class IcalModule(PMCard):
             event_str = f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
             event.event_str = event_str
             all_events.append(event)
+            print(event.description)
         for event in self.all_day_events:
+            if event.description != "\\n":
+                ## HACK: holidays in Apple iCal have a "mock" newline
+                ## HACK" "regular" events do not
+                continue
             all_day_str = f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}"
             event.event_str = all_day_str
             all_events.append(event)
