@@ -4,7 +4,7 @@
 from collections import defaultdict
 from dataclasses import is_dataclass
 from datetime import datetime, timedelta
-from sqlalchemy import and_
+from sqlalchemy import extract, and_, func
 
 from pmdb.pmdb import Base
 from pymirror.pmcard import PMCard
@@ -136,6 +136,7 @@ class IcalModule(PMCard):
             )))
 
         if self._ical.show_regular_events:
+            # Check if time is exactly midnight (00:00:00)
             self.daily_events = to_munch(to_dict(self.pmdb.get_all_where(
                 IcalTable, 
                 and_(
@@ -144,7 +145,7 @@ class IcalModule(PMCard):
                     IcalTable.utc_end <= later_epoch,
                     IcalTable.rrule == "",
                     IcalTable.all_day == False
-                ), 
+                ),
                 order_by=IcalTable.utc_start
             )))
 
@@ -162,20 +163,23 @@ class IcalModule(PMCard):
             events = [to_munch(to_dict(event)) for event in recurring_events]
             print(157, events)
             self.daily_events.extend(events)
-        event_str = ""
-        all_day_str = ""
-        self.daily_events = sorted(self.daily_events, key=lambda e: e.dtstart)
-        self.all_day_events = sorted(self.all_day_events, key=lambda e: e.dtstart)
+        all_events = []
         for event in self.daily_events:
             print(162, event, isinstance(event, Base))
-            event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"
+            event_str = f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
+            event.event_str = event_str
+            all_events.append(event)
         for event in self.all_day_events:
-            all_day_str += f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}\n"
+            all_day_str = f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}"
+            event.event_str = all_day_str
+            all_events.append(event)
+        events = sorted(all_events, key=lambda e: e.utc_start)
+        event_str = "\n".join([event.event_str for event in events])
         if self._ical.number_days > 1:
             header_str = f"{self._ical.title}\n{now.strftime(self._ical.title_format)} - {later.strftime(self._ical.title_format)}"
         self.update(
             header_str,
-            (event_str + "\n" + all_day_str) or "No Events to Show",
+            (event_str) or "No Events to Show",
             "last updated\n" + now.astimezone().strftime("%Y-%m-%d %H:%M:%S"),
         )
         return True # state changed

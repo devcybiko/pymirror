@@ -12,7 +12,7 @@
     "ical": {
         "calendar_name": "gregs_calendar",
         "title": "This Month",
-        "time_format": "Oct-01 0:00",
+        "time_format": "%m/%d",
         "number_days": 30,
         "show_regular_events": true,
         "show_all_day_events": false,
@@ -29,7 +29,7 @@
         },
         "body": {
             "font_name": "Roboto-Regular",
-            "font_size": 40,
+            "font_size": 32,
             "text_color": "#0ff",
             "text_bg_color": "#000",
             "valign": "top",
