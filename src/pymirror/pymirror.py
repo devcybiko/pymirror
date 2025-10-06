@@ -249,7 +249,7 @@ class PyMirror:
         t0 = time.time()
         result = fn(*args)
         t1 = time.time()
-        _debug(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
+        print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
         return result
 
     def run(self):
@@ -261,7 +261,7 @@ class PyMirror:
                 self._time(self._render_modules, modules_changed)
                 self._time(self._update_screen, modules_changed)
                 # _debug("---")
-                time.sleep(0.001) # Sleep for a short time to give pmserver a chance to process web requests
+                time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
                 _debug("...")
         except Exception as e:
             traceback.print_exc()  # <-- This _debugs the full stack trace to stdout
