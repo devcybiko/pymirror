@@ -98,18 +98,15 @@ class PyMirror:
     def _load_modules(self):
         pmconfig = PMConfig()
         for module_config in self._config.modules:
-            print(101, module_config)
             ## load the module dynamically
             if type(module_config) is str:
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 module_config = pmconfig.from_file(module_config)
-                print(109, module_config)
                 expand_dataclass(module_config, {})  # Expand environment variables in the config
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            print(112, module_config)
             clazz_name = module_config.module.clazz
             mod = importlib.import_module(f"modules.{clazz_name}_module")
         
@@ -249,7 +246,7 @@ class PyMirror:
         t0 = time.time()
         result = fn(*args)
         t1 = time.time()
-        print(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
+        _debug(getattr(fn, "__name__", repr(fn)), ":", f"{(t1-t0)*1000} ms")
         return result
 
     def run(self):

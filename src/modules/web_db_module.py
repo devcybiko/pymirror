@@ -50,7 +50,7 @@ class WebDbModule(PMCard):
 	
 	def _read_db(self):
 		_debug("_read_db")
-		record = self.pmdb.get_where(WebApiTable, name=self.name)
+		record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
 		if record == None:
 			_debug("... db.get_where() returns None")
 			return

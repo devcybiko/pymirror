@@ -2,7 +2,7 @@ from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
 from pymirror.utils.utils import json_dumps, json_loads, json_read, pascal_to_snake, snake_to_pascal, to_dict
-from pymirror.pmlogger import trace, trace_method, _trace, _print, _warning
+from pymirror.pmlogger import trace, trace_method, _trace, _info, _print, _warning
 
 class Object:
     def __init__(self):
@@ -27,10 +27,9 @@ class PMConfig:
         for field_name, _expected_type in type_hints.items():
             ## if it's a subclass of some other class... get its super class
             expected_type = getattr(_expected_type, '__origin__', _expected_type)
-            _print("32: field, expected_type", field_name, expected_type)
             ## for each field and its expected type...
             if hasattr(obj, field_name):
-                _warning("... object does not have field", field_name, "...skipping...")
+                _info("... object does not have field", field_name, "...skipping...")
                 continue
             ## get the value from the object
             value = getattr(obj, field_name)
@@ -82,7 +81,6 @@ class PMConfig:
                     if isinstance(item, dict):
                         # Convert dict to AlertConfig
                         config_name = list_item_type.__name__.lower().replace('config', '')
-                        print(85, config_name)
                         nested_config = self._load_config(config_name, item)
                         processed_items.append(nested_config)
                     else:
@@ -102,13 +100,11 @@ class PMConfig:
                 if field_type.__name__.endswith("Config"):
                     ## crude way to determine, but...
                     clazz_name = pascal_to_snake(field_type.__name__)
-                    print(104, clazz_name)
                     nested_config = self._load_config(clazz_name.replace('_config', ''), obj_value)
                     if nested_config != None:
                         ## None means config was "commented out" with "_config_name"
                         setattr(obj, field_name, nested_config)
                 else:
-                    print(109, field_name)
                     nested_config = self._load_config(field_name, obj_value)
                     if nested_config != None:
                         ## None means config was "commented out" with "_config_name"
@@ -118,16 +114,13 @@ class PMConfig:
     def _load_clazz(self, _config_name):
         ## load the *Config module and get the clazz
         config_name = snake_to_pascal(_config_name)
-        print(117, _config_name, config_name)
         module = importlib.import_module(f"configs.{_config_name}_config")
-        print(119, module)
         clazz_name = f"{config_name}Config"
         _print(f"Loading '{config_name}' config, class {clazz_name} from {module.__name__}")
         clazz = getattr(module, clazz_name, None)
         return clazz
 
     def _load_config(self, config_name, values: dict):
-        print(126, config_name)
         if config_name.startswith("_"):
             ## fields beginning with underscores are skipped (commented out)
             return None
@@ -154,7 +147,6 @@ class PMConfig:
     def from_file(self, fname: str, with_config:str=None) -> "PMConfig":
         try:
             obj = json_read(fname)
-            print(obj)
             self._rename_class_to_clazz(obj)
             _print("with_config", with_config)
             return self.from_dict(obj, with_config=with_config)
@@ -170,10 +162,8 @@ class PMConfig:
     def from_dict(self, obj: dict, with_config:str = None) -> "PMConfig":
         result = None
         if with_config:
-            print(183, with_config)
             result = self._load_config(with_config, obj)
         else:
-            print(186, "config")
             result = self._load_config("config", obj)
         return result
     

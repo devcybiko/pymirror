@@ -1,9 +1,7 @@
-
-
 from datetime import datetime
 import json
 import time
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, and_
 from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
@@ -31,7 +29,7 @@ class WebApiTask(PMTask):
     def __init__(self, pmtm, config):
         super().__init__(pmtm, config)
         self.pmdb.create_table(WebApiTable, checkfirst=True, force=False)
-        record = self.pmdb.get_where(WebApiTable, name=self.name)
+        record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
         if not record:
             record = WebApiTable(
                 name=self.name,
@@ -47,7 +45,7 @@ class WebApiTask(PMTask):
 
     def exec(self):
         # hit a url using http request
-        record = self.pmdb.get_where(WebApiTable, name=self.name)
+        record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
         if not record:
             _debug(f"record not found for {self.name}")
             return

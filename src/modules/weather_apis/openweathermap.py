@@ -32,7 +32,7 @@ class OpenWeatherMapApi:
         Fetches weather data from the OpenWeatherMap API.
         If params are provided, they will be used in the request.
         """
-        _record = self.pmdb.get_where(WebApiTable, name=self.name)
+        _record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
         record = to_munch(to_dict(_record))
         self.text = record.result_text
         if not self.text:
