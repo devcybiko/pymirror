@@ -26,6 +26,17 @@ glyphs = Glyphs()
 def snake_to_pascal(snake_str):
     return "".join(word.capitalize() for word in snake_str.split("_"))
 
+def pascal_to_snake(pascal_str):
+    result = ""
+    under = ""
+    for c in pascal_str:
+        if c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            result += under + c.lower()
+            under = "_"
+        else:
+            result += c
+    return result
+
 def expand_string(s: str, context: dict, dflt: str = None) -> str:
     if not s:
         return s
@@ -348,11 +359,6 @@ def to_munch(obj):
         return [munchify(v) for v in obj]
     else:
         return obj
-def to_dict(record) -> dict:
-    if isinstance(record, sqlalchemy.orm.query.Query):
-        arr = [to_dict(v) for v in record]
-        return(arr)
-    return {c.name: getattr(record, c.name) for c in record.__table__.columns}
 
 def to_secs(s: str, dflt_secs: int = 0) -> int:
     return to_ms(s, dflt_secs * 1000) // 1000
@@ -440,13 +446,14 @@ def to_dict(obj) -> dict:
         for key, value in obj.__dict__.items():
             result[key] = to_dict(value)
         return result
-    elif hasattr(obj, '__dict__'):
-        return obj
-        return {k: to_dict(v) for k, v in obj.__dict__.items()}
+    elif hasattr(obj, '__table__'):
+        return obj.__dict__
     elif isinstance(obj, dict):
         return {k: to_dict(v) for k, v in obj.items()}
     elif isinstance(obj, (list, tuple)):
         return [to_dict(item) for item in obj]
+    elif hasattr(obj, '__dict__'):
+        return obj.__dict__
     else:
         return obj
     

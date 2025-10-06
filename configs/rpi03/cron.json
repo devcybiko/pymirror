@@ -1,35 +1,37 @@
 {
-    "module": "cron",
-    "moddef": {
-        "name": "cron"
-    },
+  "module": {
+    "class": "cron",
+    "name": "cron"
+  },
+  "cron": {
     "alerts": [
-        {
-            "cron": "*:00",
-            "description": "Play sound at the start of every hour",
-            "event": {
-                "event": "SoundEvent",
-                "filename": "./sounds/begin.wav",
-                "repeat": 1
-            }
-        },
-        {
-            "cron": "*:15,30,45",
-            "description": "Play sound at 15, 30, and 45 minutes past the hour",
-            "event": {
-                "event": "SoundEvent",
-                "filename": "./sounds/morse.wav",
-                "repeat": 1
-            }
-        },
-        {
-            "cron": "17:00:00",
-            "description": "Play sound at 5 PM daily",
-            "event": {
-                "event": "SoundEvent",
-                "filename": "./sounds/signal.wav",
-                "repeat": 1
-            }
+      {
+        "cron": "*:00",
+        "description": "Play sound at the start of every hour",
+        "event": {
+          "event": "SoundEvent",
+          "filename": "./sounds/begin.wav",
+          "repeat": 1
         }
+      },
+      {
+        "cron": "*:15,30,45",
+        "description": "Play sound at 15, 30, and 45 minutes past the hour",
+        "event": {
+          "event": "SoundEvent",
+          "filename": "./sounds/morse.wav",
+          "repeat": 1
+        }
+      },
+      {
+        "cron": "17:00:00",
+        "description": "Play sound at 5 PM daily",
+        "event": {
+          "event": "SoundEvent",
+          "filename": "./sounds/signal.wav",
+          "repeat": 1
+        }
+      }
     ]
+  }
 }

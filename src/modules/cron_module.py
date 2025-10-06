@@ -9,6 +9,8 @@ class CronModule(PMModule):
 		self.alerts = config.cron.alerts or []
 		if type(self.alerts) is not list:
 			self.alerts = [self.alerts]
+		for alert in self.alerts:
+			print(alert)
 		self.crontab = Crontab([alert.cron for alert in self.alerts])
 
 	def render(self, force: bool = False) -> bool:

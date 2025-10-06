@@ -1,6 +1,6 @@
 {
-    "module": "ical",
-    "moddef": {
+    "module": {
+        "class": "ical",
         "name": "holidays",
         "position": "icalendar_holidays",
         "text_color": "#fff",

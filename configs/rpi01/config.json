@@ -47,7 +47,6 @@
     "./configs/rpi01/news.json",
     "./configs/rpi01/weather.json",
     "./configs/rpi01/pymirror_controller.json",
-    "./configs/rpi01/cron_test.json",
     "./configs/rpi01/window_manager.json"
   ]
 }

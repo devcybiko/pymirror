@@ -64,7 +64,7 @@ class PMDb:
         return record
 
     def get_all_where(self, table: Table, where_clause) -> list["Table"]:
-        records = self.session.query(table).filter(where_clause)
+        records = self.session.query(table).filter(where_clause).all()
         return records
 
     def delete(self, record: Table):

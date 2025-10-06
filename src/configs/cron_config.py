@@ -1,9 +1,12 @@
 from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class AlertConfig:
+    cron: str
+    description: str = None
+    event: dict = field(default_factory=dict)
 
 @dataclass
 class CronConfig:
-    first_delay: str
-    delay: str
-    repeat: str
-    event: dict = field(default_factory=dict)    
-    alerts: dict = field(default_factory=dict)
+    alerts: List[AlertConfig] = field(default_factory=lambda: [AlertConfig(cron="*:00")])

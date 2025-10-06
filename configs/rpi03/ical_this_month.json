@@ -1,6 +1,6 @@
 {
-    "module": "ical",
-    "moddef": {
+    "module": {
+        "class": "ical",
         "name": "this_month",
         "position": "icalendar_this_month",
         "text_color": "#fff",

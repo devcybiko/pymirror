@@ -1,6 +1,7 @@
 import copy
 from dataclasses import dataclass
 
+from configs.card_config import CardConfig
 from configs.module_config import ModuleConfig
 from configs.text_config import TextConfig
 from pmgfxlib.pmgfx import PMGfx
@@ -12,8 +13,8 @@ from pymirror.utils.utils import from_dict, non_null, pprint
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
-        if getattr(self._config, "card", None) == None:
-            return
+        if self._config.card == None:
+            self._config.card = CardConfig()
         self._card = self._config.card
         self._card.header = non_null(self._card.header, TextConfig())
         self._card.body = non_null(self._card.body, TextConfig())

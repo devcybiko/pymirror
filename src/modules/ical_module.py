@@ -2,39 +2,19 @@
 # https://openicalmap.org/api/one-call-3#current
 
 from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
-import json
+from dataclasses import is_dataclass
+from datetime import datetime, timedelta
 from sqlalchemy import and_
 
+from pmdb.pmdb import Base
 from pymirror.pmcard import PMCard
 from pymirror.utils.utils import json_read, strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
-from pymirror.pmlogger import _debug, _error
 from tasks.ical_task import IcalTable
-
-@dataclass
-class ICalConfig:
-    calendar_name: str = "gregs_calendar"
-    title: str = "iCalendar"
-    refresh_time: str = "60m"
-    max_events: int = 10
-    number_days: int = 7
-    title_format: str = strftime_by_example("Jan 2025")
-    time_format: str = strftime_by_example("0:00 PM")
-    show_regular_events: bool = True
-    show_all_day_events: bool = True
-    show_recurring_events: bool = True
-    all_day_format: str = strftime_by_example("Jan-1")
-    render_mode: str = "card"
-    week_mode: int = 7
-    row_height: int = None
-    rows: int = 1000
-    holiday_files: list = field(default_factory=list)
     
 class IcalModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._ical = ICalConfig(**config.ical.__dict__)
+        self._ical = config.ical
         self.timer.set_timeout(self._ical.refresh_time)
         self.all_day_format = strftime_by_example(self._ical.all_day_format)
         self.time_format = strftime_by_example(self._ical.time_format)
@@ -167,7 +147,7 @@ class IcalModule(PMCard):
             )))
 
         if self._ical.show_recurring_events:
-            recurring_events = to_munch(to_dict(self.pmdb.get_all_where(
+            recurring_events = self.pmdb.get_all_where(
                 IcalTable, 
                 and_(
                     IcalTable.calendar_name == self._ical.calendar_name,
@@ -175,11 +155,14 @@ class IcalModule(PMCard):
                     IcalTable.utc_end <= later_epoch,
                     IcalTable.rrule != ""
                 )
-            )))
-            self.daily_events.extend(recurring_events)
+            )
+            events = [to_munch(to_dict(event)) for event in recurring_events]
+            print(157, events)
+            self.daily_events.extend(events)
         event_str = ""
         all_day_str = ""
         for event in self.daily_events:
+            print(162, event, isinstance(event, Base))
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"
         for event in self.all_day_events:
             all_day_str += f"{event.get('dtstart').strftime(self.all_day_format)}: {event.get('name', event.get('summary', 'none'))}\n"

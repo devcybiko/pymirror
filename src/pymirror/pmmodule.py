@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from configs.module_config import ModuleConfig
 from configs.pymirror_config import PymirrorConfig
+from pmdb.pmdb import PMDb
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.utils.utils import SafeNamespace, _height, _width, from_dict, non_null, to_munch
@@ -33,7 +34,7 @@ class PMModule(ABC):
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm
-        self.pmdb = pm.pmdb
+        self.pmdb: PMDb = pm.pmdb
         self._moddef: ModuleConfig = config.module
         _moddef: ModuleConfig = self._moddef
         self.screen = pm.screen

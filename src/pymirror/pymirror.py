@@ -83,8 +83,7 @@ class PyMirror:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
-        pymirror_config = pmconfig.from_file(config_fname, with_config="pymirror")
-        config = pymirror_config.pymirror
+        config = pmconfig.from_file(config_fname, with_config="pymirror")
         # Load secrets from .secrets file if specified
         secrets_path = config.secrets
         if secrets_path:
@@ -99,19 +98,18 @@ class PyMirror:
     def _load_modules(self):
         pmconfig = PMConfig()
         for module_config in self._config.modules:
+            print(101, module_config)
             ## load the module dynamically
             if type(module_config) is str:
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
-                try:
-                    module_config = pmconfig.from_file(module_config)
-                    expand_dataclass(module_config, {})  # Expand environment variables in the config
-                except Exception as e:
-                    _error(f"Error loading module config from {module_config}: {e}")
-                    sys.exit(1)
+                module_config = pmconfig.from_file(module_config)
+                print(109, module_config)
+                expand_dataclass(module_config, {})  # Expand environment variables in the config
             ## import the module using its name
             ## all modules should be in the "modules" directory
+            print(112, module_config)
             clazz_name = module_config.module.clazz
             mod = importlib.import_module(f"modules.{clazz_name}_module")
         

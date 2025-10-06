@@ -1,6 +1,6 @@
 {
-    "module": "ical",
-    "moddef": {
+    "module": {
+        "class": "ical",
         "name": "icalendar2",
         "position": "0.00,0.15,0.75,1.00",
         "text_color": "#fff",
