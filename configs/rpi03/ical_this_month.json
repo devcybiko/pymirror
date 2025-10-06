@@ -12,7 +12,7 @@
     "ical": {
         "calendar_name": "gregs_calendar",
         "title": "This Month",
-        "time_format": "9/11 0:00",
+        "time_format": "Oct-01 0:00",
         "number_days": 30,
         "show_regular_events": true,
         "show_all_day_events": false,
@@ -24,14 +24,15 @@
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "gray",
-            "height": 72
+            "height": 72,
+            "valign": "center",
         },
         "body": {
             "font_name": "Roboto-Regular",
             "font_size": 40,
             "text_color": "#0ff",
             "text_bg_color": "#000",
-            "valign": "center",
+            "valign": "top",
             "halign": "left",
             "wrap": "none"
         },
@@ -40,7 +41,7 @@
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "gray",
-            "valign": "bottom",
+            "valign": "center",
             "height": 72
         }
     }

@@ -59,12 +59,18 @@ class PMDb:
         records = self.session.query(table).all()
         return records
 
-    def get_where(self, table: Table, **kwargs) -> "Table":
-        record = self.session.query(table).filter_by(**kwargs).first()
-        return record
+    def get_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
+        query = self.session.query(table).filter(where_clause)
+        if order_by is not None:
+            query = query.order_by(order_by)
+        records = query.first()
+        return records
 
-    def get_all_where(self, table: Table, where_clause) -> list["Table"]:
-        records = self.session.query(table).filter(where_clause).all()
+    def get_all_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
+        query = self.session.query(table).filter(where_clause)
+        if order_by is not None:
+            query = query.order_by(order_by)
+        records = query.all()
         return records
 
     def delete(self, record: Table):

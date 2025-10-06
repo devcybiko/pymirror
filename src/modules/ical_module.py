@@ -131,7 +131,8 @@ class IcalModule(PMCard):
                     IcalTable.utc_start >= now_epoch,
                     IcalTable.utc_end <= later_epoch,
                     IcalTable.all_day == True
-                )
+                ),
+                order_by=IcalTable.utc_start
             )))
 
         if self._ical.show_regular_events:
@@ -143,7 +144,8 @@ class IcalModule(PMCard):
                     IcalTable.utc_end <= later_epoch,
                     IcalTable.rrule == "",
                     IcalTable.all_day == False
-                )
+                ), 
+                order_by=IcalTable.utc_start
             )))
 
         if self._ical.show_recurring_events:
@@ -154,13 +156,16 @@ class IcalModule(PMCard):
                     IcalTable.utc_start >= now_epoch,
                     IcalTable.utc_end <= later_epoch,
                     IcalTable.rrule != ""
-                )
+                ),
+                order_by=IcalTable.utc_start
             )
             events = [to_munch(to_dict(event)) for event in recurring_events]
             print(157, events)
             self.daily_events.extend(events)
         event_str = ""
         all_day_str = ""
+        self.daily_events = sorted(self.daily_events, key=lambda e: e.dtstart)
+        self.all_day_events = sorted(self.all_day_events, key=lambda e: e.dtstart)
         for event in self.daily_events:
             print(162, event, isinstance(event, Base))
             event_str += f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}\n"

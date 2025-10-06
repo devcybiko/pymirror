@@ -24,14 +24,16 @@
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "#800",
-            "height": 72
+            "height": 72,
+            "valign": "center",
+
         },
         "body": {
             "font_name": "Roboto-Regular",
             "font_size": 40,
             "text_color": "#0ff",
             "text_bg_color": "#000",
-            "valign": "center",
+            "valign": "top",
             "halign": "left",
             "wrap": "none"
         },
@@ -40,7 +42,7 @@
             "font_size": 32,
             "text_color": "#fff",
             "text_bg_color": "#080",
-            "valign": "bottom",
+            "valign": "center",
             "height": 72
         }
     }
