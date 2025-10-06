@@ -161,15 +161,12 @@ class IcalModule(PMCard):
                 order_by=IcalTable.utc_start
             )
             events = [to_munch(to_dict(event)) for event in recurring_events]
-            print(157, events)
             self.daily_events.extend(events)
         all_events = []
         for event in self.daily_events:
-            print(162, event, isinstance(event, Base))
             event_str = f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
             event.event_str = event_str
             all_events.append(event)
-            print(event.description)
         for event in self.all_day_events:
             if event.description != "\\n":
                 ## HACK: holidays in Apple iCal have a "mock" newline
