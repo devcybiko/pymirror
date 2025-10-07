@@ -22,6 +22,23 @@
       }
     },
     {
+      "class": "maps",
+      "name": "maps",
+      "cron": "00:00:00",
+      "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "output_dir": "./maps",
+      "maps": [
+        {
+          "width": 800,
+          "height": 600,
+          "lat": "37.4971",
+          "lon": "-77.7305",
+          "zoom": 5,
+          "fname": "midlothian_11.png"
+        }
+      ]
+    },
+    {
       "class": "web_api",
       "name": "openweather",
       "cron": "*:15:00",

@@ -110,7 +110,7 @@ class PMBitmap:
 
     def clear(self) -> None:
         self._draw.rectangle(
-            (0, 0, self._img.width, self._img.height), fill=self.gfx.bg_color
+            (0, 0, self._img.width-1, self._img.height-1), fill=self.gfx.bg_color
         )
 
     def line(self, rect: tuple):

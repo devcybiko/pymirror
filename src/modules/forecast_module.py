@@ -2,19 +2,11 @@
 # https://openweathermap.org/api/one-call-3#current
 
 from datetime import datetime
-from dataclasses import dataclass
 from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from pymirror.utils.utils import SafeNamespace
 from pymirror.pmlogger import _debug, _print
-
-@dataclass
-class ForecastConfig:
-    days: int = 3  # Number of days to forecast
-    days_offset: int = 0  # Offset for the forecast days
-    icon_size: str = "small"  # Size of the forecast icons (None, small, medium, large)
-    lines: int = 3
 
 class ForecastModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):

@@ -6,7 +6,7 @@
         "font_size": 24,
         "text_color": "#ff0",
         "force": true,
-        "bg_color": "#001"
+        "bg_color": "#111"
     },
     "forecast": {
         "days": 4,

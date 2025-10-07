@@ -22,7 +22,6 @@
 6. Hot Reload of config.json
     - if config.json is updated then dispose of old modules and reload
 19. add color palette to config.json
-1. Font "object" rather than discrete values
 
 ## Text
 
