@@ -29,7 +29,7 @@
         },
         "body": {
             "font_name": "Roboto-Regular",
-            "font_size": 32,
+            "font_size": 36,
             "text_color": "#0ff",
             "text_bg_color": "#000",
             "valign": "top",

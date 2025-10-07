@@ -22,7 +22,7 @@
     "card": {
         "header": {
             "font_name": "Roboto-Regular",
-            "font_size": 32,
+            "font_size": 36,
             "text_color": "#fff",
             "text_bg_color": "#800",
             "height": 72,
