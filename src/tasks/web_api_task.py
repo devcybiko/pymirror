@@ -30,6 +30,7 @@ class WebApiTask(PMTask):
         super().__init__(pmtm, config)
         self.pmdb.create_table(WebApiTable, checkfirst=True, force=False)
         record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
+        print(33, self._task)
         if not record:
             record = WebApiTable(
                 name=self.name,
