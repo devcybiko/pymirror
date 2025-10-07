@@ -18,4 +18,5 @@ while true; do
         >> src/pmserver/static/output.log 2>&1
         date
         echo "Restarting pymirror..."
+        sleep 10
 done
