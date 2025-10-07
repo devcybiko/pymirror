@@ -146,6 +146,14 @@ main() {
     visudo -cf "/etc/sudoers.d/99-${NEWUSER}-nopasswd" || rm -f "/etc/sudoers.d/99-${NEWUSER}-nopasswd"
   fi
 
+    # add to sudo group if needed
+    sudo usermod -aG sudo pymirror
+
+    # create a drop-in that allows passwordless sudo for this user
+    echo 'pymirror ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/99-pymirror-nopasswd >/dev/null
+    sudo chmod 440 /etc/sudoers.d/99-pymirror-nopasswd
+    sudo visudo -cf /etc/sudoers.d/99-pymirror-nopasswd
+
   echo "User $NEWUSER created with home $HOME_DIR."
 }
 
