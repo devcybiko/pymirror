@@ -3,9 +3,9 @@ from logging import config
 from pmdb.pmdb import PMDb
 from pymirror.pmwebapi import PMWebApi
 from utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
-from tasks.web_api_task import WebApiTable
+from tables.web_api_table import WebApiTable
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 def _paragraph_fix(text: str) -> str:
     results = []
@@ -34,6 +34,9 @@ class OpenWeatherMapApi:
         """
         _record = self.pmdb.get_where(WebApiTable, WebApiTable.name == self.name)
         record = to_munch(to_dict(_record))
+        if not record:
+            _debug("... db.get_where() returns None")
+            return
         self.text = record.result_text
         if not self.text:
             _debug("... db.get_where() returns None")

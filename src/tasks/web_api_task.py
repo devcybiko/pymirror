@@ -1,29 +1,12 @@
 from datetime import datetime
-import json
 import time
-from sqlalchemy import Column, DateTime, Integer, String, and_
-from pmdb.pmdb import Base
-from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
+from tables.web_api_table import WebApiTable
 from utils.utils import json_dumps, json_loads, to_secs
-from pymirror.pmlogger import _debug, _error
+from pmlogger import _debug, _error
 
 import requests
-
-Base = declarative_base()
-
-class WebApiTable(Base):
-    __tablename__ = 'webapi'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    url = Column(String)
-    last_time = Column(DateTime)
-    last_rc = Column(Integer)
-    rate_limit_secs = Column(Integer)
-    retry_after_secs = Column(Integer)
-    result_text = Column(String)
-    params = Column(String)
 
 class WebApiTask(PMTask):
     def __init__(self, pmtm, config):

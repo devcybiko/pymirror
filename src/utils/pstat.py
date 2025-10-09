@@ -3,7 +3,7 @@ import time
 from munch import DefaultMunch
 import psutil
 import resource
-from pymirror.pmlogger import _print
+from pmlogger import _print
 
 def get_pid_by_name(process_name):
     """Find PID by process name"""

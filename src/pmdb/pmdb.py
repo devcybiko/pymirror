@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+import traceback
 from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from utils.utils import from_dict
-from pymirror.pmlogger import _debug
+from pmlogger import _debug, _error, tracebacker
 
 Base = declarative_base()
 
@@ -59,6 +60,7 @@ class PMDb:
         records = self.session.query(table).all()
         return records
 
+    @tracebacker(None)
     def get_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:

@@ -8,7 +8,7 @@ from types import SimpleNamespace
 from jinja2 import Template, StrictUndefined, Environment, Undefined, DebugUndefined
 from munch import DefaultMunch, Munch
 import sqlalchemy
-from pymirror.pmlogger import _debug, _trace, trace, _print, _error
+from pmlogger import _debug, _trace, trace, _print, _error
 from dataclasses import asdict, dataclass, fields, is_dataclass
 from typing import Dict, Any
 import hashlib

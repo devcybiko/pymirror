@@ -13,7 +13,7 @@ import traceback
 from munch import DefaultMunch, Munch
 
 from configs.pmconfig import PMConfig
-from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
+from pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMScreen
 from utils.utils import expand_dataclass, json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch

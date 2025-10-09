@@ -8,7 +8,7 @@ import select
 import glob
 from typing import Optional, List
 from evdev import InputDevice, ecodes
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 class KeyboardDevice:
     """

@@ -2,7 +2,7 @@ from datetime import datetime, timezone, timedelta
 import json
 from sys import stderr
 from dateutil.relativedelta import relativedelta
-from pymirror.pmlogger import _print
+from pmlogger import _print
 from utils.utils import json_dumps
 
 class IcalParser:

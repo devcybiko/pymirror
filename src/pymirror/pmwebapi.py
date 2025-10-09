@@ -6,9 +6,9 @@ import json
 import time
 import inspect
 
-from pymirror.pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
+from pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
 from utils.utils import SafeNamespace, json_loads, to_ms
-from pymirror.pmlogger import pmlogger, PMLoggerLevel, _print
+from pmlogger import pmlogger, PMLoggerLevel, _print
 from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)

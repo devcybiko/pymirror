@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from PIL import Image
 from pmgfxlib import PMBitmap, PMGfx
 from utils.utils import from_dict
-from .pmlogger import _debug
+from pmlogger import _debug
 
 @from_dict
 @dataclass

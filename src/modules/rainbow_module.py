@@ -1,7 +1,7 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMGfx
-from pymirror.pmlogger import _debug, _trace
+from pmlogger import _debug, _trace
 
 class RainbowModule(PMModule):
 	def __init__(self, pm, config):

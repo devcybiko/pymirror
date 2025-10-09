@@ -2,25 +2,10 @@ from datetime import datetime
 import time
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
-from sqlalchemy import Float, Column, Integer, String
-from sqlalchemy.orm import declarative_base
-
+from tables.time_table import TimeTable
 from utils.utils import to_dict
-
-Base = declarative_base()
-
-class TimeTable(Base):
-    __tablename__ = 'time'
-    id = Column(Integer, primary_key=True)
-    epoch = Column(Float)
-    local_date = Column(String)
-    local_time = Column(String)
-    local_datetime = Column(String)
-    utc_date = Column(String)
-    utc_time = Column(String)
-    utc_datetime = Column(String)
 
 class TimeTask(PMTask):
     def __init__(self, pmtm, config):

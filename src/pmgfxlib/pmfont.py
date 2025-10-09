@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import ClassVar, Optional
 from PIL import ImageFont
 from utils.utils import _height, _width
-from pymirror.pmlogger import trace, _debug
+from pmlogger import trace, _debug
 
 @dataclass
 class PMFont:

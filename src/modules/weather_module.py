@@ -5,7 +5,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from configs.module_config import ModuleConfig
 from pymirror.pmcard import PMCard
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 from utils.utils import to_ms, to_secs
 
 class WeatherModule(PMCard):

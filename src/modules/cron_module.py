@@ -1,6 +1,6 @@
 from utils.crontab import Crontab
 from pymirror.pmmodule import PMModule
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 class CronModule(PMModule):
 	def __init__(self, pm, config):

@@ -2,7 +2,7 @@ from dataclasses import fields, is_dataclass
 import pygame
 from configs.module_config import ModuleConfig
 from pymirror.pmmodule import PMModule
-from pymirror.pmlogger import _error, _debug, _print
+from pmlogger import _error, _debug, _print
 
 class SoundModule(PMModule):
     def __init__(self, pm, config: ModuleConfig):

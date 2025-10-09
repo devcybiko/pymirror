@@ -1,6 +1,6 @@
 import os
 from pymirror.pmmodule import PMModule
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 class PymirrorControllerModule(PMModule):
 	def __init__(self, pm, config):

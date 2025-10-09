@@ -7,7 +7,7 @@ import subprocess
 from pymirror.pmmodule import PMModule
 from utils.utils import expand_dict
 from pymirror.pmcard import PMCard
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 class CliModule(PMCard):
 	def __init__(self, pm, config):

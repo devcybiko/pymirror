@@ -1,30 +1,12 @@
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String
-from pmdb.pmdb import Base
-from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
+from tables.ical_table import IcalTable
 from utils.utils import to_naive, make_hashcode, to_munch, to_utc_epoch
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 from utils.ical_parser import IcalParser
 import requests
-
-Base = declarative_base()
-
-class IcalTable(Base):
-    __tablename__ = 'ical'
-    id = Column(Integer, primary_key=True)
-    calendar_name = Column(String)
-    all_day = Column(Boolean)
-    dtstart = Column(DateTime)
-    dtend = Column(DateTime)
-    utc_start = Column(Float)
-    utc_end = Column(Float)
-    summary = Column(String)
-    description = Column(String)
-    rrule = Column(String)
-    uid = Column(String, unique=True)
 
 class IcalTask(PMTask):
     def __init__(self, pmtm, config):

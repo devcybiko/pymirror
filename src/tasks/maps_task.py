@@ -1,9 +1,8 @@
 from os import path
 from pmtaskmgr.pmtask import PMTask
-from pymirror.pmlogger import _debug, _error, _print
+from pmlogger import _debug, _error, _print
 
 from staticmap import StaticMap, CircleMarker
-from PIL import Image
 
 class MapsTask(PMTask):
     def __init__(self, pmtm, config):

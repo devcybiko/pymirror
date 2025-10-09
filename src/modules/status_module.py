@@ -4,7 +4,7 @@ import sys
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from utils.utils import strftime_by_example, glyphs, to_secs
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 class StatusModule(PMModule):
     def __init__(self, pm, config):

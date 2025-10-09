@@ -10,7 +10,7 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from pymirror.pmlogger import _debug, _error, _print
+from pmlogger import _debug, _error, _print
 from utils.utils import json_dumps
 
 # Default IR remote key mapping

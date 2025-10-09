@@ -1,5 +1,5 @@
 import time
-from pymirror.pmlogger import _debug, trace
+from pmlogger import _debug, trace
 from utils.utils import to_ms
 
 class PMTimer:

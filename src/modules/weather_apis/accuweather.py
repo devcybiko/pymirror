@@ -6,7 +6,7 @@ from flask import json
 from pymirror.pmwebapi import PMWebApi
 from utils.utils import SafeNamespace, json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 @dataclass 
 class AccuWeatherParams:

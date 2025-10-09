@@ -11,7 +11,7 @@ from pmdb.pmdb import PMDb
 from pmtaskmgr.pmtask import PMTask
 from utils.crontab import Crontab
 from utils.utils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 @from_dict
 @dataclass
@@ -52,6 +52,8 @@ class PMTaskMgr:
         _debug(config_fname)
         config = json_read(config_fname)
         _debug(config)
+        if not config.get("tasks"):
+            raise Exception("This is not a Task Manager config file")
         # Load secrets from .secrets file if specified
         secrets_path = config.get("secrets")
         if secrets_path:

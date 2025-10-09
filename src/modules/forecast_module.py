@@ -6,7 +6,7 @@ from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from utils.utils import SafeNamespace
-from pymirror.pmlogger import _debug, _print
+from pmlogger import _debug, _print
 
 class ForecastModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):

@@ -14,7 +14,7 @@ from email.mime import image
 from PIL import Image, ImageDraw, ImageColor
 
 from pymirror.pmrect import PMRect
-from pymirror.pmlogger import _trace, _debug
+from pmlogger import _trace, _debug
 from utils.utils import SafeNamespace, non_null
 from .pmgfx import PMGfx
 

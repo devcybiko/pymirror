@@ -1,5 +1,5 @@
 from devices.ir_device import IRDevice
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 from pymirror.pmmodule import PMModule
 
 class IrModule(PMModule):

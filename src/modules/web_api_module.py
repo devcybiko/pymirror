@@ -8,7 +8,7 @@ from pymirror.pmcard import PMCard
 from utils.utils import SafeNamespace, expand_dict, json_loads, to_ms
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
-from pymirror.pmlogger import _debug, _debug, _error, _debug
+from pmlogger import _debug, _debug, _error, _debug
 
 class WebApiModule(PMCard):
     def __init__(self, pm, config):

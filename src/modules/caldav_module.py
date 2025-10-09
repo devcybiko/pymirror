@@ -3,7 +3,7 @@ import os
 from caldav import DAVClient
 import vobject, datetime as dt, pytz
 import dotenv
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 
 dotenv.load_dotenv(".secrets")
 APPLE_ID_EMAIL = os.getenv("APPLE_ID_EMAIL")

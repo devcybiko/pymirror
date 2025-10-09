@@ -4,7 +4,7 @@ from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from utils.utils import SafeNamespace, _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
-from pymirror.pmlogger import _debug
+from pmlogger import _debug
 from pymirror.pmrect import PMRect
 import os
 

@@ -7,6 +7,23 @@ global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _ex
 
 _print = print
 
+import traceback
+from functools import wraps
+
+def tracebacker(dflt=None):
+    """Decorator that catches exceptions, prints traceback, and returns default value"""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                traceback.print_exc()
+                _error(f"Function {func.__name__} failed: {e}")
+                return dflt
+        return wrapper
+    return decorator
+
 def trace_method(func):
     """Decorator to trace individual methods"""
     # check func is already traced
