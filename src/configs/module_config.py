@@ -16,3 +16,4 @@ class ModuleConfig(GfxMixin, FontMixin, TextMixin):
     force_update: bool = False
     debug: bool = False
     force: bool = False
+    clear: bool = False ## clear the framebuffer before writing

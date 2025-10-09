@@ -5,7 +5,7 @@ from datetime import datetime
 from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import SafeNamespace
+from utils.utils import SafeNamespace
 from pymirror.pmlogger import _debug, _print
 
 class ForecastModule(PMCard):

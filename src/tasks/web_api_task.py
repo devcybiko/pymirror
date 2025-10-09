@@ -6,7 +6,7 @@ from pmdb.pmdb import Base
 from sqlalchemy.orm import declarative_base
 
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils.utils import json_dumps, json_loads, to_secs
+from utils.utils import json_dumps, json_loads, to_secs
 from pymirror.pmlogger import _debug, _error
 
 import requests

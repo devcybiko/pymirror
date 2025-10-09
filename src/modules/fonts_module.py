@@ -1,6 +1,6 @@
 import os
 from pymirror.pmmodule import PMModule
-from pymirror.utils.utils import SafeNamespace
+from utils.utils import SafeNamespace
 from pymirror.pmlogger import _debug, _error
 
 class FontsModule(PMModule):

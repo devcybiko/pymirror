@@ -2,7 +2,7 @@ from random import random, randint, choice  # Import the functions you need
 from configs.module_config import ModuleConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from pymirror.utils.utils import SafeNamespace, _height, _str_to_rect, _width
+from utils.utils import SafeNamespace, _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
 from pymirror.pmlogger import _debug
 from pymirror.pmrect import PMRect

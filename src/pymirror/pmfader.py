@@ -1,5 +1,5 @@
 import time
-from pymirror.utils.utils import _sub, _add, _norm, _scale, color_from_tuple, color_to_tuple, tocolor
+from utils.utils import _sub, _add, _norm, _scale, color_from_tuple, color_to_tuple, tocolor
 
 ##
 ## GLS - defunct... maybe remove?

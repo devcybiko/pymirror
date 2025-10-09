@@ -8,7 +8,7 @@ from sqlalchemy import extract, and_, func
 
 from pmdb.pmdb import Base
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import json_read, strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
+from utils.utils import json_read, strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
 from tasks.ical_task import IcalTable
     
 class IcalModule(PMCard):

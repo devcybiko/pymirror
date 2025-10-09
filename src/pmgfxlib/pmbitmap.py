@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageColor
 
 from pymirror.pmrect import PMRect
 from pymirror.pmlogger import _trace, _debug
-from pymirror.utils.utils import SafeNamespace, non_null
+from utils.utils import SafeNamespace, non_null
 from .pmgfx import PMGfx
 
 CENTER = 0

@@ -1,6 +1,6 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
-from pymirror.utils.utils import SafeNamespace, strftime_by_example
+from utils.utils import SafeNamespace, strftime_by_example
 
 class ClockModule(PMModule):
 	def __init__(self, pm, config: SafeNamespace):

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from logging import config
 from pmdb.pmdb import PMDb
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
+from utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
 from tasks.web_api_task import WebApiTable
 from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
 from pymirror.pmlogger import _debug

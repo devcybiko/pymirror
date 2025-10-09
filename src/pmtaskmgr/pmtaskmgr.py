@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 from pmdb.pmdb import PMDb
 from pmtaskmgr.pmtask import PMTask
-from pymirror.utils.crontab import Crontab
-from pymirror.utils.utils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
+from utils.crontab import Crontab
+from utils.utils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
 from pymirror.pmlogger import _debug
 
 @from_dict

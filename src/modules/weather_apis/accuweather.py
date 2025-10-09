@@ -4,7 +4,7 @@ from logging import config
 
 from flask import json
 from pymirror.pmwebapi import PMWebApi
-from pymirror.utils.utils import SafeNamespace, json_dumps
+from utils.utils import SafeNamespace, json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
 from pymirror.pmlogger import _debug
 

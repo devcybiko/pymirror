@@ -5,7 +5,7 @@ from configs.mixins.font_mixin import FontMixin
 from configs.mixins.gfx_mixin import GfxMixin
 from configs.mixins.text_mixin import TextMixin
 from pymirror.pmrect import PMRect
-from pymirror.utils.utils import _NONE_PROXY, from_dict, non_null
+from utils.utils import _NONE_PROXY, from_dict, non_null
 from .pmfont import PMFont
 from .pmutils import to_color
 

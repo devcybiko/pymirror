@@ -3,7 +3,7 @@ import json
 from sys import stderr
 from dateutil.relativedelta import relativedelta
 from pymirror.pmlogger import _print
-from pymirror.utils.utils import json_dumps
+from utils.utils import json_dumps
 
 class IcalParser:
     def __init__(self, lines: list[str]):

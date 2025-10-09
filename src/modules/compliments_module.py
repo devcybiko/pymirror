@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 
 from pymirror.pmmodule import PMModule
-from pymirror.utils.utils import expand_dict
+from utils.utils import expand_dict
 from pymirror.pmcard import PMCard
 
 class ComplimentsModule(PMModule):

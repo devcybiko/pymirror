@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from threading import Thread
 import logging
 
-from pymirror.utils.utils import json_loads
+from utils.utils import json_loads
 
 class PMServer:
     def __init__(self, config, event_queue, host="0.0.0.0", port=8080):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from pymirror.utils.utils import strftime_by_example
+from utils.utils import strftime_by_example
 
 @dataclass
 class IcalConfig:

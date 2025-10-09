@@ -1,6 +1,6 @@
 import time
 from pymirror.pmlogger import _debug, trace
-from pymirror.utils.utils import to_ms
+from utils.utils import to_ms
 
 class PMTimer:
     def __init__(self, delay_time: str | int =0, first_timeout_time=1):

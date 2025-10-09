@@ -16,10 +16,10 @@ from configs.pmconfig import PMConfig
 from pymirror.pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
 from pymirror.pmmodule import PMModule
 from pymirror.pmscreen import PMScreen
-from pymirror.utils.utils import expand_dataclass, json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
+from utils.utils import expand_dataclass, json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
-from pymirror.utils.pstat import get_pstat_delta, get_pids_by_cli
+from utils.pstat import get_pstat_delta, get_pids_by_cli
 
 from events import * # get all events 
 
@@ -223,6 +223,9 @@ class PyMirror:
         for module in modules_changed:
             if (not module.disabled) and module.bitmap:
                 start_time = time.time()  # Start timing the module rendering
+                if module._moddef.clear:
+                    gfx = self.bitmap.gfx.push(module.bitmap.gfx)
+                    self.bitmap.rectangle(self.module.bitmap.erect)
                 module.render(force=self.force_render)
                 end_time = time.time()  # End timing the module rendering
                 if module._time:

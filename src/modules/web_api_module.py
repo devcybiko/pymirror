@@ -5,7 +5,7 @@ import requests
 import copy
 
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import SafeNamespace, expand_dict, json_loads, to_ms
+from utils.utils import SafeNamespace, expand_dict, json_loads, to_ms
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
 from pymirror.pmlogger import _debug, _debug, _error, _debug

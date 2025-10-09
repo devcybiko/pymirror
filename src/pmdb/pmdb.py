@@ -3,7 +3,7 @@ from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from pymirror.utils.utils import from_dict
+from utils.utils import from_dict
 from pymirror.pmlogger import _debug
 
 Base = declarative_base()

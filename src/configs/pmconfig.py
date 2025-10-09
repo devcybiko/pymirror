@@ -1,7 +1,7 @@
 from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
-from pymirror.utils.utils import json_dumps, json_loads, json_read, pascal_to_snake, snake_to_pascal, to_dict
+from utils.utils import json_dumps, json_loads, json_read, pascal_to_snake, snake_to_pascal, to_dict
 from pymirror.pmlogger import trace, trace_method, _trace, _info, _print, _warning
 
 class Object:

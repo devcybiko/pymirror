@@ -8,7 +8,7 @@ from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmtextcomp import PMTextComp
 from pymirror.pmmodule import PMModule
-from pymirror.utils.utils import from_dict, non_null, pprint
+from utils.utils import from_dict, non_null, pprint
 
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):

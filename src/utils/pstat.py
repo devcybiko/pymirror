@@ -1,4 +1,4 @@
-from pymirror.utils.utils import pprint
+from utils.utils import pprint
 import time
 from munch import DefaultMunch
 import psutil

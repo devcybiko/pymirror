@@ -3,7 +3,7 @@ import time
 import copy
 
 from pymirror.pmcard import PMCard
-from pymirror.utils.utils import expand_dict, json_loads, to_dict
+from utils.utils import expand_dict, json_loads, to_dict
 from pymirror.pmtimer import PMTimer
 from pymirror.pmlogger import _debug
 from tasks.web_api_task import WebApiTable

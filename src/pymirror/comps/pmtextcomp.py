@@ -4,7 +4,7 @@ from pymirror.pmrect import PMRect
 from pymirror.pmtimer import PMTimer
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
-from pymirror.utils.utils import SafeNamespace, non_null
+from utils.utils import SafeNamespace, non_null
 
 class PMTextComp(PMComponent):
     def __init__(self, gfx: PMGfx, config: TextConfig, x0: int = None, y0: int = None, width: int = None, height: int = None):
