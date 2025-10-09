@@ -7,10 +7,11 @@ global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _ex
 
 _print = print
 
+import time
 import traceback
 from functools import wraps
 
-def tracebacker(dflt=None):
+def tracebacker(dflt=None, delay=1.0):
     """Decorator that catches exceptions, prints traceback, and returns default value"""
     def decorator(func):
         @wraps(func)
@@ -20,6 +21,7 @@ def tracebacker(dflt=None):
             except Exception as e:
                 traceback.print_exc()
                 _error(f"Function {func.__name__} failed: {e}")
+                time.sleep(delay)
                 return dflt
         return wrapper
     return decorator

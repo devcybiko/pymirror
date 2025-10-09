@@ -9,6 +9,25 @@ from pmlogger import _debug, _error, tracebacker
 
 Base = declarative_base()
 
+class NullRecord:
+    """Null object that mimics a database record"""
+    def __init__(self, table_class=None):
+        self.table_class = table_class
+    
+    def __getattr__(self, name):
+        # Return None for any attribute access
+        return None
+    
+    def __bool__(self):
+        # Makes it falsy like None
+        return False
+    
+    def __repr__(self):
+        return f"<NullRecord for {self.table_class.__name__ if self.table_class else 'Unknown'}>"
+
+global null_record
+null_record = NullRecord()
+
 @from_dict
 @dataclass
 class PMDbConfig:
@@ -56,11 +75,12 @@ class PMDb:
         record = self.session.query(table).get(key)
         return record
 
+    @tracebacker([])
     def get_all(self, table: Table) -> list["Table"]:
         records = self.session.query(table).all()
         return records
 
-    @tracebacker(None)
+    @tracebacker(null_record)
     def get_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
@@ -68,6 +88,7 @@ class PMDb:
         records = query.first()
         return records
 
+    @tracebacker([])
     def get_all_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
