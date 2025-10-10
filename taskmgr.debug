@@ -6,6 +6,7 @@ else
     CONFIG="$1"
 fi
     rm ./maps/*
+    source .venv/bin/activate
     PYTHONPATH=src \
         python3 -u -m pmtaskmgr.pmtaskmgr \
         --config "$CONFIG"

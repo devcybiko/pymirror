@@ -5,7 +5,7 @@ if [ $# -eq 0 ]; then
 else
     CONFIG="$1"
 fi
-
+source .venv/bin/activate
 while true; do
     PYTHONPATH=src \
         python3 -u -m pmtaskmgr.pmtaskmgr \

@@ -8,6 +8,7 @@ fi
 
 mkdir -p ./src/pmserver/static
 mkdir -p ./caches/
+source .venv/bin/activate
 
 while true; do
     PYTHONPATH=src \
