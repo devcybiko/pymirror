@@ -40,7 +40,6 @@ class IcalModule(PMCard):
                     ## GLS HACK: skips extra Meetup events
                     continue
                 dups.add(event.summary)
-                print("all day event", event.dtstart, event.summary)
                 events.append(event)
         for event in self.daily_events:
             if now.date() == event.get("dtstart").date():
