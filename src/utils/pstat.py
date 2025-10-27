@@ -3,7 +3,7 @@ import time
 from munch import DefaultMunch
 import psutil
 import resource
-from pmlogger import _print
+from pmlogger import _print, _debug
 
 def get_pid_by_name(process_name):
     """Find PID by process name"""
@@ -17,7 +17,7 @@ def get_pids_by_cli(process_name):
     pids = []
     for proc in psutil.process_iter(['pid', 'cmdline']):
         if proc.info["cmdline"] and process_name in " ".join(proc.info['cmdline']):
-            _print(">>>", proc.info["cmdline"])
+            _debug(">>>", proc.info["cmdline"])
             pids.append(proc.pid)
     return pids
 
