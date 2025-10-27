@@ -2,7 +2,7 @@
     "module": {
         "class": "web_db",
         "name": "news",
-        "position": "0.67,0.15,1.00,0.95",
+        "position": "0.68,0.15,0.99,0.95",
         "text_color": "#000000",
         "text_bg_color": "#c0c0c0",
         "font_name": "Roboto-Regular",
@@ -26,13 +26,15 @@
             "text_color": "#fff",
             "text_bg_color": "#066",
             "valign": "center",
-            "height": 160
+            "height": 280
         },
         "body": {
             "font_name": "Roboto-Regular",
             "font_size": 40,
-            "text_color": "#0ff",
-            "text_bg_color": "#000"
+            "text_color": "#ccc",
+            "text_bg_color": "#000",
+            "valign": "top",
+            "halign": "left",
         },
         "footer": {
             "font_name": "Roboto-Regular",
@@ -40,7 +42,7 @@
             "text_color": "#000",
             "text_bg_color": "#088",
             "valign": "bottom",
-            "height": 128
+            "height": 64
         }
     }
 }
