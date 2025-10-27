@@ -167,7 +167,7 @@ class PMBitmap:
         results = []
         (x_min, baseline, line_width, font_height) = self.gfx.font.getbbox("M")
         for multi_line in lines:
-            multi_lines = multi_line.split("\n")
+            multi_lines = multi_line.splitlines()
             for line in multi_lines:
                 results.append(line)
                 (x_min, baseline, line_width, _font_height) = self.gfx.font.getbbox(line)
@@ -192,13 +192,13 @@ class PMBitmap:
         ## if you want a cliprect, create a PMBitmap with the cliprect size
         ## then render it and paste it into the parent PMBitmap
         rect = PMRect(*rect)  # Ensure rect is a PMRect object
+        x0, y0, x1, y1 = rect
         if lines == None:
-            return
+            return (x0, y0)
         if isinstance(lines, str):
-            lines = [lines]
+            lines = [lines.strip()]
         valign = {"center": CENTER, "top": TOP, "bottom": BOTTOM}[valign or "center"]
         halign = {"center": CENTER, "left": LEFT, "right": RIGHT}[halign or "center"]
-        x0, y0, x1, y1 = rect
         if self.gfx._text_bg_color:
             self._draw.rectangle(rect, fill=self.gfx._text_bg_color)
         gfx = self.gfx
@@ -218,29 +218,26 @@ class PMBitmap:
                 f"Invalid valign '{type(valign), valign}' in text_box, using 'center' instead."
             )
 
-        for multi_line in lines:
-            multi_lines = multi_line.split("\n")
-            for line in multi_lines:
-                if text_y0 + font_height * clip > y1:
-                    break
-                (_x_min, _baseline, width, _font_height) = font.getbbox(line)
-                if halign == CENTER:
-                    text_x0 = x0 + int((rect.width - width) / 2)
-                elif halign == LEFT:
-                    text_x0 = x0
-                elif halign == RIGHT:
-                    text_x0 = x0 + int(rect.width - width)
-                else:
-                    _debug(
-                        f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead."
-                    )
-                self._draw.text(
-                    (text_x0, text_y0 - baseline + self.gfx.font_y_offset),
-                    line,
-                    fill=(gfx._text_color),
-                    font=gfx.font._font,
-                )
-                text_y0 += font_height
+        for line in lines:
+            if text_y0 + font_height * clip > y1:
+                break
+            (_x_min, _baseline, width, _font_height) = font.getbbox(line)
+            if halign == CENTER:
+                text_x0 = x0 + int((rect.width - width) / 2)
+            elif halign == LEFT:
+                text_x0 = x0
+            elif halign == RIGHT:
+                text_x0 = x0 + int(rect.width - width)
+            else:
+                _debug(f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead.")
+            self._draw.text(
+                (text_x0, text_y0 - baseline + self.gfx.font_y_offset),
+                line,
+                fill=(gfx._text_color),
+                font=gfx.font._font,
+            )
+            text_y0 += font_height + baseline
+        return (x0, text_y0)
 
     def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:

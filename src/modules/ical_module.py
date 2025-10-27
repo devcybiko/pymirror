@@ -31,8 +31,18 @@ class IcalModule(PMCard):
 
     def _date_in(self, now):
         events = []
+        dups = set()
+        for event in self.all_day_events:
+            if now.date() == event.get("dtstart").date():
+                if event.summary in dups:
+                    continue
+                dups.add(event.summary)
+                print("all day event", event.dtstart, event.summary)
+                events.append(event)
         for event in self.daily_events:
             if now.date() == event.get("dtstart").date():
+                if event.summary in dups:
+                    continue
                 events.append(event)
         dtstart_st = now.strftime("%Y-%m-%d")
         dtstart_day = now.strftime("%m-%d")
@@ -43,6 +53,7 @@ class IcalModule(PMCard):
         return events
 
     def render_grid(self, force) -> bool:
+        text_colors = ["yellow", "cyan"]
         w = self.bitmap.width
         h = self.bitmap.height
         x = 0
@@ -52,11 +63,11 @@ class IcalModule(PMCard):
         header_height = self.bitmap.gfx.font.height + 2
         dow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         gfx = self.bitmap.gfx_push()
-        gfx.text_color, gfx.text_bg_color = gfx.text_bg_color, gfx.text_color
-        gfx.bg_color = None
         for col in range(0, 7):
             if days == 5 and (col == 0 or col == 6):
                 continue
+            gfx.text_color = "black"
+            gfx.text_bg_color = "white"
             self.bitmap.text_box((x, y, x + box_width - 1, y + header_height - 1), dow[col], halign="center", valign="center", use_baseline=True)
             x += box_width
         y += header_height
@@ -73,30 +84,43 @@ class IcalModule(PMCard):
         dow = now.weekday()
         then = now - timedelta(days=dow_offset[dow])
         now = then
-        text_color, text_bg_color = "yellow", gfx.text_color
+        padding = gfx.font.width // 2
         for row in range(0, self._ical.rows):
             for col in range(0, 7):
-                gfx.text_color = text_color
-                gfx.text_bg_color = text_bg_color
                 if now.date() == today.date():
-                    gfx.text_bg_color = "#444"
+                    self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1), fill="#444")
                 events = self._date_in(now)
                 date = now
                 now += timedelta(hours=24)
                 if days == 5 and (col == 0 or col == 6):
                     continue
-
-                self.bitmap.text_box((x, y, x + box_width - 1, y + box_height - 1), str(date.month)+"/"+str(date.day), halign="right", valign="top", use_baseline=True)
+                line_no = 0
+                gfx.text_color = "orange"
+                gfx.text_bg_color = None
+                self.bitmap.text_box((x + padding, y, x + box_width - padding, y + box_height - 1), str(date.month)+"/"+str(date.day), halign="right", valign="top", use_baseline=True)
                 yy = y + header_height
                 for event in events:
-                    if type(event) is str:
+                    if event['dtstart'].strftime("%H:%M") == "00:00":
                         # holiday
-                        self.bitmap.gfx.text_color = "cyan"
-                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event}", halign="left", valign="top", use_baseline=True)                 
+                        gfx.text_color = "#0f0"
+                        gfx.text_bg_color = None
+                        self.bitmap.text_box((x + padding, y, x + box_width - 1, yy + header_height - 1), f"<{event.summary}>", halign="left", valign="top", use_baseline=True)
+                        # yy += gfx.font.height // 2
                     else:
-                        self.bitmap.gfx.text_color = text_color
-                        self.bitmap.text_box((x, yy, x + box_width - 1, yy + header_height - 1), f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}", halign="left", valign="top", use_baseline=True)
-                    yy += header_height
+                        if event['dtstart'].strftime("%H:%M") == "00:00":
+                            continue
+                        if "Ticket:" in event.summary:
+                            ## GLS HACK: skips extra Meetup events
+                            continue
+                        rect = (x + padding, yy, x + box_width - padding, yy + box_height)
+                        msg = f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
+                        lines = gfx.font.text_split(msg, rect=rect, split="words")
+                        gfx.text_color = text_colors[line_no % len(text_colors)]
+                        gfx.text_bg_color = None
+                        gfx.bg_color = None
+                        _, yy = self.bitmap.text_box(rect, lines[0:3], halign="left", valign="top", use_baseline=True)
+                        yy += gfx.font.height // 2
+                        line_no += 1
                 self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1))
                 x += box_width
             y += box_height
@@ -164,6 +188,7 @@ class IcalModule(PMCard):
             self.daily_events.extend(events)
         all_events = []
         for event in self.daily_events:
+            if event.get('dtstart').strftime("%H:%M") == "00:00": continue
             event_str = f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
             event.event_str = event_str
             all_events.append(event)
