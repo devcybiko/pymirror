@@ -2,7 +2,7 @@
     "module": {
         "class": "ical",
         "name": "this_month",
-        "position": "0.75,0.15,1.00,0.60",
+        "position": "0.75,0.15,1.00,0.67",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,

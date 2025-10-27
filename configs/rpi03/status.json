@@ -3,8 +3,8 @@
         "class": "status",
         "disabled": false,
         "name": "status",
-        "position": "status_strip",
-        "font_size": 32
+        "position": "0.75,0.97,1.00,1.00",
+        "font_size": 26
     },
     "status": {
         "valign": "bottom",

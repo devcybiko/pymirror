@@ -2,7 +2,7 @@
     "module": {
         "class": "ical",
         "name": "holidays",
-        "position": "0.75,0.60,1.00,0.90",
+        "position": "0.75,0.67,1.00,0.97",
         "text_color": "#fff",
         "text_bg_color": "#000",
         "font_size": 24,

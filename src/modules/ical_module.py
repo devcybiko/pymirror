@@ -36,12 +36,18 @@ class IcalModule(PMCard):
             if now.date() == event.get("dtstart").date():
                 if event.summary in dups:
                     continue
+                if "Ticket:" in event.summary:
+                    ## GLS HACK: skips extra Meetup events
+                    continue
                 dups.add(event.summary)
                 print("all day event", event.dtstart, event.summary)
                 events.append(event)
         for event in self.daily_events:
             if now.date() == event.get("dtstart").date():
                 if event.summary in dups:
+                    continue
+                if "Ticket:" in event.summary:
+                    ## GLS HACK: skips extra Meetup events
                     continue
                 events.append(event)
         dtstart_st = now.strftime("%Y-%m-%d")
@@ -108,9 +114,6 @@ class IcalModule(PMCard):
                         # yy += gfx.font.height // 2
                     else:
                         if event['dtstart'].strftime("%H:%M") == "00:00":
-                            continue
-                        if "Ticket:" in event.summary:
-                            ## GLS HACK: skips extra Meetup events
                             continue
                         rect = (x + padding, yy, x + box_width - padding, yy + box_height)
                         msg = f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
@@ -189,10 +192,17 @@ class IcalModule(PMCard):
         all_events = []
         for event in self.daily_events:
             if event.get('dtstart').strftime("%H:%M") == "00:00": continue
+            if "Ticket:" in event.summary:
+                ## GLS HACK: skips extra Meetup events
+                continue
+
             event_str = f"{event.get('dtstart').strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
             event.event_str = event_str
             all_events.append(event)
         for event in self.all_day_events:
+            if "Ticket:" in event.summary:
+                ## GLS HACK: skips extra Meetup events
+                continue
             if event.description != "\\n":
                 ## HACK: holidays in Apple iCal have a "mock" newline
                 ## HACK" "regular" events do not

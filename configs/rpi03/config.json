@@ -42,7 +42,7 @@
     "./configs/rpi03/cron.json",
     "./configs/rpi03/sound.json",
     "./configs/rpi03/date.json",
-    // "./configs/rpi03/time.json",
+    "./configs/rpi03/time.json",
     "./configs/rpi03/ical2.json",
     "./configs/rpi03/ical_holidays.json",
     "./configs/rpi03/ical_this_month.json",
