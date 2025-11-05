@@ -14,7 +14,8 @@
         "number_days": 60,
         "render_mode": "grid",
         "week_mode": 5,
-        "row_height": 220,
-        "holiday_files": ["./holiday_files/birthdays.json"]
+        "holiday_files": ["./holiday_files/birthdays.json"],
+        "prev_weeks": 1,
+        "rows": 5
     }
 }

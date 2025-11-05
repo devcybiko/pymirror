@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
 
 from pmtaskmgr.pmtask import PMTask
@@ -55,7 +55,8 @@ class IcalTask(PMTask):
             rc = response.status_code
             if rc == 200:
                 ical_parser = IcalParser(response.text.splitlines())
-                now = datetime.now().strftime("%Y-%m-%d")
+                _now = datetime.now() - timedelta(days=30)
+                now = _now.strftime("%Y-%m-%d")
                 then = "2100-12-31"
                 events = ical_parser.parse(now, then)
                 self._add_new_events(events)

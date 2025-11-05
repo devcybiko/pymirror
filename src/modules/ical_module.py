@@ -4,6 +4,7 @@
 from collections import defaultdict
 from dataclasses import is_dataclass
 from datetime import datetime, timedelta
+from arrow import now
 from sqlalchemy import extract, and_, func
 
 from pmdb.pmdb import Base
@@ -21,6 +22,8 @@ class IcalModule(PMCard):
         self.daily_events = []
         self.all_day_events = []
         self.holidays = defaultdict(list)
+        self.prev_weeks = self._ical.prev_weeks
+        self.rows = self._ical.rows
         self._read_holidays()
 
     def _read_holidays(self):
@@ -57,83 +60,137 @@ class IcalModule(PMCard):
             events.append(holiday)
         return events
 
-    def render_grid(self, force) -> bool:
-        text_colors = ["yellow", "cyan"]
-        w = self.bitmap.width
-        h = self.bitmap.height
-        x = 0
-        y = 0
-        days = self._ical.week_mode
-        box_width = int(w/days) - 1
-        header_height = self.bitmap.gfx.font.height + 2
+    def _render_header(self, x, y, w, h):
         dow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-        gfx = self.bitmap.gfx_push()
         for col in range(0, 7):
-            if days == 5 and (col == 0 or col == 6):
+            if self.days == 5 and (col == 0 or col == 6):
                 continue
-            gfx.text_color = "black"
-            gfx.text_bg_color = "white"
-            self.bitmap.text_box((x, y, x + box_width - 1, y + header_height - 1), dow[col], halign="center", valign="center", use_baseline=True)
-            x += box_width
-        y += header_height
-        if self._ical.row_height == None:
-            box_height = box_width // 2
-        elif self._ical.row_height == 0:
-            box_height = int(h / self._ical.rows)
+            self.gfx.text_color = "black"
+            self.gfx.text_bg_color = "white"
+            self.bitmap.text_box((x, y, x + self.box_width - 1, y + self.header_height - 1), dow[col], halign="center", valign="center", use_baseline=True)
+            x += self.box_width
+        y += self.header_height
+        return x, y
+
+    def _render_holiday_event(self, x, yy, event):
+        today = datetime.now().astimezone()
+        if event['dtstart'].date() < today.date():
+            self.gfx.text_color = "gray"
         else:
-            box_height = self._ical.row_height
+            self.gfx.text_color = "#0f0"
+        self.gfx.text_bg_color = None
+        _, yy = self.bitmap.text_box((x + self.h_padding, yy, x + self.box_width - 1, yy + self.header_height - 1), f"<{event.summary}>", halign="left", valign="top", use_baseline=True)
+        yy += self.v_padding
+        return yy
+
+    def _render_grid(self, force) -> bool:
+        self.bitmap.clear()
+        x, y, w, h = self._calc_initial_values()
+        x, y = self._render_header(x, y, w, h)
         x = 0
-        now = datetime.now().astimezone()
-        today = now
-        dow_offset = [1, 2, 3, 4, 5, 6, 0]
-        dow = now.weekday()
-        then = now - timedelta(days=dow_offset[dow])
-        now = then
-        padding = gfx.font.width // 2
-        for row in range(0, self._ical.rows):
+        now = self._calc_start_dates()
+        self.h_padding = self.gfx.font.width // 2
+        for row in range(0, self.rows):
+            self._highlight_this_week(x, y, now)
             for col in range(0, 7):
-                if now.date() == today.date():
-                    self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1), fill="#444")
                 events = self._date_in(now)
-                date = now
-                now += timedelta(hours=24)
-                if days == 5 and (col == 0 or col == 6):
+                if self.days == 5 and (col == 0 or col == 6):
+                    now += timedelta(days=1)
                     continue
                 line_no = 0
-                gfx.text_color = "orange"
-                gfx.text_bg_color = None
-                self.bitmap.text_box((x + padding, y, x + box_width - padding, y + box_height - 1), str(date.month)+"/"+str(date.day), halign="right", valign="top", use_baseline=True)
-                yy = y + header_height
+                yy = self._render_date(x, y, self.h_padding, now)
                 for event in events:
                     if event['dtstart'].strftime("%H:%M") == "00:00":
-                        # holiday
-                        gfx.text_color = "#0f0"
-                        gfx.text_bg_color = None
-                        self.bitmap.text_box((x + padding, y, x + box_width - 1, yy + header_height - 1), f"<{event.summary}>", halign="left", valign="top", use_baseline=True)
-                        # yy += gfx.font.height // 2
+                        self._render_holiday_event(x, y, event)
                     else:
-                        if event['dtstart'].strftime("%H:%M") == "00:00":
-                            continue
-                        rect = (x + padding, yy, x + box_width - padding, yy + box_height)
-                        msg = f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
-                        lines = gfx.font.text_split(msg, rect=rect, split="words")
-                        gfx.text_color = text_colors[line_no % len(text_colors)]
-                        gfx.text_bg_color = None
-                        gfx.bg_color = None
-                        _, yy = self.bitmap.text_box(rect, lines[0:3], halign="left", valign="top", use_baseline=True)
-                        yy += gfx.font.height // 2
+                        yy = self._render_event(x, line_no, yy, event)
                         line_no += 1
-                self.bitmap.rectangle((x, y, x + box_width - 1, y + box_height - 1))
-                x += box_width
-            y += box_height
-            if y + box_height > h:
+                self.bitmap.rectangle((x, y, x + self.box_width - 1, y + self.box_height - 1), fill=None)
+                x += self.box_width
+                now += timedelta(days=1)
+            y += self.box_height
+            if y + self.box_height > h:
                 break
             x = 0
         self.bitmap.gfx_pop()
 
+    def _calc_initial_values(self):
+        self.gfx = self.bitmap.gfx_push()
+        self.text_colors = ["yellow", "cyan"]
+        w = self.bitmap.width
+        h = self.bitmap.height
+        x = 0
+        y = 0
+        self.days = self._ical.week_mode
+        self.box_width = int(w/self.days) - 1
+        self.h_padding = self.gfx.font.width // 2
+        self.v_padding = self.gfx.font.height // 2
+        self.header_height = self.bitmap.gfx.font.height + 2
+        if self._ical.rows:
+            self.box_height = int((h - self.header_height) / self._ical.rows)
+            self.rows = self._ical.rows
+        else:
+            self.box_height = int(self.box_width * 3 / 4) ## initial aspect ratio 4:3
+            # self.box_height = int(self.box_width * 9 / 16) ## initial aspect ratio 16:9
+            self.rows = int((h - self.header_height) / self.box_height)
+            self.box_height = int((h - self.header_height) / self.rows) ## recalc to fit exactly
+        print(f"ICAL GRID: box_width={self.box_width}, box_height={self.box_height}, days={self.days}")
+        return x,y,w,h
+
+    def _render_event(self, x, line_no, yy, event):
+        rect = (x + self.h_padding, yy, x + self.box_width - self.h_padding, yy + self.box_height)
+        msg = f"{event['dtstart'].strftime(self.time_format)}: {event.get('name', event.get('summary', 'none'))}"
+        lines = self.gfx.font.text_split(msg, rect=rect, split="words")
+        today = datetime.now().astimezone()
+        if event['dtstart'].date() < today.date():
+            self.gfx.text_color = "gray"
+        else:
+            self.gfx.text_color = self.text_colors[line_no % len(self.text_colors)]
+        self.gfx.text_bg_color = None
+        self.gfx.bg_color = None
+        _, yy = self.bitmap.text_box(rect, lines[0:3], halign="left", valign="top", use_baseline=True)
+        yy += self.v_padding
+        return yy
+
+    def _render_date(self, x, y, padding, date):
+        today = datetime.now().astimezone()
+        if date.date() < today.date():
+            self.gfx.text_color = "gray"
+        else:
+            self.gfx.text_color = "orange"
+        self.gfx.text_bg_color = None
+        _, yy = self.bitmap.text_box((x + padding, y, x + self.box_width - padding, y + self.box_height - 1), str(date.month)+"/"+str(date.day), halign="right", valign="top", use_baseline=True)
+        yy += self.v_padding
+        return yy
+
+    def _highlight_this_week(self, x, y, beginning_of_week):
+        today = datetime.now().astimezone()
+        if (today.date() - beginning_of_week.date()).days < 0:
+            return
+        if (today.date() - beginning_of_week.date()).days > 7:
+            return
+        now = beginning_of_week
+        for i in range(0, 7):
+            if self.days == 5 and (i == 0 or i == 6):
+                now += timedelta(days=1)
+                continue
+            if now.date() == today.date():
+                self.bitmap.rectangle((x, y, x + self.box_width - 1, y + self.box_height - 1), fill="#333")
+            # else:
+            #     self.bitmap.rectangle((x, y, x + self.box_width - 1, y + self.box_height - 1), fill="#444")
+            now += timedelta(days=1)
+            x += self.box_width
+
+    def _calc_start_dates(self):
+        dow_offset = [1, 2, 3, 4, 5, 6, 0]
+        now = datetime.now().astimezone() - timedelta(weeks=self.prev_weeks)
+        dow = now.weekday()
+        beginning_of_week = now - timedelta(days=dow_offset[dow])
+        return beginning_of_week
+
     def render(self, force: bool) -> bool:
         if self._ical.render_mode == "grid":
-            self.render_grid(force)
+            self._render_grid(force)
         else:
             super().render(force)
 
@@ -143,7 +200,7 @@ class IcalModule(PMCard):
             # return is_dirty # early exit if not timed out
         self.timer.reset(self._ical.refresh_time)
 
-        now = datetime.now()
+        now = datetime.now() - timedelta(weeks=self.prev_weeks)
         later = (now + timedelta(hours=24 * self._ical.number_days))
         now_epoch = to_utc_epoch(now)
         later_epoch = to_utc_epoch(later)

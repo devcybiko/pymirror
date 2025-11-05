@@ -17,6 +17,6 @@ class IcalConfig:
     all_day_format: str = strftime_by_example("Jan-1")
     render_mode: str = "card"
     week_mode: int = 7
-    row_height: int = None
-    rows: int = 1000
+    rows: int = None
     holiday_files: list = field(default_factory=list)
+    prev_weeks: int = 0
