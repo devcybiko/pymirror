@@ -72,6 +72,7 @@ class TuroModule(PMModule):
         y += self.dims.padding
         month = self._compute_month_values(_month, start_date, end_date, x, y, w, h)
         dtrip = self._compute_dtrip_values(y, month)
+        self._render_weekend_markers(gfx, month)
         for trip in vehicle_trips:
             trip_start = max(trip.trip_start, month.start)
             trip_end = min(trip.trip_end, month.end)
@@ -89,6 +90,16 @@ class TuroModule(PMModule):
         self.bitmap.rectangle((month.x, _y, month.x + month.w, dtrip.y), outline="white", fill=None)
         self.bitmap.gfx_pop()
         return dtrip.y - _y
+
+    def _render_weekend_markers(self, gfx, month):
+        self.bitmap.gfx_push()
+        self.bitmap.gfx.color = "lightgray"
+        for day in range((month.end - month.start).days + 1):
+            trip_day = month.start + timedelta(days=day)
+            if trip_day.weekday() >= 5: # Saturday or Sunday
+                x = month.x + round(day * month.pixels_per_day)
+                self.bitmap.rectangle((x, month.y, x + month.pixels_per_day, month.y + self.dims.month_h), fill="lightgray")
+        self.bitmap.gfx_pop()
 
     def _render_earnings_per_mile(self, gfx, dtrip, trip):
         gfx.set_font(None, self.dims.stats_font_size)
