@@ -1,0 +1,12 @@
+{
+    "module": {
+        "class": "clock",
+        "name": "date",
+        "position": "0.00,0.00,0.33,0.15",
+        "font_name": "7segment.ttf",
+        "font_size": 128
+    },
+    "clock": {
+        "date_format": "%Y-%m-%d"
+    }
+}

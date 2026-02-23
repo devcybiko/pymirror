@@ -113,8 +113,8 @@ class PMBitmap:
             (0, 0, self._img.width-1, self._img.height-1), fill=self.gfx.bg_color
         )
 
-    def line(self, rect: tuple):
-        self._draw.line(rect, fill=self.gfx.color, width=self.gfx.line_width)
+    def line(self, rect: tuple, color=None, width=None) -> None:
+        self._draw.line(rect, fill=color or self.gfx.color, width=width or self.gfx.line_width)
 
     def ellipse(self, rect: tuple, fill=-1) -> None:
         if fill == -1:
@@ -135,20 +135,14 @@ class PMBitmap:
         bbox = (x0 - r, y0 - r, x0 + r, y0 + r)
         self.ellipse(bbox, fill=fill)
 
-    def rectangle(self, rect: tuple, fill=-1) -> None:
+    def rectangle(self, rect: tuple, outline = -1, fill=-1) -> None:
+        if outline == -1:
+            outline = self.gfx.color
         if fill == -1:
-            # Use the gfx.background color if specified
-            self._draw.rectangle(
-                rect,
-                outline=self.gfx.color,
-                width=self.gfx.line_width,
-                fill=self.gfx.bg_color,
-            )
-        else:
-            # Use the specified fill color
-            self._draw.rectangle(
-                rect, outline=self.gfx.color, width=self.gfx.line_width, fill=fill
-            )
+            fill = self.gfx.bg_color
+        self._draw.rectangle(
+            rect, outline=outline or self.gfx.color, width=self.gfx.line_width, fill=fill
+        )
 
     def text(self, msg: str, x0: int, y0: int, fill=-1) -> None:
         if fill == -1:
@@ -159,6 +153,7 @@ class PMBitmap:
         else:
             # Use the specified fill color
             self._draw.text((x0, y0+self.gfx.font_y_offset), msg, font=self.gfx.font._font, fill=fill)
+        return self.gfx.font.height
 
     def calculate_text_box(self, lines: str) -> tuple[str, tuple[int, int]]:
         """Calculate the size of the text."""

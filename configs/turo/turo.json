@@ -1,0 +1,11 @@
+{
+    "module": {
+        "class": "turo",
+        "name": "turo",
+        "position": "0.01,0.20,0.99,1.00",
+    },
+    "turo": {
+        "database": "/Users/greg/git/turo-dashboard/turo.sqlite",
+        "refresh_time": "60s"
+    }
+}

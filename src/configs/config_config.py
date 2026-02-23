@@ -15,6 +15,7 @@ from configs.pmdb_config import PmdbConfig
 from configs.slideshow_config import SlideshowConfig  # Missing import
 from configs.status_config import StatusConfig        # Missing import
 from configs.text_config import TextConfig            # Missing import
+from configs.turo_config import TuroConfig
 from configs.weather_config import WeatherConfig      # Missing import
 from configs.web_db_config import WebDbConfig         # Missing import
 
@@ -36,6 +37,7 @@ class ConfigConfig:
     slideshow: SlideshowConfig = None
     status: StatusConfig = None
     text: TextConfig = None
+    turo: TuroConfig = None
     weather: WeatherConfig = None
     web_db: WebDbConfig = None
 

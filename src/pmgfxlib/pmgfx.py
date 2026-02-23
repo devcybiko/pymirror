@@ -15,8 +15,13 @@ class PMGfx(GfxMixin, TextMixin, FontMixin):
     _color: tuple = (255, 255, 255) 
     _bg_color: tuple = (0, 0, 0) 
     _text_color: tuple = (255, 255, 255)
-    _text_bg_color: tuple = None  
+    _text_bg_color: tuple = None
+    _text_base_font_size: int = 24
+    _text_base_font_name: str = "DejaVuSans"
     font: PMFont = None
+
+    def __post_init__(self):
+        self.set_font(self._text_base_font_name, self._text_base_font_size)
     
     def merge(self, config: dataclass) -> "PMGfx":
         if isinstance(config, TextMixin):
@@ -42,11 +47,13 @@ class PMGfx(GfxMixin, TextMixin, FontMixin):
 
         return self
 
-    def set_font(self, name: str, size: int) -> None:
+    def set_font(self, name: str, size: int | float | None) -> None:
         """Set the font for the graphics context."""
-        self.font_name = name
-        self.font_size = size
-        self.font = PMFont(name, size)
+        self.font_name = name or self.font_name or self._text_base_font_name
+        if type(size) == float:
+            size = int(size * float(self._text_base_font_size))
+        self.font_size = size or self.font_size or self._text_base_font_size
+        self.font = PMFont(self.font_name, self.font_size)
     
     @property
     def color(self) -> tuple[int, int, int]:
