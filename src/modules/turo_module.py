@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from pydoc import text
 from dateutil.relativedelta import relativedelta
 
+import json
 from munch import DefaultMunch
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
@@ -46,7 +47,7 @@ class TuroModule(PMModule):
         month.days = (month.end - month.start).days + 1
         month.pixels_per_day = w / ((end_date - start_date).days + 1)
         month.x = x + round((month.start - start_date).days * month.pixels_per_day)
-        month.y = y + self.dims.padding
+        month.y = y
         month.w = month.days * month.pixels_per_day
         month.h = 0
         return month
@@ -66,13 +67,13 @@ class TuroModule(PMModule):
             dtrip.end_days = (trip_end - month.start).days
         return dtrip
     
-    def _render_month(self, x, y, w, h, start_date, end_date, _month, vehicle_trips, status_list=["Booked", "Completed", "In-progress"]):
+    def _render_month(self, x, y, w, h, cal_start, cal_end, _month, vehicle_trips, status_list=["Booked", "Completed", "In-progress"]):
         _y = y
-        gfx = self.bitmap.gfx_push()
-        y += self.dims.padding
-        month = self._compute_month_values(_month, start_date, end_date, x, y, w, h)
+        bm = self.bitmap
+        gfx = bm.gfx_push()
+        month = self._compute_month_values(_month, cal_start, cal_end, x, y, w, h)
         dtrip = self._compute_dtrip_values(y, month)
-        self._render_weekend_markers(gfx, month)
+        y += self.dims.padding
         for trip in vehicle_trips:
             trip_start = max(trip.trip_start, month.start)
             trip_end = min(trip.trip_end, month.end)
@@ -87,19 +88,20 @@ class TuroModule(PMModule):
             dtrip.y = self._render_earnings_per_mile(gfx, dtrip, trip)
             dtrip.y = self._render_vehicle_value(gfx, dtrip, trip)
         dtrip.y += self.dims.padding
-        self.bitmap.rectangle((month.x, _y, month.x + month.w, dtrip.y), outline="white", fill=None)
-        self.bitmap.gfx_pop()
+        bm.rectangle((month.x, _y, month.x + month.w, dtrip.y), outline="white", fill=None)
+        bm.gfx_pop()
         return dtrip.y - _y
 
-    def _render_weekend_markers(self, gfx, month):
-        self.bitmap.gfx_push()
-        self.bitmap.gfx.color = "lightgray"
+    def _render_weekend_markers(self, month, dh):
+        bm = self.bitmap
+        gfx = bm.gfx_push()
+        gfx.color = None
         for day in range((month.end - month.start).days + 1):
             trip_day = month.start + timedelta(days=day)
             if trip_day.weekday() >= 5: # Saturday or Sunday
                 x = month.x + round(day * month.pixels_per_day)
-                self.bitmap.rectangle((x, month.y, x + month.pixels_per_day, month.y + self.dims.month_h), fill="lightgray")
-        self.bitmap.gfx_pop()
+                bm.rectangle((x, month.y, x + month.pixels_per_day, month.y + dh), fill="#333", outline=None)
+        bm.gfx_pop()
 
     def _render_earnings_per_mile(self, gfx, dtrip, trip):
         gfx.set_font(None, self.dims.stats_font_size)
@@ -127,15 +129,36 @@ class TuroModule(PMModule):
         h = gfx.font.height + gfx.font.baseline
         dtrip.y += self.dims.padding
         if not trip.check_out_odometer:
-            return dtrip.y + h - 1
+            return dtrip.y + h*3 - 1
         vehicle = self.vehicles[trip.vehicle_nickname]
-        delta_value = vehicle.purchase_value - vehicle.last_value
-        delta_miles = vehicle.purchase_mileage - vehicle.last_mileage
-        depreciation_rate = -round(delta_value / delta_miles, 3) if delta_miles != 0 else 0
-        current_value = round(vehicle.purchase_value - depreciation_rate * (trip.check_out_odometer - vehicle.purchase_mileage))
+        print(vehicle)
+        depreciation_value = vehicle.last_kbb_value - vehicle.purchase_kbb_value
+        depreciation_miles = vehicle.last_mileage - vehicle.purchase_mileage
+        depreciation_rate = round(depreciation_value / depreciation_miles, 3) if depreciation_miles != 0 else 0
+        delta_miles = trip.check_out_odometer - vehicle.last_mileage
+        depreciation_this_trip = round(depreciation_rate * delta_miles, 2)
+        current_value = round(vehicle.last_kbb_value - depreciation_this_trip, 2)
+        equity = round(current_value - vehicle.remaining_balance)
+        sample = {
+            "vehicle.last_kbb_value": vehicle.last_kbb_value,
+            "vehicle.purchase_kbb_value": vehicle.purchase_kbb_value,
+            "vehicle.last_mileage": vehicle.last_mileage,
+            "vehicle.purchase_mileage": vehicle.purchase_mileage,
+            "depreciation_miles": depreciation_miles,
+            "depreciation_value": depreciation_value,
+            "depreciation_rate": depreciation_rate,
+            "trip.check_out_odometer": trip.check_out_odometer,
+            "vehicle.last_mileage": vehicle.last_mileage,
+            "delta_miles": delta_miles,
+            "depreciation_this_trip": depreciation_this_trip,
+            "current_value": current_value
+        }
+        print(json.dumps(sample, indent=4))
         gfx.text_color = "white"
-        print(f"delta_value: {delta_value}, delta_miles: {delta_miles}, depreciation_rate: {depreciation_rate}, current_value: {current_value}")
-        x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + h), f"${current_value} @ ${depreciation_rate}/mi", halign="center", valign="center", use_baseline=True)
+        x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + h), f"${current_value}", halign="center", valign="center", use_baseline=True)
+        x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"Δ{delta_miles}mi", halign="center", valign="center", use_baseline=True)
+        x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"${depreciation_rate}/mi", halign="center", valign="center", use_baseline=True)
+        x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"${equity}", halign="center", valign="center", use_baseline=True)
         return y
 
     def _render_trip_days_bar(self, gfx, dtrip, trip):
@@ -192,6 +215,10 @@ class TuroModule(PMModule):
             cal_end = cal_start + relativedelta(months=nmonths) - timedelta(days=1)
             for month in range(1, nmonths + 1):
                 dh = self._render_month(x, y, w, h, cal_start, cal_end, month, vehicle_trips)
+                month_data = self._compute_month_values(month, cal_start, cal_end, x, y, w, h)
+                self._render_weekend_markers(month_data, dh)
+                self._render_month(x, y, w, h, cal_start, cal_end, month, vehicle_trips)
+
             y += dh
             total_completed_income += round(annual_income(vehicle_trips, ["Completed"]))
             total_booked_income += round(annual_income(vehicle_trips, ["Booked", "In-progress"]))
