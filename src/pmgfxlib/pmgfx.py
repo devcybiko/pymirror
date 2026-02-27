@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass, fields
 
 from configs.fonts_config import FontsConfig
@@ -18,11 +19,18 @@ class PMGfx(GfxMixin, TextMixin, FontMixin):
     _text_bg_color: tuple = None
     _text_base_font_size: int = 24
     _text_base_font_name: str = "DejaVuSans"
+
     font: PMFont = None
 
     def __post_init__(self):
         self.set_font(self._text_base_font_name, self._text_base_font_size)
     
+    def copy(self) -> "PMGfx":
+        """Create a copy of the PMGfx instance."""
+        new_gfx = copy.copy(self) 
+        new_gfx.set_font(None, None)  # Reinitialize the font to ensure a new PMFont instance is created  
+        return new_gfx
+
     def merge(self, config: dataclass) -> "PMGfx":
         if isinstance(config, TextMixin):
             self.text_color = non_null(config.text_color, self.text_color, (255, 255, 255))

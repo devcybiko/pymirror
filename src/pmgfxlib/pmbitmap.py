@@ -94,11 +94,11 @@ class PMBitmap:
         """Push the current graphics state onto the stack."""
         # Save the current graphics state
         self._gfx_stack.append(self.gfx)
-        # If gfx is provided, use it; otherwise, keep the current state
+        # If gfx is provided, use it; otherwise, copy the current state
         if gfx == None:
-            self.gfx = copy.copy(self.gfx)
+            self.gfx = self.gfx.copy()
         else:
-            self.gfx = copy.copy(gfx)
+            self.gfx = gfx.copy()
         # Return the current graphics state
         # you can modify this gfx object and it will not affect the previous state
         return self.gfx

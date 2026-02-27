@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 from typing import ClassVar, Optional
 from PIL import ImageFont
@@ -22,6 +23,12 @@ class PMFont:
             PMFont.FONT_LIST = []
             PMFont.FONT_LIST = self._read_fontlist()
         self.set_font(self._name, self._pitch)
+
+    def copy(self) -> "PMFont":
+        """Create a copy of the PMFont instance."""
+        new_font = copy.copy(self)
+        new_font.set_font(None, None)  # Reinitialize the font to ensure a new ImageFont instance is created
+        return new_font
 
     @property
     def name(self) -> str:

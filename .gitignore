@@ -11,3 +11,4 @@ maps/
 .secrets
 .env
 *.db
+*.sqlite
