@@ -20,6 +20,7 @@ class TuroModule(PMModule):
         self.timer.set_timeout(self._turo.refresh_time)
         self.database = self._turo.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")
+        config.nmonths = 3
         self.turo_db = PMDb(config)
         self.dims = self._compute_dimensions(32)
 
@@ -241,7 +242,6 @@ class TuroModule(PMModule):
         y = 0
         w = bm.width
         h = self.dims.month_h
-        nmonths = 3
         ## set start_date = january 1st 0f 2026
         total_completed_income = 0
         total_booked_income = 0
@@ -250,8 +250,8 @@ class TuroModule(PMModule):
             dh = self._render_vehicle_name(x, y, vehicle_name, vehicle_trips)
             y += dh
             cal_start = datetime(datetime.now().year, 1, 1)
-            cal_end = cal_start + relativedelta(months=nmonths) - timedelta(days=1)
-            for month in range(1, nmonths + 1):
+            cal_end = cal_start + relativedelta(months=self.config.nmonths) - timedelta(days=1)
+            for month in range(1, self.config.nmonths + 1):
                 # render once to compute the height of the month block
                 box_top, dh = self._render_month(x, y, w, h, cal_start, cal_end, month, vehicle_trips)
                 month_data = self._compute_month_values(month, cal_start, cal_end, x, y, w, h)
