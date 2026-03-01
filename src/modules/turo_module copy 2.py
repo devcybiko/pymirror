@@ -5,7 +5,6 @@ from dateutil.relativedelta import relativedelta
 
 import json
 from munch import DefaultMunch
-from configs.turo_config import TuroConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
@@ -17,30 +16,14 @@ from .turo_calculations import annual_income, monthly_income, annual_sum_of_days
 class TuroModule(PMModule):
     def __init__(self, pm, config: SafeNamespace):
         super().__init__(pm, config)
-        self._turo: TuroConfig = config.turo
+        self._turo = config.turo
         self.timer.set_timeout(self._turo.refresh_time)
         self.database = self._turo.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")
         self.turo_db = PMDb(config)
         self.dims = self._compute_dimensions(32)
-        self.nmonths = self._turo.nmonths
-        self.cal = self._compute_cal_values()
-        self.cal = self._compute_cal_values()
+        self.calendar_start = datetime(datetime.now().year, 1, 1)
 
-    def _gfx_push(self):
-        gfx = self.bitmap.gfx_push()
-        return self.bitmap, gfx
-    
-    def _gfx_pop(self):
-        return self.bitmap.gfx_pop()
-
-    def _compute_cal_values(self):
-        cal = DefaultMunch()
-        cal.start = datetime.strptime(self._turo.start_date, "%Y-%m-%d")
-        cal.end = cal.start + relativedelta(months=self.nmonths) - timedelta(days=1)
-        cal.days = (cal.end - cal.start).days + 1
-        cal.pixels_per_day = self.bitmap.width / cal.days
-        return cal
     def _compute_dimensions(self, title_font_size: int = 32):
         dims = DefaultMunch()
         dims.padding = 4
@@ -57,25 +40,24 @@ class TuroModule(PMModule):
             (dims.padding + dims.stats_font_size) * 3
         return dims
 
-    def _compute_month_box(self, month_n, x, y, w, h):
-        cal = self.cal
-        box = DefaultMunch()
-        box.start = cal.start + relativedelta(months=month_n)
-        box.end = box.start + relativedelta(months=1) - relativedelta(days=1)
-        box.days = (box.end - box.start).days + 1
-        box.pixels_per_day = self.cal.pixels_per_day
-        box.x = int(x + round((box.start - cal.start).days * cal.pixels_per_day))
-        box.y = y
-        box.w = int(box.days * cal.pixels_per_day)
-        box.h = h
-        return box
+    def _compute_month_values(self, _month, start_date, end_date, x, y, w, h):
+        month = DefaultMunch()
+        month.start = datetime(start_date.year, _month, 1)
+        month.end = datetime(start_date.year, _month+1, 1) - timedelta(days=1)
+        month.days = (month.end - month.start).days + 1
+        month.pixels_per_day = w / ((end_date - start_date).days + 1)
+        month.x = x + round((month.start - start_date).days * month.pixels_per_day)
+        month.y = y
+        month.w = month.days * month.pixels_per_day
+        month.h = 0
+        return month
     
-    def _compute_trip_bar(self, y, month, trip_start=None, trip_end=None):
-        bar = DefaultMunch()
-        bar.x = 0
-        bar.y = y
-        bar.h = self.dims.trip_box_h
-        bar.colors = {
+    def _compute_dtrip_values(self, y, month, trip_start=None, trip_end=None):
+        dtrip = DefaultMunch()
+        dtrip.x = 0
+        dtrip.y = y
+        dtrip.h = self.dims.trip_box_h
+        dtrip.colors = {
             "Booked": "orange",
             "In-progress": "blue",
             "Completed": "green",
@@ -83,11 +65,11 @@ class TuroModule(PMModule):
             "Dummy": None
         }
         if trip_start and trip_end:
-            bar.start_days = (trip_start - self.cal.start).days
-            bar.end_days = (trip_end - self.cal.start).days
-            bar.x += round(bar.start_days * month.pixels_per_day)
-            bar.w = round((bar.end_days - bar.start_days) * month.pixels_per_day) - 1
-        return bar
+            dtrip.start_days = (trip_start - self.calendar_start).days
+            dtrip.end_days = (trip_end - self.calendar_start).days
+            dtrip.x += round(dtrip.start_days * month.pixels_per_day)
+            dtrip.w = round((dtrip.end_days - dtrip.start_days) * month.pixels_per_day) - 1
+        return dtrip
     
     def _render_personal_trip(self, x, y, month, last_trip, trip):
         gfx = self.bitmap.gfx_push()
@@ -105,7 +87,7 @@ class TuroModule(PMModule):
         print(trip_start, trip_end, ndays)
         if ndays > 0.5:
             y += self.dims.earnings_font_size + 1
-            dtrip = self._compute_trip_bar(y, month, trip_start, trip_end)
+            dtrip = self._compute_dtrip_values(y, month, trip_start, trip_end)
             personal_trip = trip.copy()
             personal_trip.trip_status = "Personal"
             personal_trip.trip_start = trip_start
@@ -141,7 +123,7 @@ class TuroModule(PMModule):
         y += self.dims.padding
         last_trip = None
         box_top = y
-        dtrip = self._compute_trip_bar(y, month, month.start, month.end)
+        dtrip = self._compute_dtrip_values(y, month, month.start, month.end)
         # This dummy trip guarantees we create at least one trip
         # because the height of the "month" is returned so that the 'weekend' markers can be drawn
         # without it, no trips are rendered and so no height is returned
@@ -157,7 +139,7 @@ class TuroModule(PMModule):
             if (trip_start > month.end) or (trip_end < month.start): continue # if the trip is not within the month boundary
             # self._render_personal_trip(x, y, month, last_trip, trip)
             last_trip = trip
-            dtrip = self._compute_trip_bar(y, month, trip_start, trip_end)
+            dtrip = self._compute_dtrip_values(y, month, trip_start, trip_end)
             dtrip.y = self._render_trip_earnings(gfx, month, dtrip, trip, dtrip.start_days, dtrip.end_days)
             dtrip.y = self._render_trip_days_bar(gfx, dtrip, trip)
             dtrip.y = self._render_daily_average(gfx, dtrip, trip)
@@ -172,21 +154,16 @@ class TuroModule(PMModule):
         bm.gfx_pop()
         return box_top, dtrip.y - _y
 
-    def _render_weekend_markers(self, box):
-        bm, gfx = self._gfx_push()
-        gfx.fill_color = "#333"
-        gfx.color = "#333"
-        for day in range((box.end - box.start).days + 1):
-            trip_day = box.start + timedelta(days=day)
+    def _render_weekend_markers(self, month, box_top, dh):
+        bm = self.bitmap
+        gfx = bm.gfx_push()
+        gfx.color = None
+        for day in range((month.end - month.start).days + 1):
+            trip_day = month.start + timedelta(days=day)
             if trip_day.weekday() >= 5: # Saturday or Sunday
-                x = box.x + round(day * box.pixels_per_day)
-                y = box.y
-                w = round(box.pixels_per_day)
-                h = box.h
-                print("x,y,w,h", x, y, w, h)
-                _x, _y = bm.rectangle((x, y, x+w, y+h), fill="#333", outline=None)
-        self._gfx_pop()
-        return _x, _y
+                x = month.x + round(day * month.pixels_per_day)
+                bm.rectangle((x, box_top, x + month.pixels_per_day, month.y + dh), fill="#333", outline=None)
+        bm.gfx_pop()
 
     def _render_earnings_per_mile(self, gfx, dtrip, trip):
         gfx.set_font(None, self.dims.stats_font_size)
@@ -230,62 +207,20 @@ class TuroModule(PMModule):
         x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"${equity} eqy", halign="center", valign="center", use_baseline=True)
         return y
 
-    def _render_trip_days_bar(self, gfx, y, bar, the_trip):
-        y += self.dims.padding
+    def _render_trip_days_bar(self, gfx, dtrip, the_trip):
+        dtrip.y += self.dims.padding
         gfx.set_font(None, self.dims.trip_box_font_size)
-        self.bitmap.rectangle((bar.x, y, bar.x + bar.w, y + bar.h), fill=bar.colors[the_trip.trip_status])
-        x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h), f"{the_trip.trip_days}d")
-        return x, y
+        self.bitmap.rectangle((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + dtrip.h), fill=dtrip.colors[the_trip.trip_status])
+        x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + dtrip.h), f"{the_trip.trip_days}d")
+        return y
 
-    def _render_trip_earnings(self, gfx, y, box, bar, trip):
+    def _render_trip_earnings(self, gfx, month, dtrip, trip, start_days, end_days):
         gfx.set_font(None, self.dims.earnings_font_size)
-        y += self.dims.padding
-        x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), f"${round(trip.total_earnings)}")
-        return x, y
-
-    def _render_trips(self, x, y, vehicle, vehicle_trips, status_list=["Booked", "Completed", "In-progress"]):
-        _x, _y = (0, 0)
-        for month_n in range(0, self.nmonths):
-            _x, _y = self._render_trip(x, y, month_n, vehicle, vehicle_trips, status_list)
-        return _x, _y
-
-    def _render_trip(self, x, y, month_n, vehicle, vehicle_trips, status_list):
-        bm, gfx = self._gfx_push()
-        w, h = bm.width, self.dims.month_h
-        box = self._compute_month_box(month_n, x, y, w, h)
-        bar = self._compute_trip_bar(y, box, box.start, box.end)
-        # This dummy trip guarantees we create at least one trip
-        # because the height of the "month" is returned so that the 'weekend' markers can be drawn
-        # without it, no trips are rendered and so no height is returned
-        # dummy_trip = self._create_dummy_trip(month)
-        # vehicle_trips = [dummy_trip] + vehicle_trips
-        _x, _y = (x, y)
-        for trip in vehicle_trips:
-            trip_start = trip.trip_start
-            trip_end = trip.trip_end
-            # trip_start = max(trip.trip_start, month.start)
-            # trip_end = min(trip.trip_end, month.end)
-            if trip.trip_status not in (status_list + ["Dummy"]): continue # its not an interesting trip
-            if trip_end <= trip_start: continue # might happen if we use the min/max values
-            if (trip_start > box.end) or (trip_end < box.start): continue # if the trip is not within the month boundary
-            # self._render_personal_trip(x, y, month, last_trip, trip)
-            last_trip = trip
-            bar = self._compute_trip_bar(y, box, trip_start, trip_end)
-            _x, y0 = self._render_trip_earnings(gfx, y, box, bar, trip)
-            _x, _y = self._render_trip_days_bar(gfx, y0, bar, trip)
-            # dtrip.y = self._render_daily_average(gfx, dtrip, trip)
-            # dtrip.y = self._render_earnings_per_mile(gfx, dtrip, trip)
-            # dtrip.y = self._render_vehicle_value(gfx, dtrip, trip)
-        # render personal trip at end of month
-        # self._render_personal_trip(x, y, month, last_trip, None)
-        bar.y += self.dims.padding
-        # render month border
-        # bm.rectangle((box.x, box_top, box.x + box.w, bar.y), outline="white", fill=None)
-        # self._render_today_marker(gfx, box, bar, box_top)
-        self._gfx_pop()
-        return _x, _y
-
+        x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + dtrip.h - 1), f"${round(trip.total_earnings)}")
+        return y
+    
     def _render_vehicle_name(self, x, y, vehicle_name, vehicle_trips):
+        _y = y
         gfx = self.bitmap.gfx_push()
         booked_income = round(annual_income(vehicle_trips, ["Booked", "In-progress"]))
         completed_income = round(annual_income(vehicle_trips, ["Completed"]))
@@ -295,58 +230,46 @@ class TuroModule(PMModule):
         vehicle_name = f"{vehicle_name} - ${str(completed_income)} (${str(booked_income)}) => ${str(total_income)} ({str(days)}d * ${str(average_income)}/day)"
         gfx.set_font(None, self.dims.title_font_size)
         gfx.font.use_bold = True
-        self.bitmap.text_box((x, y, self.bitmap.width, y + self.dims.title_font_size), vehicle_name, halign="center", valign="center", use_baseline=True)
+        self.bitmap.text(vehicle_name, x, y)
         y += gfx.font.height + gfx.font.baseline
         self.bitmap.gfx_pop()
-        return x, y
-
-    def _render_month_box(self, x, y, month_n):
-        bm, gfx = self._gfx_push()
-        w, h = bm.width, self.dims.month_h
-        box = self._compute_month_box(month_n, x, y, w, h)
-        box.y += self.dims.padding
-        self._render_weekend_markers(box)
-        _x, _y = bm.rectangle((box.x, box.y, box.x + box.w, box.y + box.h), fill=None)
-        self._gfx_pop()
-        return _x, _y
-
-    def _render_month_name(self, x, y, month_n):
-        bm, gfx = self._gfx_push()
-        w, h = bm.width, self.dims.month_h
-        box = self._compute_month_box(month_n, x, y, w, h)
-        box.y += self.dims.padding*2
-        _x, _y = bm.text_box((box.x, box.y, box.x + box.w, box.y + self.dims.month_font_size), box.start.strftime("%B %Y"), halign="center", valign="center", use_baseline=True)
-        self._gfx_pop()
-        return _x, _y
-
-    def _render_month_names(self, x, y, vehicle, vehicle_trips):
-        for month_n in range(0, self.nmonths):
-            _x, _y = self._render_month_name(x, y, month_n)
-        return _x, _y
-
-    def _render_month_boxes(self, x, y, vehicle, vehicle_trips):
-        for month_n in range(0, self.nmonths):
-            _x, _y = self._render_month_box(x, y, month_n)
-        return _x, _y
+        return y - _y
 
     def render(self, force: bool) -> bool:
         bm = self.bitmap
-        gfx = bm.gfx_push()
         bm.clear()
-        gfx.set_font(None, self.dims.title_font_size)
+        bm.gfx.set_font(None, self.dims.title_font_size)
         if not self.trips:
             bm.text("No trips found", 0, 0)
             return True
-        (x, y) = (0, 0)
-        _y = y
-        for vehicle_nickname, vehicle_trips in self.trips.items():
-            vehicle = self.vehicles[vehicle_nickname]
-            _, y0 = self._render_vehicle_name(x, y, vehicle.nickname, vehicle_trips)
-            _, y1 = self._render_month_names(x, y0, vehicle, vehicle_trips)
-            _, y2 = self._render_month_boxes(x, y1, vehicle, vehicle_trips)
-            _, y3 = self._render_trips(x, y1, vehicle, vehicle_trips)
-            y = y2 + self.dims.padding*2
-        
+        x = 0
+        y = 0
+        w = bm.width
+        h = self.dims.month_h
+        ## set start_date = january 1st 0f 2026
+        total_completed_income = 0
+        total_booked_income = 0
+        total_days = 0
+        for vehicle_name, vehicle_trips in self.trips.items():
+            dh = self._render_vehicle_name(x, y, vehicle_name, vehicle_trips)
+            y += dh
+            cal_start = datetime(datetime.now().year, 1, 1)
+            cal_end = cal_start + relativedelta(months=self._turo.nmonths) - timedelta(days=1)
+            for month in range(1, self._turo.nmonths + 1):
+                # render once to compute the height of the month block
+                box_top, dh = self._render_month(x, y, w, h, cal_start, cal_end, month, vehicle_trips)
+                month_data = self._compute_month_values(month, cal_start, cal_end, x, y, w, h)
+                self._render_weekend_markers(month_data, box_top, dh)
+                self._render_month(x, y, w, h, cal_start, cal_end, month, vehicle_trips)
+            y += dh
+            total_completed_income += round(annual_income(vehicle_trips, ["Completed"]))
+            total_booked_income += round(annual_income(vehicle_trips, ["Booked", "In-progress"]))
+            total_days += annual_sum_of_days(vehicle_trips, ["Booked", "In-progress", "Completed"])
+            y += self.dims.padding
+        total_income = total_completed_income + total_booked_income
+        average_income = round(total_income / total_days, 2) if total_days > 0 else 0
+        bm.gfx.set_font(None, self.dims.title_font_size)
+        bm.text(f"Total: ${str(total_completed_income)} (${str(total_booked_income)}) => ${str(total_income)} ({str(total_days)}d * ${str(average_income)}/day)", x, y)        
         return True
 
     def exec(self) -> bool:
@@ -359,11 +282,13 @@ class TuroModule(PMModule):
         self.trips = DefaultMunch()
         for row in rows:
             trip = DefaultMunch.fromDict(row.__dict__)
-            self.trips.setdefault(trip.vehicle_nickname, []).append(trip)
+            if self.trips[trip.vehicle_nickname] is None:
+                self.trips[trip.vehicle_nickname] = []
+            self.trips[trip.vehicle_nickname].append(DefaultMunch.fromDict(trip.__dict__))
         rows = self.turo_db.get_all(TuroVehiclesTable)
         rows = sorted(rows, key=lambda x: x.vehicle_id)
         self.vehicles = DefaultMunch()
         for row in rows:
             vehicle = DefaultMunch.fromDict(row.__dict__)
-            self.vehicles[vehicle.nickname] = vehicle
+            self.vehicles[vehicle.nickname] = DefaultMunch.fromDict(vehicle.__dict__)
         return True # state changed

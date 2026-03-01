@@ -136,13 +136,13 @@ class PMBitmap:
         self.ellipse(bbox, fill=fill)
 
     def rectangle(self, rect: tuple, outline = -1, fill=-1) -> None:
+        x0, y0, x1, y1 = map(int, rect)
         if outline == -1:
             outline = self.gfx.color
         if fill == -1:
             fill = self.gfx.bg_color
-        self._draw.rectangle(
-            rect, outline=outline or self.gfx.color, width=self.gfx.line_width, fill=fill
-        )
+        self._draw.rectangle((x0, y0, x1, y1), outline=outline or self.gfx.color, width=self.gfx.line_width, fill=fill)
+        return x1, y1
 
     def text(self, msg: str, x0: int, y0: int, fill=-1) -> None:
         if fill == -1:

@@ -1,3 +1,10 @@
+def all_time_income(trips, status_list=["Booked", "Completed", "In-progress"]):
+    total = 0
+    for trip in trips:
+        if trip.trip_status in status_list:
+            total += trip.total_earnings
+    return total
+
 def annual_income(trips, status_list=["Booked", "Completed", "In-progress"]):
     total = 0
     for trip in trips:
