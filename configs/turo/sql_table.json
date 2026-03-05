@@ -1,0 +1,48 @@
+{
+    "module": {
+        "class": "sql_table",
+        "name": "sql_table",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "position": "0.01,0.6,0.99,0.94",
+        "font_size": 16,
+        "color": "#fff",
+        "bg_color": "#000",
+        "text_color": "#fff",
+        "text_bg_color": "#333",
+    },
+    "sql_table": {
+        "database_url": "sqlite:///turo.sqlite",
+        "sql": "\
+        SELECT \
+            vehicle_nickname as vehicle, \
+            guest, \
+            trip_status, \
+            strftime('%Y-%m-%d', trip_start) AS trip_start, \
+            strftime('%Y-%m-%d', trip_end) AS trip_end, \
+            check_in_odometer,\
+            check_out_odometer,\
+            trip_days, \
+CASE \
+  WHEN check_in_odometer = '' OR check_out_odometer ='' THEN '' \
+  ELSE check_out_odometer - check_in_odometer \
+END AS distance, \
+CASE \
+  WHEN check_in_odometer = '' OR check_out_odometer = '' OR ROUND(trip_days) = '' OR ROUND(trip_days) = 0 THEN '' \
+  ELSE CAST(ROUND((check_out_odometer - check_in_odometer) / ROUND(trip_days)) AS INTEGER) \
+END AS miles_per_day, \
+CASE \
+  WHEN check_in_odometer = '' OR check_out_odometer = '' OR ROUND(trip_days) = '' OR ROUND(trip_days) = 0 THEN '' \
+  ELSE '$' || ROUND(total_earnings / ROUND(trip_days), 2) \
+END AS earnings_per_day, \
+CASE \
+  WHEN check_in_odometer = '' OR check_out_odometer = '' OR check_out_odometer - check_in_odometer = 0 THEN '' \
+  ELSE '$' || ROUND(total_earnings / (check_out_odometer - check_in_odometer), 2) \
+END AS earnings_per_mile, \
+    '$' || CAST(ROUND(SUM(total_earnings) OVER (ORDER BY trip_start),0) AS INTEGER) AS cumulative_earnings \
+        FROM trips \
+        WHERE trip_status in ('Completed', 'In-progress', 'Booked') \
+        ORDER BY trip_start; \
+        ",
+    }
+}

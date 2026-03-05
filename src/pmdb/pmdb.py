@@ -71,6 +71,14 @@ class PMDb:
         self.session.merge(record)
         self.commit()
 
+    def raw_query(self, sql: str, params=None):
+        from sqlalchemy import text
+        with self.engine.connect() as conn:
+            result = conn.execute(text(sql), params or {})
+            keys = list(result.keys())
+            result_list = [dict(zip(keys, row)) for row in result.fetchall()]
+            return result_list
+
     def get(self, table: Table, key) -> "Table":
         record = self.session.query(table).get(key)
         return record

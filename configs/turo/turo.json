@@ -2,7 +2,7 @@
     "module": {
         "class": "turo",
         "name": "turo",
-        "position": "0.01,0.20,0.99,1.00",
+        "position": "0.01,0.20,01.0,0.55",
     },
     "turo": {
         "database": "/Users/greg/git/turo-dashboard/turo.sqlite",

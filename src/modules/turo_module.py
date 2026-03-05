@@ -102,7 +102,6 @@ class TuroModule(PMModule):
         trip_end = trip.trip_start
         nmins = (trip_end - trip_start).total_seconds() / 60.0
         ndays = float(nmins) / (60.0 * 24.0)
-        print(trip_start, trip_end, ndays)
         if ndays > 0.5:
             y += self.dims.earnings_font_size + 1
             dtrip = self._compute_trip_bar(y, month, trip_start, trip_end)
@@ -183,7 +182,6 @@ class TuroModule(PMModule):
                 y = box.y
                 w = round(box.pixels_per_day)
                 h = box.h
-                print("x,y,w,h", x, y, w, h)
                 _x, _y = bm.rectangle((x, y, x+w, y+h), fill="#333", outline=None)
         self._gfx_pop()
         return _x, _y
