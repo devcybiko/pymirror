@@ -109,7 +109,6 @@ class PyMirror:
             ## all modules should be in the "modules" directory
             clazz_name = module_config.module.clazz
             mod = importlib.import_module(f"modules.{clazz_name}_module")
-        
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase

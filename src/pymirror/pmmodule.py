@@ -58,6 +58,13 @@ class PMModule(ABC):
             self.bitmap.gfx.set_font(_moddef.font_name, _moddef.font_size)
         self.subscribe(_moddef.subscriptions or [])
 
+    def _gfx_push(self):
+        gfx = self.bitmap.gfx_push()
+        return self.bitmap, gfx
+    
+    def _gfx_pop(self):
+        return self.bitmap.gfx_pop()
+
     def _compute_rect(self, position: str = None) -> tuple:
         # compute rect based on "position"
         rect = PMRect(0,0,0,0)

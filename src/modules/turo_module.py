@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 import json
 from munch import DefaultMunch
-from configs.turo_config import TuroConfig
+from configs.turo_trip_config import TuroTripConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
@@ -17,7 +17,7 @@ from .turo_calculations import annual_income, monthly_income, annual_sum_of_days
 class TuroModule(PMModule):
     def __init__(self, pm, config: SafeNamespace):
         super().__init__(pm, config)
-        self._turo: TuroConfig = config.turo
+        self._turo: TuroTripConfig = config.turo
         self.timer.set_timeout(self._turo.refresh_time)
         self.database = self._turo.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")

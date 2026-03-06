@@ -26,7 +26,7 @@
     "./configs/turo/date.json",
     "./configs/turo/day_of_week.json",
     "./configs/turo/pymirror_controller.json",
-    "./configs/turo/turo.json",
+    "./configs/turo/turo_sentra.json",
     "./configs/turo/window_manager.json",
   ]
 }

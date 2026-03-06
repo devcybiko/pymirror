@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import traceback
 from munch import DefaultMunch, Munch
-from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String
+from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from utils.utils import from_dict
@@ -90,6 +90,8 @@ class PMDb:
 
     @tracebacker(null_record)
     def get_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
+        if type(where_clause) == str:
+            where_clause = text(where_clause)
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
             query = query.order_by(order_by)
@@ -98,6 +100,8 @@ class PMDb:
 
     @tracebacker([])
     def get_all_where(self, table: Table, where_clause, order_by=None) -> list["Table"]:
+        if type(where_clause) == str:
+            where_clause = text(where_clause)
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
             query = query.order_by(order_by)
