@@ -86,45 +86,6 @@ class TuroTripModule(PMModule):
         if month.start.date() <= today <= month.end.date():
             x = month.x + round((today - month.start.date()).days * month.pixels_per_day)
             self.bitmap.rectangle((x, box_top, x + 4, dtrip.y), fill="red")
-    
-    # def _render_month(self, x, y, w, h, cal_start, cal_end, _month, vehicle_trips, status_list=["Booked", "Completed", "In-progress"]):
-    #     _y = y
-    #     bm = self.bitmap
-    #     gfx = bm.gfx_push()
-    #     month = self._compute_month_values(_month, cal_start, cal_end, x, y, w, h)
-    #     # render month name
-    #     gfx.set_font(None, self.dims.month_font_size)
-    #     _, y = bm.text_box((month.x, y, month.x + month.w, y + self.dims.month_font_size), month.start.strftime("%B"), halign="center", valign="center", use_baseline=True)
-    #     y += self.dims.padding
-    #     last_trip = None
-    #     box_top = y
-    #     dtrip = self._compute_trip_bar(y, month, month.start, month.end)
-    #     # This dummy trip guarantees we create at least one trip
-    #     # because the height of the "month" is returned so that the 'weekend' markers can be drawn
-    #     # without it, no trips are rendered and so no height is returned
-    #     # dummy_trip = self._create_dummy_trip(month)
-    #     # vehicle_trips = [dummy_trip] + vehicle_trips
-    #     for trip in vehicle_trips:
-    #         trip_start = trip.trip_start
-    #         trip_end = trip.trip_end
-    #         # trip_start = max(trip.trip_start, month.start)
-    #         # trip_end = min(trip.trip_end, month.end)
-    #         if trip.trip_status not in (status_list + ["Dummy"]): continue # its not an interesting trip
-    #         if trip_end <= trip_start: continue # might happen if we use the min/max values
-    #         if (trip_start > month.end) or (trip_end < month.start): continue # if the trip is not within the month boundary
-    #         last_trip = trip
-    #         dtrip = self._compute_trip_bar(y, month, trip_start, trip_end)
-    #         dtrip.y = self._render_trip_earnings(gfx, month, dtrip, trip, dtrip.start_days, dtrip.end_days)
-    #         dtrip.y = self._render_trip_days_bar(gfx, dtrip, trip)
-    #         dtrip.y = self._render_daily_average(gfx, dtrip, trip)
-    #         dtrip.y = self._render_earnings_per_mile(gfx, dtrip, trip)
-    #         dtrip.y = self._render_vehicle_value(gfx, dtrip, trip)
-    #     dtrip.y += self.dims.padding
-    #     # render month border
-    #     bm.rectangle((month.x, box_top, month.x + month.w, dtrip.y), outline="white", fill=None)
-    #     self._render_today_marker(gfx, month, dtrip, box_top)
-    #     bm.gfx_pop()
-    #     return box_top, dtrip.y - _y
 
     def _render_weekend_markers(self, box):
         bm, gfx = self._gfx_push()
@@ -140,48 +101,6 @@ class TuroTripModule(PMModule):
                 _x, _y = bm.rectangle((x, y, x+w, y+h), fill="#333", outline=None)
         self._gfx_pop()
         return _x, _y
-
-    # def _render_earnings_per_mile(self, gfx, dtrip, trip):
-    #     gfx.set_font(None, self.dims.stats_font_size)
-    #     h = gfx.font.height + gfx.font.baseline
-    #     dtrip.y += self.dims.padding
-    #     y = dtrip.y
-    #     try:
-    #         earnings_per_mile = f"${round(trip.total_earnings / trip.distance_traveled, 3)}*{trip.distance_traveled}mi"
-    #         x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + h), f"{earnings_per_mile}", halign="center", valign="center", use_baseline=True)
-    #     except TypeError as e:
-    #         y = dtrip.y + h - 1
-    #     return y
-
-    # def _render_daily_average(self, gfx, dtrip, trip):
-    #     dtrip.y += self.dims.padding
-    #     gfx.set_font(None, self.dims.stats_font_size)
-    #     h = gfx.font.height
-    #     daily_average = round(trip.total_earnings / trip.trip_days, 2)
-    #     daily_average = f"${daily_average}/day"
-    #     x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + h), f"{daily_average}", halign="center", valign="center", use_baseline=True)
-    #     return y
-
-    # def _render_vehicle_value(self, gfx, dtrip, trip):
-    #     gfx.set_font(None, self.dims.stats_font_size)
-    #     h = gfx.font.height
-    #     dtrip.y += self.dims.padding
-    #     if not trip.check_out_odometer:
-    #         return dtrip.y + h*4 - 1
-    #     vehicle = self.vehicles[trip.vehicle_nickname]
-    #     depreciation_value = vehicle.last_kbb_value - vehicle.purchase_kbb_value
-    #     depreciation_miles = vehicle.last_mileage - vehicle.purchase_mileage
-    #     depreciation_rate = round(depreciation_value / depreciation_miles, 3) if depreciation_miles != 0 else 0
-    #     delta_miles = trip.check_out_odometer - vehicle.last_mileage
-    #     depreciation_this_trip = round(depreciation_rate * delta_miles, 2)
-    #     current_value = round(vehicle.last_kbb_value + depreciation_this_trip)
-    #     equity = round(current_value - vehicle.remaining_balance)
-    #     gfx.text_color = "white"
-    #     x, y = self.bitmap.text_box((dtrip.x, dtrip.y, dtrip.x + dtrip.w, dtrip.y + h), f"${current_value}", halign="center", valign="center", use_baseline=True)
-    #     x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"{trip.check_out_odometer}mi", halign="center", valign="center", use_baseline=True)
-    #     x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"${depreciation_rate}/mi", halign="center", valign="center", use_baseline=True)
-    #     x, y = self.bitmap.text_box((dtrip.x, y, dtrip.x + dtrip.w, y + h), f"${equity} eqy", halign="center", valign="center", use_baseline=True)
-    #     return y
 
     def _render_trip_days_bar(self, gfx, y, bar, the_trip):
         y += self.dims.padding
