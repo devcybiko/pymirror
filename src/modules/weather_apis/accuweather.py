@@ -3,8 +3,9 @@ from datetime import datetime
 from logging import config
 
 from flask import json
+from munch import DefaultMunch
 from pymirror.pmwebapi import PMWebApi
-from utils.utils import SafeNamespace, json_dumps
+from utils.utils import json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
 from pmlogger import _debug
 
@@ -43,7 +44,7 @@ class AccuWeatherApi(PMWebApi):
     A wrapper for the AccuWeather API that uses PMWebApi.
     This is a convenience function to create an instance of PMWebApi with the AccuWeatherConfig.
     """
-    def __init__(self, config: SafeNamespace):
+    def __init__(self, config: DefaultMunch):
         self.config = AccuWeatherConfig()
         super().__init__(self.config.url, self.config.cache_file, self.config.cache_timeout_secs)
         _debug(f"AccuWeatherApi initialized with params: {config}")
@@ -96,7 +97,7 @@ class AccuWeatherApi(PMWebApi):
         }
         response = self.get_json(params)
         if not response: return None
-        r = SafeNamespace(**(response[0]))
+        r = DefaultMunch(**(response[0]))
         units = self.params.units.capitalize()
         c = {
             "dt": datetime.fromisoformat(r.LocalObservationDateTime).timestamp(),
@@ -136,7 +137,7 @@ class AccuWeatherApi(PMWebApi):
             "details": "false",
             "toplevel": "false"
         })
-        self.location_data = SafeNamespace(**location_data)
+        self.location_data = DefaultMunch(**location_data)
         self.location_key = location_data["Key"]
         _debug(f"AccuWeather location key: {self.location_key}")
         return self.location_key
@@ -151,6 +152,6 @@ class AccuWeatherApi(PMWebApi):
             "language": self.params.language,
             "metric": self.params.units.lower() == "metric"
         })
-        self.forecast_data = SafeNamespace(**forecast_data)
+        self.forecast_data = DefaultMunch(**forecast_data)
         _debug(f"AccuWeather forecast_data: {self.forecast_data}")
         return self.forecast_data

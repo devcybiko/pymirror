@@ -1,10 +1,7 @@
-from dataclasses import dataclass
-from logging import config
 from pmdb.pmdb import PMDb
-from pymirror.pmwebapi import PMWebApi
-from utils.utils import SafeNamespace, json_dumps, json_loads, pprint, to_dict, to_munch
+from utils.utils import  json_loads, pprint, to_dict, to_munch
 from tables.web_api_table import WebApiTable
-from .pmweatherdata import PMWeatherAlert, PMWeatherCurrent, PMWeatherDaily, PMWeatherData, PMWeatherSummary
+from .pmweatherdata import PMWeatherData
 from pmlogger import _debug
 
 def _paragraph_fix(text: str) -> str:

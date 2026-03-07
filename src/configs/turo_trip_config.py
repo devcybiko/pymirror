@@ -1,7 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from configs.pmdb_config import PmdbConfig
-from configs.screen_config import ScreenConfig
 
 @dataclass
 class TuroTripConfig:

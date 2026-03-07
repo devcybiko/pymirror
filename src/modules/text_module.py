@@ -1,10 +1,11 @@
 import copy
+
+from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace
 from pymirror.comps.pmtextcomp import PMTextComp
 
 class TextModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._textcomp = PMTextComp(self.bitmap.gfx, config.text, 0, 0, self.bitmap.width, self.bitmap.height)
 

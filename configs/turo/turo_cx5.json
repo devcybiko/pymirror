@@ -1,11 +1,11 @@
 {
     "module": {
         "class": "turo_trip",
-        "name": "turo_trip_sentra",
-        "position": "0.01,0.15,0.99,0.28",
+        "name": "turo_trip_cx5",
+        "position": "0.01,0.50,0.99,0.64",
     },
     "turo_trip": {
-        "vehicle_nickname": "sentra",
+        "vehicle_nickname": "cx5",
         "database": "/Users/greg/git/turo-dashboard/turo.sqlite",
         "refresh_time": "60s",
         "nmonths": 4,

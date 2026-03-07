@@ -1,9 +1,11 @@
 from datetime import datetime
+
+from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace, strftime_by_example
+from utils.utils import strftime_by_example
 
 class ClockModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._clock = config.clock
 		self.date_format = strftime_by_example(self._clock.date_format) or "%I:%M:%S %p"

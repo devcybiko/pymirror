@@ -1,8 +1,9 @@
 from abc import ABC
 from dataclasses import dataclass, fields
 
+from munch import DefaultMunch
+
 from pmgfxlib.pmgfx import PMGfx
-from utils.utils import SafeNamespace, from_dict
 from pymirror.pmconstants import PMConstants as PMC
 from pmgfxlib.pmbitmap import PMBitmap
 from pymirror.pmrect import PMRect
@@ -47,7 +48,7 @@ class PMComponent(ABC):
 
 if __name__ == "__main__":
     # Example usage
-    config = SafeNamespace(rect=(0, 0, 100, 100), color="#fff", bg_color="#000", other_attr="example")
+    config = DefaultMunch(rect=(0, 0, 100, 100), color="#fff", bg_color="#000", other_attr="example")
     component = PMComponent(config)
     _print(f"Component created with rect: {component._comp.rect}, color: {component._comp.color}")
     # Note: Actual rendering logic would be implemented in subclasses.

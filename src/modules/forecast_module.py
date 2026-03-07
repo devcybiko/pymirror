@@ -5,7 +5,6 @@ from datetime import datetime
 from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
-from utils.utils import SafeNamespace
 from pmlogger import _debug, _print
 
 class ForecastModule(PMCard):
@@ -23,7 +22,7 @@ class ForecastModule(PMCard):
         _debug(f"Loading weather icon from {icon_path}")
         return PMBitmap().load(icon_path, width=width, height=height, scale=scale)
 
-    def _render_text(self, c: SafeNamespace) -> None:
+    def _render_text(self, c: DefaultMunch) -> None:
         if self.weather_response == None:
             return
         text_x0 = c.cell_width * c.col
@@ -40,7 +39,7 @@ class ForecastModule(PMCard):
             halign="center"
         )
 
-    def _select_row_config(self, c: SafeNamespace) -> None:
+    def _select_row_config(self, c: DefaultMunch) -> None:
         dims = {
             1: ((0,),),
             2: ((0,1),),
@@ -56,7 +55,7 @@ class ForecastModule(PMCard):
         _debug(f"Forecast rows: {self._forecast.days}: {c.rows}")
         c.n_rows = len(c.rows)
 
-    def _initial_values(self, c: SafeNamespace) -> None:
+    def _initial_values(self, c: DefaultMunch) -> None:
         c.w = self.bitmap.width
         c.h = self.bitmap.height
         c.row = 0
@@ -70,7 +69,7 @@ class ForecastModule(PMCard):
         _debug(f"Forecast cell_height: {c.cell_height}")
         _debug(f"Forecast max_icon_height: {c.max_icon_height}")
 
-    def _render_icon(self, c: SafeNamespace):
+    def _render_icon(self, c: DefaultMunch):
         _debug(f"render icon {c.id} for {c.max_icon_width}x{c.max_icon_height}")
         bm = self._load_icon(
             self.weather_response.daily[c.id].weather[0].icon,
@@ -96,7 +95,7 @@ class ForecastModule(PMCard):
         if not self.weather_response:
             return False
         self.bitmap.clear()
-        c = SafeNamespace()
+        c = DefaultMunch()
         self._initial_values(c)
         for row_ids in c.rows:
             c.col = 0

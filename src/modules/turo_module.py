@@ -3,19 +3,17 @@ from datetime import datetime, timedelta
 from pydoc import text
 from dateutil.relativedelta import relativedelta
 
-import json
 from munch import DefaultMunch
 from configs.turo_trip_config import TuroTripConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
-from utils.utils import SafeNamespace
 
 from .turo_calculations import annual_income, monthly_income, annual_sum_of_days
 
 class TuroModule(PMModule):
-    def __init__(self, pm, config: SafeNamespace):
+    def __init__(self, pm, config: DefaultMunch):
         super().__init__(pm, config)
         self._turo: TuroTripConfig = config.turo
         self.timer.set_timeout(self._turo.refresh_time)

@@ -1,22 +1,19 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 import importlib
-import json
 import os
-import sys
 import time
 from dotenv import load_dotenv
 import queue
 import argparse
 import traceback
 
-from munch import DefaultMunch, Munch
+from munch import DefaultMunch
 
 from configs.pmconfig import PMConfig
-from pmlogger import trace, _debug, _print, _info, _warning, _error, _critical, _trace
-from pymirror.pmmodule import PMModule
+from pmlogger import _debug, _print
 from pymirror.pmscreen import PMScreen
-from utils.utils import expand_dataclass, json_read, snake_to_pascal, expand_dict, SafeNamespace, to_munch
+from utils.utils import expand_dataclass, snake_to_pascal, DefaultMunch, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from utils.pstat import get_pstat_delta, get_pids_by_cli
@@ -96,17 +93,22 @@ class PyMirror:
         return config
 
     def _load_modules(self):
+        print(99, "Loading modules...")
         pmconfig = PMConfig()
         for module_config in self._config.modules:
+            print(101, type(module_config))
             ## load the module dynamically
             if type(module_config) is str:
+                print(104, "Loading module config from file:", module_config)
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 module_config = pmconfig.from_file(module_config)
+                print(110, "Loaded module config:", module_config)
                 expand_dataclass(module_config, {})  # Expand environment variables in the config
             ## import the module using its name
             ## all modules should be in the "modules" directory
+            print(112, module_config.module)
             clazz_name = module_config.module.clazz
             mod = importlib.import_module(f"modules.{clazz_name}_module")
             ## get the class from inside the module
@@ -149,12 +151,12 @@ class PyMirror:
                     module.onEvent(event)
 
     def _convert_events_to_namespace(self):
-        """ Convert a list of events to SafeNamespace objects """
-        return [SafeNamespace(**event) if isinstance(event, dict) else event for event in self.events]
+        """ Convert a list of events to DefaultMunch objects """
+        return [DefaultMunch(**event) if isinstance(event, dict) else event for event in self.events]
 
     def _send_events_to_modules(self):
         if not self.events: return
-        self.events = self._convert_events_to_namespace()  # Convert events to SafeNamespace if needed
+        self.events = self._convert_events_to_namespace()  # Convert events to DefaultMunch if needed
         for module in self.modules:
             self._send_events_to_module(module, self.events)  # Send all events to the module
         self.events.clear()  # Clear the events after sending them
@@ -168,11 +170,11 @@ class PyMirror:
         self.server_queue.put(to_munch(event))
 
         # if type(event) is dict:
-        #     self.events.append(SafeNamespace(**event))
-        # elif isinstance(event, SafeNamespace):
+        #     self.events.append(DefaultMunch(**event))
+        # elif isinstance(event, DefaultMunch):
         #     self.events.append(event)
         # else:
-        #     raise TypeError(f"Event must be a dict or SafeNamespace, got {type(event)}")
+        #     raise TypeError(f"Event must be a dict or DefaultMunch, got {type(event)}")
 
     def _stats_for_nerds(self, module):
         if not module.bitmap: 
@@ -310,7 +312,7 @@ def main():
             "Overrides the output_file setting in config."
     )
     args = parser.parse_args()
-    pm = PyMirror(args.config, SafeNamespace(**vars(args)))
+    pm = PyMirror(args.config, DefaultMunch(**vars(args)))
     pm.run()
 
 if __name__ == "__main__":

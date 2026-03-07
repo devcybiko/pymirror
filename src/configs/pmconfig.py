@@ -116,8 +116,9 @@ class PMConfig:
         config_name = snake_to_pascal(_config_name)
         module = importlib.import_module(f"configs.{_config_name}_config")
         clazz_name = f"{config_name}Config"
-        _print(f"Loading '{config_name}' config, class {clazz_name} from {module.__name__}")
-        clazz = getattr(module, clazz_name, None)
+        _print(f"119: Loading '{config_name}' config, class {clazz_name} from {module.__name__}")
+        clazz = getattr(module, clazz_name, None) # get the class from the module
+        _print(f"... loaded class: {clazz}")
         return clazz
 
     def _load_config(self, config_name, values: dict):

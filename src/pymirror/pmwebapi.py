@@ -2,14 +2,11 @@ from datetime import datetime
 import sys
 import httpx
 import asyncio
-import json
 import time
-import inspect
 
-from pmlogger import _debug, _debug, _error, trace, _trace, _debug, _warning
-from utils.utils import SafeNamespace, json_loads, to_ms
-from pmlogger import pmlogger, PMLoggerLevel, _print
-from pymirror.pmcaches import FileCache, MemoryCache, MemoryFileCache
+from pmlogger import _debug, _debug, _error, _debug
+from utils.utils import DefaultMunch, json_loads, to_ms
+from pmlogger import _print
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 
@@ -27,7 +24,7 @@ class PMWebApi:
         self.error = None # last error
 
     def set_httpx(self, method="get", headers={"Accept": "application/json"}, params={}, data=None, json=None, timeout_time="5s"):
-        httpx = SafeNamespace()
+        httpx = DefaultMunch()
         httpx.method = method
         httpx.headers = headers
         httpx.params = params

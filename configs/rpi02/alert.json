@@ -1,6 +1,6 @@
 {
-    "module": "alert",
-    "moddef": {
+    "module": {
+        "class": "alert",
         "name": "Alert",
         "position": "alert_strip",
         "text_color": null,

@@ -108,51 +108,6 @@ def expand_dataclass(obj, context: dict, dflt: str = None):
         # For other types, do nothing
         pass
 
-##
-## This is a proxy class that returns None for any attribute or item access.
-## It is used to safely handle missing attributes in SafeNamespace.
-##
-class _NoneProxy:
-    def __getattr__(self, name):
-        return _NONE_PROXY
-
-    def __getitem__(self, name):
-        return _NONE_PROXY
-
-    def __eq__(self, other):
-        return other == None
-
-    def __bool__(self):
-        return False
-
-    def __repr__(self):
-        return "None"
-
-
-_NONE_PROXY = _NoneProxy()
-
-
-## This is a safe namespace class that returns None for any missing attributes.
-class SafeNamespace(SimpleNamespace):
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            if isinstance(v, dict):
-                kwargs[k] = SafeNamespace(**v)
-            elif isinstance(v, list):
-                kwargs[k] = [
-                    SafeNamespace(**i) if isinstance(i, dict) else i for i in v
-                ]
-        super().__init__(**kwargs)
-        self.__dict__.update(kwargs)
-
-    def __getattr__(self, name):
-        # Return _NONE_PROXY for missing attributes
-        return _NONE_PROXY
-
-    def __getitem__(self, name):
-        return getattr(self, name, _NONE_PROXY)
-
-
 def _add(t, d):
     """Increment each element of the tuple by the corresponding element in d."""
     return tuple(a + b for a, b in zip(t, d))

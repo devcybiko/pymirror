@@ -1,10 +1,11 @@
 import copy
+
+from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace
 from pymirror.comps.pmtablecomp import PMTableComp
 
 class TableModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._table_comp = PMTableComp(self.bitmap.gfx, config.table, 0, 0, self.bitmap.width, self.bitmap.height)
 

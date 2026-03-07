@@ -1,11 +1,9 @@
-from dataclasses import dataclass
-from pmcomponent import PMComponent, PMComponentConfig
+from pmcomponent import PMComponent
 from pmgfxlib.pmbitmap import PMBitmap
-from utils import SafeNamespace, _width, _height
-from pmconstants import PMConstants as PMC
+from munch import DefaultMunch
 
 class PMGroup(PMComponent):
-	def __init__(self, config: SafeNamespace):
+	def __init__(self, config: DefaultMunch):
 		super().__init__(config)
 		self.children = []
 

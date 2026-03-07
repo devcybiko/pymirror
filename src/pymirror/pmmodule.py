@@ -7,7 +7,7 @@ from configs.pymirror_config import PymirrorConfig
 from pmdb.pmdb import PMDb
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
-from utils.utils import SafeNamespace, _height, _width, from_dict, non_null, to_munch
+from utils.utils import to_munch
 from pmlogger import _trace, _debug
 from pymirror.pmrect import PMRect
 

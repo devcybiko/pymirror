@@ -10,12 +10,11 @@ from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
-from utils.utils import SafeNamespace
 
 from .turo_calculations import annual_income, annual_sum_of_days
 
 class TuroTripModule(PMModule):
-    def __init__(self, pm, config: SafeNamespace):
+    def __init__(self, pm, config: DefaultMunch):
         super().__init__(pm, config)
         self._trip: TuroTripConfig = config.turo_trip
         self.timer.set_timeout(self._trip.refresh_time)

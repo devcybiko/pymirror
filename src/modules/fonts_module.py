@@ -1,10 +1,11 @@
 import os
+
+from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace
 from pmlogger import _debug, _error
 
 class FontsModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._text = config.fonts
 		self.text = None

@@ -4,11 +4,10 @@ from munch import DefaultMunch
 from configs.table_config import TableConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace
 from pymirror.comps.pmtablecomp import PMCell, PMTableComp
 
 class SqlTableModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._sql_table = config.sql_table
 		db_config = DefaultMunch(url=self._sql_table.database_url)

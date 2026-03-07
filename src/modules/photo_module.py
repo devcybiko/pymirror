@@ -1,9 +1,10 @@
+from munch import DefaultMunch
+
 from pymirror.pmmodule import PMModule
-from utils.utils import SafeNamespace
 from pmgfxlib.pmbitmap import PMBitmap
 
 class PhotoModule(PMModule):
-	def __init__(self, pm, config: SafeNamespace):
+	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._photo = config.photo
 		self.photo = PMBitmap().load(self._photo.path)

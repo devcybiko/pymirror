@@ -4,7 +4,7 @@ from pymirror.pmrect import PMRect
 from pymirror.pmtimer import PMTimer
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
-from utils.utils import SafeNamespace, non_null
+from utils.utils import non_null
 
 class PMCell:
     def __init__(self, value=None, format=None, halign="center", valign="center", bg_color="#333", text_color="#fff"):
