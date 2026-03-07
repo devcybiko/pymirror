@@ -1,7 +1,6 @@
 from configs.table_config import TableConfig
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
-from pymirror.pmtimer import PMTimer
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
 from utils.utils import non_null

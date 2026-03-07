@@ -93,22 +93,17 @@ class PyMirror:
         return config
 
     def _load_modules(self):
-        print(99, "Loading modules...")
         pmconfig = PMConfig()
         for module_config in self._config.modules:
-            print(101, type(module_config))
             ## load the module dynamically
             if type(module_config) is str:
-                print(104, "Loading module config from file:", module_config)
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 module_config = pmconfig.from_file(module_config)
-                print(110, "Loaded module config:", module_config)
                 expand_dataclass(module_config, {})  # Expand environment variables in the config
             ## import the module using its name
             ## all modules should be in the "modules" directory
-            print(112, module_config.module)
             clazz_name = module_config.module.clazz
             mod = importlib.import_module(f"modules.{clazz_name}_module")
             ## get the class from inside the module
@@ -236,7 +231,6 @@ class PyMirror:
         updated = False
         for module in reversed(self.modules):
             if (not module.disabled) and module.bitmap and module in modules_changed:
-                # _print("... painting", module.name)
                 start_time = time.time()  # Start timing the module rendering
                 self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
                 end_time = time.time()  # End timing the module rendering

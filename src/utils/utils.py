@@ -382,16 +382,16 @@ def json_write(fname: str, obj: dict) -> bool:
         return 
 
 def json_loads(s: str, dflt=None) -> dict:
-    try:
+    # try:
         return json.loads(s)
-    except Exception as e:
-        err_msg = str(e)
-        words = err_msg.split(" ")
-        line_no = int(words[0].split(":")[1])-1
-        col = int(words[5])-1
-        lines = s.split("\n")
-        ptr = ("." * col) + "^"
-        raise ValueError(f"{err_msg}\n{line_no-1}:{lines[line_no-1]}\n{line_no}:{lines[line_no]}\n{line_no}:{ptr}\n{line_no+1}:{lines[line_no+1]}")
+    # except Exception as e:
+    #     err_msg = str(e)
+    #     words = err_msg.split(" ")
+    #     line_no = int(words[0].split(":")[1])-1
+    #     col = int(words[5])-1
+    #     lines = s.split("\n")
+    #     ptr = ("." * col) + "^"
+    #     raise ValueError(f"{err_msg}\n{line_no-1}:{lines[line_no-1]}\n{line_no}:{lines[line_no]}\n{line_no}:{ptr}\n{line_no+1}:{lines[line_no+1]}")
 
 def to_dict(obj) -> dict:
     """Convert any object to dict recursively"""

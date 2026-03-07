@@ -116,7 +116,6 @@ class PMConfig:
         config_name = snake_to_pascal(_config_name)
         module = importlib.import_module(f"configs.{_config_name}_config")
         clazz_name = f"{config_name}Config"
-        _print(f"119: Loading '{config_name}' config, class {clazz_name} from {module.__name__}")
         clazz = getattr(module, clazz_name, None) # get the class from the module
         _print(f"... loaded class: {clazz}")
         return clazz
@@ -160,7 +159,7 @@ class PMConfig:
             raise Exception(f"bad json object: '{data[0:20]}...'")
         return self.from_dict(obj, with_config=with_config)
 
-    def from_dict(self, obj: dict, with_config:str = None) -> "PMConfig":
+    def from_dict(self, obj: dict, with_config:str = "Config") -> "PMConfig":
         result = None
         if with_config:
             result = self._load_config(with_config, obj)

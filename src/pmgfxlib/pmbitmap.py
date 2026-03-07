@@ -8,10 +8,8 @@
 ## PMBitmap is the lowest level graphcics class in PyMirror.
 ##
 
-import copy
 from dataclasses import dataclass
-from email.mime import image
-from PIL import Image, ImageDraw, ImageColor
+from PIL import Image, ImageDraw
 
 from pymirror.pmrect import PMRect
 from pmlogger import _trace, _debug

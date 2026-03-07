@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 import copy
 from dataclasses import dataclass
 
+from configs.config_config import ConfigConfig
 from configs.module_config import ModuleConfig
-from configs.pymirror_config import PymirrorConfig
 from pmdb.pmdb import PMDb
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
@@ -11,26 +11,8 @@ from utils.utils import to_munch
 from pmlogger import _trace, _debug
 from pymirror.pmrect import PMRect
 
-# @from_dict
-# @dataclass
-# class PMModuleDef(ABC):
-#     name: str = None
-#     position: str = "None"
-#     color: str = "#fff"
-#     bg_color: str = None
-#     text_color: str = "#fff"
-#     text_bg_color: str = None
-#     font_name: str = "DejaVuSans"
-#     font_size: int = 64
-#     font_baseline: bool = False
-#     font_y_offset: int = 0
-#     subscriptions: list[str] = None
-#     disabled: bool = False
-#     force_render: bool = False
-#     force_update: bool = False
-
 class PMModule(ABC):
-    def __init__(self, pm, config: PymirrorConfig):
+    def __init__(self, pm, config: ConfigConfig):
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm

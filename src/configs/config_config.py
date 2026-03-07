@@ -12,6 +12,7 @@ from configs.ical_config import IcalConfig
 from configs.image_config import ImageConfig
 from configs.module_config import ModuleConfig
 from configs.openweathermap_config import OpenweathermapConfig
+from configs.plot_config import PlotConfig
 from configs.pmdb_config import PmdbConfig
 from configs.slideshow_config import SlideshowConfig  # Missing import
 from configs.sql_table_config import SqlTableConfig
@@ -37,6 +38,7 @@ class ConfigConfig:
     ical: IcalConfig = None
     image: ImageConfig = None
     openweathermap: OpenweathermapConfig = None
+    plot: PlotConfig = None
     pmdb: PmdbConfig = None
     slideshow: SlideshowConfig = None
     csv_table: CsvTableConfig = None
