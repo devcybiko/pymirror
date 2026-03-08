@@ -1,0 +1,28 @@
+
+[project]
+name = "pymirror-macos"
+version = "0.1.0"
+description = "PyMirror dependencies for macOS using Ultraviolet (uv)"
+requires-python = ">=3.8"
+dependencies = [
+	"dotenv",
+	"icalendar",
+	"caldav",
+	"vobject",
+	"Pillow",
+	"jinja2",
+	"flask",
+	"requests",
+	"pygame",
+	"ics",
+	"python-dateutil",
+	"httpx",
+	"munch",
+	"sqlalchemy",
+	"psutil",
+	"json5",
+	"staticmap"
+]
+
+[tool.uv]
+# Ultraviolet-specific settings can go here if needed
