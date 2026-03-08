@@ -4,18 +4,16 @@ from dataclasses import dataclass
 from configs.card_config import CardConfig
 from configs.module_config import ModuleConfig
 from configs.text_config import TextConfig
-from pmgfxlib.pmgfx import PMGfx
-from pymirror.pmrect import PMRect
 from pymirror.comps.pmtextcomp import PMTextComp
 from pymirror.pmmodule import PMModule
-from utils.utils import from_dict, non_null, pprint
+from utils.utils import non_null
 
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
-        if self._config.card == None:
-            self._config.card = CardConfig()
-        self._card = self._config.card
+        if getattr(self._config, "card", None) is None:
+            self._config.card = {}
+        self._card: CardConfig = pm.configurator.from_dict(self._config.card, CardConfig)
         self._card.header = non_null(self._card.header, TextConfig())
         self._card.body = non_null(self._card.body, TextConfig())
         self._card.footer = non_null(self._card.footer, TextConfig())

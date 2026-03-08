@@ -1,6 +1,6 @@
 {
-    "module": "image",
-    "moddef": {
+    "module": {
+        "class": "image",
         "name": "test_image",
         "position": "middle_center"
     },

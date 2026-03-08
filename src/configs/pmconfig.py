@@ -2,9 +2,10 @@ from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
 
-from munch import DefaultMunch
-from utils.utils import json_dumps, json_loads, json_read, pascal_to_snake, snake_to_pascal, to_dict
-from pmlogger import trace, trace_method, _trace, _info, _print, _warning
+from utils.json import json_dumps, json_loads, json_read
+from utils.to_types import to_dict
+from utils.strings import pascal_to_snake, snake_to_pascal
+from utils.logger import trace, trace_method, _trace, _info, _print, _warning
 
 class Object:
     def __init__(self):
@@ -124,14 +125,17 @@ class PMConfig:
         _print(f"... loaded class: {clazz}")
         return clazz
 
-    def _load_config(self, config_name, values: dict):
-        if config_name.startswith("_"):
-            ## fields beginning with underscores are skipped (commented out)
-            return None
+    def _load_config(self, config_clazz, values: dict):
+        if type(config_clazz) == str:
+            if config_clazz.startswith("_"):
+                ## fields beginning with underscores are skipped (commented out)
+                return None
+            clazz = self._load_clazz(config_clazz)
+        else:
+            clazz = config_clazz
         if type(values) != dict:
             ## make sure we're working on a dictonary
-            raise Exception(f"'{config_name}' expects a dictionary, but got '{values}' ({type(values)})")
-        clazz = self._load_clazz(config_name)
+            raise Exception(f"'{config_clazz}' expects a dictionary, but got '{values}' ({type(values)})")
         _trace(clazz, values)
         obj = self._handle_fields(clazz, values)
         self._handle_strict_types(clazz, obj)

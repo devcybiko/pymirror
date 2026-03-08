@@ -1,6 +1,6 @@
 {
-    "module": "forecast",
-    "moddef": {
+    "module": {
+        "class": "forecast",
         "name": "Weather Forecast",
         "position": "bottom_left",
         "font_size": 24,

@@ -4,15 +4,15 @@
 import copy
 import subprocess
 
-from pymirror.pmmodule import PMModule
-from utils.utils import expand_dict
+from configs.cli_config import CliConfig
+from utils.strings import expand_dict
 from pymirror.pmcard import PMCard
-from pmlogger import _debug
+from utils.logger import _debug
 
 class CliModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._cli = config.cli
+		self._cli: CliConfig = pm.configurator.from_dict(config.cli, CliConfig)
 		_debug(">>>", config.cli)
 		self.timer.set_timeout(self._cli.cycle_seconds * 1000)
 		self.update("", "", "")  # Initialize with empty strings

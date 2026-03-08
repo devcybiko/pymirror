@@ -1,6 +1,6 @@
 {
-    "module": "compliments",
-    "moddef": {
+    "module": {
+        "class": "compliments",
         "name": "Complements",
         "position": "lower_third",
         "font_name": "Roboto-Light",

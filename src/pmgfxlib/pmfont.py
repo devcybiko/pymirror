@@ -2,8 +2,8 @@ import copy
 from dataclasses import dataclass
 from typing import ClassVar, Optional
 from PIL import ImageFont
-from utils.utils import _height, _width
-from pmlogger import trace, _debug
+from utils.rects import _height, _width
+from utils.logger import trace, _debug
 
 @dataclass
 class PMFont:

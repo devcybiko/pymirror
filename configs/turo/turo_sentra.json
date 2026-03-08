@@ -8,7 +8,7 @@
         "vehicle_nickname": "sentra",
         "database": "/Users/greg/git/turo-dashboard/turo.sqlite",
         "refresh_time": "60s",
-        "nmonths": 4,
+        "nmonths": 5,
         "start_date": "2025-12-01",
         "hide_months": true,
         "hide_vehicle_name": true

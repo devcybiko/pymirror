@@ -1,5 +1,7 @@
 {
-    "module": "pymirror_controller",
+    "module": {
+        "class": "pymirror_controller"
+    },
     "cron": {
         "name": "PyMirror Controller"
     }

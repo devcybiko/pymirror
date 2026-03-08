@@ -5,7 +5,7 @@ import time
 from abc import ABC, abstractmethod
 
 from pymirror.pmtimer import PMTimer
-from pmlogger import _debug, _error, _debug, pmlogger, PMLoggerLevel, trace, _trace
+from utils.logger import _debug, _error, _debug, pmlogger, PMLoggerLevel, trace, _trace
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 

@@ -1,13 +1,14 @@
 from datetime import datetime
 
 from munch import DefaultMunch
+from configs.clock_config import ClockConfig
 from pymirror.pmmodule import PMModule
-from utils.utils import strftime_by_example
+from utils.strings import strftime_by_example
 
 class ClockModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
-		self._clock = config.clock
+		self._clock: ClockConfig = pm.configurator.from_dict(config.clock, ClockConfig)
 		self.date_format = strftime_by_example(self._clock.date_format) or "%I:%M:%S %p"
 		self.last_time = None
 		self.curr_time = datetime.now().strftime(self.date_format)

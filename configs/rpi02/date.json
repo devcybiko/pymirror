@@ -1,6 +1,6 @@
 {
-    "module": "clock",
-    "moddef": {
+    "module": {
+        "class": "clock",
         "name": "date",
         "position": "top_right",
         "font_name": "7segment.ttf",

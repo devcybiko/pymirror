@@ -11,6 +11,14 @@
         "text_color": "#fff",
         "text_bg_color": "#333",
     },
+    "table": {
+        "rows": 10,
+        "cols": null,
+        "row_height": 30,
+        "col_width": null,
+        "has_header": true,
+        "reversed": true,
+    },
     "sql_table": {
         "database_url": "sqlite:///turo.sqlite",
         "sql": "\

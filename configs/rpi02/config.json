@@ -46,8 +46,8 @@
     "./configs/rpi02/weather_alert.json",
     "./configs/rpi02/forecast.json",
     "./configs/rpi02/pymirror_controller.json",
-    "./configs/rpi02/ir.json",
-    "./configs/rpi02/keyboard.json",
+    // "./configs/rpi02/ir.json",
+    // "./configs/rpi02/keyboard.json",
     "./configs/rpi02/cron_test.json",
     "./configs/rpi02/window_manager.json"
   ]

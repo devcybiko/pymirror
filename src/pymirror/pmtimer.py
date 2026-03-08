@@ -1,6 +1,6 @@
 import time
-from pmlogger import _debug, trace
-from utils.utils import to_ms
+from utils.logger import _debug, trace
+from utils.to_types import to_ms
 
 class PMTimer:
     def __init__(self, delay_time: str | int =0, first_timeout_time=1):

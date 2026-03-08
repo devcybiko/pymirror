@@ -1,5 +1,14 @@
 {
-    "module": "pymirror_controller",
+    "module": {
+        "class": "pymirror_controller",
+        "name": "pymirror_controller",
+        "position": "0.0,0.0,1.0,1.0",
+        "text_color": "#000000",
+        "text_bg_color": "#c0c0c0",
+        "font_name": "Roboto-Regular",
+        "font_size": 24,
+        "disabled": false
+    },
     "cron": {
         "name": "PyMirror Controller"
     }

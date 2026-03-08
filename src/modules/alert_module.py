@@ -1,10 +1,11 @@
 from datetime import datetime
+from configs.alert_config import AlertConfig
 from pymirror.pmcard import PMCard
 
 class AlertModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._alert = config.alert
+		self._alert: AlertConfig = pm.configurator.from_dict(config.alert, AlertConfig)
 		## update the card with initial values
 		self.update(self._alert.header, self._alert.body, self._alert.footer)
 		## set the timeout for the alert, if any

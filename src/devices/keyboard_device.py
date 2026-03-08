@@ -8,7 +8,7 @@ import select
 import glob
 from typing import Optional, List
 from evdev import InputDevice, ecodes
-from pmlogger import _debug
+from utils.logger import _debug
 
 class KeyboardDevice:
     """

@@ -1,5 +1,7 @@
 {
-    "module": "cron",
+    "module": {
+        "class": "cron"
+    },
     "cron": {
         "name": "example_cron",
         "first_delay": 1,

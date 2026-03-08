@@ -2,16 +2,16 @@
 # https://openweathermap.org/api/one-call-3#current
 
 from datetime import datetime
-from dataclasses import dataclass
 from configs.module_config import ModuleConfig
+from configs.weather_config import WeatherConfig
 from pymirror.pmcard import PMCard
-from pmlogger import _debug
-from utils.utils import to_ms, to_secs
+from utils.logger import _debug
+from utils.to_types import to_ms
 
 class WeatherModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
-        self._weather = config.weather
+        self._weather: WeatherConfig = pm.configurator.from_dict(config.weather, WeatherConfig)
         self.timer.set_timeout(to_ms(self._weather.refresh_time)) 
         self.weather_response = None
         if config.openweathermap:

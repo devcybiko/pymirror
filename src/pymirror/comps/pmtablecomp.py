@@ -41,7 +41,8 @@ class PMRow:
 class PMTableComp(PMComponent):
     def __init__(self, gfx: PMGfx, config: TableConfig, x0: int = None, y0: int = None, width: int = None, height: int = None):
         super().__init__(gfx, config)
-        self._table = self._comp
+        print(44, config)
+        self._table = config
         self.gfx = gfx
         self.rect = PMRect(x0, y0, 0, 0)
         self.rect.width = non_null(width, 100)
@@ -75,21 +76,38 @@ class PMTableComp(PMComponent):
         else:
             self.header_cell.render(bm, x, y, w, h, self.rows[row_n][col_n])
 
+    def _render_header_row(self, bm: PMBitmap, y: int, h: int, row_n: int):
+        cell_width = self.rect.width // self._table.cols
+        for col_n in range(self._table.cols):
+            x = col_n * cell_width
+            w = cell_width
+            self._render_header_cell(bm, x, y, w, h, row_n, col_n)
+
     def _render_row(self, bm: PMBitmap, y: int, h: int, row_n: int):
         cell_width = self.rect.width // self._table.cols
         for col_n in range(self._table.cols):
             x = col_n * cell_width
             w = cell_width
-            if self._table.has_header and row_n == 0:
-                self._render_header_cell(bm, x, y, w, h, row_n, col_n)
-            else:
-                self._render_cell(bm, x, y, w, h, row_n, col_n)
+            self._render_cell(bm, x, y, w, h, row_n, col_n)
 
     def render(self, bm: PMBitmap) -> None:
         # Render the table to the bitmap
         bm.gfx_push(self.gfx)
-        cell_height = self.rect.height // self._table.rows
-        for row_n in range(self._table.rows):
-            y = row_n * cell_height
-            self._render_row(bm, y, cell_height, row_n)
+        cell_height = self._table.row_height or (self.rect.height // self._table.rows)
+        y = 0
+        row_n = 0
+        if self._table.has_header:
+            self._render_header_row(bm, y, cell_height, row_n)
+            y += cell_height
+        while row_n < len(self.rows):
+            if y + cell_height > self.rect.height:
+                break
+            if self._table.has_header and row_n == 0:
+                ## we already rendered the header row
+                row_n += 1
+                continue
+            actual_row = row_n if not self._table.reversed else (len(self.rows) - 1 - row_n)
+            self._render_row(bm, y, cell_height, actual_row)
+            y += cell_height
+            row_n += 1
         bm.gfx_pop()

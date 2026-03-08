@@ -1,6 +1,6 @@
 {
-    "module": "cli",
-    "moddef": {
+    "module": {
+        "class": "cli",
         "name": "calendar2",
         "position": "calendar_strip2"
     },

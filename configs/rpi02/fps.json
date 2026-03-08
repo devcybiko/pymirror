@@ -1,6 +1,6 @@
 {
-    "module": "fps",
-    "moddef": {
+    "module": {
+        "class": "fps",
         "disabled": false,
         "name": "fps",
         "position": "fps_strip",

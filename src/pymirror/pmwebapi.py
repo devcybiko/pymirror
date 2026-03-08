@@ -4,9 +4,9 @@ import httpx
 import asyncio
 import time
 
-from pmlogger import _debug, _debug, _error, _debug
+from utils.logger import _debug, _debug, _error, _debug
 from utils.utils import DefaultMunch, json_loads, to_ms
-from pmlogger import _print
+from utils.logger import _print
 
 # pmlogger.set_level(PMLoggerLevel.WARNING)
 

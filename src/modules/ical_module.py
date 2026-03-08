@@ -7,15 +7,18 @@ from datetime import datetime, timedelta
 from arrow import now
 from sqlalchemy import extract, and_, func
 
+from configs.ical_config import IcalConfig
 from pmdb.pmdb import Base
 from pymirror.pmcard import PMCard
-from utils.utils import json_read, strftime_by_example, to_dict, to_munch, to_naive, to_utc_epoch
+from utils.json import json_read
+from utils.strings import strftime_by_example
+from utils.to_types import to_dict, to_munch, to_utc_epoch
 from tasks.ical_task import IcalTable
     
 class IcalModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._ical = config.ical
+        self._ical: IcalConfig = pm.configurator.from_dict(config.ical, IcalConfig)
         self.timer.set_timeout(self._ical.refresh_time)
         self.all_day_format = strftime_by_example(self._ical.all_day_format)
         self.time_format = strftime_by_example(self._ical.time_format)

@@ -4,7 +4,7 @@ import time
 from pmtaskmgr.pmtask import PMTask
 from tables.web_api_table import WebApiTable
 from utils.utils import json_dumps, json_loads, to_secs
-from pmlogger import _debug, _error
+from utils.logger import _debug, _error
 
 import requests
 

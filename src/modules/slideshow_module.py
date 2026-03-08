@@ -1,18 +1,19 @@
 from random import random
 
 from configs.module_config import ModuleConfig
+from configs.slideshow_config import SlideshowConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from utils.utils import _height, _str_to_rect, _width
+from utils.rects import _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
-from pmlogger import _debug
+from utils.logger import _debug
 from pymirror.pmrect import PMRect
 import os
 
 class SlideshowModule(PMModule):
-	def __init__(self, pm, config: ModuleConfig):
+	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._slideshow = config.slideshow
+		self._slideshow: SlideshowConfig = pm.configurator.from_dict(config.slideshow, SlideshowConfig)
 		self.alt_rect = PMRect(*_str_to_rect(self._slideshow.rect))
 		self.photo_number = 0
 		self.photos = self.load_folder(self._slideshow.folder)

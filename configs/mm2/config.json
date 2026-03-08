@@ -12,6 +12,9 @@
     "text_color": "#fff",
     "text_bg_color": null
   },
+  "pmdb": {
+    "url": "sqlite:///pymirror.db"
+  },
   "positions": {
     "top_left":     "0.00,0.00,0.33,0.20",
     "top_center":   "0.33,0.00,0.66,0.20",

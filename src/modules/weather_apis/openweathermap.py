@@ -1,8 +1,10 @@
 from pmdb.pmdb import PMDb
-from utils.utils import  json_loads, pprint, to_dict, to_munch
+from utils.json import  json_loads
+from utils.utils import pprint
+from utils.to_types import to_dict, to_munch
 from tables.web_api_table import WebApiTable
 from .pmweatherdata import PMWeatherData
-from pmlogger import _debug
+from utils.logger import _debug
 
 def _paragraph_fix(text: str) -> str:
     results = []

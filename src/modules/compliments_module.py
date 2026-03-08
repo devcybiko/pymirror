@@ -1,6 +1,8 @@
 from datetime import datetime
 import random
 
+from munch import DefaultMunch
+
 from pymirror.pmmodule import PMModule
 from utils.utils import expand_dict
 from pymirror.pmcard import PMCard
@@ -8,7 +10,7 @@ from pymirror.pmcard import PMCard
 class ComplimentsModule(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._compliments = config.compliments
+        self._compliments = DefaultMunch(**config.compliments)
         self.timer.set_timeout(self._compliments.update_interval_secs * 1000)
 
     def _pick_complement(self):

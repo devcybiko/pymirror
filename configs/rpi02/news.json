@@ -1,6 +1,6 @@
 {
-    "module": "web_db",
-    "moddef": {
+    "module": {
+        "class": "web_db",
         "name": "news",
         "position": "middle_right",
         "text_color": "#000000",

@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from PIL import Image, ImageDraw
 
 from pymirror.pmrect import PMRect
-from pmlogger import _trace, _debug
+from utils.logger import _trace, _debug
 from utils.utils import non_null
 from .pmgfx import PMGfx
 

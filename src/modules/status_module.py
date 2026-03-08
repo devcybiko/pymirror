@@ -1,15 +1,18 @@
 from datetime import datetime
 import os
 import sys
+from configs.pmconfig import PMConfig
+from configs.status_config import StatusConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from utils.utils import strftime_by_example, glyphs, to_secs
-from pmlogger import _debug
+from utils.strings import strftime_by_example, glyphs
+from utils.to_types import to_secs
+from utils.logger import _debug
 
 class StatusModule(PMModule):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._status = config.status
+        self._status: StatusConfig = pm.configurator.from_dict(config.status, StatusConfig)
         self.interval_secs = to_secs(self._status.interval_time)
         self.timer = PMTimer(self._status.interval_time)
         self._status.time_format = strftime_by_example(self._status.time_format)

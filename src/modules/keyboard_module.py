@@ -1,5 +1,5 @@
 from devices.keyboard_device import KeyboardDevice
-from pmlogger import _debug
+from utils.logger import _debug
 from pymirror.pmmodule import PMModule
 
 class KeyboardModule(PMModule):

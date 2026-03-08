@@ -12,14 +12,14 @@ from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
-from utils.utils import json_dumps
+from utils.json import json_dumps
 
 from turo.modules.turo_calculations import annual_income, annual_sum_of_days
 
 class TuroTripModule(PMModule):
     def __init__(self, pm, config: DefaultMunch):
         super().__init__(pm, config)
-        self._trip: TuroTripConfig = TuroTripConfig(config.turo_trip)
+        self._trip: TuroTripConfig = pm.configurator.from_dict(config.turo_trip, TuroTripConfig)
         self.timer.set_timeout(self._trip.refresh_time)
         self.database = self._trip.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")
@@ -85,11 +85,20 @@ class TuroTripModule(PMModule):
             if bar.w < 1: bar.w = 0
         return bar
         
-    def _render_today_marker(self, gfx, month, dtrip, box_top):
+    def _render_today_marker(self, x, y, vehicle, vehicle_trips):
         today = datetime.now().date()
-        if month.start.date() <= today <= month.end.date():
-            x = month.x + round((today - month.start.date()).days * month.pixels_per_day)
-            self.bitmap.rectangle((x, box_top, x + 4, dtrip.y), fill="red")
+        bm, gfx = self._gfx_push()
+        w, h = bm.width, self.dims.month_h
+        for month_n in range(0, self.nmonths):
+            trip_date = self.cal.start + relativedelta(months=month_n)
+            if trip_date.month == today.month:
+               box = self._compute_month_box(today.month, x, y, w, h)
+               marker_w = 3
+            #    marker_x = box.x + box.pixels_per_day * (today.day - 1) + box.pixels_per_day * 0.5 - marker_w / 2
+               marker_x = box.x + box.pixels_per_day * (today.day - 1)
+               x, y = bm.rectangle((marker_x, box.y+self.dims.padding, marker_x + marker_w, box.y+box.h+self.dims.padding), "white", "red")
+        self._gfx_pop()
+        return x, y
 
     def _render_weekend_markers(self, box):
         bm, gfx = self._gfx_push()
@@ -212,6 +221,7 @@ class TuroTripModule(PMModule):
         _, y1 = self._render_month_names(x, y0, vehicle, self.trips)
         _, y2 = self._render_month_boxes(x, y1, vehicle, self.trips)
         _, y3 = self._render_trips(x, y1, vehicle, self.trips)
+        _, y4 = self._render_today_marker(x, y1, vehicle, self.trips)
         y = y2 + self.dims.padding*2
         
         return True

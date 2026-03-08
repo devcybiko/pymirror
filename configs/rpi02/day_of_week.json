@@ -1,6 +1,6 @@
 {
-    "module": "clock",
-    "moddef": {
+    "module": {
+        "class": "clock",
         "name": "day_of_week",
         "position": "top_center",
         "font_name": "7segment",

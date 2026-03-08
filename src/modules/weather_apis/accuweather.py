@@ -7,7 +7,7 @@ from munch import DefaultMunch
 from pymirror.pmwebapi import PMWebApi
 from utils.utils import json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
-from pmlogger import _debug
+from utils.logger import _debug
 
 @dataclass 
 class AccuWeatherParams:

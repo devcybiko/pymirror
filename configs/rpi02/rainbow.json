@@ -1,6 +1,6 @@
 {
-  "module": "rainbow",
-  "moddef": {
+  "module": {
+    "class": "rainbow",
     "name": "rainbow",
     "position": "bottom_left"
   }

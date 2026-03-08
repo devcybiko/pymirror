@@ -1,12 +1,13 @@
-from utils.crontab import Crontab
+from configs.cron_config import CronConfig
+from glslib.crontab import Crontab
 from pymirror.pmmodule import PMModule
-from pmlogger import _debug
+from utils.logger import _debug
 
 class CronModule(PMModule):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._cron = config.cron
-		self.alerts = config.cron.alerts or []
+		self._cron: CronConfig = pm.configurator.from_dict(config.cron, CronConfig)
+		self.alerts = self._cron.alerts or []
 		if type(self.alerts) is not list:
 			self.alerts = [self.alerts]
 		for alert in self.alerts:

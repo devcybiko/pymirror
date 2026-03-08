@@ -1,6 +1,6 @@
     {
-      "module": "slideshow",
-      "moddef": {
+      "module": {
+        "class": "slideshow",
         "name": "test_slideshow",
         "position": "middle_center"
       },

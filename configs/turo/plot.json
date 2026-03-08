@@ -12,7 +12,6 @@
         "text_bg_color": "#333",
     },
     "plot": {
-        "foo": false,
         "refresh_time": "60s",
         "database": "sqlite:///turo.sqlite",
         "sql": "SELECT trip_start, total_earnings FROM trips WHERE vehicle_nickname='cx5' AND trip_status in ('Completed', 'In-progress', 'Booked') ORDER BY trip_start",

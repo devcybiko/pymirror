@@ -5,7 +5,7 @@ from configs.screen_config import ScreenConfig
 @dataclass
 class PymirrorConfig:
     screen: ScreenConfig
-    pmdb: PmdbConfig
+    pmdb: PmdbConfig = None
     debug: bool = False
     secrets: str = ".secrets"
     force_render: bool = False

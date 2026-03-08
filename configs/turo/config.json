@@ -22,7 +22,7 @@
     "None": "0.0,0.0,0.0,0.0",
   },
   modules: [
-    "./configs/turo/plot.json",
+    // "./configs/turo/plot.json",
     "./configs/turo/fps.json",
     "./configs/turo/status.json",
     "./configs/turo/time.json",

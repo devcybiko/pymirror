@@ -1,30 +1,22 @@
 {
-    "module": "web_api",
-    "moddef": {
-        "name": "newsapi.com",
-        "position": "news_strip",
-        "text_color": "#fff",
-        "text_bg_color": "#000",
+    "module": {
+        "class": "web_db",
+        "name": "news",
+        "position": "0.68,0.15,0.99,0.95",
+        "text_color": "#000000",
+        "text_bg_color": "#c0c0c0",
+        "font_name": "Roboto-Regular",
         "font_size": 24,
-        "disabled": false,
-        "force_render": true
+        "disabled": false
     },
-    "web_api": {
-        "cache_file": "./caches/news.json",
-        "poll_secs": 840,
-        "cycle_seconds":15,
-        "url": "https://newsapi.org/v2/top-headlines",
-        "params": {
-            "apiKey": "$NEWSAPI_KEY",
-            "country": "us",
-            "pageSize": 100,
-            "category": "general"
-        },
+    "web_db": {
+        "cycle_time": "60s",
         "display": {
-            "total": "{{ payload.totalResults }}",
-            "max": "10",
-            "body": "{{payload.articles[_n_].title.split(' - ')[0]}}",
-            "header": "{{payload.articles[_n_].source.name}} @ {{ payload.articles[_n_].publishedAt.split('T')[0] }} -  {{ payload.articles[_n_].publishedAt.split('T')[1].replace('Z', '') }}"
+            "total": "{{payload.totalResults}}",
+            "max": "100",
+            "header": "{{_n_}}/{{payload.totalResults}}: {{payload.articles[_n_].title}}",
+            "body": "{{payload.articles[_n_].description}}",
+            "footer": "{{payload.articles[_n_].source.name}} @ {{ payload.articles[_n_].publishedAt.split('T')[0] }} -  {{ payload.articles[_n_].publishedAt.split('T')[1].replace('Z', '') }}"
         }
     },
     "card": {

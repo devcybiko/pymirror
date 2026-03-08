@@ -1,6 +1,6 @@
 {
-    "module": "text",
-    "moddef": {
+    "module": {
+        "class": "text",
         "name": "week_text",
         "position": "top_center_left",
         "font_name": "DejaVuSans",

@@ -1,6 +1,6 @@
 {
-    "module": "window_manager",
-    "window_manager": {
+    "module": {
+        "class": "window_manager",
         "name": "window_manager"
     }
 }

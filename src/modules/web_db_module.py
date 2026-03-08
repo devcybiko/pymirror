@@ -1,16 +1,19 @@
 import time
 import copy
 
+from configs.web_db_config import WebDbConfig
 from pymirror.pmcard import PMCard
-from utils.utils import expand_dict, json_loads, to_dict
+from utils.strings import expand_dict
+from utils.json import json_loads
+from utils.to_types import to_dict
 from pymirror.pmtimer import PMTimer
-from pmlogger import _debug
+from utils.logger import _debug
 from tables.web_api_table import WebApiTable
 
 class WebDbModule(PMCard):
 	def __init__(self, pm, config):
 		super().__init__(pm, config)
-		self._web_db = config.web_db
+		self._web_db: WebDbConfig = pm.configurator.from_dict(config.web_db, WebDbConfig)
 		self.display_timer = PMTimer(self._web_db.cycle_time)
 		self.dirty = False
 		self.text = None

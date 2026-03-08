@@ -15,7 +15,7 @@ class PlotModule(PMModule):
     def __init__(self, pm, config: ConfigConfig):
         super().__init__(pm, config)
         print(f"Initializing PlotModule with config: {config}")
-        self._plot: PlotConfig = config.plot
+        self._plot: PlotConfig = PlotConfig(**config.plot)
         now = datetime.now()
         x_axis=PMPlotAxisConfig(min=now, max=(now + relativedelta(days=5)), margin=40, tic_interval=86400, format="{:%Y-%m-%d}", data=[], color="red")
         y_axis=PMPlotAxisConfig(min=0, max=10, margin=40, tic_interval=5.0, format="${:.2f}", color="blue")

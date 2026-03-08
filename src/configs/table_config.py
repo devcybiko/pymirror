@@ -9,3 +9,6 @@ class TableConfig(TextMixin, FontMixin):
     cols: int = None
     height: int = None
     width: int = None
+    row_height: int = None
+    col_width: int = None
+    reversed: bool = False

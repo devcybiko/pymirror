@@ -1,6 +1,6 @@
 {
-    "module": "cli",
-    "moddef": {
+    "module": {
+        "class": "cli",
         "name": "FORTUNE COOKIES",
         "position": "top_strip"
     },

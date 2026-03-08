@@ -2,7 +2,7 @@ from datetime import datetime
 import time
 
 from pmtaskmgr.pmtask import PMTask
-from pmlogger import _debug
+from utils.logger import _debug
 
 from tables.time_table import TimeTable
 from utils.utils import to_dict

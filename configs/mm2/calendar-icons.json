@@ -1,6 +1,6 @@
 {
-    "module": "cli",
-    "moddef": {
+    "module": {
+        "class": "cli",
         "name": "calendar0",
         "position": "calendar_strip0",
         "font_name": "fonts/Font Awesome 6 Free-Regular-400"

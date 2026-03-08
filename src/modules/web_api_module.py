@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import json
 import time
+from munch import DefaultMunch
 import requests
 import copy
 
@@ -8,15 +9,15 @@ from pymirror.pmcard import PMCard
 from utils.utils import expand_dict, json_loads, to_ms
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
-from pmlogger import _debug, _debug, _error, _debug
+from utils.logger import _debug, _debug, _error, _debug
 
 class WebApiModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)
-        self._web_api = config.web_api
+        self._web_api = DefaultMunch(**config.web_api)
         _debug("xxx... poll_time ", self._web_api.poll_time, "to_ms()", to_ms(self._web_api.poll_time))
         _debug("xxx... cache_file", self._web_api.__dict__)
-        self.api = PMWebApi(url=self._web_api.url, poll_time=to_ms(self._web_api.poll_time), cache_file=self._web_api.cache_file)
+        self.api = PMWebApi(url=self._web_api.url, poll_time=self._web_api.poll_time, cache_file=self._web_api.cache_file)
         self.display_timer = PMTimer(self._web_api.cycle_time)
         self.dirty = False
 

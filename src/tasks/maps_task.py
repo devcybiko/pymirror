@@ -1,6 +1,6 @@
 from os import path
 from pmtaskmgr.pmtask import PMTask
-from pmlogger import _debug, _error, _print
+from utils.logger import _debug, _error, _print
 
 from staticmap import StaticMap, CircleMarker
 
