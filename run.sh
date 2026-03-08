@@ -11,12 +11,12 @@ mkdir -p ./caches/
 source .venv/bin/activate
 
 while true; do
-    PYTHONPATH=src \
+    PYTHONPATH="libs:apps/pymirror" \
         python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \
         --output_file=null \
         --frame_buffer="/dev/fb0" \
-        >> src/pmserver/static/output.log 2>&1
+        >> ./apps/pymirror/pmserver/static/output.log 2>&1
         date
         echo "Restarting pymirror..."
         sleep 10
