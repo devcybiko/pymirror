@@ -16,11 +16,4 @@ def make_hashcode(*args):
     s = "|".join(str(a) for a in args)
     return hashlib.sha256(s.encode()).hexdigest()
 
-def munchify(obj):
-    if isinstance(obj, dict):
-        return DefaultMunch.fromDict({k: munchify(v) for k, v in obj.items()})
-    elif isinstance(obj, list):
-        return [munchify(v) for v in obj]
-    else:
-        return obj
 

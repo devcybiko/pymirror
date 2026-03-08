@@ -19,7 +19,7 @@ from glslib.module_manager import ModuleManager
 from glslib.strings import expand_dataclass, snake_to_pascal
 from glslib.to_types import to_munch
 from pmserver.pmserver import PMServer
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from glslib.pstat import get_pstat_delta, get_pids_by_cli
 import modules
 
@@ -53,7 +53,7 @@ class PyMirror:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
         _debug(f"Using config: {self._config}")
         self._import_modules_from_config()
-        self.pmdb = PMDb(self._config.pmdb.__dict__) if self._config.pmdb else None
+        self.pmdb = GLSDb(self._config.pmdb.__dict__) if self._config.pmdb else None
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug

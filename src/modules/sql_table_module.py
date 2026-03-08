@@ -3,7 +3,7 @@ import copy
 from munch import DefaultMunch
 from configs.sql_table_config import SqlTableConfig
 from configs.table_config import TableConfig
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from pymirror.comps.pmtablecomp import PMCell, PMTableComp
 
@@ -12,7 +12,7 @@ class SqlTableModule(PMModule):
 		super().__init__(pm, config)
 		self._sql_table: SqlTableConfig = pm.configurator.from_dict(config.sql_table, TableConfig)
 		db_config = DefaultMunch(url=self._sql_table.database_url)
-		self.db = PMDb(db_config)
+		self.db = GLSDb(db_config)
 		self.header, self.rows = self._read_sql(self._sql_table.sql)
 		self._table_comp: PMTableComp = self._create_table(config)
 		self._table_comp.set_rows(self.rows)

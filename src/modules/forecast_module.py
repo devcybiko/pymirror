@@ -6,11 +6,13 @@ from configs.module_config import ModuleConfig
 from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from glslib.logger import _debug, _print
+from munch import DefaultMunch
+from configs.forecast_config import ForecastConfig
 
 class ForecastModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):
         super().__init__(pm, config)
-        self._forecast = config.forecast
+        self._forecast: ForecastConfig = pm.configurator.from_dict(config.forecast, ForecastConfig)
         self.subscribe("WeatherForecastEvent")
         self.dirty = False
         self.weather_response = None

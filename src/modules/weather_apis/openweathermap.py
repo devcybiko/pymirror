@@ -1,4 +1,4 @@
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from glslib.gson import  json_loads
 from glslib.logger import pprint
 from glslib.to_types import to_dict, to_munch
@@ -20,7 +20,7 @@ class OpenWeatherMapApi:
     A wrapper for the OpenWeatherMap API that uses PMWebApi.
     This is a convenience function to create an instance of PMWebApi with the OpenWeatherMapConfig.
     """
-    def __init__(self, pmdb: PMDb, name: str):
+    def __init__(self, pmdb: GLSDb, name: str):
         self.pmdb = pmdb
         self.name = name
         self.text = ""
@@ -52,7 +52,7 @@ class OpenWeatherMapApi:
         return weather
 
 if __name__ == "__main__":
-    pmdb = PMDb({"url":"sqlite:///pymirror.db"})
+    pmdb = GLSDb({"url":"sqlite:///pymirror.db"})
     openweathermap = OpenWeatherMapApi(pmdb, "openweather")
     weather_data = openweathermap.get_weather_data()
     pprint(weather_data)

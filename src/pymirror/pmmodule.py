@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 # from configs.config_config import ConfigConfig
 from configs.module_config import ModuleConfig
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.pymirror import PyMirror
@@ -15,7 +15,7 @@ class PMModule(ABC):
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm
-        self.pmdb: PMDb = pm.pmdb
+        self.pmdb: GLSDb = pm.pmdb
         self._moddef: ModuleConfig = config.module
         _moddef: ModuleConfig = self._moddef
         self.screen = pm.screen

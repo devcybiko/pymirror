@@ -1,9 +1,9 @@
 import datetime
 import sys
 
-from utils.strings import has_alpha
-from utils.to_types import to_int, to_list
-from utils.logger import _debug, _error, _print
+from glslib.strings import has_alpha
+from glslib.to_types import to_int, to_list
+from glslib.logger import _debug, _error, _print
 
 _SECONDS=0 # seconds index
 _MINUTES=1 # minutes index

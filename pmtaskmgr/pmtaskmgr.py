@@ -7,11 +7,13 @@ import time
 import traceback
 from dotenv import load_dotenv
 
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from pmtaskmgr.pmtask import PMTask
 from glslib.crontab import Crontab
-from pmutils import expand_dict, from_dict, munchify, json_read, snake_to_pascal
-from utils.logger import _debug
+from glslib.strings import expand_dict, snake_to_pascal
+from glslib.gson import json_read
+from glslib.dicts import from_dict, munchify
+from glslib.logger import _debug
 
 @from_dict
 @dataclass
@@ -22,7 +24,7 @@ class PMTaskMgrConfig:
 class PMTaskMgr:
     def __init__(self, config_fname: str):
         self._config = self._load_config(config_fname)
-        self.pmdb: PMDb = PMDb(self._config.pmdb)
+        self.pmdb: GLSDb = GLSDb(self._config.pmdb)
         self.tasks: list[PMTask] = []
         self._load_tasks()
         self.task_dict: dict = self._make_task_dict()

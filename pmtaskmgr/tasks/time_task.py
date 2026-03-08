@@ -5,7 +5,7 @@ from pmtaskmgr.pmtask import PMTask
 from glslib.logger import _debug
 
 from tables.time_table import TimeTable
-from pmutils import to_dict
+from glslib.to_types import to_dict
 
 class TimeTask(PMTask):
     def __init__(self, pmtm, config):

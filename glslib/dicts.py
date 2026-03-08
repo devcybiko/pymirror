@@ -1,5 +1,7 @@
 from dataclasses import fields
 
+from munch import DefaultMunch
+
 def getter(obj, path, default=None):
     keys = path.split(".")
     current = obj
@@ -26,3 +28,11 @@ def from_dict(cls):
 
     cls.from_dict = from_dict
     return cls
+
+def munchify(obj):
+    if isinstance(obj, dict):
+        return DefaultMunch.fromDict({k: munchify(v) for k, v in obj.items()})
+    elif isinstance(obj, list):
+        return [munchify(v) for v in obj]
+    else:
+        return obj

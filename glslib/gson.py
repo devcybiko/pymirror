@@ -1,4 +1,7 @@
 import json5
+import json
+from glslib.logger import _print
+from dataclasses import is_dataclass
 
 def json_read(fname: str, dflt=None) -> dict:
     with open(fname, 'r') as file:

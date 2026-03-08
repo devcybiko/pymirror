@@ -1,13 +1,13 @@
 from munch import DefaultMunch, munchify
 
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 
 
 class PMTask:
     def __init__(self, pmtm, config: dict):
         self._task = munchify(config, factory=DefaultMunch)
         self.pmtm: "PMTaskMgr" = pmtm
-        self.pmdb: PMDb = pmtm.pmdb
+        self.pmdb: GLSDb = pmtm.pmdb
         self.name = self._task.name
         self.cron = self._task.cron
         if not (self.name or self.cron):

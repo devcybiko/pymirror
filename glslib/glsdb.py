@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-import traceback
-from munch import DefaultMunch, Munch
-from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String, text
+from munch import DefaultMunch 
+from sqlalchemy import Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from glslib.dicts import from_dict
-from glslib.logger import _debug, _error, tracebacker
+from glslib.logger import _debug, tracebacker
 
 Base = declarative_base()
 
@@ -33,7 +32,7 @@ null_record = NullRecord()
 class PMDbConfig:
     url: str = "sqlite:///pmdb.db"
 
-class PMDb:
+class GLSDb:
     def __init__(self, config: dict):
         self._pmdb = PMDbConfig.from_dict(config)
         self.engine = create_engine(self._pmdb.url)
@@ -121,7 +120,7 @@ if __name__ == "__main__":
             name = Column(String)
 
         config = DefaultMunch(url="sqlite:///pymirror.db")
-        pmdb = PMDb(config)
+        pmdb = GLSDb(config)
         # Add a task
         task = Task(name="Example Task")
         pmdb.session.add(task)

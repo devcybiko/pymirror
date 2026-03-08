@@ -8,7 +8,7 @@ from arrow import now
 from sqlalchemy import extract, and_, func
 
 from configs.ical_config import IcalConfig
-from pmdb.pmdb import Base
+from glslib.glsdb import Base
 from pymirror.pmcard import PMCard
 from glslib.gson import json_read
 from glslib.strings import strftime_by_example

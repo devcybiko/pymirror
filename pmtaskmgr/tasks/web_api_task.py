@@ -3,7 +3,8 @@ import time
 
 from pmtaskmgr.pmtask import PMTask
 from tables.web_api_table import WebApiTable
-from pmutils import json_dumps, json_loads, to_secs
+from glslib.gson import json_dumps, json_loads
+from glslib.to_types import to_secs
 from glslib.logger import _debug, _error
 
 import requests

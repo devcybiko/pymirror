@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 
 from munch import DefaultMunch
 from turo.configs.turo_trip_config import TuroTripConfig
-from pmdb.pmdb import PMDb
+from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
@@ -17,7 +17,7 @@ class TuroTripModule(PMModule):
         self.timer.set_timeout(self._trip.refresh_time)
         self.database = self._trip.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")
-        self.turo_db = PMDb(config)
+        self.turo_db = GLSDb(config)
         self.dims = self._compute_dimensions(32)
         self.nmonths = self._trip.nmonths
         self.cal = self._compute_cal_values()
