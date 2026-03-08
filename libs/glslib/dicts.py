@@ -1,5 +1,5 @@
 from dataclasses import fields
-
+from typing import Dict, Any
 from munch import DefaultMunch
 
 def getter(obj, path, default=None):
