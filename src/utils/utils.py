@@ -1,5 +1,7 @@
+from copy import Error
 import datetime
-import json5 as json
+import json5
+import json
 import os
 import pprint as _pprint
 import re
@@ -383,7 +385,7 @@ def json_write(fname: str, obj: dict) -> bool:
 
 def json_loads(s: str, dflt=None) -> dict:
     # try:
-        return json.loads(s)
+        return json5.loads(s)
     # except Exception as e:
     #     err_msg = str(e)
     #     words = err_msg.split(" ")
@@ -392,6 +394,10 @@ def json_loads(s: str, dflt=None) -> dict:
     #     lines = s.split("\n")
     #     ptr = ("." * col) + "^"
     #     raise ValueError(f"{err_msg}\n{line_no-1}:{lines[line_no-1]}\n{line_no}:{lines[line_no]}\n{line_no}:{ptr}\n{line_no+1}:{lines[line_no+1]}")
+def print_class_hierarchy(obj):
+    print("Class hierarchy:")
+    for cls in obj.__class__.__mro__:
+        print(cls.__name__)
 
 def to_dict(obj) -> dict:
     """Convert any object to dict recursively"""
@@ -401,6 +407,8 @@ def to_dict(obj) -> dict:
         for key, value in obj.__dict__.items():
             result[key] = to_dict(value)
         return result
+    if isinstance(obj, Munch):
+        return {k: to_dict(v) for k, v in obj.items()}
     elif hasattr(obj, '__table__'):
         return obj.__dict__
     elif isinstance(obj, dict):
@@ -413,11 +421,20 @@ def to_dict(obj) -> dict:
         return obj
     
 def json_dumps(d: dict, dflt=None, indent=2) -> str:
-    d = to_dict(d)
+    def default_handler(obj):
+        # Try to serialize dataclasses, objects with __dict__, or fallback to str
+        if is_dataclass(obj):
+            return obj.__dict__
+        if hasattr(obj, '__dict__'):
+            return obj.__dict__
+        if hasattr(obj, '__str__'):
+            return str(obj)
+        return f"<non-serializable: {type(obj).__name__}>"
     try:
-        return json.dumps(d, indent=indent)
+        return json.dumps(d, indent=indent, default=default_handler)
     except Exception as e:
         _print(e)
+        # raise e
         return dflt
 
 def to_naive(dt):

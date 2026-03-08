@@ -8,3 +8,5 @@ class TuroTripConfig:
     refresh_time: str = "60s"
     nmonths: int = 3
     start_date: str = datetime.now().strftime("%Y-%m-%d")
+    hide_months: bool = False
+    hide_vehicle_name: bool = False

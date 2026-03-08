@@ -11,7 +11,7 @@ class SqlTableModule(PMModule):
 		super().__init__(pm, config)
 		self._sql_table = config.sql_table
 		db_config = DefaultMunch(url=self._sql_table.database_url)
-		self.turo_db = PMDb(db_config)
+		self.db = PMDb(db_config)
 		self.header, self.rows = self._read_sql(self._sql_table.sql)
 		config_table = TableConfig(rows=len(self.rows), cols=len(self.header), height=self.bitmap.height, width=self.bitmap.width, has_header=True)
 		self._table_comp = PMTableComp(self.bitmap.gfx, config_table, 0, 0, self.bitmap.width, self.bitmap.height)
@@ -20,7 +20,7 @@ class SqlTableModule(PMModule):
 	def _read_sql(self, query) -> list:
 		rows = []
 		header = None
-		data = self.turo_db.raw_query(query)
+		data = self.db.query(query)
 		i = 0
 		row_colors = ["#010", "#030"]
 		for row in data:

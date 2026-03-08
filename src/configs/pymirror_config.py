@@ -11,3 +11,4 @@ class PymirrorConfig:
     force_render: bool = False
     positions: dict = field(default_factory=dict)
     modules: list = field(default_factory=list)
+    imports: list = field(default_factory=list)

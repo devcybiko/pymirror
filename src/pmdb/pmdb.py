@@ -4,7 +4,7 @@ from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from utils.utils import from_dict
+from utils.utils import from_dict, json_dumps
 from pmlogger import _debug, _error, tracebacker
 
 Base = declarative_base()
@@ -71,7 +71,7 @@ class PMDb:
         self.session.merge(record)
         self.commit()
 
-    def raw_query(self, sql: str, params=None):
+    def query(self, sql: str, params=None):
         from sqlalchemy import text
         with self.engine.connect() as conn:
             result = conn.execute(text(sql), params or {})

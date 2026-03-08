@@ -1,6 +1,8 @@
 from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
+
+from munch import DefaultMunch
 from utils.utils import json_dumps, json_loads, json_read, pascal_to_snake, snake_to_pascal, to_dict
 from pmlogger import trace, trace_method, _trace, _info, _print, _warning
 
@@ -114,7 +116,9 @@ class PMConfig:
     def _load_clazz(self, _config_name):
         ## load the *Config module and get the clazz
         config_name = snake_to_pascal(_config_name)
-        module = importlib.import_module(f"configs.{_config_name}_config")
+        module_name = f"configs.{_config_name}_config"
+        print(f"Loading config class '{config_name}' from module '{module_name}'...")
+        module = importlib.import_module(module_name)
         clazz_name = f"{config_name}Config"
         clazz = getattr(module, clazz_name, None) # get the class from the module
         _print(f"... loaded class: {clazz}")
@@ -145,13 +149,13 @@ class PMConfig:
                     self._rename_class_to_clazz(obj[key])
 
     def from_file(self, fname: str, with_config:str=None) -> "PMConfig":
-        try:
+        # try:
             obj = json_read(fname)
             self._rename_class_to_clazz(obj)
             _print("with_config", with_config)
             return self.from_dict(obj, with_config=with_config)
-        except Exception as e:
-            raise TypeError(f"error reading file '{fname}. {str(e)}")
+        # except Exception as e:
+        #     raise TypeError(f"error reading file '{fname}. {str(e)}")
 
     def from_string(self, data: str, with_config:str=None) -> "PMConfig":
         obj = json_loads(data)

@@ -2,7 +2,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import importlib
 import os
+import sys
 import time
+import types
 from dotenv import load_dotenv
 import queue
 import argparse
@@ -13,13 +15,16 @@ from munch import DefaultMunch
 from configs.pmconfig import PMConfig
 from pmlogger import _debug, _print
 from pymirror.pmscreen import PMScreen
+from utils.module_manager import ModuleManager
 from utils.utils import expand_dataclass, snake_to_pascal, DefaultMunch, to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
 from utils.pstat import get_pstat_delta, get_pids_by_cli
+import modules
 
 from events import * # get all events 
 
+# Now use merged_configs as your config namespace
 @dataclass
 class PMStatus:
     debug: bool = False
@@ -45,6 +50,7 @@ class PyMirror:
         if args.frame_buffer:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
         _debug(f"Using config: {self._config}")
+        self._import_modules_from_config()
         self.pmdb = PMDb(self._config.pmdb.__dict__) if self._config.pmdb else None
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
@@ -60,6 +66,12 @@ class PyMirror:
         self.server = PMServer(self._config, self.server_queue)
         self.server.start()  # Start the server to handle incoming events
 
+    def _import_modules_from_config(self):
+        """ Import any modules specified in the config file """
+        for folder in self._config.imports:
+            for package_name in ["configs", "modules"]:
+                ModuleManager.load_modules(folder, package_name)
+    
     def get_status(self) -> PMStatus:
         if not self.status:
             self.status = PMStatus()

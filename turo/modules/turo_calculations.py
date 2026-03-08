@@ -29,3 +29,5 @@ def annual_sum_of_days(trips, status_list=["Booked", "Completed", "In-progress"]
         total += trip.trip_days
     return total
     
+def test_me(s: str):
+    return s.upper()

@@ -19,7 +19,6 @@ from configs.sql_table_config import SqlTableConfig
 from configs.status_config import StatusConfig        # Missing import
 from configs.table_config import TableConfig            # Missing import
 from configs.text_config import TextConfig            # Missing import
-from configs.turo_trip_config import TuroTripConfig
 from configs.weather_config import WeatherConfig      # Missing import
 from configs.web_db_config import WebDbConfig         # Missing import
 
@@ -46,7 +45,6 @@ class ConfigConfig:
     status: StatusConfig = None
     text: TextConfig = None
     table: TableConfig = None
-    turo_trip: TuroTripConfig = None
     weather: WeatherConfig = None
     web_db: WebDbConfig = None
 

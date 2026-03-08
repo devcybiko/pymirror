@@ -1,22 +1,25 @@
 from calendar import month
 from datetime import datetime, timedelta
+import math
 from pydoc import text
 from dateutil.relativedelta import relativedelta
 
 import json
+from httpx import delete
 from munch import DefaultMunch
-from configs.turo_trip_config import TuroTripConfig
+from turo.configs.turo_trip_config import TuroTripConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
+from utils.utils import json_dumps
 
-from .turo_calculations import annual_income, annual_sum_of_days
+from turo.modules.turo_calculations import annual_income, annual_sum_of_days
 
 class TuroTripModule(PMModule):
     def __init__(self, pm, config: DefaultMunch):
         super().__init__(pm, config)
-        self._trip: TuroTripConfig = config.turo_trip
+        self._trip: TuroTripConfig = TuroTripConfig(config.turo_trip)
         self.timer.set_timeout(self._trip.refresh_time)
         self.database = self._trip.database
         config = DefaultMunch(url="sqlite:///turo.sqlite")
@@ -76,8 +79,10 @@ class TuroTripModule(PMModule):
         if trip_start and trip_end:
             bar.start_days = (trip_start - self.cal.start).days
             bar.end_days = (trip_end - self.cal.start).days
+            bar.days = bar.end_days - bar.start_days
             bar.x += round(bar.start_days * month.pixels_per_day)
-            bar.w = round((bar.end_days - bar.start_days) * month.pixels_per_day) - 1
+            bar.w = round(bar.days * month.pixels_per_day) - 1
+            if bar.w < 1: bar.w = 0
         return bar
         
     def _render_today_marker(self, gfx, month, dtrip, box_top):
@@ -102,6 +107,8 @@ class TuroTripModule(PMModule):
         return _x, _y
 
     def _render_trip_days_bar(self, gfx, y, bar, the_trip):
+        if bar.days < 1:
+            return bar.x, y
         y += self.dims.padding
         gfx.set_font(None, self.dims.trip_box_font_size)
         self.bitmap.rectangle((bar.x, y, bar.x + bar.w, y + bar.h), fill=bar.colors[the_trip.trip_status])
@@ -111,7 +118,10 @@ class TuroTripModule(PMModule):
     def _render_trip_earnings(self, gfx, y, box, bar, trip):
         gfx.set_font(None, self.dims.earnings_font_size)
         y += self.dims.padding * 2
-        x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), f"${round(trip.total_earnings)}")
+        earnings = "\u2800" # Braille Pattern Blank
+        if trip.total_earnings is not None:
+            earnings = f"${round(trip.total_earnings)}"
+        x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), earnings)
         return x, y
 
     def _render_trip(self, x, y, month_n, vehicle, vehicle_trips, status_list):
@@ -133,13 +143,15 @@ class TuroTripModule(PMModule):
         self._gfx_pop()
         return _x, _y
 
-    def _render_trips(self, x, y, vehicle, vehicle_trips, status_list=["Booked", "Completed", "In-progress"]):
+    def _render_trips(self, x, y, vehicle, vehicle_trips, status_list=["Booked", "Completed", "In-progress", "Personal"]):
         _x, _y = (0, 0)
         for month_n in range(0, self.nmonths):
             _x, _y = self._render_trip(x, y, month_n, vehicle, vehicle_trips, status_list)
         return _x, _y
 
     def _render_vehicle_name(self, x, y, vehicle_name, vehicle_trips):
+        if self._trip.hide_vehicle_name:
+            return x, y
         gfx = self.bitmap.gfx_push()
         booked_income = round(annual_income(vehicle_trips, ["Booked", "In-progress"]))
         completed_income = round(annual_income(vehicle_trips, ["Completed"]))
@@ -174,6 +186,8 @@ class TuroTripModule(PMModule):
         return _x, _y
 
     def _render_month_names(self, x, y, vehicle, vehicle_trips):
+        if self._trip.hide_months:
+            return x, y
         for month_n in range(0, self.nmonths):
             _x, _y = self._render_month_name(x, y, month_n)
         return _x, _y
@@ -193,13 +207,12 @@ class TuroTripModule(PMModule):
             return True
         (x, y) = (0, 0)
         _y = y
-        for vehicle_nickname, vehicle_trips in self.trips.items():
-            vehicle = self.vehicles[vehicle_nickname]
-            _, y0 = self._render_vehicle_name(x, y, vehicle.nickname, vehicle_trips)
-            _, y1 = self._render_month_names(x, y0, vehicle, vehicle_trips)
-            _, y2 = self._render_month_boxes(x, y1, vehicle, vehicle_trips)
-            _, y3 = self._render_trips(x, y1, vehicle, vehicle_trips)
-            y = y2 + self.dims.padding*2
+        vehicle = self.vehicles[self._trip.vehicle_nickname]
+        _, y0 = self._render_vehicle_name(x, y, vehicle.nickname, self.trips)
+        _, y1 = self._render_month_names(x, y0, vehicle, self.trips)
+        _, y2 = self._render_month_boxes(x, y1, vehicle, self.trips)
+        _, y3 = self._render_trips(x, y1, vehicle, self.trips)
+        y = y2 + self.dims.padding*2
         
         return True
 
@@ -208,11 +221,24 @@ class TuroTripModule(PMModule):
             return False
             # return is_dirty # early exit if not timed out
         self.timer.reset(self._trip.refresh_time)
-        rows = self.turo_db.get_all_where(TuroTripsTable, f"vehicle_nickname='{self._trip.vehicle_nickname}'")
-        self.trips = DefaultMunch()
+        rows = self.turo_db.get_all_where(TuroTripsTable, f"vehicle_nickname='{self._trip.vehicle_nickname}'", order_by="trip_start")
+        self.trips = []
+        last_trip = None
         for row in rows:
             trip = DefaultMunch.fromDict(row.__dict__)
-            self.trips.setdefault(trip.vehicle_nickname, []).append(trip)
+            del trip["_sa_instance_state"] # we dont need the id field
+            if trip.trip_status not in ("Booked", "In-progress", "Completed"):
+                continue # skip uninteresting trips
+            if last_trip:
+                personal_trip = DefaultMunch()
+                personal_trip.trip_status = "Personal"
+                personal_trip.trip_start = last_trip.trip_end
+                personal_trip.trip_end = trip.trip_start
+                personal_trip.trip_days = (personal_trip.trip_end - personal_trip.trip_start).days + 1
+                personal_trip.total_earnings = None
+                self.trips.append(personal_trip)
+            self.trips.append(trip)
+            last_trip = trip
         rows = self.turo_db.get_all_where(TuroVehiclesTable, f"nickname='{self._trip.vehicle_nickname}'")
         rows = sorted(rows, key=lambda x: x.vehicle_id)
         self.vehicles = DefaultMunch()
