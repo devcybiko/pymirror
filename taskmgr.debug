@@ -6,6 +6,7 @@ else
     CONFIG="$1"
 fi
     rm ./maps/*
+    mkdir -p ./maps
     source .venv/bin/activate
     PYTHONPATH=libs:apps/task_manager \
         python3 -u -m pmtaskmgr \

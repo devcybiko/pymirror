@@ -16,8 +16,9 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-cd /Users/greg
+. "$HOME/.local/bin/env"
 cd git/pymirror
+./scripts/purge.sh
 git pull
 source ./scripts/rpi/set-venv.sh
 ./taskmgr.sh ./configs/rpi01/tasks.json &
