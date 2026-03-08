@@ -4,8 +4,6 @@ import random
 from munch import DefaultMunch
 
 from pymirror.pmmodule import PMModule
-from pmutils import expand_dict
-from pymirror.pmcard import PMCard
 
 class ComplimentsModule(PMModule):
     def __init__(self, pm, config):

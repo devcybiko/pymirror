@@ -32,7 +32,7 @@ class PymirrorControllerModule(PMModule):
 		if event.purge: 
 			_debug(f"Received purge event: {event.refresh}")
 			os.system("rm -f caches/*")
-			os.system("rm -f src/pmserver/static/output.*")
+			os.system("rm -f static/output.*")
 
 		if event.remote_display in [True, False, "true", "false", "on", "off"]:
 			if event.remote_display in [False, "false", "off"]:
@@ -42,7 +42,7 @@ class PymirrorControllerModule(PMModule):
 			else:
 				_debug("Received remote display event: True")
 				# turn on the screen output (used by the web display)
-				self.screen._screen.output_file = "./src/pmserver/static/output.jpg"
+				self.screen._screen.output_file = "./apps/pymirror/pmserver/static/output.jpg"
 
 		if event.restart: 
 			_debug(f"Received restart event: {event.restart}")

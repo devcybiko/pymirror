@@ -1,5 +1,5 @@
 from os import path
-from pmtaskmgr.pmtask import PMTask
+from pmtask import PMTask
 from glslib.logger import _debug, _error, _print
 
 from staticmap import StaticMap, CircleMarker

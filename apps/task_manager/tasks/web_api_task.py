@@ -1,7 +1,7 @@
 from datetime import datetime
 import time
 
-from pmtaskmgr.pmtask import PMTask
+from pmtask import PMTask
 from tables.web_api_table import WebApiTable
 from glslib.gson import json_dumps, json_loads
 from glslib.to_types import to_secs

@@ -1,4 +1,4 @@
-#!/bin/bash
+cod #!/bin/bash
 
 if [ $# -eq 0 ]; then
     CONFIG="./configs/rpi01/tasks.json"
@@ -7,6 +7,6 @@ else
 fi
     rm ./maps/*
     source .venv/bin/activate
-    PYTHONPATH=glslib:pmtaskmgr \
-        python3 -u -m pmtaskmgr.pmtaskmgr \
+    PYTHONPATH=glslib:apps/task_manager \
+        python3 -u -m pmtaskmgr \
         --config "$CONFIG"

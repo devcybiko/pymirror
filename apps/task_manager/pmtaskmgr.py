@@ -8,7 +8,7 @@ import traceback
 from dotenv import load_dotenv
 
 from glslib.glsdb import GLSDb
-from pmtaskmgr.pmtask import PMTask
+from pmtask import PMTask
 from glslib.crontab import Crontab
 from glslib.strings import expand_dict, snake_to_pascal
 from glslib.gson import json_read

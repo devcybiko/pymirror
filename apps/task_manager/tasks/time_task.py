@@ -1,7 +1,7 @@
 from datetime import datetime
 import time
 
-from pmtaskmgr.pmtask import PMTask
+from pmtask import PMTask
 from glslib.logger import _debug
 
 from tables.time_table import TimeTable
