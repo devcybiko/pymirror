@@ -11,7 +11,7 @@ mkdir -p ./caches/
 
 source .venv/bin/activate
 while true; do
-    PYTHONPATH=src \
+    PYTHONPATH=libs:src/pymirror \
         python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \
         --output_file="./src/pmserver/static/output.jpg" \
