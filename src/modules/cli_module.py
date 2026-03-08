@@ -5,9 +5,9 @@ import copy
 import subprocess
 
 from configs.cli_config import CliConfig
-from utils.strings import expand_dict
+from glslib.strings import expand_dict
 from pymirror.pmcard import PMCard
-from utils.logger import _debug
+from glslib.logger import _debug
 
 class CliModule(PMCard):
 	def __init__(self, pm, config):

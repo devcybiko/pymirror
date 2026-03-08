@@ -2,10 +2,10 @@ from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
 
-from utils.json import json_dumps, json_loads, json_read
-from utils.to_types import to_dict
-from utils.strings import pascal_to_snake, snake_to_pascal
-from utils.logger import trace, trace_method, _trace, _info, _print, _warning
+from glslib.gson import json_dumps, json_loads, json_read
+from glslib.to_types import to_dict
+from glslib.strings import pascal_to_snake, snake_to_pascal
+from glslib.logger import trace, trace_method, _trace, _info, _print, _warning
 
 class Object:
     def __init__(self):

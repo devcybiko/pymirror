@@ -3,10 +3,10 @@ from sqlalchemy.exc import IntegrityError
 
 from pmtaskmgr.pmtask import PMTask
 from tables.ical_table import IcalTable
-from utils.to_types import to_naive, to_munch, to_utc_epoch
-from utils.utils import make_hashcode
-from utils.logger import _debug
-from utils.ical_parser import IcalParser
+from glslib.to_types import to_naive, to_munch, to_utc_epoch
+from pmutils import make_hashcode
+from glslib.logger import _debug
+from glslib.ical_parser import IcalParser
 import requests
 
 class IcalTask(PMTask):

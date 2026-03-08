@@ -1,5 +1,5 @@
 from devices.ir_device import IRDevice
-from utils.logger import _debug
+from glslib.logger import _debug
 from pymirror.pmmodule import PMModule
 
 class IrModule(PMModule):

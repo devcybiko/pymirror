@@ -6,10 +6,10 @@ import requests
 import copy
 
 from pymirror.pmcard import PMCard
-from utils.utils import expand_dict, json_loads, to_ms
+from pmutils import expand_dict, json_loads, to_ms
 from pymirror.pmtimer import PMTimer
 from pymirror.pmwebapi import PMWebApi
-from utils.logger import _debug, _debug, _error, _debug
+from glslib.logger import _debug, _debug, _error, _debug
 
 class WebApiModule(PMCard):
     def __init__(self, pm, config):

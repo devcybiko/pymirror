@@ -4,8 +4,8 @@ from munch import DefaultMunch, Munch
 from sqlalchemy import MetaData, Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from utils.dicts import from_dict
-from utils.logger import _debug, _error, tracebacker
+from glslib.dicts import from_dict
+from glslib.logger import _debug, _error, tracebacker
 
 Base = declarative_base()
 

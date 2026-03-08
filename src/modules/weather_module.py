@@ -5,8 +5,8 @@ from datetime import datetime
 from configs.module_config import ModuleConfig
 from configs.weather_config import WeatherConfig
 from pymirror.pmcard import PMCard
-from utils.logger import _debug
-from utils.to_types import to_ms
+from glslib.logger import _debug
+from glslib.to_types import to_ms
 
 class WeatherModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):

@@ -13,14 +13,14 @@ import traceback
 from munch import DefaultMunch
 
 from configs.pmconfig import PMConfig
-from utils.logger import _debug, _print
+from glslib.logger import _debug, _print
 from pymirror.pmscreen import PMScreen
-from utils.module_manager import ModuleManager
-from utils.strings import expand_dataclass, snake_to_pascal
-from utils.to_types import to_munch
+from glslib.module_manager import ModuleManager
+from glslib.strings import expand_dataclass, snake_to_pascal
+from glslib.to_types import to_munch
 from pmserver.pmserver import PMServer
 from pmdb.pmdb import PMDb
-from utils.pstat import get_pstat_delta, get_pids_by_cli
+from glslib.pstat import get_pstat_delta, get_pids_by_cli
 import modules
 
 from events import * # get all events 

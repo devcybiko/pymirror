@@ -5,9 +5,9 @@ from configs.pmconfig import PMConfig
 from configs.status_config import StatusConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from utils.strings import strftime_by_example, glyphs
-from utils.to_types import to_secs
-from utils.logger import _debug
+from glslib.strings import strftime_by_example, glyphs
+from glslib.to_types import to_secs
+from glslib.logger import _debug
 
 class StatusModule(PMModule):
     def __init__(self, pm, config):

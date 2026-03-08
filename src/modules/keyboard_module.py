@@ -1,5 +1,5 @@
 from devices.keyboard_device import KeyboardDevice
-from utils.logger import _debug
+from glslib.logger import _debug
 from pymirror.pmmodule import PMModule
 
 class KeyboardModule(PMModule):

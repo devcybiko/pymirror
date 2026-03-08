@@ -3,7 +3,7 @@ from datetime import datetime
 from munch import DefaultMunch
 from configs.clock_config import ClockConfig
 from pymirror.pmmodule import PMModule
-from utils.strings import strftime_by_example
+from glslib.strings import strftime_by_example
 
 class ClockModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

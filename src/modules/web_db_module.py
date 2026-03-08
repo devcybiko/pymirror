@@ -3,11 +3,11 @@ import copy
 
 from configs.web_db_config import WebDbConfig
 from pymirror.pmcard import PMCard
-from utils.strings import expand_dict
-from utils.json import json_loads
-from utils.to_types import to_dict
+from glslib.strings import expand_dict
+from glslib.gson import json_loads
+from glslib.to_types import to_dict
 from pymirror.pmtimer import PMTimer
-from utils.logger import _debug
+from glslib.logger import _debug
 from tables.web_api_table import WebApiTable
 
 class WebDbModule(PMCard):

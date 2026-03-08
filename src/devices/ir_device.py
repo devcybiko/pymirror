@@ -10,8 +10,8 @@ import select
 import time
 import re
 from typing import Optional, Dict, List, Tuple
-from utils.logger import _debug, _error, _print
-from utils.utils import json_dumps
+from glslib.logger import _debug, _error, _print
+from glslib.gson import json_dumps
 
 # Default IR remote key mapping
 IR_KEY_MAP = {

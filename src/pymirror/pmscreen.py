@@ -1,9 +1,9 @@
 import os
 from dataclasses import dataclass
 from PIL import Image
-from pmgfxlib import PMBitmap, PMGfx
-from utils.dicts import from_dict
-from utils.logger import _debug
+from pmgfxlib import PMBitmap
+from glslib.dicts import from_dict
+from glslib.logger import _debug
 
 @from_dict
 @dataclass

@@ -5,9 +5,9 @@ from logging import config
 from flask import json
 from munch import DefaultMunch
 from pymirror.pmwebapi import PMWebApi
-from utils.utils import json_dumps
+from pmutils import json_dumps
 from .pmweatherdata import PMWeatherData, PMWeatherSummary
-from utils.logger import _debug
+from glslib.logger import _debug
 
 @dataclass 
 class AccuWeatherParams:

@@ -1,18 +1,12 @@
-from calendar import month
 from datetime import datetime, timedelta
-import math
-from pydoc import text
 from dateutil.relativedelta import relativedelta
 
-import json
-from httpx import delete
 from munch import DefaultMunch
 from turo.configs.turo_trip_config import TuroTripConfig
 from pmdb.pmdb import PMDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
-from utils.json import json_dumps
 
 from turo.modules.turo_calculations import annual_income, annual_sum_of_days
 

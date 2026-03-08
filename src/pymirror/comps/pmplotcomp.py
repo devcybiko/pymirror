@@ -6,7 +6,7 @@ from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
-from utils.utils import _add, _sub
+from pmutils import _add, _sub
 
 @dataclass
 class PMPlotAxisConfig:

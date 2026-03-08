@@ -1,6 +1,6 @@
 from datetime import datetime
 from pymirror.pmmodule import PMModule
-from utils.logger import _debug
+from glslib.logger import _debug
 import math
 
 def _compute_clock_positions(gfx, dx, dy, r):

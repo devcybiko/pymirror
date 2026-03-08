@@ -2,14 +2,15 @@ import enum
 import inspect
 import functools
 import os
-from textwrap import wrap
-global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit, _print
+from pprint import pprint as _pprint
 
-_print = print
 
 import time
 import traceback
 from functools import wraps
+
+global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit, _print
+_print = print
 
 def tracebacker(dflt=None, delay=1.0):
     """Decorator that catches exceptions, prints traceback, and returns default value"""
@@ -206,6 +207,26 @@ if __name__ == "__main__":
         test_logger.foo("flibbitz")
         _error("This is an error message.")
         _critical("This is a critical message.")
+
+def pprint(obj):
+    if isinstance(obj, Munch):
+        _pprint.pprint(obj.toDict(), indent=2, width=80)
+    elif is_dataclass(obj):
+        pprint(asdict(obj))
+    elif hasattr(obj, '__dict__'):
+        print(f"=== {obj.__class__.__name__} Object Members ===")
+        print(f"Type: {type(obj).__name__}")
+        print("Instance attributes:")
+        _pprint.pprint(vars(obj), indent=2, width=80)
+    else:
+        # Fallback for objects without __dict__ (built-in types, etc.)
+        _pprint.pprint(obj, indent=2, width=80)
+
+def print_class_hierarchy(obj):
+    print("Class hierarchy:")
+    for cls in obj.__class__.__mro__:
+        print(cls.__name__)
+
 
 if __name__ == "__main__":
     main()

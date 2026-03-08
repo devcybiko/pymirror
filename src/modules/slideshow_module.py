@@ -4,9 +4,9 @@ from configs.module_config import ModuleConfig
 from configs.slideshow_config import SlideshowConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
-from utils.rects import _height, _str_to_rect, _width
+from glslib.rects import _height, _str_to_rect, _width
 from pmgfxlib.pmbitmap import PMBitmap
-from utils.logger import _debug
+from glslib.logger import _debug
 from pymirror.pmrect import PMRect
 import os
 

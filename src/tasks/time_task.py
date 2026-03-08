@@ -2,10 +2,10 @@ from datetime import datetime
 import time
 
 from pmtaskmgr.pmtask import PMTask
-from utils.logger import _debug
+from glslib.logger import _debug
 
 from tables.time_table import TimeTable
-from utils.utils import to_dict
+from pmutils import to_dict
 
 class TimeTask(PMTask):
     def __init__(self, pmtm, config):

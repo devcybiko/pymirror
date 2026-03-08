@@ -1,5 +1,5 @@
 from pymirror.pmmodule import PMModule
-from utils.logger import _debug
+from glslib.logger import _debug
 
 class WindowManagerModule(PMModule):
     def __init__(self, pm, config):

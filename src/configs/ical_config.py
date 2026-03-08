@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from utils.strings import strftime_by_example
+from glslib.strings import strftime_by_example
 
 @dataclass
 class IcalConfig:

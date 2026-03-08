@@ -1,10 +1,10 @@
 from pmdb.pmdb import PMDb
-from utils.json import  json_loads
-from utils.utils import pprint
-from utils.to_types import to_dict, to_munch
+from glslib.gson import  json_loads
+from glslib.logger import pprint
+from glslib.to_types import to_dict, to_munch
 from tables.web_api_table import WebApiTable
 from .pmweatherdata import PMWeatherData
-from utils.logger import _debug
+from glslib.logger import _debug
 
 def _paragraph_fix(text: str) -> str:
     results = []

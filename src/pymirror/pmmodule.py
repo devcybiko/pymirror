@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-import copy
-from dataclasses import dataclass
 
 # from configs.config_config import ConfigConfig
 from configs.module_config import ModuleConfig
@@ -8,8 +6,8 @@ from pmdb.pmdb import PMDb
 from pmgfxlib.pmbitmap import PMBitmap, PMGfx
 from pymirror.pmtimer import PMTimer
 from pymirror.pymirror import PyMirror
-from utils.to_types import to_munch
-from utils.logger import _trace, _debug
+from glslib.to_types import to_munch
+from glslib.logger import _trace, _debug
 from pymirror.pmrect import PMRect
 
 class PMModule(ABC):

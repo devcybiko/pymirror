@@ -1,7 +1,7 @@
 from configs.cron_config import CronConfig
 from glslib.crontab import Crontab
 from pymirror.pmmodule import PMModule
-from utils.logger import _debug
+from glslib.logger import _debug
 
 class CronModule(PMModule):
 	def __init__(self, pm, config):

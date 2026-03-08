@@ -10,9 +10,9 @@ from sqlalchemy import extract, and_, func
 from configs.ical_config import IcalConfig
 from pmdb.pmdb import Base
 from pymirror.pmcard import PMCard
-from utils.json import json_read
-from utils.strings import strftime_by_example
-from utils.to_types import to_dict, to_munch, to_utc_epoch
+from glslib.gson import json_read
+from glslib.strings import strftime_by_example
+from glslib.to_types import to_dict, to_munch, to_utc_epoch
 from tasks.ical_task import IcalTable
     
 class IcalModule(PMCard):

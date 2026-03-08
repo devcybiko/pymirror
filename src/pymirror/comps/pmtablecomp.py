@@ -3,7 +3,7 @@ from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
-from utils.utils import non_null
+from pmutils import non_null
 
 class PMCell:
     def __init__(self, value=None, format=None, halign="center", valign="center", bg_color="#333", text_color="#fff"):

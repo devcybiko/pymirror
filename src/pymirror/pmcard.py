@@ -1,12 +1,9 @@
-import copy
-from dataclasses import dataclass
-
 from configs.card_config import CardConfig
 from configs.module_config import ModuleConfig
 from configs.text_config import TextConfig
 from pymirror.comps.pmtextcomp import PMTextComp
 from pymirror.pmmodule import PMModule
-from utils.utils import non_null
+from pmutils import non_null
 
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):

@@ -1,6 +1,6 @@
 import time
-from utils.logger import _debug, trace
-from utils.to_types import to_ms
+from glslib.logger import _debug
+from glslib.to_types import to_ms
 
 class PMTimer:
     def __init__(self, delay_time: str | int =0, first_timeout_time=1):

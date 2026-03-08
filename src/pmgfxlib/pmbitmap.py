@@ -12,8 +12,8 @@ from dataclasses import dataclass
 from PIL import Image, ImageDraw
 
 from pymirror.pmrect import PMRect
-from utils.logger import _trace, _debug
-from utils.utils import non_null
+from glslib.logger import _trace, _debug
+from pmutils import non_null
 from .pmgfx import PMGfx
 
 CENTER = 0

@@ -2,7 +2,7 @@ import os
 
 from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from utils.logger import _debug, _error
+from glslib.logger import _debug, _error
 
 class FontsModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):
