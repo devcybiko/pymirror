@@ -7,7 +7,7 @@
   ],
   screen: {
     "output_file": "./apps/pymirror/pmserver/static/output.jpg",
-    "frame_buffer": null,
+    "frame_buffer": "/dev/fb0",
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
