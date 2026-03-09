@@ -13,7 +13,7 @@ from pymirror.pmcard import PMCard
 from glslib.gson import json_read
 from glslib.strings import strftime_by_example
 from glslib.to_types import to_dict, to_munch, to_utc_epoch
-from tasks.ical_task import IcalTable
+from tables.ical_table import IcalTable
     
 class IcalModule(PMCard):
     def __init__(self, pm, config):
