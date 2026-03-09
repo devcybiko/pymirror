@@ -3,11 +3,11 @@
   secrets: "$HOME/.secrets",
   force_render: false,
   imports: [
-    "./turo",
+    "./modules/turo",
   ],
   screen: {
-    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
-    "frame_buffer": "/dev/fb0",
+    "output_file": null,
+    "frame_buffer": null,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",

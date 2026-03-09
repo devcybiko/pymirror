@@ -5,11 +5,12 @@ import os
 from pprint import pprint as _pprint
 
 
+import sys
 import time
 import traceback
 from functools import wraps
 
-global pmlogger, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit, _print
+global pmlogger, _die, _debug, _info, _warning, _error, _critical, _trace, _enter, _exit, _print
 _print = print
 
 def tracebacker(dflt=None, delay=1.0):
@@ -164,6 +165,10 @@ class PMLogger:
     def critical(self, *args):
         self.log(PMLoggerLevel.CRITICAL, *args)
 
+    def die(self, *args):
+        self.log(PMLoggerLevel.CRITICAL, *args)
+        sys.exit(1)
+
 pmlogger = PMLogger()
 _debug = pmlogger.debug
 _info = pmlogger.info
@@ -171,6 +176,7 @@ _warning = pmlogger.warning
 _error = pmlogger.error
 _critical = pmlogger.critical
 _trace = pmlogger.trace
+_die = pmlogger.die
 
 if __name__ == "__main__":
 

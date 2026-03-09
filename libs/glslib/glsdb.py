@@ -4,7 +4,7 @@ from sqlalchemy import Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from glslib.dicts import from_dict
-from glslib.logger import _debug, tracebacker
+from glslib.logger import _debug, tracebacker, _die
 
 Base = declarative_base()
 
@@ -27,15 +27,10 @@ class NullRecord:
 global null_record
 null_record = NullRecord()
 
-@from_dict
-@dataclass
-class PMDbConfig:
-    url: str = "sqlite:///pmdb.db"
-
 class GLSDb:
-    def __init__(self, config: dict):
-        self._pmdb = PMDbConfig.from_dict(config)
-        self.engine = create_engine(self._pmdb.url)
+    def __init__(self, url: str):
+        self.url = url
+        self.engine = create_engine(url)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
@@ -73,6 +68,7 @@ class GLSDb:
     def query(self, sql: str, params=None):
         from sqlalchemy import text
         with self.engine.connect() as conn:
+            print(76, "Executing SQL:", sql, "with params:", params)
             result = conn.execute(text(sql), params or {})
             keys = list(result.keys())
             result_list = [dict(zip(keys, row)) for row in result.fetchall()]

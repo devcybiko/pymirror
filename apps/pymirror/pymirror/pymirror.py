@@ -53,7 +53,7 @@ class PyMirror:
             self._config.screen.frame_buffer = _to_null(args.frame_buffer)
         _debug(f"Using config: {self._config}")
         self._import_modules_from_config()
-        self.pmdb = GLSDb(self._config.pmdb.__dict__) if self._config.pmdb else None
+        self.pmdb = GLSDb(self._config.pmdb.url) if self._config.pmdb else None
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug

@@ -5,4 +5,6 @@ from configs.mixins.text_mixin import TextMixin
 @dataclass
 class SqlTableConfig(TextMixin, FontMixin):
     sql: str = None
+    sql_file: str = None
+    sql_params: dict = None
     database_url: str = None

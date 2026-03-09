@@ -10,49 +10,12 @@
       "cron": "*:*:00"
     },
     {
-      "class": "web_api",
-      "name": "news",
-      "cron": "*:00:00",
-      "rate_limit_time": "59m",
-      "url": "https://newsapi.org/v2/top-headlines",
-      "params": {
-        "apiKey": "$NEWSAPI_KEY",
-        "country": "us",
-        "pageSize": 100,
-        "category": "business"
-      }
-    },
-    {
-      "class": "maps",
-      "name": "maps",
-      "cron": "00:00:00",
-      "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-      "output_dir": "./maps",
-      "maps": [
-        {
-          "width": 800,
-          "height": 600,
-          "lat": "37.4971",
-          "lon": "-77.7305",
-          "zoom": 5,
-          "fname": "midlothian_11.png"
-        }
-      ]
-    },
-    {
-      "class": "web_api",
-      "name": "openweather",
+      "class": "turo_task",
+      "name": "turo_task",
       "cron": "*:15:00",
-      "rate_limit_time": "59m",
-      "url": "https://api.openweathermap.org/data/3.0/onecall",
-      "params": {
-        "appid": "$OPENWEATHERMAP_API_KEY",
-        "lat": "37.5050",
-        "lon": "-77.6491",
-        "exclude": "minutely,hourly",
-        "units": "imperial",
-        "lang": "english"
-      }
+      "from_file": "greg@GregsM4MacMini:turo.sqlite",
+      "to_file": "/home/pymirror/turo.sqlite",
+      "cp_command": "scp {from_file} {to_file}"
     }
   ]
 }

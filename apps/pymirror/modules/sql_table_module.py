@@ -1,5 +1,6 @@
 import copy
 
+from glslib.gson import json_dumps
 from munch import DefaultMunch
 from configs.sql_table_config import SqlTableConfig
 from configs.table_config import TableConfig
@@ -10,9 +11,13 @@ from pymirror.comps.pmtablecomp import PMCell, PMTableComp
 class SqlTableModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
-		self._sql_table: SqlTableConfig = pm.configurator.from_dict(config.sql_table, TableConfig)
-		db_config = DefaultMunch(url=self._sql_table.database_url)
-		self.db = GLSDb(db_config)
+		self._sql_table: SqlTableConfig = pm.configurator.from_dict(config.sql_table, SqlTableConfig)
+		self.db = GLSDb(self._sql_table.database_url)
+		if self._sql_table.sql_file:
+			with open(self._sql_table.sql_file, "r") as f:
+				self._sql_table.sql = f.read()
+			if self._sql_table.sql_params:
+				self._sql_table.sql = self._sql_table.sql.format(**self._sql_table.sql_params)
 		self.header, self.rows = self._read_sql(self._sql_table.sql)
 		self._table_comp: PMTableComp = self._create_table(config)
 		self._table_comp.set_rows(self.rows)

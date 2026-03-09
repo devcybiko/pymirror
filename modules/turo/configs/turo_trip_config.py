@@ -3,7 +3,7 @@ from datetime import datetime
 
 @dataclass
 class TuroTripConfig:
-    database: str = ""
+    database_url: str = ""
     vehicle_nickname: str = ""
     refresh_time: str = "60s"
     nmonths: int = 3

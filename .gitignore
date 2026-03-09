@@ -3,7 +3,6 @@ __pycache__/
 .venv/
 caches/
 build/
-src/pmserver/static/
 maps/
 .pix
 .DS_Store

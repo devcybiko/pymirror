@@ -6,7 +6,7 @@
     },
     "turo_trip": {
         "vehicle_nickname": "cx5",
-        "database": "$HOME/turo.sqlite",
+        "database_url": "sqlite:///$HOME/turo.sqlite",
         "refresh_time": "60s",
         "nmonths": 5,
         "start_date": "2025-12-01",

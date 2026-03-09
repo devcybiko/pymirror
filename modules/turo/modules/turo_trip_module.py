@@ -2,22 +2,20 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from munch import DefaultMunch
-from turo.configs.turo_trip_config import TuroTripConfig
+from configs.turo_trip_config import TuroTripConfig
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
 
-from turo.modules.turo_calculations import annual_income, annual_sum_of_days
+from modules.turo_calculations import annual_income, annual_sum_of_days
 
 class TuroTripModule(PMModule):
     def __init__(self, pm, config: DefaultMunch):
         super().__init__(pm, config)
         self._trip: TuroTripConfig = pm.configurator.from_dict(config.turo_trip, TuroTripConfig)
         self.timer.set_timeout(self._trip.refresh_time)
-        self.database = self._trip.database
-        config = DefaultMunch(url="sqlite:///turo.sqlite")
-        self.turo_db = GLSDb(config)
+        self.turo_db = GLSDb(self._trip.database_url)
         self.dims = self._compute_dimensions(32)
         self.nmonths = self._trip.nmonths
         self.cal = self._compute_cal_values()
