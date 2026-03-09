@@ -1,2 +1,2 @@
-scp greg@GregsM4MacMini:turo.sqlite ~
+cp ~/git/turo-dashboard/turo.sqlite ~
 ./run.debug ./configs/turo/config.json

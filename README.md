@@ -10,17 +10,19 @@
 
 - RPI OS Lite 32-bit
   - `sudo apt update`
-  - `sudo apt install git`
+  - `sudo apt instal -y git`
   - `git clone https://github.com/drfrancintosh/pymirror.git`
-  - `sudo apt install fortune`
-  - `sudo apt install libdrm-tests`
+  - `sudo apt install -y fortune`
+  - `sudo apt install -y libdrm-tests`
     - `modetest` (will display hardware information on the displays)
-  - `sudo apt install calendar`
-  - `sudo apt install python3-setuptools`
-  - `sudo apt-get install python3-venv python3-full`
+  - `sudo apt install -y calendar`
+  - `sudo apt install -y python3-setuptools`
+  - `sudo apt-get install -y  python3-venv python3-full`
+  - `curl -LsSf https://astral.sh/uv/install.sh | sh` # install uv
+
 - Python Virtual Environment
   - `cd pymirror`
-  - `python3 -m venv .venv --system-site-packages`
+  - `./scripts/rpi/install-uv.sh`
   - `source .venv/bin/activate`
   - Calendar (here? maybe better in the install_libs.sh)
   - `pip install ics`

@@ -8,3 +8,4 @@ python3-caldav
 python3-vobject
 ir-keytable
 lirc
+sqlite3
