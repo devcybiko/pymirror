@@ -8,6 +8,6 @@ fi
     rm ./maps/*
     mkdir -p ./maps
     source .venv/bin/activate
-    PYTHONPATH=libs:apps/task_manager \
+    PYTHONPATH="libs:apps/pmtaskmgr" \
         python3 -u -m pmtaskmgr \
         --config "$CONFIG"

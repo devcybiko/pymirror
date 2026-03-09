@@ -4,7 +4,7 @@ from glslib.glsdb import GLSDb
 
 
 class PMTask:
-    def __init__(self, pmtm, config: dict):
+    def __init__(self, pmtm: "PMTaskMgr", config: dict):
         self._task = munchify(config, factory=DefaultMunch)
         self.pmtm: "PMTaskMgr" = pmtm
         self.pmdb: GLSDb = pmtm.pmdb

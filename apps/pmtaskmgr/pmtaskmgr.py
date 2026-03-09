@@ -6,8 +6,10 @@ import sys
 import time
 import traceback
 from dotenv import load_dotenv
+from munch import DefaultMunch
 
 from glslib.glsdb import GLSDb
+from glslib.to_types import to_munch
 from pmtask import PMTask
 from glslib.crontab import Crontab
 from glslib.strings import expand_dict, snake_to_pascal
@@ -24,7 +26,7 @@ class PMTaskMgrConfig:
 class PMTaskMgr:
     def __init__(self, config_fname: str):
         self._config = self._load_config(config_fname)
-        self.pmdb: GLSDb = GLSDb(self._config.pmdb)
+        self.pmdb: GLSDb = GLSDb(self._config.pmdb.url)
         self.tasks: list[PMTask] = []
         self._load_tasks()
         self.task_dict: dict = self._make_task_dict()
@@ -47,27 +49,25 @@ class PMTaskMgr:
             task_dict[task.name] = task
         return task_dict
 
-    def _load_config(self, config_fname) -> PMTaskMgrConfig:
+    def _load_config(self, config_fname) -> DefaultMunch:
         # read .env file if it exists
         load_dotenv()
         # Load the main configuration file
         _debug(config_fname)
-        config = json_read(config_fname)
+        config = to_munch(json_read(config_fname))
         _debug(config)
-        if not config.get("tasks"):
+        if not config.tasks:
             raise Exception("This is not a Task Manager config file")
         # Load secrets from .secrets file if specified
-        secrets_path = config.get("secrets")
+        secrets_path = config.secrets
         if secrets_path:
             secrets_path = os.path.expandvars(secrets_path)
         else:
             secrets_path = ".secrets"
+        _debug("Secrets path:", secrets_path)
         load_dotenv(dotenv_path=secrets_path)
         # Expand environment variables in the config
         expand_dict(config, os.environ)
-        obj = PMTaskMgrConfig.from_dict(config)
-        _debug(obj)
-        config = munchify(obj)
         return config
 
     def _load_tasks(self):
@@ -77,10 +77,10 @@ class PMTaskMgr:
                 ## if moddef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
-                config = munchify(json_read(task_config))
+                config = to_munch(json_read(task_config))
                 if config == None:
                     raise Exception(f"ERROR: reading {task_config}")
-                task_config = munchify(config)
+                task_config = config
 
             ## import the module using its name
             ## all modules should be in the "modules" directory

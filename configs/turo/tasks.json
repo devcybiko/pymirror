@@ -5,17 +5,12 @@
   "secrets": "$HOME/.secrets",
   "tasks": [
     {
-      "class": "time",
-      "name": "time",
-      "cron": "*:*:00"
-    },
-    {
-      "class": "turo_task",
-      "name": "turo_task",
+      "class": "cp",
+      "name": "turo file copy",
       "cron": "*:15:00",
-      "from_file": "greg@GregsM4MacMini:turo.sqlite",
-      "to_file": "/home/pymirror/turo.sqlite",
-      "cp_command": "scp {from_file} {to_file}"
+      "from_file": "greg@GregsM4MacMini.local:turo.sqlite",
+      "to_file": "$HOME/turo.sqlite",
+      "cp_command": "scp {{from_file}} {{to_file}}"
     }
   ]
 }
