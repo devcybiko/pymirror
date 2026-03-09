@@ -177,7 +177,7 @@ class PMBitmap:
         halign: str = "center",
         clip: bool = False,
         use_baseline: bool = None
-    ) -> Tuple[int, int]:
+    ) -> tuple[int, int]:
         clip = bool(clip) ## make sure it's zero or one
         if use_baseline == None:
             use_baseline =  self.gfx.font_baseline
