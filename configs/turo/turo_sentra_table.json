@@ -20,7 +20,7 @@
         "reversed": true,
     },
     "sql_table": {
-        "database_url": "sqlite:///turo.sqlite",
+        "database_url": "sqlite:///$HOME/turo.sqlite",
         "sql": "\
         SELECT \
             vehicle_nickname as vehicle, \

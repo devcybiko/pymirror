@@ -16,7 +16,7 @@
     "text_bg_color": null,
   },
   pmdb: {
-    "url": "sqlite:///pymirror.db"
+    "url": "sqlite:///$HOME/pymirror.db"
   },
   positions: {
     "None": "0.0,0.0,0.0,0.0",

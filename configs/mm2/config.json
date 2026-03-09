@@ -13,7 +13,7 @@
     "text_bg_color": null
   },
   "pmdb": {
-    "url": "sqlite:///pymirror.db"
+    "url": "sqlite:///$HOME/pymirror.db"
   },
   "positions": {
     "top_left":     "0.00,0.00,0.33,0.20",

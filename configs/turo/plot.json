@@ -13,7 +13,7 @@
     },
     "plot": {
         "refresh_time": "60s",
-        "database": "sqlite:///turo.sqlite",
+        "database": "$HOME/turo.sqlite",
         "sql": "SELECT trip_start, total_earnings FROM trips WHERE vehicle_nickname='cx5' AND trip_status in ('Completed', 'In-progress', 'Booked') ORDER BY trip_start",
         "x_axis": {
           "column": "trip_date",

@@ -1,11 +1,14 @@
 from dataclasses import fields as dc_fields
 import importlib
 from typing import get_type_hints
+import os
 
 from glslib.gson import json_dumps, json_loads, json_read
 from glslib.to_types import to_dict
 from glslib.strings import pascal_to_snake, snake_to_pascal
 from glslib.logger import trace, trace_method, _trace, _info, _print, _warning
+from libs.glslib.strings import expand_dict
+from glslib.strings import expand_dict
 
 class Object:
     def __init__(self):
@@ -155,6 +158,7 @@ class PMConfig:
     def from_file(self, fname: str, with_config:str=None) -> "PMConfig":
         # try:
             obj = json_read(fname)
+            expand_dict(obj, os.environ)
             self._rename_class_to_clazz(obj)
             _print("with_config", with_config)
             return self.from_dict(obj, with_config=with_config)

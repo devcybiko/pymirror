@@ -12,7 +12,7 @@
         "text_bg_color": "#333",
     },
     "sql_table": {
-        "database_url": "sqlite:///turo.sqlite",
+        "database_url": "sqlite:///$HOME/turo.sqlite",
         "sql": "\
         SELECT \
             vehicle_nickname as vehicle, \

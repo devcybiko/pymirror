@@ -3,7 +3,7 @@
   "secrets": "$HOME/.secrets",
   "force_render": false,
   "pmdb": {
-    "url": "sqlite:///pymirror.db"
+    "url": "sqlite:///$HOME/pymirror.db"
   },
   "screen": {
     "output_file": null,

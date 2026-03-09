@@ -1,6 +1,6 @@
 {
   "pmdb": {
-    "url": "sqlite:///pymirror.db"
+    "url": "sqlite:///$HOME/pymirror.db"
   },
   "secrets": "$HOME/.secrets",
   "tasks": [
