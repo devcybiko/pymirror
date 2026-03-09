@@ -7,7 +7,7 @@ else
 fi
 source .venv/bin/activate
 while true; do
-    PYTHONPATH=libs:apps/task_manager \
+    PYTHONPATH=libs:apps/pmtaskmgr \
         python3 -u -m pmtaskmgr.pmtaskmgr \
         --config "$CONFIG" \
         >> src/pmserver/static/output.log 2>&1

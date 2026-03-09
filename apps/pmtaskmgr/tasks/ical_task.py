@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
 
-from pmtaskmgr.pmtask import PMTask
+from pmtask import PMTask
 from tables.ical_table import IcalTable
 from glslib.to_types import to_naive, to_munch, to_utc_epoch
 from pmutils import make_hashcode
