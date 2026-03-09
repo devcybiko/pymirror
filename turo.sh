@@ -1,2 +1,2 @@
-scp greg@GregsM4MacMini:turo.sqlite ~
-./run.debug ./configs/turo/config.json
+#scp greg@GregsM4MacMini:turo.sqlite ~
+./run.sh ./configs/turo/config.json
