@@ -12,3 +12,4 @@ maps/
 .env
 *.db
 *.sqlite
+output.*
