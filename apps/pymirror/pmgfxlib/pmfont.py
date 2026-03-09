@@ -127,7 +127,7 @@ class PMFont:
             n += 1
 
     def text_split_words(self, s, rect: tuple) -> list[str]:
-        words = s.split()
+        words = s.strip().split()
         n = 0
         end = len(words)
         lines = []
@@ -143,6 +143,7 @@ class PMFont:
     def text_split_chars(self, s, rect: tuple) -> list[str]:
         n = 0
         lines = []
+        s = s.strip()
         max = len(s)
         while True:
             if n >= max:
@@ -174,7 +175,7 @@ class PMFont:
         for s in s.splitlines():
             if height >= _height(rect):
                 break
-            s = s.strip()
+            # s = s.strip()  # Only strip trailing whitespace, preserve leading indentation
             split_lines = split_fn(s, rect)
             results.extend(split_lines)
             height += self.height * len(split_lines)

@@ -100,6 +100,8 @@ class GLSDb:
             where_clause = text(where_clause)
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
+            if isinstance(order_by, str):
+                order_by = text(order_by)
             query = query.order_by(order_by)
         records = query.all()
         return records

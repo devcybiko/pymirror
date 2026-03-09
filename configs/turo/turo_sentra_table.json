@@ -1,10 +1,10 @@
 {
     "module": {
         "class": "sql_table",
-        "name": "sentra_table",
+        "name": "turo_sentra_table",
         "text_color": "#fff",
         "text_bg_color": null,
-        "position": "0.01,0.30,0.99,0.50",
+        "position": "turo_sentra_table",
         "font_size": 16,
         "color": "#fff",
         "bg_color": "#000",

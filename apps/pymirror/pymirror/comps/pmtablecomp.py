@@ -84,7 +84,7 @@ class PMTableComp(PMComponent):
             self._render_header_cell(bm, x, y, w, h, row_n, col_n)
 
     def _render_row(self, bm: PMBitmap, y: int, h: int, row_n: int):
-        cell_width = self.rect.width // self._table.cols
+        cell_width = self._table.col_width or (self.rect.width // self._table.cols)
         for col_n in range(self._table.cols):
             x = col_n * cell_width
             w = cell_width

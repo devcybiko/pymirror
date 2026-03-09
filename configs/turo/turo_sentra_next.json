@@ -1,0 +1,41 @@
+{
+    "module": {
+        "class": "turo_next",
+        "name": "turo_sentra_next",
+        "position": "turo_sentra_next",
+    },
+    "turo_next": {
+        "vehicle_nickname": "sentra",
+        "database_url": "sqlite:///$HOME/turo.sqlite",
+        "refresh_time": "15m",
+        "date_format": "(Sun) 2024-06-30",
+        "time_format": "9:00 AM",
+    },
+    "card": {
+        "header": {
+            "font_name": "Roboto-Bold",
+            "font_size": 40,
+            "text_color": "#fff",
+            "text_bg_color": "#066",
+            "valign": "center",
+            "height": 80,
+        },
+        "body": {
+            "font_name": "Roboto-Regular",
+            "font_size": 40,
+            "text_color": "#ccc",
+            "text_bg_color": "#222",
+            "valign": "top",
+            "halign": "left",
+            "wrap": "none"
+        },
+        "footer": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "valign": "bottom",
+            "height": 64
+        }
+    }
+}

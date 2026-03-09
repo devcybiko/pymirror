@@ -121,13 +121,20 @@ class PyMirror:
             ## all modules should be in the "modules" directory
             print(120, f"Loading module from config: {module_config}")
             clazz_name = module_config.module.clazz
-            mod = importlib.import_module(f"modules.{clazz_name}_module")
+            try:
+                mod = importlib.import_module(f"modules.{clazz_name}_module")
+            except ModuleNotFoundError as e:
+                msg = f"Error importing module 'modules.{clazz_name}_module': {e}"
+                raise ImportError(f"{msg}\nBe sure to add the module to your __init__.py file in the modules directory.")
+                raise e
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(clazz_name)
             _print(f"Loading '{module_config.module.name}' module, class {clazz_name} from {mod.__name__}")
             clazz = getattr(mod, clazz_name + "Module", None)
+            if clazz is None:
+                raise ImportError(f"Class '{clazz_name}Module' not found in module '{mod.__name__}'")
 
             ## create an instance of the class (module)
             ## and pass the PyMirror instance and the module config to it

@@ -35,6 +35,15 @@ class PMCard(PMModule):
         width = self.bitmap.width
         return PMTextComp(self.bitmap.gfx, self._card.body, y0=y0, width=width, height=height)
 
+    def set_header(self, text: str) -> None:
+        self._header.update(text)
+
+    def set_body(self, text: str) -> None:
+        self._body.update(text)
+
+    def set_footer(self, text: str) -> None:
+        self._footer.update(text)
+        
     def update(self, header: str, body: str, footer: str) -> None:
         self._header.update(header)
         self._body.update(body)

@@ -35,7 +35,7 @@ class PMGfx(GfxMixin, TextMixin, FontMixin):
         if isinstance(config, TextMixin):
             self.text_color = non_null(config.text_color, self.text_color, (255, 255, 255))
             self.text_bg_color = non_null(config.text_bg_color, self.text_bg_color, None)
-            self.wrap = non_null(config.wrap, self.wrap, "words")
+            self.wrap = non_null(config.wrap, self.wrap, None)
             self.halign = non_null(config.halign, self.halign, "center")
             self.valign = non_null(config.valign, self.valign, "center")
             self.clip = non_null(config.clip, self.clip, False)

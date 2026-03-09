@@ -8,6 +8,7 @@
 ## PMBitmap is the lowest level graphcics class in PyMirror.
 ##
 
+from ast import Tuple
 from dataclasses import dataclass
 from PIL import Image, ImageDraw
 
@@ -176,7 +177,7 @@ class PMBitmap:
         halign: str = "center",
         clip: bool = False,
         use_baseline: bool = None
-    ) -> None:
+    ) -> Tuple[int, int]:
         clip = bool(clip) ## make sure it's zero or one
         if use_baseline == None:
             use_baseline =  self.gfx.font_baseline
@@ -189,7 +190,7 @@ class PMBitmap:
         if lines == None:
             return (x0, y0)
         if isinstance(lines, str):
-            lines = [lines.strip()]
+            lines = [lines]
         valign = {"center": CENTER, "top": TOP, "bottom": BOTTOM}[valign or "center"]
         halign = {"center": CENTER, "left": LEFT, "right": RIGHT}[halign or "center"]
         if self.gfx._text_bg_color:
@@ -224,7 +225,7 @@ class PMBitmap:
             else:
                 _debug(f"Invalid halign '{type(halign), halign}' in text_box, using 'center' instead.")
             self._draw.text(
-                (text_x0, text_y0 - baseline + self.gfx.font_y_offset),
+                (text_x0 + 0, text_y0 - baseline + self.gfx.font_y_offset),
                 line,
                 fill=(gfx._text_color),
                 font=gfx.font._font,

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, is_dataclass, fields
+from datetime import datetime, timedelta
 from jinja2 import Environment, DebugUndefined
 import os
 import re
@@ -122,53 +123,59 @@ def _replace_month_day(word):
     result = re.sub(r"(%[bB])-\d{2}$", r"\1-%d", result)
     result = re.sub(r"(%[bB])-\d{1}([^0-9])", r"\1-%-d\2", result)
     result = re.sub(r"(%[bB])-\d{1}$", r"\1-%-d", result)
+
+    result = re.sub(r"(%[bB])/\d{2}([^0-9])", r"\1/%d\2", result)
+    result = re.sub(r"(%[bB])/\d{2}$", r"\1/%d", result)
+    result = re.sub(r"(%[bB])/\d{1}([^0-9])", r"\1/%-d\2", result)
+    result = re.sub(r"(%[bB])/\d{1}$", r"\1/%-d", result)
+
+    result = re.sub(r"\d{2}-\d{2}([^0-9])", r"%m-%d\1", result)
+    result = re.sub(r"\d{2}-\d{2}$", r"%m-%d", result)
+    result = re.sub(r"\d{1}-\d{1}([^0-9])", r"%-m-%-d\1", result)
+    result = re.sub(r"\d{1}-\d{1}$", r"%-m-%-d", result)
+
+    result = re.sub(r"\d{2}/\d{2}([^0-9])", r"%m/%d\1", result)
+    result = re.sub(r"\d{2}/\d{2}$", r"%m/%d", result)
+    result = re.sub(r"\d{1}/\d{1}([^0-9])", r"%-m/%-d\1", result)
+    result = re.sub(r"\d{1}/\d{1}$", r"%-m/%-d", result)
+
     return result
 
 def _replace_year_month_day(word):
-    result = re.sub(r"\d{4}-\d{2}-\d{2}", r"%Y-%m-%d", word)
-    result = re.sub(r"\d{4}-\d{2}", r"%Y-%m", result)
+    result = re.sub(r"\d{4}-\d{2}-\d{2}", "%Y-%m-%d", word)
+    result = re.sub(r"\d{4}/\d{2}/\d{2}", "%Y/%m/%d", result)
+    result = re.sub(r"\d{4}-\d{1}-\d{2}", "%Y-%-m-%d", result)
+    result = re.sub(r"\d{4}/\d{1}/\d{2}", "%Y/%-m/%d", result)
+    result = re.sub(r"\d{4}-\d{2}-\d{1}", "%Y-%m-%-d", result)
+    result = re.sub(r"\d{4}/\d{2}/\d{1}", "%Y/%m/%-d", result)
     return result
 
 def _replace_month_day_year(word):
-    result = _replace_month_day(word)
-    result = re.sub(r"(%[bB]) (%-d)([ ,]+)\d{4}", r"\1 \2\3%Y", result)
-    result = re.sub(r"(%[bB]) (%-d)([ ,]+)\d{2}", r"\1 \2\3%y", result)
-    result = re.sub(r"(%[bB]) (%d)([ ,]+)\d{4}", r"\1 \2\3%Y", result)
-    result = re.sub(r"(%[bB]) (%d)([ ,]+)\d{2}", r"\1 \2\3%y", result)
-    result = re.sub(r"(%[bB]) \d{4}$", r"\1 %Y", result)
-    result = re.sub(r"(%[bB]) \d{2}$", r"\1 %d", result)
-    result = re.sub(r"(%[bB]) \d{1}$", r"\1 %d", result)
-
-    result = re.sub(r"(%[bB])-(%-d)-\d{4}", r"\1-\2-%Y", result)
-    result = re.sub(r"(%[bB])-(%-d)-\d{2}", r"\1-\2-%y", result)
-    result = re.sub(r"(%[bB])-(%d)-\d{4}", r"\1-\2-%Y", result)
-    result = re.sub(r"(%[bB])-(%d)-\d{2}", r"\1-\2-%y", result)
-
+    result = re.sub(r"\d{2}-\d{2}-\d{4}", r"%m-%d-%Y", word)
     result = re.sub(r"\d{2}/\d{2}/\d{4}", r"%m/%d/%Y", result)
-    result = re.sub(r"\d{2}/\d{1}/\d{4}", r"%m/%-d/%Y", result)
+    result = re.sub(r"\d{1}-\d{2}-\d{4}", r"%-m-%d-%Y", result)
     result = re.sub(r"\d{1}/\d{2}/\d{4}", r"%-m/%d/%Y", result)
+    result = re.sub(r"\d{2}-\d{1}-\d{4}", r"%m-%-d-%Y", result)
+    result = re.sub(r"\d{2}/\d{1}/\d{4}", r"%m/%-d/%Y", result)
+    result = re.sub(r"\d{1}-\d{1}-\d{4}", r"%-m-%-d-%Y", result)
     result = re.sub(r"\d{1}/\d{1}/\d{4}", r"%-m/%-d/%Y", result)
-
+    result = re.sub(r"\d{2}-\d{2}-\d{2}", r"%m-%d-%y", result)
     result = re.sub(r"\d{2}/\d{2}/\d{2}", r"%m/%d/%y", result)
+    result = re.sub(r"\d{1}-\d{2}-\d{2}", r"%-m-%d-%y", result)
     result = re.sub(r"\d{1}/\d{2}/\d{2}", r"%-m/%d/%y", result)
+    result = re.sub(r"\d{2}-\d{1}-\d{2}", r"%m-%-d-%y", result)
     result = re.sub(r"\d{2}/\d{1}/\d{2}", r"%m/%-d/%y", result)
+    result = re.sub(r"\d{1}-\d{1}-\d{2}", r"%-m-%-d-%y", result)
     result = re.sub(r"\d{1}/\d{1}/\d{2}", r"%-m/%-d/%y", result)
-
-    result = re.sub(r"\d{2}/\d{4}", r"%m/%Y", result)
-
-    result = re.sub(r"\d{2}/\d{2}", r"%m/%d", result)
-    result = re.sub(r"\d{1}/\d{2}", r"%-m/%d", result)
-    result = re.sub(r"\d{2}/\d{1}", r"%m/%-d", result)
-    result = re.sub(r"\d{1}/\d{1}", r"%-m/%-d", result)
     return result
 
 def _replace_hours_minutes_seconds(word):
     result = word
 
-    result = re.sub(r"99:\d{2}:\d{2} (am|pm)", r"%H:%M:%S %p", result, flags=re.IGNORECASE)
-    result = re.sub(r"9:\d{2}:\d{2} (am|pm)", r"%-H:%M:%S %p", result, flags=re.IGNORECASE)
-    result = re.sub(r"99:\d{2} (am|pm)", r"%H:%M %p", result, flags=re.IGNORECASE)
-    result = re.sub(r"9:\d{2} (am|pm)", r"%-H:%M %p", result, flags=re.IGNORECASE)
+    result = re.sub(r"99:\d{2}:\d{2} (am|pm)", r"%I:%M:%S %p", result, flags=re.IGNORECASE)
+    result = re.sub(r"9:\d{2}:\d{2} (am|pm)", r"%-I:%M:%S %p", result, flags=re.IGNORECASE)
+    result = re.sub(r"99:\d{2} (am|pm)", r"%I:%M %p", result, flags=re.IGNORECASE)
+    result = re.sub(r"9:\d{2} (am|pm)", r"%-I:%M %p", result, flags=re.IGNORECASE)
 
     result = re.sub(r"99:\d{2}:\d{2}", r"%H:%M:%S", result)
     result = re.sub(r"9:\d{2}:\d{2}", r"%-H:%M:%S", result)
@@ -180,20 +187,58 @@ def _replace_hours_minutes_seconds(word):
     result = re.sub(r"\d{2}:\d{2} (am|pm)", r"%I:%M %p", result, flags=re.IGNORECASE)
     result = re.sub(r"\d{1}:\d{2} (am|pm)", r"%-I:%M %p", result, flags=re.IGNORECASE)
 
-    result = re.sub(r"\d{2}:\d{2}:\d{2}", r"%I:%M:%S", result)
-    result = re.sub(r"\d{1}:\d{2}:\d{2}", r"%-I:%M:%S", result)
-    result = re.sub(r"\d{2}:\d{2}", r"%I:%M", result)
-    result = re.sub(r"\d{1}:\d{2}", r"%-I:%M", result)
+    result = re.sub(r"\d{2}:\d{2}:\d{2}", r"%H:%M:%S", result)
+    result = re.sub(r"\d{1}:\d{2}:\d{2}", r"%-H:%M:%S", result)
+    result = re.sub(r"\d{2}:\d{2}", r"%H:%M", result)
+    result = re.sub(r"\d{1}:\d{2}", r"%-H:%M", result)
     return result
 
-def strftime_by_example(_example: str) -> str:
+def _replace_year(word):
+    result = re.sub(r"\d{4}", r"%Y", word)
+    result = re.sub(r"\d{2}", r"%y", result)
+    return result
+
+def _replace_day(word):
+    # Month is already replaced, so just replace remaining day numbers
+    # Replace 2-digit numbers (01-31) after a month with %d
+    result = re.sub(r"(?<=%[bB] )\d{2}", r"%d", word)
+    result = re.sub(r"(?<=%[bB]-)\d{2}", r"%d", result)
+    # Replace 1-digit numbers (1-9) after a month with %-d
+    result = re.sub(r"(?<=%[bB] )\d{1}", r"%-d", result)
+    result = re.sub(r"(?<=%[bB]-)\d{1}", r"%-d", result)
+    # Replace 2-digit numbers (01-31) before a month with %d
+    result = re.sub(r"\d{2}(?= %?[bB])", r"%d", result)
+    result = re.sub(r"\d{2}(?=-%?[bB])", r"%d", result)
+    # Replace 1-digit numbers (1-9) before a month with %-d
+    result = re.sub(r"\d{1}(?= %?[bB])", r"%-d", result)
+    result = re.sub(r"\d{1}(?=-%?[bB])", r"%-d", result)
+    return result
+
+def strftime_by_example(_example: str, verify=False) -> str:
     """Format a datetime string according to the specified example."""
     ## NOTE: Returns immediately if "%" is in the string, assuming it's already a strftime format
     if "%" in _example:
         return _example
-    result = _replace_dow(_example)
-    result = _replace_hours_minutes_seconds(result)
-    result = _replace_year_month_day(result)
-    result = _replace_month_day_year(result)
-    example = result.strip()
-    return example
+    # print(f"{_example}...")
+    format = _replace_dow(_example)
+    # print(219, f"...{result}")
+    format = _replace_hours_minutes_seconds(format)
+    # print(221, f"...{result}")
+    format = _replace_year_month_day(format)
+    # print(223,f"...{result}")
+    format = _replace_month_day_year(format)
+    # print(225,f"...{result}")
+    format = _replace_month_day(format)
+    # print(226,f"...{result}")
+    format = _replace_month(format)
+    # print(227,f"...{result}")
+    format = _replace_day(format)
+    # print(229,f"...{result}")
+    format = _replace_year(format)
+    # print(231,f"...{result}")
+    if verify:
+        ## Test the resulting format string by trying to parse the original example
+        parsed_date = datetime.strptime(_example, format)
+        assert parsed_date.strftime(format) == _example, f"Verification failed: {parsed_date.strftime(format)} != {_example}"
+
+    return format

@@ -15,6 +15,8 @@ class PMTextComp(PMComponent):
         y0 = non_null(y0, 0)
         self.halign = config.halign
         self.valign = config.valign
+        self.wrap = config.wrap or "words"
+        self.wrap = self.wrap.lower()
         self.rect = PMRect(x0, y0, 0, 0)
         self.rect.width = non_null(width, 1)
         self.rect.height = non_null(config.height, height, 1)
@@ -34,7 +36,7 @@ class PMTextComp(PMComponent):
             return
         gfx = bitmap.gfx_push(self.gfx)
         gfx.merge(self._comp)
-        lines = gfx.font.text_split(self.text, self.rect, gfx.wrap)
+        lines = gfx.font.text_split(self.text, self.rect, self.wrap)
         bitmap.text_box(self.rect, lines, valign=self.valign, halign=self.halign, clip=self.clip, use_baseline=self.use_baseline)
         bitmap.gfx_pop()
         self.clean()

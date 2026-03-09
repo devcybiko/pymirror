@@ -1,16 +1,16 @@
 {
     "module": {
         "class": "turo_trip",
-        "name": "turo_trip_cx5",
-        "position": "0.01,0.215,0.99,0.29",
+        "name": "turo_sentra_trips",
+        "position": "turo_sentra_trips",
     },
     "turo_trip": {
-        "vehicle_nickname": "cx5",
+        "vehicle_nickname": "sentra",
         "database_url": "sqlite:///$HOME/turo.sqlite",
         "refresh_time": "60s",
         "nmonths": 5,
         "start_date": "2025-12-01",
-        "hide_months": true,
+        "hide_months": false,
         "hide_vehicle_name": true
     }
 }
