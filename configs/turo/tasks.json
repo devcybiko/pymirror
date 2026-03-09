@@ -2,6 +2,7 @@
   "pmdb": {
     "url": "sqlite:///pymirror.db"
   },
+  "secrets": "$HOME/.secrets",
   "tasks": [
     {
       "class": "time",

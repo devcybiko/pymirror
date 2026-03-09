@@ -1,6 +1,6 @@
 {
   "debug": false,
-  "secrets": ".secrets",
+  "secrets": "$HOME/.secrets",
   "force_render": false,
   "screen": {
     "output_file": "./static/output.jpg",

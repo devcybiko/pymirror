@@ -1,6 +1,6 @@
 {
   "debug": false,
-  "secrets": ".secrets",
+  "secrets": "$HOME/.secrets",
   "force_render": false,
   "pmdb": {
     "url": "sqlite:///pymirror.db"
