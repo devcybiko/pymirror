@@ -23,4 +23,4 @@ class CpTask(PMTask):
         if result.returncode != 0:
             _error(f"Command failed with return code {result.returncode}: {result.stderr}")
         else:
-            _debug(f"Command executed successfully: {result.stdout}")
+            print(f"Command executed successfully: {result.stdout}")
