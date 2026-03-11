@@ -76,7 +76,7 @@ def exemplar_date_time(exemplar: datetime, include_am_pm=True, case_insensitive=
 __default_patterns = exemplar_date_time(datetime(1776, 7, 4, 13, 2, 3))
 
 
-def strftime_by_example(example: str, patterns: list=None, verify=True) -> str:
+def strftime_by_example(example: str, patterns: list=None, verify=False) -> str:
     """
     given an example string and a list of (pattern, strftime_code) tuples, replace occurrences of the patterns in the example with the corresponding strftime codes
     """
