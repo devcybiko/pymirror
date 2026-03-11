@@ -5,10 +5,14 @@ if [ $# -eq 0 ]; then
 else
     CONFIG="$1"
 fi
+
+rm ./maps/*
+mkdir -p ./maps
+
 source .venv/bin/activate
 while true; do
     PYTHONPATH=libs:apps/pmtaskmgr \
-        python3 -u -m pmtaskmgr.pmtaskmgr \
+        python3 -u -m pmtaskmgr \
         --config "$CONFIG" \
         >> src/pmserver/static/output.log 2>&1
         date
