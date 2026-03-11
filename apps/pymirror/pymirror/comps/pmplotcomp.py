@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 
-from datetime import timedelta, datetime
+from datetime import datetime
 
+from glslib.strings import strftime_by_example
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
-from pmutils import _add, _sub
+from glslib.tuples import _add
+from glslib.logger import _die, _debug, _print
 
 @dataclass
 class PMPlotAxisConfig:
@@ -17,22 +19,40 @@ class PMPlotAxisConfig:
     tic_interval: float = 1.0
     tic_height: int = 10
     format: str = "{:.2f}"
-    data: list = field(default_factory=list)
+    line_width: int = 2
+    data: list = field(default_factory=list) # x_axis only
     _size: float = None
 
 @dataclass
 class PMPlotTraceConfig:
     data: list
     color: str = "blue"
-    width: int = 2
+    label_color: str = "black"
+    line_width: int = 2
+    width: int = 20
+    x_offset: int = 0
+    type: str = "line" # or "bar"
     format: str = "{:.2f}"
-    data: list = field(default_factory=list)    
+    label_format: str = None
+    data: list = field(default_factory=list) 
+    column: str = None   
+    _width: str = None # scale bar width by trip days
 
 @dataclass
 class PMPlotCompConfig:
     x_axis: PMPlotAxisConfig
     y_axis: PMPlotAxisConfig
     rect: PMRect
+
+@dataclass
+class PMPointConfig:
+    y: float
+    color: str = None
+    width: int = None
+    line_width: int = None
+    label: str = None
+    halign: str = "center"
+    _width: float = None # scaled relative to x-axis
 
 class PMPlotComp(PMComponent):
     def __init__(
@@ -41,7 +61,7 @@ class PMPlotComp(PMComponent):
         config: PMPlotCompConfig,
     ):
         super().__init__(gfx, config)
-        print(f"Initializing PMPlotComp with config: {config}")
+        _debug(f"Initializing PMPlotComp with config: {config}")
         self._plot = config
         self.gfx = gfx
         self.rect = config.rect
@@ -52,19 +72,29 @@ class PMPlotComp(PMComponent):
         self.y_axis._size = self.rect.height - self.y_axis.margin * 2
         self.traces = []
 
+
     def is_dirty(self):
         return self._dirty
 
     def clean(self):
         self._dirty = False
 
-    def add_trace(self, data, color="blue", width=2, format="{:.2f}"):
-        self.traces.append(PMPlotTraceConfig(data, color, width, format))
+    def add_trace(self, trace_config: PMPlotTraceConfig, data=[]):
+        _debug(f"Adding trace with data: {trace_config.data}, color: {trace_config.color}, line_width: {trace_config.line_width}, format: {trace_config.format}")
+        if data:
+            trace_config.data = data
+        self.traces.append(trace_config)
+        for i, point in enumerate(trace_config.data):
+            if type(point) != PMPointConfig:
+                trace_config.data[i] = PMPointConfig(y=point)
+        self._dirty = True
 
-    def _scale(self, v, axis):
-        min, max = self._to_float(axis.min), self._to_float(axis.max)
-        scale = (v - min) * (axis._size) / (max - min)
-        return scale
+    def _to_float(self,val):
+        if val is None:
+            return None
+        if isinstance(val, datetime):
+            return val.timestamp()
+        return float(val)
 
     def _sx(self, v):
         return self._scale(v, self.x_axis)
@@ -72,16 +102,24 @@ class PMPlotComp(PMComponent):
     def _sy(self, v):
         return self._scale(v, self.y_axis)
 
-    def _to_float(self, val):
-        if isinstance(val, datetime):
-            return val.timestamp()
-        return float(val)
+    def _scale(self, _v, axis):
+        if _v is None:
+            return None
+        v = self._to_float(_v)
+        min, max = self._to_float(axis.min), self._to_float(axis.max)
+        scale = (v - min) * (axis._size) / (max - min)
+        return scale
 
-    def _to_label(self, val: float, template, format):
-        if isinstance(template, datetime):
-            val = datetime.fromtimestamp(val)
+    def _to_label(self, val: float, exampler, format):
         try:
-            return format.format(val)
+            if isinstance(exampler, datetime):
+                datetime_format = strftime_by_example(format)
+                _debug(90, f"... using format {datetime_format}")
+                val = datetime.fromtimestamp(val).strftime(datetime_format)
+                return val
+            else:
+                _debug(94, f"... {type(exampler)} using format {format}")
+                return format.format(val)
         except Exception:
             return str(val)
 
@@ -89,60 +127,126 @@ class PMPlotComp(PMComponent):
         # axis
         x0 = self.x_axis.margin
         y0 = self.rect.height - self.y_axis.margin
-        w = self.rect.width - self.x_axis.margin * 2
-        h = self.rect.height - self.y_axis.margin * 2
-        bm.line((x0, y0, x0 + dx * w, y0 - dy * h), color=axis.color)
-
+        x_axis_w = self.rect.width - self.x_axis.margin * 2
+        y_axis_h = self.rect.height - self.y_axis.margin * 2
+        bm.line((x0, y0, x0 + dx * x_axis_w, y0 - dy * y_axis_h), color=axis.color)
+        _debug(f"Rendering axis with min={axis.min}, max={axis.max}, tic_interval={axis.tic_interval}, format='{axis.format}'")
         # tics and labels
         tic_size = axis.tic_height / 2
         start = self._to_float(axis.min)
         end = self._to_float(axis.max)
         tic = self._to_float(axis.tic_interval)
+        _debug(f"Axis range: {start} to {end}, tic interval: {tic}")
         format = axis.format
         val = start
+        sanity_check = 0
         while val <= end + tic + 1e-8:
+            sanity_check += 1
+            if sanity_check > 10000:
+                _die(f"Sanity check failed in _render_axis, val={val}, end={end}, tic={tic}\n-- check your tic_interval and axis range to make sure they are reasonable")
             sval = self._scale(val, axis)
             bm.gfx.text_color = axis.color
             # base rect for tic
-            rect = (x0, y0, x0, y0) 
+            tic_rect = (x0, y0, x0, y0) 
             # move to tic position
-            rect = _add(rect, (dx * sval, -dy * sval, dx * sval, -dy * sval)) 
+            tic_rect = _add(tic_rect, (dx * sval, -dy * sval, dx * sval, -dy * sval)) 
             # move down/left to center
-            rect = _add(rect, (-dy * tic_size, -dx * tic_size, dy * tic_size, dx * tic_size)) 
-            bm.line(rect, color=axis.color)
+            tic_rect = _add(tic_rect, (-dy * tic_size, -dx * tic_size, dy * tic_size, dx * tic_size)) 
+            if tic_rect[0] > (x_axis_w + self.x_axis.margin) or tic_rect[1] < 0:
+                _debug(f"Skipping tic at val={val} because tic_rect={tic_rect} is outside of plot rect={self.rect}")
+                val += tic
+                continue
+            bm.line(tic_rect, color=axis.color)
             # draw label
-            rect = _add(rect, (-dy * axis.margin, dx * tic_size * 4, -dy * axis.margin, dx * tic_size * 4))
+            tic_rect = _add(tic_rect, (-dy * axis.margin, dx * tic_size * 4, -dy * axis.margin, dx * tic_size * 4))
             bm.gfx.text_color = axis.color
             bm.gfx.text_bg_color = None
             label = self._to_label(val, axis.min, format)
-            bm.text_box(rect, label)
+            bm.text_box(tic_rect, label)
             val += tic
+
+    def _render_lines(self, bm: PMBitmap, x, y, ly, trace):
+            x_data = self.x_axis.data
+            y_data = trace.data
+            line_width = trace.line_width
+            format = trace.format
+            for i in range(len(y_data) - 1):
+                point = y_data[i]
+                x0, y0 = self._to_float(x_data[i]), self._to_float(point.y)
+                next_point = y_data[i + 1]
+                x1, y1 = self._to_float(x_data[i + 1]), self._to_float(next_point.y)
+                # Print y-value at each point
+                if y0 is None:
+                    continue
+                bm.gfx.text_color = point.color or trace.color
+                rect = (x + self._sx(x0), ly - self._sy(y0), x + self._sx(x0), ly - self._sy(y0))
+                bm.text_box(rect, format.format(y0))
+                if y1 is None:
+                    continue # skip if data is missing
+                line = (x + self._sx(x0), y - self._sy(y0), x + self._sx(x1), y - self._sy(y1))
+                bm.line(line, color=point.color or trace.color, width=line_width)
+
+            # Print last y-value
+            last_point = y_data[-1]
+            if last_point is None:
+                return
+            bm.gfx.text_color = last_point.color or trace.color
+            sx0 = self._sx(x_data[-1])
+            sy0 = self._sy(last_point.y)
+            if sy0 is None or sx0 is None:
+                return
+            rect =(x + sx0, ly - sy0, x + sx0, ly - sy0)
+            bm.text_box(rect, format.format(last_point.y))
+
+    def _render_bars(self, bm: PMBitmap, x, y, label_y, trace):                
+            x_data = self.x_axis.data
+            y_data = trace.data
+            format = trace.format
+            for i in range(len(y_data)):
+                point = y_data[i]
+                bar_width = point.width or trace.width
+                if point._width is not None:
+                    bar_width = self._sx(self.x_axis.min.timestamp() + point._width)
+                    _print("_width is not None", point._width, bar_width)
+                x0, y0 = self._to_float(x_data[i]), self._to_float(point.y)
+                # Print y-value at each point
+                if y0 is None:
+                    continue
+                
+                bar_rect = PMRect(0,0,0,0)
+                bar_rect.x0 = x + self._sx(x0) + trace.x_offset
+                bar_rect.y0 = y - self._sy(y0)
+                bar_rect.x1 = x + self._sx(x0) + trace.x_offset
+                bar_rect.y1 = y
+                if point.halign == "center":
+                    bar_rect.x0 -= bar_width // 2
+                    bar_rect.x1 += bar_width // 2
+                else:
+                    bar_rect.x1 += bar_width
+
+                bm.gfx.text_color = point.color or trace.color
+                label_rect = PMRect(bar_rect.x0, bar_rect.y0 - 30, bar_rect.x1, bar_rect.y0)
+                bm.text_box(label_rect, format.format(y0))
+
+                bm.gfx.text_color = trace.label_color
+                bm.gfx.color = "black"
+                bm.gfx.bg_color = point.color or trace.color
+                bm.rectangle(bar_rect)
+                bm.text_box(bar_rect, point.label or "")
 
     def _render_traces(self, bm: PMBitmap):
         x = self.x_axis.margin
         y = self.rect.height - self.y_axis.margin
-        ly = y - bm.gfx.font.pitch // 2
+        label_y = y - bm.gfx.font.pitch // 2
 
         for trace in self.traces:
-            data = trace.data
-            color = trace.color
-            width = trace.width
-            format = trace.format
-            x_data = self.x_axis.data
-            y_data = trace.data
-            for i in range(len(data) - 1):
-                x0, y0 = self._to_float(x_data[i]), self._to_float(y_data[i])
-                x1, y1 = self._to_float(x_data[i + 1]), self._to_float(y_data[i + 1])
-                line = (x + self._sx(x0), y - self._sy(y0), x + self._sx(x1), y - self._sy(y1))
-                bm.line(line, color=color, width=width)
-                # Print y-value at each point
-                bm.gfx.text_color = color
-                rect = (x + self._sx(x0), ly - self._sy(y0), x + self._sx(x0), ly - self._sy(y0))
-                bm.text_box(rect, format.format(y0))
-            # Print last y-value
-            bm.gfx.text_color = color
-            rect =(x + self._sx(self.x_axis.data[-1]), ly - self._sy(y_data[-1]), x + self._sx(self.x_axis.data[-1]), ly - self._sy(y_data[-1]))
-            bm.text_box(rect, format.format(y_data[-1]))
+            print("213", trace)
+            if trace.type == "line":
+                self._render_lines(bm, x, y, label_y, trace)
+            elif trace.type == "bar":
+                self._render_bars(bm, x, y, label_y, trace)
+            else:
+                self._render_lines(bm, x, y, label_y, trace)
 
     def _convert_list_to_floats(self, datalist):
         new_datalist = []

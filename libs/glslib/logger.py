@@ -92,7 +92,7 @@ class PMLoggerLevel(enum.Enum):
 
 class PMLogger:
     # class variable to hold the logger instance
-    c_level = None
+    c_level = PMLoggerLevel.NONE
     c_fn_stack = [""]
     c_trace = False
 

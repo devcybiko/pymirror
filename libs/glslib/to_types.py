@@ -23,7 +23,7 @@ def to_float(s: str, dflt: float = 0.0) -> float:
 
 def to_munch(obj):
     if isinstance(obj, dict):
-        return DefaultMunch.fromDict({k: munchify(v) for k, v in obj.items()})
+        return DefaultMunch.fromDict({k: munchify(v, factory=DefaultMunch) for k, v in obj.items()})
     elif isinstance(obj, list):
         return [munchify(v) for v in obj]
     else:

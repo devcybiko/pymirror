@@ -19,7 +19,6 @@
   - `sudo apt install -y python3-setuptools`
   - `sudo apt-get install -y  python3-venv python3-full`
   - `curl -LsSf https://astral.sh/uv/install.sh | sh` # install uv
-
 - Python Virtual Environment
   - `cd pymirror`
   - `./scripts/rpi/install-uv.sh`
@@ -31,7 +30,13 @@
   - `sudo systemctl enable bluetooth`
   - `sudo systemctl start bluetooth`
   - `hciconfig` # check the bluetooth connector
-
+- perms
+```
+  ssh greg@rpi03.local
+  sudo -E EDITOR=vim visudo
+  sudo visudo
+  greg ALL=(ALL) NOPASSWD: ALL
+```
   Since your Pi Zero 2 W is headless, connecting a Bluetooth keyboard takes a slightly different approach than on a desktop. Here’s a reliable method for macOS users:
 
 ### **2. Put your keyboard in pairing mode**

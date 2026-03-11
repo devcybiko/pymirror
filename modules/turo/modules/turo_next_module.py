@@ -23,12 +23,15 @@ class TuroNextModule(PMCard):
         nbs = "\u00A0"  # non-breaking space
         tab = nbs * 4
         now = datetime.now()
-        days = (trip_date - now).days
+        days = (trip_date - now)
+        secs = days.total_seconds()
+        days = int(secs // 86400) + (1 if secs % 86400 > 0 else 0)  # round up to nearest day
+        print(27, f"trip_date: {trip_date}, now: {now}, days: {days}")
         returning_in = f"in {days} days" if days > 0 else "TODAY"
         msg = ""
         msg += f"{call_to_action} ({returning_in})\n"
         msg += f"{tab}{trip_date.strftime(self.date_format)}\n"
-        msg += f"{tab}{trip_date.strftime(self.time_format)}\n"
+        msg += f"{tab}{trip_date.strftime(self.time_format)} ({trip.trip_days})\n"
         msg += f"{tab}{trip.guest}: (${trip.total_earnings})\n"
         return msg
     

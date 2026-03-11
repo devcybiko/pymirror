@@ -52,7 +52,7 @@ class OpenWeatherMapApi:
         return weather
 
 if __name__ == "__main__":
-    pmdb = GLSDb({"url":"sqlite:///pymirror.db"})
+    pmdb = GLSDb("sqlite:///$HOME/pymirror.db")
     openweathermap = OpenWeatherMapApi(pmdb, "openweather")
     weather_data = openweathermap.get_weather_data()
     pprint(weather_data)

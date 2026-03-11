@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import importlib
 import os
-import sys
 import time
-import types
 from dotenv import load_dotenv
 import queue
 import argparse
@@ -13,7 +11,7 @@ import traceback
 from munch import DefaultMunch
 
 from configs.pmconfig import PMConfig
-from glslib.logger import _debug, _print
+from glslib.logger import _debug, _print, _die
 from pymirror.pmscreen import PMScreen
 from glslib.module_manager import ModuleManager
 from glslib.strings import expand_dataclass, snake_to_pascal
@@ -21,7 +19,7 @@ from glslib.to_types import to_munch
 from pmserver.pmserver import PMServer
 from glslib.glsdb import GLSDb
 from glslib.pstat import get_pstat_delta, get_pids_by_cli
-import modules
+import modules ## import all modules so that they get registered with the ModuleManager
 
 from events import * # get all events 
 
@@ -293,6 +291,7 @@ class PyMirror:
         gfx.text_bg_color = "#ff0"
         self.screen.bitmap.text_box(gfx.rect, f"Exception:\n\n{str(e)}")
         self.screen.flush()
+        _die(f"Error displaying exception: {e}")  # Re-raise the exception after displaying it
 
     def _bsod(self, e):
         """ Blue Screen of Death """

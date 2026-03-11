@@ -24,7 +24,7 @@ class PlotModule(PMModule):
         plot_config: PMPlotCompConfig = PMPlotCompConfig(x_axis=x_axis,y_axis=y_axis,rect=self.bitmap.rect)
         self.plot = PMPlotComp(self.bitmap.gfx, plot_config)
         self.timer.set_timeout(self._plot.refresh_time)
-        self.db = GLSDb({"url": self._plot.database})
+        self.db = GLSDb(self._plot.database_url)
         data = [1.5,2,3.75,4,5,1.99]
         self.plot.add_trace(data, color="blue", width=2, format="${:.2f}")
         data = [7,6,5,4,3,2]

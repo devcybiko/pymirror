@@ -1,10 +1,10 @@
-from dataclasses import dataclass
+from datetime import datetime
 from munch import DefaultMunch 
 from sqlalchemy import Table, create_engine, Column, Integer, String, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from glslib.dicts import from_dict
-from glslib.logger import _debug, tracebacker, _die
+from glslib.logger import _debug, tracebacker, _die, _print
 
 Base = declarative_base()
 
@@ -66,12 +66,22 @@ class GLSDb:
         self.commit()
 
     def query(self, sql: str, params=None):
-        from sqlalchemy import text
         with self.engine.connect() as conn:
             print(76, "Executing SQL:", sql, "with params:", params)
             result = conn.execute(text(sql), params or {})
             keys = list(result.keys())
             result_list = [dict(zip(keys, row)) for row in result.fetchall()]
+            
+            # Convert datetime strings to datetime objects
+            for record in result_list:
+                for key, value in record.items():
+                    if not isinstance(value, str): continue
+                    try:
+                        # Try parsing common datetime formats
+                        record[key] = datetime.fromisoformat(value.replace('Z', '+00:00'))
+                    except (ValueError, AttributeError):
+                        # Keep original value if it's not a datetime string
+                        pass
             return result_list
 
     def get(self, table: Table, key) -> "Table":
@@ -100,8 +110,6 @@ class GLSDb:
             where_clause = text(where_clause)
         query = self.session.query(table).filter(where_clause)
         if order_by is not None:
-            if isinstance(order_by, str):
-                order_by = text(order_by)
             query = query.order_by(order_by)
         records = query.all()
         return records
