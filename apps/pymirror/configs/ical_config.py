@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from glslib.strings import strftime_by_example
+from glslib.strftime import strftime_by_example
 
 @dataclass
 class IcalConfig:
@@ -9,7 +9,7 @@ class IcalConfig:
     refresh_time: str = "60m"
     max_events: int = 10
     number_days: int = 7
-    title_format: str = strftime_by_example("Jan 2025")
+    title_format: str = strftime_by_example("Jul 2776")
     time_format: str = strftime_by_example("0:00 PM")
     show_regular_events: bool = True
     show_all_day_events: bool = True

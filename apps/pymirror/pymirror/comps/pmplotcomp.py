@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from datetime import datetime
 
-from glslib.strings import strftime_by_example
+from glslib.strftime import strftime_by_example
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.comps.pmcomponent import PMComponent

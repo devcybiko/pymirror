@@ -1,18 +1,31 @@
+from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 
 from munch import DefaultMunch
-from sqlalchemy import label
 
 from configs.module_config import ModuleConfig
 
 from glslib.glsdb import GLSDb
 from glslib.gson import json_dumps
-from glslib.strings import strftime_by_example
+from glslib.strftime import strftime_by_example
 from glslib.to_types import to_munch
 from pymirror.comps.pmplotcomp import PMPlotAxisConfig, PMPlotComp, PMPlotCompConfig, PMPlotTraceConfig, PMPointConfig
 from pymirror.pmmodule import PMModule
-from configs.turo_plot_config import TuroPlotConfig
 from glslib.logger import _die, _debug, _print
+
+@dataclass
+class TuroPlotConfig:
+    database_url: str
+    x_column: str 
+    traces: list = None
+    refresh_time: str = "60s"
+    nmonths: int = 3
+    start_date: str = datetime.now().strftime("%Y-%m-%d")
+    date_format: str = "%Y-%m-%d"
+    time_format: str = "%H:%M:%S"
+    x_axis: dict = None
+    y_axis: dict = None
 
 class TuroPlotModule(PMModule):
     def __init__(self, pm, config: ModuleConfig):
@@ -28,9 +41,14 @@ class TuroPlotModule(PMModule):
         self.y_axis_config: PMPlotAxisConfig = PMPlotAxisConfig(**self._turo.y_axis)
 
     def _create_query(self):
-        base_query = "SELECT *, total_earnings / trip_days as earnings_per_day, total_earnings / distance_traveled *100 as earnings_per_mile, distance_traveled / trip_days as miles_per_day"
-        base_query += " FROM trips WHERE trip_status = 'Completed' ORDER BY trip_end"
-        return base_query
+        # Get the directory of the current module
+        module_dir = Path(__file__).parent
+
+        # Read the SQL file
+        sql_file = module_dir / 'turo_plot.sql'
+        with open(sql_file, 'r') as f:
+            sql_content = f.read()
+        return sql_content
 
     def render(self, force: bool) -> bool:
         self.plot.render(self.bitmap)

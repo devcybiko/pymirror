@@ -1,14 +1,24 @@
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from munch import DefaultMunch
-from configs.turo_trip_config import TuroTripConfig
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
 from tables.turo_vehicles_table import TuroVehiclesTable
 
 from modules.turo_calculations import annual_income, annual_sum_of_days
+
+@dataclass
+class TuroTripConfig:
+    database_url: str 
+    vehicle_nickname: str 
+    refresh_time: str = "60s"
+    nmonths: int = 3
+    start_date: str = datetime.now().strftime("%Y-%m-%d")
+    hide_months: bool = False
+    hide_vehicle_name: bool = False
 
 class TuroTripModule(PMModule):
     def __init__(self, pm, config: DefaultMunch):

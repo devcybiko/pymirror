@@ -6,7 +6,7 @@ from munch import DefaultMunch
 from configs.module_config import ModuleConfig
 from glslib.glsdb import GLSDb
 from glslib.to_types import to_munch
-from glslib.strings import strftime_by_example
+from glslib.strftime import strftime_by_example
 from pymirror.pmcard import PMCard
 from tables.turo_trips_table import TuroTripsTable
 

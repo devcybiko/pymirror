@@ -12,6 +12,7 @@ from munch import DefaultMunch
 
 from configs.pmconfig import PMConfig
 from glslib.logger import _debug, _print, _die
+from glslib.strftime import exemplar_date_time
 from pymirror.pmscreen import PMScreen
 from glslib.module_manager import ModuleManager
 from glslib.strings import expand_dataclass, snake_to_pascal

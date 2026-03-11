@@ -9,6 +9,6 @@
         "font_size": 128
     },
     "clock": {
-        "date_format": "0:00:00"
+        "date_format": "1:02:03"
     }
 }

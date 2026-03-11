@@ -28,7 +28,7 @@
     "turo_cx5_table": "0.255,0.65,0.745,1.00",
   },
   modules: [
-    // "./configs/turo/turo_plot.json",
+    "./configs/turo/turo_plot.json",
     // "./configs/turo/fps.json",
     // "./configs/turo/status.json",
     "./configs/turo/time.json",
