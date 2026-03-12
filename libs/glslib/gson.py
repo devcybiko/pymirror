@@ -1,3 +1,5 @@
+import sys
+
 import json5
 import json
 from glslib.logger import _print
@@ -41,3 +43,6 @@ def json_dumps(d: dict, dflt=None, indent=2) -> str:
         _print(e)
         # raise e
         return dflt
+
+def json_print(d: dict, dflt=None, indent=2, file=sys.stdout):
+    print(json_dumps(d, dflt=dflt, indent=indent), file=file)

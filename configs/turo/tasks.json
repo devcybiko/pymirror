@@ -8,8 +8,8 @@
       "class": "cp",
       "name": "turo file copy",
       "cron": "*:15:00",
-      "from_file": "greg@GregsM4MacMini:turo.sqlite",
-      "to_file": "$HOME/turo.sqlite",
+      "from_file": "greg@GregsM4MacMini:turo.db",
+      "to_file": "$HOME/turo.db",
       "cp_command": "scp {{from_file}} {{to_file}}"
     }
   ]

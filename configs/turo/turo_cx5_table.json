@@ -20,7 +20,7 @@
     "reversed": true
   },
   "sql_table": {
-    "database_url": "sqlite:///$HOME/turo.sqlite",
+    "database_url": "sqlite:///$HOME/turo.db",
     "sql_file": "./configs/turo/turo_trip.sql",
     "sql_params": {
       "vehicle_nickname": "cx5",

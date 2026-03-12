@@ -67,10 +67,14 @@ class GLSDb:
 
     def query(self, sql: str, params=None):
         with self.engine.connect() as conn:
-            print(76, "Executing SQL:", sql, "with params:", params)
             result = conn.execute(text(sql), params or {})
             keys = list(result.keys())
-            result_list = [dict(zip(keys, row)) for row in result.fetchall()]
+            result_list = []
+            for row in result.fetchall():
+                record = {}
+                for i in range(len(keys)):
+                    record[keys[i]] = row[i]
+                result_list.append(record)
             
             # Convert datetime strings to datetime objects
             for record in result_list:

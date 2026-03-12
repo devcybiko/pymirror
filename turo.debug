@@ -1,2 +1,2 @@
-cp ~/git/turo-dashboard/turo.sqlite ~
+cp ~/git/turo-dashboard/turo.db ~
 ./run.debug ./configs/turo/config.json

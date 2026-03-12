@@ -6,7 +6,7 @@
     },
     "turo_next": {
         "vehicle_nickname": "cx5",
-        "database_url": "sqlite:///$HOME/turo.sqlite",
+        "database_url": "sqlite:///$HOME/turo.db",
         "refresh_time": "15m",
         "date_format": "(Tue) 1776-07-04",
         "time_format": "9:00 AM",

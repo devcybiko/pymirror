@@ -13,7 +13,7 @@
   },
   "turo_plot": {
     "refresh_time": "60s",
-    "database_url": "sqlite:///$HOME/turo.sqlite",
+    "database_url": "sqlite:///$HOME/turo.db",
     "x_column": "trip_start",
     "x_axis": {
       "min": null,
