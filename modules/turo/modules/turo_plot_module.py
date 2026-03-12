@@ -81,11 +81,10 @@ class TuroPlotModule(PMModule):
         self.plot_config = PMPlotCompConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect)
         self.plot = PMPlotComp(self.bitmap.gfx, self.plot_config)
         for trace_data in self._turo.traces:
-            print(117, f"vehicle_name: {trace_data.vehicle}")
             vehicle_nickname = trace_data.vehicle
-            if hasattr(trace_data, 'vehicle'):
-                del trace_data.vehicle
-            vehicle_trace = PMPlotTraceConfig(**trace_data)
+            # Create a copy without the 'vehicle' key instead of deleting
+            trace_dict = {k: v for k, v in trace_data.items() if k != 'vehicle'}
+            vehicle_trace = PMPlotTraceConfig(**trace_dict)
             vehicle_points = []
             for k, v in z_rows.items():
                 point_data = v[vehicle_nickname]
@@ -94,7 +93,6 @@ class TuroPlotModule(PMModule):
                 else:
                     _width = None
                     label_format = vehicle_trace.label_format or vehicle_trace.label or "f\"{y}\""
-                    print(127, f"label_format: {label_format}")
                     # Flatten point_data to include all trip fields for eval
                     eval_context = dict(point_data)
                     if point_data.get('trip'):
@@ -116,11 +114,11 @@ class TuroPlotModule(PMModule):
         self.y_axis_config.min = self._min(
             all_values, preferred=self.y_axis_config.min, default=0
         )
-        print(f"y_axis_config.min: {self.y_axis_config.min}")
+        _debug(f"y_axis_config.min: {self.y_axis_config.min}")
         self.y_axis_config.max = self._max(
             all_values, preferred=self.y_axis_config.max, default=100
         )
-        print(f"y_axis_config.max: {self.y_axis_config.max}")
+        _debug(f"y_axis_config.max: {self.y_axis_config.max}")
 
     def _compute_x_axis(self, x_axis):
         self.x_axis_config.data = x_axis
@@ -130,7 +128,7 @@ class TuroPlotModule(PMModule):
         self.x_axis_config.max = self._max(
             x_axis, preferred=self.x_axis_config.max, default=100
         )
-        print(f"x_axis: {json_dumps(x_axis)}")
+        _debug(f"x_axis: {json_dumps(x_axis)}")
         return x_axis
 
     def _collate_data(self, rows, x_column_name, y_columns, vehicles):
@@ -177,7 +175,7 @@ class TuroPlotModule(PMModule):
                         vehicle_row[y_column] = trip[y_column]
                     if trip[y_column] is not None:
                         all_values.append(trip[y_column])
-        print(json_dumps(z_rows))
-        print(json_dumps(x_axis))
-        print(json_dumps(all_values))
+        _debug(json_dumps(z_rows))
+        _debug(json_dumps(x_axis))
+        _debug(json_dumps(all_values))
         return z_rows, x_axis, all_values

@@ -3,7 +3,7 @@ import importlib.util
 import importlib.abc
 import sys
 import os
-from glslib.logger import _die, _print, _error
+from glslib.logger import _die, _debug, _error
 
 # Custom loader for loading code from bytes (from zip)
 class ZipModuleLoader(importlib.abc.Loader):
@@ -49,22 +49,22 @@ class ModuleManager:
 
     @staticmethod
     def load_modules(folder: str, package_name: str, die_trying: bool = False):
-        _print(f"Loading modules from package {package_name} in folder {folder}...")
+        _debug(f"Loading modules from package {package_name} in folder {folder}...")
         path = os.path.abspath(folder)
-        _print(f"Resolved path: {path}")
+        _debug(f"Resolved path: {path}")
         package_path = os.path.join(path, package_name)
-        _print(f"Package path: {package_path}")
+        _debug(f"Package path: {package_path}")
         sys.path.insert(0, package_path)
-        _print(f"Added {package_path} to sys.path")
+        _debug(f"Added {package_path} to sys.path")
         init_file = os.path.join(package_path, "__init__.py")
-        _print(f"Looking for __init__.py at {init_file}...")
+        _debug(f"Looking for __init__.py at {init_file}...")
         if not os.path.isfile(init_file):
-            _print(f"__init__.py not found at {init_file}")
+            _debug(f"__init__.py not found at {init_file}")
             _error(f"Package {package_name} must have an __init__.py file at {init_file}")
             if die_trying:
                 _die(f"Package {package_name} must have an __init__.py file at {init_file}")
         else:
-            _print(f"Found __init__.py at {init_file}")
+            _debug(f"Found __init__.py at {init_file}")
             with open(init_file, "r") as f:
                 lines = f.read().splitlines()
                 imports = _extract_imports("\n".join(lines))

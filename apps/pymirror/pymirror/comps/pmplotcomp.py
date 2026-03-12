@@ -207,7 +207,6 @@ class PMPlotComp(PMComponent):
                 bar_width = point.width or trace.width
                 if point._width is not None:
                     bar_width = self._sx(self.x_axis.min.timestamp() + point._width)
-                    _print("_width is not None", point._width, bar_width)
                 x0, y0 = self._to_float(x_data[i]), self._to_float(point.y)
                 # Print y-value at each point
                 if y0 is None:
@@ -240,7 +239,6 @@ class PMPlotComp(PMComponent):
         label_y = y - bm.gfx.font.pitch // 2
 
         for trace in self.traces:
-            print("213", trace)
             if trace.type == "line":
                 self._render_lines(bm, x, y, label_y, trace)
             elif trace.type == "bar":
