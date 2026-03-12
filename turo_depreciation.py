@@ -123,7 +123,7 @@ def main():
         print("... ${:.0f} equity".format(last_trip.vehicle_value - cars[vehicle_nickname].remaining_balance))
         print("... {:.0f} last odo".format(last_trip.vehicle_miles))
         print("... {:.0f} miles".format(delta_miles))
-        print("... ${:.3f} per mile".format((first_trip.vehicle_value - last_trip.vehicle_value) / delta_miles))
+        print("... ${:.3f} depreciation per mile".format((first_trip.vehicle_value - last_trip.vehicle_value) / delta_miles))
         print("... {:.0f} miles remaining".format(last_trip.miles_remaining))
 
 main()
