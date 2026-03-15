@@ -10,7 +10,7 @@ mkdir -p ./src/pmserver/static
 mkdir -p ./caches/
 source .venv/bin/activate
 
-    PYTHONPATH="libs:apps/pymirror" \
+PYTHONPATH="libs:apps/pymirror" \
         python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \
         --output_file="./apps/pymirror/pmserver/static/output.jpg" \

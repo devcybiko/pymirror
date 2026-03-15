@@ -2,7 +2,7 @@
         vehicle_nickname as vehicle, 
         guest, 
         trip_status as status, 
-        strftime('%Y-%m-%d', trip_start) AS start, 
+        strftime(' %Y-%m-%d ', trip_start) AS start, 
         -- strftime('%Y-%m-%d', trip_end) AS trip_end, 
         -- check_in_odometer,
         -- check_out_odometer,

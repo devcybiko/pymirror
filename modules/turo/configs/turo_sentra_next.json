@@ -8,7 +8,7 @@
         "vehicle_nickname": "sentra",
         "database_url": "sqlite:///$HOME/turo.db",
         "refresh_time": "15m",
-        "date_format": "1776-07-04 (Tue)",
+        "date_format": "(Tue) 1776-07-04",
         "time_format": "9:00 AM",
     },
     "card": {

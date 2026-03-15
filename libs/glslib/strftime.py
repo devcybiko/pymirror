@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import sys
+from glslib.logger import _die, _debug
 
 ## this is set whenver exemplar_date_time is called, so that strftime_by_example can use it without needing to pass the patterns around everywhere
 global __default_patterns # see below...

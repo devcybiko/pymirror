@@ -1,2 +1,2 @@
-cp ~/git/turo-dashboard/turo.db ~
-./run.debug ./configs/turo/config.json
+scp greg@gregsm4macmini.local:turo.db ~/turo.db
+./run.debug ./modules/turo/configs/config.json

@@ -35,7 +35,7 @@ class TuroNextModule(PMCard):
         msg = ""
         msg += f"{call_to_action} ({returning_in})\n"
         msg += f"{tab}{trip_date.strftime(self.date_format)}\n"
-        msg += f"{tab}{trip_date.strftime(self.time_format)} ({trip.trip_days})\n"
+        msg += f"{tab}{trip_date.strftime(self.time_format)} ({trip.trip_days} days)\n"
         msg += f"{tab}{trip.guest}: (${trip.total_earnings})\n"
         return msg
     

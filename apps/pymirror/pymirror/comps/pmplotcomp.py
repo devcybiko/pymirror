@@ -17,10 +17,12 @@ class PMPlotAxisConfig:
     margin: int = 40
     color: str = "blue"
     tic_interval: float = 1.0
+    n_tics: int = None
     tic_height: int = 10
     format: str = "{:.2f}"
     line_width: int = 2
     data: list = field(default_factory=list) # x_axis only
+    title: str = "AXIS"
     _size: float = None
 
 @dataclass
@@ -43,6 +45,7 @@ class PMPlotCompConfig:
     x_axis: PMPlotAxisConfig
     y_axis: PMPlotAxisConfig
     rect: PMRect
+    title: str = None
 
 @dataclass
 class PMPointConfig:
@@ -114,11 +117,9 @@ class PMPlotComp(PMComponent):
         try:
             if isinstance(exampler, datetime):
                 datetime_format = strftime_by_example(format)
-                _debug(90, f"... using format {datetime_format}")
                 val = datetime.fromtimestamp(val).strftime(datetime_format)
                 return val
             else:
-                _debug(94, f"... {type(exampler)} using format {format}")
                 return format.format(val)
         except Exception:
             return str(val)
@@ -135,15 +136,19 @@ class PMPlotComp(PMComponent):
         tic_size = axis.tic_height / 2
         start = self._to_float(axis.min)
         end = self._to_float(axis.max)
-        tic = self._to_float(axis.tic_interval)
-        _debug(f"Axis range: {start} to {end}, tic interval: {tic}")
+        n_tics = axis.n_tics
+        tic_interval = axis.tic_interval
+        if not n_tics:
+            # prefer n_tics over tic_interval if both are provided, but calculate n_tics if tic_interval is provided
+            n_tics = (end - start) / self._to_float(axis.tic_interval)
+        else:
+            tic_interval = (end - start) / n_tics
+            _debug(f"Calculated tic_interval: {tic_interval} based on n_tics: {n_tics}")
+        if n_tics > 100:
+            _die(f"Warning: number of tics ({n_tics}) is very high for axis with range {start} to {end} and tic_interval {axis.tic_interval}. Consider increasing tic_interval or setting n_tics to a reasonable number.")
         format = axis.format
         val = start
-        sanity_check = 0
-        while val <= end + tic + 1e-8:
-            sanity_check += 1
-            if sanity_check > 10000:
-                _die(f"Sanity check failed in _render_axis, val={val}, end={end}, tic={tic}\n-- check your tic_interval and axis range to make sure they are reasonable")
+        while n_tics >= 0:
             sval = self._scale(val, axis)
             bm.gfx.text_color = axis.color
             # base rect for tic
@@ -154,7 +159,8 @@ class PMPlotComp(PMComponent):
             tic_rect = _add(tic_rect, (-dy * tic_size, -dx * tic_size, dy * tic_size, dx * tic_size)) 
             if tic_rect[0] > (x_axis_w + self.x_axis.margin) or tic_rect[1] < 0:
                 _debug(f"Skipping tic at val={val} because tic_rect={tic_rect} is outside of plot rect={self.rect}")
-                val += tic
+                val += tic_interval
+                n_tics -= 1
                 continue
             bm.line(tic_rect, color=axis.color)
             # draw label
@@ -163,7 +169,7 @@ class PMPlotComp(PMComponent):
             bm.gfx.text_bg_color = None
             label = self._to_label(val, axis.min, format)
             bm.text_box(tic_rect, label)
-            val += tic
+            val += tic_interval
 
     def _render_lines(self, bm: PMBitmap, x, y, ly, trace):
             x_data = self.x_axis.data
@@ -196,6 +202,7 @@ class PMPlotComp(PMComponent):
             if sy0 is None or sx0 is None:
                 return
             rect =(x + sx0, ly - sy0, x + sx0, ly - sy0)
+            print(199, format)
             bm.text_box(rect, format.format(last_point.y))
 
     def _render_bars(self, bm: PMBitmap, x, y, label_y, trace):                
@@ -255,9 +262,29 @@ class PMPlotComp(PMComponent):
                 new_datalist.append(float(val))
         return new_datalist
 
+    def _render_title(self, bm: PMBitmap):
+        gfx = bm.gfx_push()
+        gfx.text_bg_color = None
+        gfx.set_font("DejaVuSans", 2.0)
+        bm.gfx.text_color = None
+        if self._plot.title:
+            bm.gfx.text_color = self.x_axis.color
+            bm.text_box((0,0,self.rect.width, self.rect.height), self._plot.title, halign="center", valign="top")
+        if self._plot.x_axis.title and self._plot.y_axis.title:
+            bm.gfx.text_color = self.x_axis.color
+            bm.text_box((0,0,self.rect.width, self.rect.height), self.x_axis.title, halign="center", valign="bottom")
+        if self._plot.y_axis.title:
+            gfx.text_bg_color="gray"
+            bm.gfx.text_color = self.y_axis.color
+            x, y, w, h = bm.gfx.font.getbbox(self.y_axis.title)
+            print(280, x, y, w, h)
+            bm.text(self.y_axis.title, 0, (self.rect.height - w)/2, angle=-90)
+        bm.gfx_pop()
+
     def render(self, bm: PMBitmap) -> None:
         bm.gfx_push(self.gfx)
         bm.rectangle((0, 0, self.rect.width, self.rect.height), fill="white")
+        self._render_title(bm)
         self._render_axis(bm, self.x_axis, dx=1, dy=0)
         self._render_axis(bm, self.y_axis, dx=0, dy=1)
         self._render_traces(bm)

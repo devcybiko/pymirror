@@ -143,15 +143,25 @@ class PMBitmap:
         self._draw.rectangle((x0, y0, x1, y1), outline=outline or self.gfx.color, width=self.gfx.line_width, fill=fill)
         return x1, y1
 
-    def text(self, msg: str, x0: int, y0: int, fill=-1) -> None:
+    def text(self, msg: str, x0: int, y0: int, fill=-1, angle=None) -> None:
         if fill == -1:
-            # Use the gfx.background color if specified
-            self._draw.text(
-                (x0, y0+self.gfx.font_y_offset), msg, font=self.gfx.font._font, fill=self.gfx._text_color
+            # Use the gfx text color for the text itself
+            self._draw_rotated_text(
+                (x0, y0+self.gfx.font_y_offset),
+                msg,
+                font=self.gfx.font._font,
+                fill=self.gfx._text_color,
+                angle=angle or 0,
             )
         else:
             # Use the specified fill color
-            self._draw.text((x0, y0+self.gfx.font_y_offset), msg, font=self.gfx.font._font, fill=fill)
+            self._draw_rotated_text(
+                (x0, y0+self.gfx.font_y_offset),
+                msg,
+                font=self.gfx.font._font,
+                fill=fill,
+                angle=angle or 0,
+            )
         return self.gfx.font.height
 
     def calculate_text_box(self, lines: str) -> tuple[str, tuple[int, int]]:
@@ -168,6 +178,26 @@ class PMBitmap:
                 width = max(width, line_width)
                 height += font_height
         return results, (width, height)
+    
+    def _draw_rotated_text(self, xy, text, angle, **kwargs):
+        """Draw text rotated by creating a temporary image and rotating it."""
+        # Get text bounding box to determine temp image size
+        font = self.gfx.font._font
+        bbox = font.getbbox(text) if font else (0, 0, 100, 20)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        
+        # Create minimal temporary image for the text
+        temp_img = Image.new('RGBA', (int(text_width) + 4, int(text_height) + 4), (255, 255, 255, 0))
+        temp_draw = ImageDraw.Draw(temp_img)
+        temp_draw.text((0, 0), text, **kwargs)
+        
+        # Rotate the temporary image around its center
+        rotated = temp_img.rotate(-angle, expand=True, fillcolor=(255, 255, 255, 0))
+        
+        # Paste rotated text onto main image at xy
+        xy_int = tuple(map(int, xy))
+        self._img.paste(rotated, xy_int, rotated)
 
     def text_box(
         self,
@@ -176,7 +206,7 @@ class PMBitmap:
         valign: str = "center",
         halign: str = "center",
         clip: bool = False,
-        use_baseline: bool = None
+        use_baseline: bool = None,
     ) -> tuple[int, int]:
         clip = bool(clip) ## make sure it's zero or one
         if use_baseline == None:

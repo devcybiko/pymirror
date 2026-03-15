@@ -1,3 +1,4 @@
+import csv
 from datetime import datetime
 import sys
 sys.path.append("./libs")
@@ -104,44 +105,79 @@ def main():
             last_trip = trip
     
     ## print depreciation
-    totol_equity = 0
+    total_equity = 0
     total_income = 0
-    total_depreiation = 0
-    for vehicle_nickname, trips in trip_data.items():
-        print(f"Vehicle: {vehicle_nickname}")
-        first_trip = None
-        last_trip = None
-        for trip_date in x_axis:
-            trip = trips[trip_date]
-            if trip.vehicle_nickname != vehicle_nickname:
-                continue
-            if first_trip is None:
-                first_trip = trip
-            last_trip = trip
-            print(f"  Trip on {trip.trip_start}-{trip.trip_end}: Value: ${trip.vehicle_value:.0f}, Miles: {trip.vehicle_miles}")
-        print("total depreciation:")
-        print(first_trip.trip_start, last_trip.trip_start)
-        delta_miles = last_trip.vehicle_miles - first_trip.vehicle_miles
-        delta_days = (last_trip.trip_end - first_trip.trip_start).days + 1
-        print("... ${:.0f} initial value".format(cars[vehicle_nickname].last_kbb_value))
-        print("... ${:.0f} amount owed".format(cars[vehicle_nickname].remaining_balance))
-        print("... ${:.0f} final value".format(last_trip.vehicle_value))
-        print("... ${:.0f} depreciation".format(first_trip.vehicle_value - last_trip.vehicle_value))
-        print("... ${:.0f} equity".format(last_trip.vehicle_value - cars[vehicle_nickname].remaining_balance))
-        print("... {:.0f} last odo".format(last_trip.vehicle_miles))
-        print("... {:.0f} miles driven".format(delta_miles))
-        print("... {:.0f} days driven".format(delta_days))
-        print("... {:.0f} miles per day".format(delta_miles / delta_days if delta_days else 0))
-        print("... ${:.3f} depreciation per mile".format((first_trip.vehicle_value - last_trip.vehicle_value) / delta_miles))
-        print("... ${:.0f} cumulative earnings".format(last_trip.cumulative_earnings))
-        print("... ${:.3f} $/mile".format(last_trip.cumulative_earnings / delta_miles if delta_miles else 0))
-        print("... {:.0f} miles remaining".format(last_trip.miles_remaining))
-        totol_equity += last_trip.vehicle_value - cars[vehicle_nickname].remaining_balance
-        total_income += last_trip.cumulative_earnings
-        total_depreiation += first_trip.vehicle_value - last_trip.vehicle_value
-    print("Total equity: ${:.0f}".format(totol_equity))
-    print("Total income: ${:.0f}".format(total_income))
-    print("Total depreciation: ${:.0f}".format(total_depreiation))
-    print("Total equity + income: ${:.0f}".format(totol_equity + total_income))
+    total_depreciation = 0
+    ## open a file for .csv otuput using the standard library csv module
+    
+    header_written = False
+    with open('turo_depreciation.csv', 'w', newline='') as csvfile:
+        # lowercase the fieldnames and replace spaces with underscores
+        for vehicle_nickname, trips in trip_data.items():
+            print(f"Vehicle: {vehicle_nickname}")
+            first_trip = None
+            last_trip = None
+            for trip_date in x_axis:
+                trip = trips[trip_date]
+                if trip.vehicle_nickname != vehicle_nickname:
+                    continue
+                if first_trip is None:
+                    first_trip = trip
+                last_trip = trip
+                record = MyMunch()
+                record.vehicle = vehicle_nickname
+                record.trip_date = trip_date
+                record.trip_start = trip.trip_start
+                record.trip_end = trip.trip_end
+                record.value = trip.vehicle_value
+                record.miles = trip.vehicle_miles
+                record.delta_miles = trip.vehicle_miles - first_trip.vehicle_miles
+                record.delta_days = (trip.trip_end - first_trip.trip_start).days + 1
+                record.cumulative_earnings = trip.cumulative_earnings
+                record.miles_remaining = trip.miles_remaining
+                record.initial_value = cars[vehicle_nickname].last_kbb_value
+                record.amount_owed = cars[vehicle_nickname].remaining_balance
+                record.final_value = last_trip.vehicle_value
+                record.depreciation = first_trip.vehicle_value - last_trip.vehicle_value
+                record.equity = last_trip.vehicle_value - cars[vehicle_nickname].remaining_balance
+                record.last_odo = last_trip.vehicle_miles
+                record.miles_driven = last_trip.vehicle_miles - first_trip.vehicle_miles
+                record.days_driven = (last_trip.trip_end - first_trip.trip_start).days + 1
+                record.miles_per_day = record.miles_driven / record.days_driven if record.days_driven else 0
+                record.depreciation_per_mile = record.depreciation / record.miles_driven if record.miles_driven else 0
+                record.cumulative_earnings_per_mile = record.cumulative_earnings / record.miles_driven if record.miles_driven else 0
+                record.earnings_per_mile = record.cumulative_earnings / record.miles_driven if record.miles_driven else 0
+                record.miles_remaining = last_trip.miles_remaining
+
+                if header_written == False:
+                    fieldnames = record.keys()
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    writer.writeheader()
+                    header_written = True
+
+                writer.writerow(record)
+                print(f"  Trip on {trip.trip_start}-{trip.trip_end}: Value: ${trip.vehicle_value:.0f}, Miles: {trip.vehicle_miles}")
+                print("total depreciation:")
+                print(record.trip_start, record.trip_start)
+                print("... ${:.0f} initial value".format(record.initial_value))
+                print("... ${:.0f} amount owed".format(record.amount_owed))
+                print("... ${:.0f} final value".format(record.final_value))
+                print("... ${:.0f} depreciation".format(record.depreciation))
+                print("... ${:.0f} equity".format(record.equity))
+                print("... {:.0f} last odo".format(record.last_odo))
+                print("... {:.0f} miles driven".format(record.miles_driven))
+                print("... {:.0f} days driven".format(record.days_driven))
+                print("... {:.0f} miles per day".format(record.miles_per_day))
+                print("... ${:.3f} depreciation per mile".format(record.depreciation_per_mile))
+                print("... ${:.0f} cumulative earnings".format(record.cumulative_earnings))
+                print("... ${:.3f} $/mile".format(record.cumulative_earnings_per_mile))
+                print("... {:.0f} miles remaining".format(record.miles_remaining))
+                total_equity += record.equity
+                total_income += record.cumulative_earnings
+                total_depreciation += record.depreciation
+        print("Total equity: ${:.0f}".format(total_equity))
+        print("Total income: ${:.0f}".format(total_income))
+        print("Total depreciation: ${:.0f}".format(total_depreciation))
+        print("Total equity + income: ${:.0f}".format(total_equity + total_income))
 
 main()

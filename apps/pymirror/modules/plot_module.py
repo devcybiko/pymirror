@@ -1,15 +1,22 @@
+from dataclasses import dataclass
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-from munch import DefaultMunch
-from sqlalchemy import Table
 from configs.config_config import ConfigConfig
-from configs.plot_config import PlotConfig
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from pymirror.comps.pmplotcomp import PMPlotComp, PMPlotCompConfig, PMPlotAxisConfig
-from pymirror.pmrect import PMRect
+
+@dataclass
+class PlotConfig:
+    x_axis: dict
+    y_axis: dict
+    refresh_time: str = "60s"
+    database_url: str = None
+    sql: str = None
+    width: int = None
+    height: int = None
 
 class PlotModule(PMModule):
     def __init__(self, pm, config: ConfigConfig):

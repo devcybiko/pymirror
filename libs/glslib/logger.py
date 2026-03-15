@@ -58,7 +58,7 @@ def trace_method(func):
             return result
         except Exception as e:
             pmlogger._trace_exit("-> EXCEPTION:", str(e))
-            raise
+            raise e
     setattr(wrapper, '_is_traced_', True)
     return wrapper
 
@@ -166,7 +166,7 @@ class PMLogger:
         self.log(PMLoggerLevel.CRITICAL, *args)
 
     def die(self, *args):
-        self.log(PMLoggerLevel.CRITICAL, *args)
+        self._print(level=PMLoggerLevel.CRITICAL.name, fn=PMLogger.c_fn_stack[-1], message=" ".join(map(str, args)))
         sys.exit(1)
 
 pmlogger = PMLogger()

@@ -21,7 +21,7 @@
     },
     "sql_table": {
         "database_url": "sqlite:///$HOME/turo.db",
-        "sql_file": "./configs/turo/turo_trip.sql",
+        "sql_file": "modules/turo/configs/turo_trip.sql",
         "sql_params": {
             "vehicle_nickname": "sentra",
             "months_ago": 3

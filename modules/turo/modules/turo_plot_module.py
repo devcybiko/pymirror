@@ -19,6 +19,9 @@ class TuroPlotConfig:
     database_url: str
     x_column: str 
     traces: list = None
+    sql: str = None
+    sql_file: str = "turo_plot.sql"
+    sql_params: dict = None
     refresh_time: str = "60s"
     nmonths: int = 3
     start_date: str = datetime.now().strftime("%Y-%m-%d")
@@ -26,6 +29,8 @@ class TuroPlotConfig:
     time_format: str = "%H:%M:%S"
     x_axis: dict = None
     y_axis: dict = None
+    vehicle_column: str = "vehicle_nickname"
+    title: str = ""
 
 class TuroPlotModule(PMModule):
     def __init__(self, pm, config: ModuleConfig):
@@ -38,16 +43,21 @@ class TuroPlotModule(PMModule):
         self.time_format = strftime_by_example(self._turo.time_format or "%H:%M:%S")
         self.plot_config: PMPlotCompConfig = None
         self.x_axis_config: PMPlotAxisConfig = PMPlotAxisConfig(**self._turo.x_axis)
+        self.x_axis_config.format = strftime_by_example(self._turo.x_axis.format or self._turo.date_format or "%Y-%m-%d")
         self.y_axis_config: PMPlotAxisConfig = PMPlotAxisConfig(**self._turo.y_axis)
+        self.y_axis_config.format = strftime_by_example(self._turo.y_axis.format or self._turo.date_format or "%Y-%m-%d")
+        self.sql_file: str = self._turo.sql_file or  Path(__file__).parent / "turo_plot.sql"
 
     def _create_query(self):
-        # Get the directory of the current module
-        module_dir = Path(__file__).parent
-
         # Read the SQL file
-        sql_file = module_dir / 'turo_plot.sql'
-        with open(sql_file, 'r') as f:
-            sql_content = f.read()
+        if self._turo.sql:
+            sql_content = self._turo.sql
+        else:
+            sql_file = self.sql_file
+            with open(sql_file, 'r') as f:
+                sql_content = f.read()
+            if self._turo.sql_params:
+                sql_content = sql_content.format(**self._turo.sql_params)
         return sql_content
 
     def render(self, force: bool) -> bool:
@@ -74,16 +84,15 @@ class TuroPlotModule(PMModule):
         rows = self.turo_db.query(self._create_query())
         x_column_name = self._turo.x_column
         y_columns = [trace.column for trace in self._turo.traces]
-        vehicles = [trace.vehicle for trace in self._turo.traces]
-        z_rows, x_axis, all_values = self._collate_data(rows, x_column_name, y_columns, vehicles)
+        z_rows, x_axis, all_values = self._collate_data(rows, x_column_name, y_columns, self._turo.traces)
         self._compute_x_axis(x_axis)
         self._compute_y_axis(all_values)
-        self.plot_config = PMPlotCompConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect)
+        self.plot_config = PMPlotCompConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect, title=self._turo.title)
         self.plot = PMPlotComp(self.bitmap.gfx, self.plot_config)
         for trace_data in self._turo.traces:
             vehicle_nickname = trace_data.vehicle
             # Create a copy without the 'vehicle' key instead of deleting
-            trace_dict = {k: v for k, v in trace_data.items() if k != 'vehicle'}
+            trace_dict = {k: v for k, v in trace_data.items() if k not in ['vehicle', 'vehicle_column']}
             vehicle_trace = PMPlotTraceConfig(**trace_dict)
             vehicle_points = []
             for k, v in z_rows.items():
@@ -92,7 +101,7 @@ class TuroPlotModule(PMModule):
                     point = None
                 else:
                     _width = None
-                    label_format = vehicle_trace.label_format or vehicle_trace.label or "f\"{y}\""
+                    label_format = vehicle_trace.label_format or "'label_format'"
                     # Flatten point_data to include all trip fields for eval
                     eval_context = dict(point_data)
                     if point_data.get('trip'):
@@ -131,7 +140,7 @@ class TuroPlotModule(PMModule):
         _debug(f"x_axis: {json_dumps(x_axis)}")
         return x_axis
 
-    def _collate_data(self, rows, x_column_name, y_columns, vehicles):
+    def _collate_data(self, rows, x_column_name, y_columns, traces):
         # all collected values for y axis to determine min and max for scaling. 
         # we will ignore None values.
         # NOTE: they should all be the same "scale" (e.g. dollars per day) 
@@ -165,17 +174,17 @@ class TuroPlotModule(PMModule):
                 x_axis.append(x_value)
                 z_rows[str(x_value)] = DefaultMunch()
             z_row = z_rows[str(x_value)]
-            for vehicle in vehicles:
-                if z_row[vehicle] == None: z_row[vehicle] = DefaultMunch()
-                vehicle_row = z_row[vehicle]
+            for trace in traces:
+                if z_row[trace.vehicle] == None: z_row[trace.vehicle] = DefaultMunch()
+                vehicle_row = z_row[trace.vehicle]
                 for y_column in y_columns:
-                    if trip.vehicle_nickname == vehicle:
+                    if trip[trace.vehicle_column] == trace.vehicle:
                         vehicle_row["_x_axis"] = x_value # for debugging
                         vehicle_row["trip"] = trip # for debugging
                         vehicle_row[y_column] = trip[y_column]
                     if trip[y_column] is not None:
                         all_values.append(trip[y_column])
-        _debug(json_dumps(z_rows))
-        _debug(json_dumps(x_axis))
-        _debug(json_dumps(all_values))
+        _print(json_dumps(z_rows))
+        _print(json_dumps(x_axis))
+        _print(json_dumps(all_values))
         return z_rows, x_axis, all_values
