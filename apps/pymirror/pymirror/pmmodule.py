@@ -1,14 +1,34 @@
 from abc import ABC, abstractmethod
 
 # from configs.config_config import ConfigConfig
-from configs.module_config import ModuleConfig
 from glslib.glsdb import GLSDb
-from pmgfxlib.pmbitmap import PMBitmap, PMGfx
+from pmgfxlib.pmbitmap import PMBitmap
 from pymirror.pmtimer import PMTimer
 from pymirror.pymirror import PyMirror
 from glslib.to_types import to_munch
 from glslib.logger import _trace, _debug
 from pymirror.pmrect import PMRect
+
+from dataclasses import dataclass, field
+
+from configs.mixins.font_mixin import FontMixin
+from configs.mixins.gfx_mixin import GfxMixin
+from configs.mixins.text_mixin import TextMixin
+
+@dataclass
+class ModuleConfig(GfxMixin, FontMixin, TextMixin):
+    ## moddef
+    clazz: str = field(default=None, metadata={"json_key": "class"})
+    name: str = None
+    position: str = "None"
+    subscriptions: list[str] = None
+    disabled: bool = False
+    force_render: bool = False
+    force_update: bool = False
+    debug: bool = False
+    force: bool = False
+    clear: bool = False ## clear the framebuffer before writing
+    refresh_time:str = "60s"
 
 class PMModule(ABC):
     def __init__(self, pm: PyMirror, config):
@@ -25,7 +45,7 @@ class PMModule(ABC):
         self.disabled = _moddef.disabled
         self.force_render = _moddef.force_render
         self.force_update = _moddef.force_update
-        self.timer = PMTimer(0, 0)
+        self.timer = PMTimer(self._moddef.refresh_time, 1)
         self.subscriptions = []
         self.dirty = False
         self.focus = False

@@ -125,7 +125,6 @@ class PyMirror:
             except ModuleNotFoundError as e:
                 msg = f"Error importing module 'modules.{clazz_name}_module': {e}"
                 raise ImportError(f"{msg}\nBe sure to add the module to your __init__.py file in the modules directory.")
-                raise e
             ## get the class from inside the module
             ## convert the file name to class name inside the module
             ## by convention the filename is snake_case and the class name is PascalCase

@@ -117,16 +117,48 @@ class PMConfig:
                         setattr(obj, field_name, nested_config)
             self._handle_lists(field_type, field_name, obj)
 
-    def _load_clazz(self, _config_name):
-        ## load the *Config module and get the clazz
-        config_name = snake_to_pascal(_config_name)
-        module_name = f"configs.{_config_name}_config"
-        print(f"Loading config class '{config_name}' from module '{module_name}'...")
-        module = importlib.import_module(module_name)
+    def _load_clazz_from_pmmodule(self, _module_name):
+        ## this is a hack until i figure out how to load the ModuleConfig more generically
+        config_name = snake_to_pascal(_module_name)
+        module_name = f"pymirror.pmmodule"
         clazz_name = f"{config_name}Config"
+        print(f"Loading config class '{clazz_name}' from module '{module_name}'...")
+        module = importlib.import_module(module_name)
         clazz = getattr(module, clazz_name, None) # get the class from the module
         _print(f"... loaded class: {clazz}")
         return clazz
+
+    def _load_clazz_from_config_folder(self, _module_name):
+        ## load the *Config module and get the clazz
+        config_name = snake_to_pascal(_module_name)
+        module_name = f"configs.{_module_name}_config"
+        clazz_name = f"{config_name}Config"
+        print(f"Loading config class '{clazz_name}' from module '{module_name}'...")
+        module = importlib.import_module(module_name)
+        clazz = getattr(module, clazz_name, None) # get the class from the module
+        _print(f"... loaded class: {clazz}")
+        return clazz
+
+    def _load_clazz_from_modules_folder(self, _module_name):
+        ## load the module and get the clazz
+        config_name = snake_to_pascal(_module_name)
+        module_name = f"modules.{_module_name}_module"
+        clazz_name = f"{config_name}Config"
+        print(f"Loading module class '{clazz_name}' from module '{module_name}'...")
+        module = importlib.import_module(module_name)
+        clazz = getattr(module, clazz_name, None) # get the class from the module
+        _print(f"... loaded class: {clazz}")
+        return clazz
+
+    def _load_clazz(self, _module_name):
+        try:
+            return self._load_clazz_from_modules_folder(_module_name)
+        except:
+            try:
+                return self._load_clazz_from_config_folder(_module_name)
+            except:
+                return self._load_clazz_from_pmmodule(_module_name)
+
 
     def _load_config(self, config_clazz, values: dict):
         if type(config_clazz) == str:

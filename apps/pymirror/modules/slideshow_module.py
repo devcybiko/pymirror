@@ -1,6 +1,5 @@
 from random import random
 
-from configs.module_config import ModuleConfig
 from configs.slideshow_config import SlideshowConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer

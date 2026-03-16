@@ -10,7 +10,7 @@ from dataclasses import dataclass
 # from configs.forecast_config import ForecastConfig
 # from configs.ical_config import IcalConfig
 # from configs.image_config import ImageConfig
-from configs.module_config import ModuleConfig
+from pymirror.pmmodule import ModuleConfig
 # from configs.openweathermap_config import OpenweathermapConfig
 # from configs.plot_config import PlotConfig
 # from configs.pmdb_config import PmdbConfig

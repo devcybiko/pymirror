@@ -4,7 +4,7 @@ from pathlib import Path
 
 from munch import DefaultMunch
 
-from configs.module_config import ModuleConfig
+from pymirror.pmmodule import ModuleConfig
 
 from glslib.glsdb import GLSDb
 from glslib.gson import json_dumps

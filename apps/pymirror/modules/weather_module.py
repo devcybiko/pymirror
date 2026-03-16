@@ -2,7 +2,7 @@
 # https://openweathermap.org/api/one-call-3#current
 
 from datetime import datetime
-from configs.module_config import ModuleConfig
+from pymirror.pmmodule import ModuleConfig
 from configs.weather_config import WeatherConfig
 from pymirror.pmcard import PMCard
 from glslib.logger import _debug
