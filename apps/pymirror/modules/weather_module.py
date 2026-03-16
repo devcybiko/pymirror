@@ -22,10 +22,10 @@ class WeatherModule(PMCard):
         self.timer.set_timeout(to_ms(self._weather.refresh_time)) 
         self.weather_response = None
         if config.openweathermap:
-            from .weather_apis.openweathermap import OpenWeatherMapApi
+            from weather_apis.openweathermap import OpenWeatherMapApi
             self.api = OpenWeatherMapApi(self.pmdb, "openweather")
         elif config.accuweather:
-            from .weather_apis.accuweather import AccuWeatherApi
+            from weather_apis.accuweather import AccuWeatherApi
             self.api = AccuWeatherApi(config.accuweather)
 
     def exec(self) -> bool:
