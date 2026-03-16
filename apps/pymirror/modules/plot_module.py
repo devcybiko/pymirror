@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from configs.config_config import ConfigConfig
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
-from pymirror.components.pmplotcomp import PMPlotComp, PMPlotCompConfig, PMPlotAxisConfig
+from components.pm_plot_component import PMPlotComponent, PMPlotComponentConfig, PMPlotAxisConfig
 
 @dataclass
 class PlotConfig:
@@ -28,8 +28,8 @@ class PlotModule(PMModule):
         y_axis=PMPlotAxisConfig(min=0, max=10, margin=40, tic_interval=5.0, format="${:.2f}", color="blue")
         for i in range(6):
             x_axis.data.append((now + relativedelta(days=i/2)).timestamp())
-        plot_config: PMPlotCompConfig = PMPlotCompConfig(x_axis=x_axis,y_axis=y_axis,rect=self.bitmap.rect)
-        self.plot = PMPlotComp(self.bitmap.gfx, plot_config)
+        plot_config: PMPlotComponentConfig = PMPlotComponentConfig(x_axis=x_axis,y_axis=y_axis,rect=self.bitmap.rect)
+        self.plot = PMPlotComponent(self.bitmap.gfx, plot_config)
         self.timer.set_timeout(self._plot.refresh_time)
         self.db = GLSDb(self._plot.database_url)
         data = [1.5,2,3.75,4,5,1.99]

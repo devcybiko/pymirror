@@ -2,7 +2,7 @@ import copy
 
 from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from pymirror.components.pmtextcomp import PMTextComp
+from components.pm_text_component import PMTextComponent
 
 from dataclasses import dataclass
 from configs.mixins.font_mixin import FontMixin
@@ -17,7 +17,7 @@ class TextModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):
 		super().__init__(pm, config)
 		self._text = pm.configurator.from_dict(config.text, TextConfig)
-		self._textcomp = PMTextComp(self.bitmap.gfx, self._text, 0, 0, self.bitmap.width, self.bitmap.height)
+		self._textcomp = PMTextComponent(self.bitmap.gfx, self._text, 0, 0, self.bitmap.width, self.bitmap.height)
 
 	def render(self, force: bool = False) -> int:
 		self._textcomp.render(self.bitmap)
