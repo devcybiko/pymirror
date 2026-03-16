@@ -5,7 +5,7 @@ from datetime import datetime
 from glslib.strftime import strftime_by_example
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
-from pymirror.comps.pmcomponent import PMComponent
+from components.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
 from glslib.tuples import _add
 from glslib.logger import _die, _debug, _print

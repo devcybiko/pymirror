@@ -1,7 +1,7 @@
 from configs.card_config import CardConfig
 from pymirror.pmmodule import ModuleConfig
 from configs.text_config import TextConfig
-from pymirror.comps.pmtextcomp import PMTextComp
+from components.pmtextcomp import PMTextComp
 from pymirror.pmmodule import PMModule
 from pmutils import non_null
 

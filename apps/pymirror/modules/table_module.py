@@ -2,7 +2,7 @@ import copy
 
 from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
-from pymirror.comps.pmtablecomp import PMTableComp
+from components.pmtablecomp import PMTableComp
 
 class TableModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

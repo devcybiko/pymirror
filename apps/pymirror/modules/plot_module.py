@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from configs.config_config import ConfigConfig
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
-from pymirror.comps.pmplotcomp import PMPlotComp, PMPlotCompConfig, PMPlotAxisConfig
+from pymirror.components.pmplotcomp import PMPlotComp, PMPlotCompConfig, PMPlotAxisConfig
 
 @dataclass
 class PlotConfig:

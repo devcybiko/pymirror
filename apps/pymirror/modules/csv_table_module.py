@@ -3,7 +3,7 @@ import copy
 from munch import DefaultMunch
 from configs.table_config import TableConfig
 from pymirror.pmmodule import PMModule
-from pymirror.comps.pmtablecomp import PMCell, PMTableComp
+from components.pmtablecomp import PMCell, PMTableComp
 
 class CsvTableModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

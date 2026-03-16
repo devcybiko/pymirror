@@ -1,6 +1,6 @@
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
-from pymirror.comps.pmcomponent import PMComponent
+from components.pmcomponent import PMComponent
 from pmgfxlib import PMBitmap
 from pmutils import non_null
 
@@ -55,7 +55,6 @@ class PMRow:
 class PMTableComp(PMComponent):
     def __init__(self, gfx: PMGfx, config: TableConfig, x0: int = None, y0: int = None, width: int = None, height: int = None):
         super().__init__(gfx, config)
-        print(44, config)
         self._table = config
         self.gfx = gfx
         self.rect = PMRect(x0, y0, 0, 0)
@@ -63,7 +62,7 @@ class PMTableComp(PMComponent):
         self.rect.height = non_null(config.height, height, 100)
         self.set_rows([[50.509] * self._table.cols] * self._table.rows)
         self.default_cell = PMCell(format="${:.2f}", halign="right", valign="center")
-        self.header_cell = PMCell(halign="center", valign="center", text_color="#f00", bg_color="#555")
+        self.header_cell = PMCell(halign="center", valign="center", text_color="#ff0", bg_color="#080")
         self._dirty = True
 
     def is_dirty(self):
@@ -87,19 +86,19 @@ class PMTableComp(PMComponent):
         else:
             self.header_cell.render(bm, x, y, w, h, value)
 
-    def _render_header_row(self, bm: PMBitmap, y: int, h: int):
+    def _render_header_row(self, bm: PMBitmap, y: int, h: int, header_row):
         cell_width = self.rect.width // self._table.cols
-        for header_value in self._table.header:
-            x = header_value * cell_width
-            w = cell_width
-            self._render_header_cell(bm, x, y, w, h, header_value)
+        x = 0
+        for header_value in header_row:
+            self._render_header_cell(bm, x, y, cell_width, h, header_value)
+            x += cell_width
 
     def _render_row(self, bm: PMBitmap, y: int, h: int, row):
         cell_width = self._table.col_width or (self.rect.width // self._table.cols)
-        for col_n in range(self._table.cols):
-            x = col_n * cell_width
-            w = cell_width
-            self._render_cell(bm, x, y, w, h, row[col_n])
+        x = 0
+        for col in row:
+            self._render_cell(bm, x, y, cell_width, h, col)
+            x += cell_width
 
     def render(self, bm: PMBitmap) -> None:
         # Render the table to the bitmap
@@ -109,9 +108,9 @@ class PMTableComp(PMComponent):
             rows = reversed(self.rows)
         cell_height = self._table.row_height or (self.rect.height // self._table.rows)
         y = 0
-        # if self._table.header:
-        #     self._render_header_row(bm, y, cell_height)
-        #     y += cell_height
+        if self._table.header:
+            self._render_header_row(bm, y, cell_height, self._table.header)
+            y += cell_height
         for row in rows:
             if y + cell_height > self.rect.height:
                 break

@@ -3,7 +3,7 @@ import copy
 from munch import DefaultMunch
 from configs.text_config import TextConfig
 from pymirror.pmmodule import PMModule
-from pymirror.comps.pmtextcomp import PMTextComp
+from pymirror.components.pmtextcomp import PMTextComp
 
 class TextModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

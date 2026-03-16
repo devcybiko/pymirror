@@ -10,7 +10,7 @@ from glslib.glsdb import GLSDb
 from glslib.gson import json_dumps
 from glslib.strftime import strftime_by_example
 from glslib.to_types import to_munch
-from pymirror.comps.pmplotcomp import PMPlotAxisConfig, PMPlotComp, PMPlotCompConfig, PMPlotTraceConfig, PMPointConfig
+from components.pmplotcomp import PMPlotAxisConfig, PMPlotComp, PMPlotCompConfig, PMPlotTraceConfig, PMPointConfig
 from pymirror.pmmodule import PMModule
 from glslib.logger import _die, _debug, _print
 

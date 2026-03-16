@@ -3,7 +3,7 @@ import copy
 from munch import DefaultMunch
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
-from pymirror.comps.pmtablecomp import PMCell, PMTableComp, TableConfig
+from components.pmtablecomp import PMCell, PMTableComp, TableConfig
 from dataclasses import dataclass
 from configs.mixins.font_mixin import FontMixin
 from configs.mixins.text_mixin import TextMixin
