@@ -1,6 +1,14 @@
 from datetime import datetime
-from configs.alert_config import AlertConfig
 from pymirror.pmcard import PMCard
+
+from dataclasses import dataclass
+
+@dataclass
+class AlertConfig:
+    header: str = None
+    body: str = None
+    footer: str = None
+    timeout: int = 1
 
 class AlertModule(PMCard):
 	def __init__(self, pm, config):
