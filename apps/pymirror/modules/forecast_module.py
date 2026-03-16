@@ -7,7 +7,14 @@ from pmgfxlib import PMBitmap
 from pymirror.pmcard import PMCard
 from glslib.logger import _debug, _print
 from munch import DefaultMunch
-from configs.forecast_config import ForecastConfig
+from dataclasses import dataclass
+
+@dataclass
+class ForecastConfig:
+    days: int = 3  # Number of days to forecast
+    days_offset: int = 0  # Offset for the forecast days
+    icon_size: str = "small"  # Size of the forecast icons (None, small, medium, large)
+    lines: int = 3
 
 class ForecastModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):

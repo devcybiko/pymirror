@@ -2,19 +2,35 @@
 # https://openicalmap.org/api/one-call-3#current
 
 from collections import defaultdict
-from dataclasses import is_dataclass
 from datetime import datetime, timedelta
-from arrow import now
-from sqlalchemy import extract, and_, func
-
-from configs.ical_config import IcalConfig
-from glslib.glsdb import Base
+from sqlalchemy import  and_
 from pymirror.pmcard import PMCard
 from glslib.gson import json_read
 from glslib.strftime import strftime_by_example
 from glslib.to_types import to_dict, to_munch, to_utc_epoch
 from tables.ical_table import IcalTable
-    
+from dataclasses import dataclass, field
+from glslib.strftime import strftime_by_example
+
+@dataclass
+class IcalConfig:
+    calendar_name: str = "gregs_calendar"
+    title: str = "iCalendar"
+    refresh_time: str = "60m"
+    max_events: int = 10
+    number_days: int = 7
+    title_format: str = strftime_by_example("Jul 1776")
+    time_format: str = strftime_by_example("01:02 PM")
+    show_regular_events: bool = True
+    show_all_day_events: bool = True
+    show_recurring_events: bool = True
+    all_day_format: str = strftime_by_example("Jul-4")
+    render_mode: str = "card"
+    week_mode: int = 7
+    rows: int = None
+    holiday_files: list = field(default_factory=list)
+    prev_weeks: int = 0
+
 class IcalModule(PMCard):
     def __init__(self, pm, config):
         super().__init__(pm, config)

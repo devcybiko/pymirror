@@ -1,11 +1,8 @@
 import copy
-from dataclasses import dataclass, fields
-
-from configs.fonts_config import FontsConfig
+from dataclasses import dataclass
 from configs.mixins.font_mixin import FontMixin
 from configs.mixins.gfx_mixin import GfxMixin
 from configs.mixins.text_mixin import TextMixin
-from pymirror.pmrect import PMRect
 from pmutils import non_null
 from .pmfont import PMFont
 from .pmutils import to_color

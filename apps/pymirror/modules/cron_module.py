@@ -1,7 +1,19 @@
-from configs.cron_config import CronConfig
 from glslib.crontab import Crontab
 from pymirror.pmmodule import PMModule
 from glslib.logger import _debug
+
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class AlertConfig:
+    cron: str
+    description: str = None
+    event: dict = field(default_factory=dict)
+
+@dataclass
+class CronConfig:
+    alerts: List[AlertConfig] = field(default_factory=lambda: [AlertConfig(cron="*:00")])
 
 class CronModule(PMModule):
 	def __init__(self, pm, config):

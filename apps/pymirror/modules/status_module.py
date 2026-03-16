@@ -1,14 +1,19 @@
-from datetime import datetime
-import os
-import sys
-from configs.pmconfig import PMConfig
-from configs.status_config import StatusConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from glslib.strftime import strftime_by_example
 from glslib.strings import glyphs
 from glslib.to_types import to_secs
 from glslib.logger import _debug
+
+from dataclasses import dataclass
+
+@dataclass
+class StatusConfig:
+    valign: str = "bottom"
+    halign: str = "center"
+    interval_time: str = "10s"
+    time_format: str = "9/1 0:00 pm"
+
 
 class StatusModule(PMModule):
     def __init__(self, pm, config):

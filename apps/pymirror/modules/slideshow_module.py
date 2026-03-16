@@ -1,6 +1,5 @@
 from random import random
 
-from configs.slideshow_config import SlideshowConfig
 from pymirror.pmmodule import PMModule
 from pymirror.pmtimer import PMTimer
 from glslib.rects import _height, _str_to_rect, _width
@@ -8,6 +7,19 @@ from pmgfxlib.pmbitmap import PMBitmap
 from glslib.logger import _debug
 from pymirror.pmrect import PMRect
 import os
+
+from dataclasses import dataclass
+
+@dataclass
+class SlideshowConfig:
+    folder: str
+    scale: str = "fill"
+    valign: str = "center"
+    halign: str = "center"
+    interval_time: str = "60s"
+    randomize: bool = True
+    frame: str = None
+    rect: str = None
 
 class SlideshowModule(PMModule):
 	def __init__(self, pm, config):

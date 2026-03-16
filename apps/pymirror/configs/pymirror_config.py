@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
-from configs.pmdb_config import PmdbConfig
 from configs.screen_config import ScreenConfig
+from dataclasses import dataclass
+from configs.pmdb_config import PmdbConfig
 
 @dataclass
 class PymirrorConfig:

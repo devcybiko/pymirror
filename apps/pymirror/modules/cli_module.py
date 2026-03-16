@@ -1,13 +1,21 @@
 # weather.py
 # https://openweathermap.org/api/one-call-3#current
 
-import copy
 import subprocess
-
-from configs.cli_config import CliConfig
+from dataclasses import dataclass
 from glslib.strings import expand_dict
 from pymirror.pmcard import PMCard
 from glslib.logger import _debug
+
+
+@dataclass
+class CliConfig:
+    cycle_seconds: int
+    command: str
+    header: str
+    body: str
+    footer: str
+
 
 class CliModule(PMCard):
 	def __init__(self, pm, config):

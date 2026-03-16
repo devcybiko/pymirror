@@ -1,9 +1,17 @@
 import copy
 
 from munch import DefaultMunch
-from configs.text_config import TextConfig
 from pymirror.pmmodule import PMModule
 from pymirror.components.pmtextcomp import PMTextComp
+
+from dataclasses import dataclass
+from configs.mixins.font_mixin import FontMixin
+from configs.mixins.text_mixin import TextMixin
+
+@dataclass
+class TextConfig(TextMixin, FontMixin):
+    text: str = None
+    height: int = None
 
 class TextModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

@@ -6,6 +6,14 @@ from tables.web_api_table import WebApiTable
 from .pmweatherdata import PMWeatherData
 from glslib.logger import _debug
 
+from dataclasses import dataclass
+
+@dataclass
+class OpenweathermapConfig:
+    appid: str
+    lat: str
+    lon: str
+
 def _paragraph_fix(text: str) -> str:
     results = []
     paragraphs = text.split("\n\n")

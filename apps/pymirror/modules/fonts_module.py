@@ -1,8 +1,12 @@
 import os
-
 from munch import DefaultMunch
 from pymirror.pmmodule import PMModule
 from glslib.logger import _debug, _error
+from dataclasses import dataclass
+
+@dataclass
+class FontsConfig:
+    delay_ms: int
 
 class FontsModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

@@ -13,7 +13,7 @@
         "calendar_name": "gregs_calendar",
         "title": "Holidays",
         "time_format": "July 1776",
-        "all_day_format": "Oct-31",
+        "all_day_format": "Jul-04",
         "number_days": 365,
         "show_regular_events": false,
         "show_all_day_events": true,

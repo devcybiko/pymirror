@@ -1,9 +1,13 @@
 from datetime import datetime
 
 from munch import DefaultMunch
-from configs.clock_config import ClockConfig
 from pymirror.pmmodule import PMModule
 from glslib.strftime import strftime_by_example
+from dataclasses import dataclass
+
+@dataclass
+class ClockConfig:
+    date_format: str
 
 class ClockModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):

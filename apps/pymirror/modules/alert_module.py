@@ -1,7 +1,5 @@
-from datetime import datetime
-from pymirror.pmcard import PMCard
-
 from dataclasses import dataclass
+from pymirror.pmcard import PMCard
 
 @dataclass
 class AlertConfig:

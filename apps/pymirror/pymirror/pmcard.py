@@ -1,9 +1,17 @@
-from configs.card_config import CardConfig
 from pymirror.pmmodule import ModuleConfig
-from configs.text_config import TextConfig
+from modules.text_module import TextConfig
 from components.pm_text_component import PMTextComponent
 from pymirror.pmmodule import PMModule
 from pmutils import non_null
+
+from dataclasses import dataclass
+
+@dataclass
+class CardConfig:
+    header: TextConfig = None
+    body: TextConfig = None
+    footer: TextConfig = None
+    timeout: int = 1
 
 class PMCard(PMModule):
     def __init__(self, pm, config: ModuleConfig):

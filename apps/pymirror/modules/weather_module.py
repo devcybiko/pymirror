@@ -3,10 +3,17 @@
 
 from datetime import datetime
 from pymirror.pmmodule import ModuleConfig
-from configs.weather_config import WeatherConfig
 from pymirror.pmcard import PMCard
 from glslib.logger import _debug
 from glslib.to_types import to_ms
+
+from dataclasses import dataclass
+
+@dataclass
+class WeatherConfig:
+    refresh_time: str = "15m"
+    degrees: str = "°F"
+    datetime_format: str = "%A, %I:%M:%S %p"
 
 class WeatherModule(PMCard):
     def __init__(self, pm, config: ModuleConfig):

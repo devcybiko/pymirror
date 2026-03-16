@@ -1,7 +1,14 @@
+from dataclasses import dataclass
 from datetime import datetime
 from pymirror.pmmodule import PMModule
 from glslib.logger import _debug
 import math
+
+@dataclass
+class AnalogClockConfig:
+    hour_hand: str = "#ff0000"
+    minute_hand: str = "#00ff00" 
+    second_hand: str = "#cc0"
 
 def _compute_clock_positions(gfx, dx, dy, r):
 	"""Compute the 12 positions around a clock face given center (x0, y0) and radius r."""

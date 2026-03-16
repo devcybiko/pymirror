@@ -1,9 +1,16 @@
 import copy
 
 from munch import DefaultMunch
-from configs.table_config import TableConfig
 from pymirror.pmmodule import PMModule
 from components.pm_table_component import PMCell, PMTableComponent
+
+from dataclasses import dataclass
+from configs.mixins.font_mixin import FontMixin
+from configs.mixins.text_mixin import TextMixin
+
+@dataclass
+class CsvTableConfig(TextMixin, FontMixin):
+    fname: str = None
 
 class CsvTableModule(PMModule):
 	def __init__(self, pm, config: DefaultMunch):
