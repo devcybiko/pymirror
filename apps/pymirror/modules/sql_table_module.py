@@ -5,8 +5,8 @@ from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from components.pm_table_component import PMCell, PMTableComponent, TableConfig
 from dataclasses import dataclass
-from configs.mixins.font_mixin import FontMixin
-from configs.mixins.text_mixin import TextMixin
+from mixins.font_mixin import FontMixin
+from mixins.text_mixin import TextMixin
 
 @dataclass
 class SqlTableConfig(TextMixin, FontMixin):

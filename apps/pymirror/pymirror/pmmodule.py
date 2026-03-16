@@ -11,9 +11,9 @@ from pymirror.pmrect import PMRect
 
 from dataclasses import dataclass, field
 
-from configs.mixins.font_mixin import FontMixin
-from configs.mixins.gfx_mixin import GfxMixin
-from configs.mixins.text_mixin import TextMixin
+from mixins.font_mixin import FontMixin
+from mixins.gfx_mixin import GfxMixin
+from mixins.text_mixin import TextMixin
 
 @dataclass
 class ModuleConfig(GfxMixin, FontMixin, TextMixin):

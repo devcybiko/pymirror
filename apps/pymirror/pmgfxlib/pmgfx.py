@@ -1,8 +1,8 @@
 import copy
 from dataclasses import dataclass
-from configs.mixins.font_mixin import FontMixin
-from configs.mixins.gfx_mixin import GfxMixin
-from configs.mixins.text_mixin import TextMixin
+from mixins.font_mixin import FontMixin
+from mixins.gfx_mixin import GfxMixin
+from mixins.text_mixin import TextMixin
 from pmutils import non_null
 from .pmfont import PMFont
 from .pmutils import to_color
