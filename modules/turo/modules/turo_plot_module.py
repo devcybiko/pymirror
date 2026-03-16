@@ -10,7 +10,7 @@ from glslib.glsdb import GLSDb
 from glslib.gson import json_dumps
 from glslib.strftime import strftime_by_example
 from glslib.to_types import to_munch
-from components.pmplotcomp import PMPlotAxisConfig, PMPlotComp, PMPlotCompConfig, PMPlotTraceConfig, PMPointConfig
+from components.pm_plot_component import PMPlotAxisConfig, PMPlotComponent, PMPlotComponentConfig, PMPlotTraceConfig, PMPointConfig
 from pymirror.pmmodule import PMModule
 from glslib.logger import _die, _debug, _print
 
@@ -41,7 +41,7 @@ class TuroPlotModule(PMModule):
         self.turo_db = GLSDb(self._turo.database_url)
         self.date_format = strftime_by_example(self._turo.date_format or "%Y-%m-%d")
         self.time_format = strftime_by_example(self._turo.time_format or "%H:%M:%S")
-        self.plot_config: PMPlotCompConfig = None
+        self.plot_config: PMPlotComponentConfig = None
         self.x_axis_config: PMPlotAxisConfig = PMPlotAxisConfig(**self._turo.x_axis)
         self.x_axis_config.format = strftime_by_example(self._turo.x_axis.format or self._turo.date_format or "%Y-%m-%d")
         self.y_axis_config: PMPlotAxisConfig = PMPlotAxisConfig(**self._turo.y_axis)
@@ -87,8 +87,8 @@ class TuroPlotModule(PMModule):
         z_rows, x_axis, all_values = self._collate_data(rows, x_column_name, y_columns, self._turo.traces)
         self._compute_x_axis(x_axis)
         self._compute_y_axis(all_values)
-        self.plot_config = PMPlotCompConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect, title=self._turo.title)
-        self.plot = PMPlotComp(self.bitmap.gfx, self.plot_config)
+        self.plot_config = PMPlotComponentConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect, title=self._turo.title)
+        self.plot = PMPlotComponent(self.bitmap.gfx, self.plot_config)
         for trace_data in self._turo.traces:
             vehicle_nickname = trace_data.vehicle
             # Create a copy without the 'vehicle' key instead of deleting

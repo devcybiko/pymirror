@@ -3,7 +3,7 @@ import copy
 from munch import DefaultMunch
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
-from components.pmtablecomp import PMCell, PMTableComp, TableConfig
+from components.pm_table_component import PMCell, PMTableComponent, TableConfig
 from dataclasses import dataclass
 from configs.mixins.font_mixin import FontMixin
 from configs.mixins.text_mixin import TextMixin
@@ -38,7 +38,7 @@ class SqlTableModule(PMModule):
 		_config.width = _config.width or self.bitmap.width
 		_config.row_height = _config.row_height or (self.bitmap.height // _config.rows)
 		_config.col_width = _config.col_width or (self.bitmap.width // _config.cols)
-		table = PMTableComp(self.bitmap.gfx, _config, 0, 0, self.bitmap.width, self.bitmap.height)
+		table = PMTableComponent(self.bitmap.gfx, _config, 0, 0, self.bitmap.width, self.bitmap.height)
 		return table
 	
 	def _read_sql(self, query) -> list:
@@ -68,7 +68,7 @@ class SqlTableModule(PMModule):
 			return False
 		self.timer.reset()
 		self.header, self.rows = self._read_sql(self._sql_table.sql)
-		self.pmtable: PMTableComp = self._create_table(self._config)
+		self.pmtable: PMTableComponent = self._create_table(self._config)
 		self.pmtable.set_rows(self.rows)
 		return True
 

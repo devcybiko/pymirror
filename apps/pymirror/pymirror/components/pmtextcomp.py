@@ -2,7 +2,7 @@ from configs.text_config import TextConfig
 from pmgfxlib.pmgfx import PMGfx
 from pymirror.pmrect import PMRect
 from pymirror.pmtimer import PMTimer
-from components.pmcomponent import PMComponent
+from components.pm_component import PMComponent
 from pmgfxlib import PMBitmap
 from pmutils import non_null
 

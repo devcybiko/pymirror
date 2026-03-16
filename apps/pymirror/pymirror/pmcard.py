@@ -1,7 +1,7 @@
 from configs.card_config import CardConfig
 from pymirror.pmmodule import ModuleConfig
 from configs.text_config import TextConfig
-from components.pmtextcomp import PMTextComp
+from components.pm_text_component import PMTextComponent
 from pymirror.pmmodule import PMModule
 from pmutils import non_null
 
@@ -21,19 +21,19 @@ class PMCard(PMModule):
     def _make_header(self):
         width = self.bitmap.width
         height = non_null(self._card.header.height, self.bitmap.gfx.font.height, 1)
-        return PMTextComp(self.bitmap.gfx, self._card.header, width=width, height=height)
+        return PMTextComponent(self.bitmap.gfx, self._card.header, width=width, height=height)
 
     def _make_footer(self):
         footer_height = non_null(self._card.footer.height, self.bitmap.gfx.font.height, 1)
         y0 = self.bitmap.height - footer_height
         width = self.bitmap.width
-        return PMTextComp(self.bitmap.gfx, self._card.footer, y0=y0, width=width)
+        return PMTextComponent(self.bitmap.gfx, self._card.footer, y0=y0, width=width)
 
     def _make_body(self):
         y0 = self._header.height
         height = self.bitmap.height - self._header.height - self._footer.height
         width = self.bitmap.width
-        return PMTextComp(self.bitmap.gfx, self._card.body, y0=y0, width=width, height=height)
+        return PMTextComponent(self.bitmap.gfx, self._card.body, y0=y0, width=width, height=height)
 
     def set_header(self, text: str) -> None:
         self._header.update(text)

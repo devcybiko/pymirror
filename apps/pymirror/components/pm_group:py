@@ -1,4 +1,4 @@
-from pmcomponent import PMComponent
+from pm_component import PMComponent
 from pmgfxlib.pmbitmap import PMBitmap
 from munch import DefaultMunch
 
