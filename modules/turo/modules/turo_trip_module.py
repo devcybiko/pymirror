@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from munch import DefaultMunch
+import math
 from glslib.glsdb import GLSDb
 from pymirror.pmmodule import PMModule
 from tables.turo_trips_table import TuroTripsTable
@@ -66,7 +67,7 @@ class TuroTripModule(PMModule):
         box.h = h
         return box
     
-    def _compute_trip_bar(self, y, month, trip_start=None, trip_end=None):
+    def _compute_trip_bar(self, y, month, trip_start=None, trip_end=None, trip_days=None):
         bar = DefaultMunch()
         bar.x = 0
         bar.y = y
@@ -80,8 +81,11 @@ class TuroTripModule(PMModule):
         }
         if trip_start and trip_end:
             bar.start_days = (trip_start - self.cal.start).days
-            bar.end_days = (trip_end - self.cal.start).days
-            bar.days = bar.end_days - bar.start_days
+            if trip_days is not None:
+                bar.days = trip_days
+            else:
+                bar.end_days = int((trip_end - self.cal.start).total_seconds() / 86400)
+                bar.days = bar.end_days - bar.start_days
             bar.x += round(bar.start_days * month.pixels_per_day)
             bar.w = round(bar.days * month.pixels_per_day) - 1
             if bar.w < 1: bar.w = 0
@@ -94,7 +98,7 @@ class TuroTripModule(PMModule):
         for month_n in range(0, self.nmonths):
             trip_date = self.cal.start + relativedelta(months=month_n)
             if trip_date.month == today.month:
-               box = self._compute_month_box(today.month, x, y, w, h)
+               box = self._compute_month_box(month_n, x, y, w, h)
                marker_w = 3
             #    marker_x = box.x + box.pixels_per_day * (today.day - 1) + box.pixels_per_day * 0.5 - marker_w / 2
                marker_x = box.x + box.pixels_per_day * (today.day - 1)
@@ -132,7 +136,13 @@ class TuroTripModule(PMModule):
         earnings = "\u2800" # Braille Pattern Blank
         if trip.total_earnings is not None:
             earnings = f"${round(trip.total_earnings)}"
-        x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), earnings)
+            x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), earnings)
+        else:
+            distance_traveled = f"{trip.distance_traveled}"
+            _y = y + bar.h * 2
+            x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), " ")
+            if trip.distance_traveled is not None:
+                x, _y = self.bitmap.text_box((bar.x, _y, bar.x + bar.w, _y + bar.h - 1), distance_traveled)
         return x, y
 
     def _render_trip(self, x, y, month_n, vehicle, vehicle_trips, status_list):
@@ -147,7 +157,7 @@ class TuroTripModule(PMModule):
             if trip.trip_status not in (status_list + ["Dummy"]): continue # its not an interesting trip
             if trip_end <= trip_start: continue # might happen if we use the min/max values
             if (trip_start > box.end) or (trip_end < box.start): continue # if the trip is not within the month boundary
-            bar = self._compute_trip_bar(y, box, trip_start, trip_end)
+            bar = self._compute_trip_bar(y, box, trip_start, trip_end, trip.trip_days)
             _x, y0 = self._render_trip_earnings(gfx, y, box, bar, trip)
             _x, _y = self._render_trip_days_bar(gfx, y0, bar, trip)
         bar.y += self.dims.padding
@@ -248,6 +258,8 @@ class TuroTripModule(PMModule):
                 personal_trip.trip_end = trip.trip_start
                 personal_trip.trip_days = (personal_trip.trip_end - personal_trip.trip_start).days + 1
                 personal_trip.total_earnings = None
+                if trip.check_in_odometer and last_trip.check_out_odometer:
+                    personal_trip.distance_traveled = int(trip.check_in_odometer) - int(last_trip.check_out_odometer)
                 self.trips.append(personal_trip)
             self.trips.append(trip)
             last_trip = trip

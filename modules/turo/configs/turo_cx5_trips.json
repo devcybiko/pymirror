@@ -8,8 +8,8 @@
         "vehicle_nickname": "cx5",
         "database_url": "sqlite:///$HOME/turo.db",
         "refresh_time": "60s",
-        "nmonths": 5,
-        "start_date": "2025-12-01",
+        "nmonths": 3,
+        "start_date": "2026-02-01",
         "hide_months": true,
         "hide_vehicle_name": true
     }
