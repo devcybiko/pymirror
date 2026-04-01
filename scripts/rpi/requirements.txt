@@ -16,3 +16,4 @@ sqlalchemy
 psutil
 json5
 staticmap
+av

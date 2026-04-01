@@ -77,13 +77,19 @@ class PMBitmap:
     def height(self, value: int):
         self._rect.height = value
 
+    def from_image(self, img: Image.Image) -> "PMBitmap":
+        self._img = img.convert("RGBA")
+        self._draw = ImageDraw.Draw(self._img)
+        self.gfx.rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
+        return self
+
     def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
         _trace("...Loading bitmap from", photo_path)
         self._img = Image.open(photo_path).convert(
             "RGBA"
         )  # Ensure the image is in RGBA format
         self._draw = ImageDraw.Draw(self._img)
-        self.gfx.rect = (0, 0, self._img.width - 1, self._img.height - 1)
+        self.gfx.rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
         self.scale(
             width or self._img.width, height or self._img.height, scale or "stretch"
         )
@@ -265,9 +271,9 @@ class PMBitmap:
 
     def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:
-            x0 = src.gfx.x0
+            x0 = src.gfx.rect.x0
         if y0 == None:
-            y0 = src.gfx.y0
+            y0 = src.gfx.rect.y0
         self._img.paste(src._img, (x0, y0), mask and mask._img)
 
     def scale_to_fit(self, target_width, target_height):

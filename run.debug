@@ -11,7 +11,7 @@ mkdir -p ./caches/
 source .venv/bin/activate
 
 PYTHONPATH="libs:apps/pymirror" \
-        python3 -u -m pymirror.pymirror\
+        uv run python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \
         --output_file="./apps/pymirror/pmserver/static/output.jpg" \
         --frame_buffer=null 2>&1

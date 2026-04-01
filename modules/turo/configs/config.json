@@ -3,6 +3,7 @@
   secrets: "$HOME/.secrets",
   force_render: false,
   imports: [
+    "./modules/rtsp",
     "./modules/turo",
   ],
   screen: {
@@ -36,7 +37,8 @@
     "./modules/turo/configs/date.json",
     "./modules/turo/configs/day_of_week.json",
     "./modules/turo/configs/turo_cx5_trips.json",
-    "./modules/turo/configs/turo_cx5_table.json",
+    // "./modules/turo/configs/turo_cx5_table.json",
+    "./modules/turo/configs/rtsp.json",
     "./modules/turo/configs/turo_cx5_next.json",
     "./modules/turo/configs/turo_sentra_trips.json",
     "./modules/turo/configs/turo_sentra_table.json",

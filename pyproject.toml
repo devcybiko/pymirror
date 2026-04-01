@@ -21,7 +21,8 @@ dependencies = [
 	"sqlalchemy",
 	"psutil",
 	"json5",
-	"staticmap"
+	"staticmap",
+	"av",
 ]
 
 [tool.uv]
