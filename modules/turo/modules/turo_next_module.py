@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from munch import DefaultMunch
 
@@ -22,14 +22,16 @@ class TuroNextModule(PMCard):
         nbs = "\u00A0"  # non-breaking space
         tab = nbs * 4
         now = datetime.now()
-        days = (trip_date - now)
-        secs = days.total_seconds()
-        days = int(secs // 86400) + (1 if secs % 86400 > 0 else 0)  # round up to nearest day
-        if days == 0:
+        today = now.date()
+        tomorrow = (now + timedelta(days=1)).date()
+        trip_date_only = trip_date.date()
+        
+        if trip_date_only == today:
             returning_in = "TODAY"
-        elif days == 1:
+        elif trip_date_only == tomorrow:
             returning_in = "TOMORROW"
         else:
+            days = (trip_date_only - today).days
             returning_in = f"in {days} days"
         msg = ""
         msg += f"{call_to_action} ({returning_in})\n"
