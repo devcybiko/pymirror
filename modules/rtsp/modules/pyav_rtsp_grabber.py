@@ -8,6 +8,7 @@ import threading
 import av
 from av import container
 from httpx import stream
+from urllib.parse import quote
 
 class PyAVRTSPGrabber:
     """Grab RTSP frames using PyAV (ffmpeg library bindings)"""
@@ -16,7 +17,8 @@ class PyAVRTSPGrabber:
         if av is None:
             raise ImportError("PyAV not installed. Install with: pip install av")
         
-        self.rtsp_url = rtsp_url
+        # URL-encode credentials to handle special characters
+        self.rtsp_url = self._encode_url(rtsp_url)
         self.latest_frame = None
         self.stopped = False
         self.thread = None
@@ -35,6 +37,24 @@ class PyAVRTSPGrabber:
             'fflags': 'nobuffer',
             # 'rw_timeout': str(self.timeout * 1000000),
         }
+    
+    def _encode_url(self, url: str) -> str:
+        """URL-encode credentials in RTSP URL"""
+        if '://' not in url or '@' not in url:
+            return url
+        
+        scheme, rest = url.split('://', 1)
+        credentials, host_path = rest.rsplit('@', 1)
+        
+        if ':' not in credentials:
+            return url
+        
+        user, password = credentials.split(':', 1)
+        # URL encode special characters in password and username
+        encoded_user = quote(user, safe='')
+        encoded_password = quote(password, safe='')
+        
+        return f"{scheme}://{encoded_user}:{encoded_password}@{host_path}"
     
     def _connect(self) -> bool:
         try:

@@ -26,7 +26,6 @@ class RtspModule(pymirror.pmmodule.PMModule):
        self.bitmap.clear()
        frame_bitmap = self.bitmap.from_image(self.frame)
        self.bitmap.paste(frame_bitmap)
-       print(f"Rendered frame from {self.url} at {datetime.now()}")
        return True
 
     def exec(self) -> bool:
@@ -40,7 +39,6 @@ class RtspModule(pymirror.pmmodule.PMModule):
         self.frame = self.grabber.get_frame_pil()
         if self.frame is None:
             return False
-        print(f"Captured frame from {self.url}", datetime.now())
         # Resize if needed (PIL Image.size is (width, height))
         if self.frame.size[0] != self.bitmap.width or self.frame.size[1] != self.bitmap.height:
             self.frame = self.frame.resize((self.bitmap.width, self.bitmap.height))
