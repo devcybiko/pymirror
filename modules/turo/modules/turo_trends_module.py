@@ -13,13 +13,17 @@ from components.pm_plot_component import PMPlotAxisConfig, PMPlotComponent, PMPl
 from pymirror.pmmodule import PMModule
 
 @dataclass
+class TuroTrendsTraceConfig(PMPlotTraceConfig):
+    nickname: str = None
+
+@dataclass
 class TuroTrendsConfig:
     database_url: str
     refresh_time: str
     column: str = "average_earnings"
     x_axis: dict = None
     y_axis: dict = None
-    traces: list = None
+    traces: list[TuroTrendsTraceConfig] = None
     start_date: str = "2025-12-01"
     window_size: int = 30
 
@@ -100,11 +104,13 @@ class TuroTrendsModule(PMModule):
                 trip_index += 1
             else:
                 # print(the_date, None, None)
+                trip = None # for record.booked, below
                 window.append(None)
                 window.pop(0)
             record = self._aggregate_data(window)
             record.index = len(records)
             record.date = the_date
+            record.booked = 1 if trip is not None else 0
             records.append(record)
             the_date += timedelta(days=1)
         return records
@@ -132,7 +138,7 @@ class TuroTrendsModule(PMModule):
         for trace_cfg in traces:
             print(132, trace_cfg, self._trends.window_size)
             records = self._collect_averages(trace_cfg.nickname, start_date=start_date, window_size=self._trends.window_size or delta_days)
-            trace = PMPlotTraceConfig(color=trace_cfg.color,format=None)
+            trace = TuroTrendsTraceConfig(**trace_cfg)
             points = []
             for record in records:
                 print(137, self._trends.column, record)
