@@ -1,0 +1,48 @@
+{
+  "module": {
+    "class": "turo_trends",
+    "name": "turo_trends",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "position": "0.01,0.35,0.99,0.65",
+    "font_size": 16,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": "#333"
+  },
+  "turo_trends": {
+    "refresh_time": "60s",
+    "window_size": 0,
+    "database_url": "sqlite:///$HOME/turo.db",
+    "traces": [{
+      "column": "avg_distance",
+      "nickname": "sentra",
+      "color": "blue"
+    }, {
+      "column": "avg_distance",
+      "nickname": "cx5",
+      "color": "red"
+    }],
+    "x_axis": {
+      "min": null,
+      "max": null,
+      "title": "Date",
+      "margin": 100,
+      "color": "black",
+      "tic_interval": 604800, // 1 week in seconds
+      "tic_height": 10,
+      "format": "Jul 04"
+    },
+    "y_axis": {
+      "title": "Distance Traveled (miles)",
+      "min": 0,
+      "max": 200,
+      "margin": 40,
+      "color": "green",
+      "tic_interval": 50,
+      "tic_height": 10,
+      "format": "{:.2f} miles"
+    },
+  }
+}

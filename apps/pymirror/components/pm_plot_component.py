@@ -186,7 +186,8 @@ class PMPlotComponent(PMComponent):
                     continue
                 bm.gfx.text_color = point.color or trace.color
                 rect = (x + self._sx(x0), ly - self._sy(y0), x + self._sx(x0), ly - self._sy(y0))
-                bm.text_box(rect, format.format(y0))
+                if format:
+                    bm.text_box(rect, format.format(y0))
                 if y1 is None:
                     continue # skip if data is missing
                 line = (x + self._sx(x0), y - self._sy(y0), x + self._sx(x1), y - self._sy(y1))
@@ -203,7 +204,8 @@ class PMPlotComponent(PMComponent):
                 return
             rect =(x + sx0, ly - sy0, x + sx0, ly - sy0)
             print(199, format)
-            bm.text_box(rect, format.format(last_point.y))
+            if format:
+                bm.text_box(rect, format.format(last_point.y))
 
     def _render_bars(self, bm: PMBitmap, x, y, label_y, trace):                
             x_data = self.x_axis.data
