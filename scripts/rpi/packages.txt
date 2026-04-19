@@ -1,3 +1,4 @@
+clang
 python3-dotenv
 python3-pil
 python3-jinja2
