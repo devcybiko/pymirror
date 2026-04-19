@@ -2,7 +2,7 @@
     "module": {
         "class": "turo_trip",
         "name": "turo_cx5_trips",
-        "position": "turo_cx5_trips",
+        "position": "0.00,0.076,1.00,0.12",
     },
     "turo_trip": {
         "vehicle_nickname": "cx5",
@@ -11,6 +11,6 @@
         "nmonths": 3,
         "start_date": "2026-02-01",
         "hide_months": true,
-        "hide_vehicle_name": true
+        "hide_vehicle_name": true,
     }
 }

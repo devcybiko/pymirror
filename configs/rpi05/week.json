@@ -1,14 +1,14 @@
 {
-    "module": "text",
-    "moddef": {
-        "name": "week_text",
-        "position": "top_center_left",
-        "font_name": "DejaVuSans",
-        "font_size": 64
-    },
-    "text": {
-        "text": "Week:",
-        "halign": "right",
-        "valign": "center"
-    }
+  "module": "text",
+  "moddef": {
+    "name": "week_text",
+    "position": "0.00,0.00,0.33,0.026",
+    "font_name": "DejaVuSans",
+    "font_size": 64
+  },
+  "text": {
+    "text": "Week:",
+    "halign": "right",
+    "valign": "center"
+  }
 }

@@ -2,12 +2,13 @@
   "module": {
     "class": "clock",
     "name": "day_of_week",
-    "position": "0.33,0.00,0.67,0.15",
+    "position": "0.33,0.00,0.67,0.026",
     "font_size": 105,
     "font_name": "digitalcomputersb",
     "font_baseline": true,
-    "font_y_offset": -20,
-    "font_size": 64
+    "font_x_offset": 0,
+    "font_y_offset": -8,
+    "font_size": 48
   },
   "clock": {
     "date_format": "+%a: %W"

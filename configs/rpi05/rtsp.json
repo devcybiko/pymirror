@@ -2,14 +2,7 @@
     "module": {
         "class": "rtsp",
         "name": "webcam",
-        "text_color": "#fff",
-        "text_bg_color": null,
-        "position": "turo_cx5_table",
-        "font_size": 16,
-        "color": "#fff",
-        "bg_color": "#000",
-        "text_color": "#fff",
-        "text_bg_color": "#333",
+        "position": "0.00,0.115,1.00,0.33",
     },
     "rtsp": {
         "url": "rtsp://admin:${REO_PASSWORD}@192.168.1.96:554/h264Preview_01_sub",

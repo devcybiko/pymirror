@@ -2,7 +2,7 @@
     "module": {
         "class": "turo_next",
         "name": "turo_cx5_next",
-        "position": "turo_cx5_next",
+        "position": "0.33,0.33,0.67,0.67",
     },
     "turo_next": {
         "vehicle_nickname": "cx5",
@@ -22,7 +22,7 @@
         },
         "body": {
             "font_name": "Roboto-Regular",
-            "font_size": 40,
+            "font_size": 32,
             "text_color": "#ccc",
             "text_bg_color": "#222",
             "valign": "top",
