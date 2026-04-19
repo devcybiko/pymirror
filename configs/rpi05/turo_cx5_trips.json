@@ -1,0 +1,16 @@
+{
+    "module": {
+        "class": "turo_trip",
+        "name": "turo_cx5_trips",
+        "position": "turo_cx5_trips",
+    },
+    "turo_trip": {
+        "vehicle_nickname": "cx5",
+        "database_url": "sqlite:///$HOME/turo.db",
+        "refresh_time": "60s",
+        "nmonths": 3,
+        "start_date": "2026-02-01",
+        "hide_months": true,
+        "hide_vehicle_name": true
+    }
+}

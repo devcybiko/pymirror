@@ -1,0 +1,30 @@
+{
+  "module": {
+    "class": "sql_table",
+    "name": "turo_cx5_table",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "position": "turo_cx5_table",
+    "font_size": 16,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": "#333"
+  },
+  "table": {
+    "rows": 10,
+    "cols": null,
+    "row_height": 30,
+    "col_width": null,
+    "has_header": true,
+    "reversed": true
+  },
+  "sql_table": {
+    "database_url": "sqlite:///$HOME/turo.db",
+    "sql_file": "./modules/turo/configs/turo_trip.sql",
+    "sql_params": {
+      "vehicle_nickname": "cx5",
+      "months_ago": 3
+    }
+  }
+}

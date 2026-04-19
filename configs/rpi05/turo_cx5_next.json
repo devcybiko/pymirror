@@ -1,0 +1,41 @@
+{
+    "module": {
+        "class": "turo_next",
+        "name": "turo_cx5_next",
+        "position": "turo_cx5_next",
+    },
+    "turo_next": {
+        "vehicle_nickname": "cx5",
+        "database_url": "sqlite:///$HOME/turo.db",
+        "refresh_time": "15m",
+        "date_format": "1776-07-04 (Tue)",
+        "time_format": "1:02 PM",
+    },
+    "card": {
+        "header": {
+            "font_name": "Roboto-Bold",
+            "font_size": 40,
+            "text_color": "#fff",
+            "text_bg_color": "#066",
+            "valign": "center",
+            "height": 80,
+        },
+        "body": {
+            "font_name": "Roboto-Regular",
+            "font_size": 40,
+            "text_color": "#ccc",
+            "text_bg_color": "#222",
+            "valign": "top",
+            "halign": "left",
+            "wrap": "none"
+        },
+        "footer": {
+            "font_name": "Roboto-Regular",
+            "font_size": 32,
+            "text_color": "#000",
+            "text_bg_color": "#088",
+            "valign": "bottom",
+            "height": 64
+        }
+    }
+}

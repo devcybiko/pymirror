@@ -1,0 +1,63 @@
+{
+  "module": {
+    "class": "turo_plot",
+    "name": "turo_depreciation",
+    "text_bg_color": null,
+    "position": "0.01,0.01,0.99,0.99",
+    "font_size": 16,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": "#333"
+  },
+  "turo_plot": {
+    "refresh_time": "60s",
+    "database_url": "sqlite:///$HOME/turo.db",
+    "sql": "select * from depreciation",
+    "x_column": "trip_start",
+    "title": "Turo Depreciation",
+    "x_axis": {
+      "min": null,
+      "max": null,
+      "margin": 100,
+      "color": "black",
+      "tic_interval": 1, // 1 week in seconds
+      "n_tics": 10,
+      "tic_height": 10,
+      "format": "Jul 4 '76",
+      "title": "Date"
+    },
+    "y_axis": {
+      "min": null,
+      "max": null,
+      "margin": 40,
+      "color": "green",
+      n_tics: 10,
+      "tic_height": 1,
+      "format": "{:.0f}mi",
+      "title": "Equity"
+    },
+    "traces": [
+      {
+        "vehicle": "cx5",
+        "vehicle_column": "vehicle",
+        "type": "line",
+        "color": "red",
+        "line_width": 2,
+        "label_color": "black",
+        "format": "${:.0f}",
+        "column": "equity"
+      },
+      {
+        "vehicle": "sentra",
+        "vehicle_column": "vehicle",
+        "type": "line",
+        "color": "green",
+        "line_width": 2,
+        "label_color": "black",
+        "format": "${:.0f}",
+        "column": "equity"
+      }
+    ]
+  }
+}

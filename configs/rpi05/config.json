@@ -15,6 +15,7 @@
     "bg_color": "#000",
     "text_color": "#fff",
     "text_bg_color": null,
+    "rotate": 90,
   },
   pmdb: {
     "url": "sqlite:///$HOME/pymirror.db"

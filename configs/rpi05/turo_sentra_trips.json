@@ -1,0 +1,16 @@
+{
+    "module": {
+        "class": "turo_trip",
+        "name": "turo_sentra_trips",
+        "position": "turo_sentra_trips",
+    },
+    "turo_trip": {
+        "vehicle_nickname": "sentra",
+        "database_url": "sqlite:///$HOME/turo.db",
+        "refresh_time": "60s",
+        "nmonths": 3,
+        "start_date": "2026-02-01",
+        "hide_months": false,
+        "hide_vehicle_name": true
+    }
+}

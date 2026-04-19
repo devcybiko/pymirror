@@ -1,0 +1,17 @@
+{
+    "module": {
+        "class": "csv_table",
+        "name": "csv_table",
+        "text_color": "#fff",
+        "text_bg_color": null,
+        "position": "0.01,0.50,0.99,0.99",
+        "font_size": 16,
+        "color": "#fff",
+        "bg_color": "#000",
+        "text_color": "#fff",
+        "text_bg_color": "#333",
+    },
+    "csv_table": {
+        "fname": "./trips.csv",
+    }
+}

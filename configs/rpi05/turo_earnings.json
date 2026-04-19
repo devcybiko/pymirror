@@ -1,0 +1,57 @@
+{
+  "module": {
+    "class": "turo_trends",
+    "name": "turo_trends",
+    "start_date": "2025-12-23",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "position": "0.01,0.65,0.99,0.94",
+    "font_size": 16,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": "#333"
+  },
+  "turo_trends": {
+    "refresh_time": "60s",
+    "window_size": 30,
+    "start_date": "2025-12-23",
+    "database_url": "sqlite:///$HOME/turo.db",
+    "traces": [
+      {
+      "column": "avg_earnings",
+      "nickname": "sentra",
+      "color": "blue",
+      "font_size": 16,
+      "label_format": null,
+
+    }, {
+      "column": "avg_earnings",
+      "nickname": "cx5",
+      "color": "red",
+      "font_size": 16,
+      "label_format": null,
+    }],
+    "x_axis": {
+      "min": null,
+      "max": null,
+      "margin": 100,
+      "color": "black",
+      "tic_interval": 604800, // 1 week in seconds
+      "tic_height": 10,
+      "label_format": "Jul 04",
+      "font_size": 24
+    },
+    "y_axis": {
+      "title": "Earnings",
+      "min": 0,
+      "max": 50,
+      "margin": 40,
+      "color": "green",
+      "tic_interval": 10,
+      "tic_height": 10,
+      "label_format": "${:.2f}",
+      "font_size": 24
+    },
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "module": {
+    "class": "turo_plot",
+    "name": "turo_plot",
+    "text_color": "#fff",
+    "text_bg_color": null,
+    "position": "0.01,0.65,0.99,0.94",
+    "font_size": 16,
+    "color": "#fff",
+    "bg_color": "#000",
+    "text_color": "#fff",
+    "text_bg_color": "#333"
+  },
+  "turo_plot": {
+    "refresh_time": "60s",
+    "database_url": "sqlite:///$HOME/turo.db",
+    "sql_file": "./modules/turo/modules/turo_plot.sql",
+    "x_column": "trip_start",
+    "x_axis": {
+      "min": null,
+      "max": null,
+      "margin": 100,
+      "color": "black",
+      "tic_interval": 604800, // 1 week in seconds
+      "tic_height": 10,
+      "format": "Jan 1 '99"
+    },
+    "y_axis": {
+      "min": 0,
+      "max": null,
+      "margin": 40,
+      "color": "green",
+      "tic_interval": 10,
+      "tic_height": 10,
+      "format": "${:.2f}"
+    },
+    "traces": [
+      {
+        "vehicle": "sentra",
+        "type": "line",
+        "color": "red",
+        "line_width": 2,
+        "label_color": "black",
+        "label_format": "f\"{trip_days}d\\n{distance_traveled}mi\\n${earnings_per_day:.0f}/d\\n{earnings_per_mile*100:.1f}¢/mi\\n{miles_per_day:.0f}mi/d\"",
+        "format": "${:.2f}/d",
+        "column": "earnings_per_day",
+        "_width": "trip_days * 86400"
+      },
+      {
+        "vehicle": "sentra",
+        "type": "bar",
+        "color": "red",
+        "line_width": 2,
+        "label_color": "black",
+        "label_format": "f\"{trip_days}d\\n{distance_traveled}mi\\n${earnings_per_day:.0f}/d\\n{earnings_per_mile*100:.1f}¢/mi\\n{miles_per_day:.0f}mi/d\"",
+        "format": "${:.2f}c/mi",
+        "column": "earnings_per_mile",
+        "_width": "trip_days * 86400"
+      },
+      {
+        "vehicle": "cx5",
+        "type": "bar",
+        "color": "blue",
+        "line_width": 2,
+        "label_color": "black",
+        "label_format": "f\"{trip_days}d\\n{distance_traveled}mi\\n${earnings_per_day:.0f}/d\\n{earnings_per_mile*100:.1f}¢/mi\\n{miles_per_day:.0f}mi/d\"",
+        "format": "${:.2f}/d",
+        "column": "earnings_per_day",
+        "_width": "trip_days * 86400"
+      },
+      {
+        "vehicle": "cx5",
+        "type": "line",
+        "color": "blue",
+        "line_width": 2,
+        "label_color": "black",
+        "label_format": "f\"{trip_days}d\\n{distance_traveled}mi\\n${earnings_per_day:.0f}/d\\n{earnings_per_mile*100:.1f}¢/mi\\n{miles_per_day:.0f}mi/d\"",
+        "format": "{:.2f}c/mi",
+        "column": "earnings_per_mile",
+        "_width": "trip_days * 86400" // scale bar width by trip days
+      }
+    ]
+  }
+}
