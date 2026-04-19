@@ -19,26 +19,31 @@ class PMPlotAxisConfig:
     tic_interval: float = 1.0
     n_tics: int = None
     tic_height: int = 10
-    format: str = "{:.2f}"
+    label_format: str = "{:.2f}"
     line_width: int = 2
     data: list = field(default_factory=list) # x_axis only
-    title: str = "AXIS"
+    title: str = None
+    font_name: str = "DejaVuSans"
+    font_size: int = 24
     _size: float = None
 
 @dataclass
 class PMPlotTraceConfig:
     data: list
     color: str = "blue"
+    edge_color: str = "black"
     label_color: str = "black"
     line_width: int = 2
     width: int = 20
     x_offset: int = 0
     type: str = "line" # or "bar"
-    format: str = "{:.2f}"
-    label_format: str = None
+    label_format: str = "{:.2f}"
+    font_name: str = "DejaVuSans"
+    font_size: int = 12
     data: list = field(default_factory=list) 
+    scale: float = 1.0
     column: str = None   
-    _width: str = None # scale bar width by trip days
+    _width: str = None
 
 @dataclass
 class PMPlotComponentConfig:
@@ -83,7 +88,7 @@ class PMPlotComponent(PMComponent):
         self._dirty = False
 
     def add_trace(self, trace_config: PMPlotTraceConfig, data=[]):
-        _debug(f"Adding trace with data: {trace_config.data}, color: {trace_config.color}, line_width: {trace_config.line_width}, format: {trace_config.format}")
+        _debug(f"Adding trace with data: {trace_config.data}, color: {trace_config.color}, line_width: {trace_config.line_width}, label_format: {trace_config.label_format}")
         if data:
             trace_config.data = data
         self.traces.append(trace_config)
@@ -113,14 +118,14 @@ class PMPlotComponent(PMComponent):
         scale = (v - min) * (axis._size) / (max - min)
         return scale
 
-    def _to_label(self, val: float, exampler, format):
+    def _to_label(self, val: float, exampler, label_format):
         try:
             if isinstance(exampler, datetime):
-                datetime_format = strftime_by_example(format)
-                val = datetime.fromtimestamp(val).strftime(datetime_format)
+                datetime_label_format = strftime_by_example(label_format)
+                val = datetime.fromtimestamp(val).strftime(datetime_label_format)
                 return val
             else:
-                return format.format(val)
+                return label_format.format(val)
         except Exception:
             return str(val)
 
@@ -131,7 +136,7 @@ class PMPlotComponent(PMComponent):
         x_axis_w = self.rect.width - self.x_axis.margin * 2
         y_axis_h = self.rect.height - self.y_axis.margin * 2
         bm.line((x0, y0, x0 + dx * x_axis_w, y0 - dy * y_axis_h), color=axis.color)
-        _debug(f"Rendering axis with min={axis.min}, max={axis.max}, tic_interval={axis.tic_interval}, format='{axis.format}'")
+        _debug(f"Rendering axis with min={axis.min}, max={axis.max}, tic_interval={axis.tic_interval}, label_format='{axis.label_format}'")
         # tics and labels
         tic_size = axis.tic_height / 2
         start = self._to_float(axis.min)
@@ -146,7 +151,7 @@ class PMPlotComponent(PMComponent):
             _debug(f"Calculated tic_interval: {tic_interval} based on n_tics: {n_tics}")
         if n_tics > 100:
             _die(f"Warning: number of tics ({n_tics}) is very high for axis with range {start} to {end} and tic_interval {axis.tic_interval}. Consider increasing tic_interval or setting n_tics to a reasonable number.")
-        format = axis.format
+        label_format = axis.label_format
         val = start
         while n_tics >= 0:
             sval = self._scale(val, axis)
@@ -167,7 +172,7 @@ class PMPlotComponent(PMComponent):
             tic_rect = _add(tic_rect, (-dy * axis.margin, dx * tic_size * 4, -dy * axis.margin, dx * tic_size * 4))
             bm.gfx.text_color = axis.color
             bm.gfx.text_bg_color = None
-            label = self._to_label(val, axis.min, format)
+            label = self._to_label(val, axis.min, label_format)
             bm.text_box(tic_rect, label)
             val += tic_interval
 
@@ -175,18 +180,22 @@ class PMPlotComponent(PMComponent):
             x_data = self.x_axis.data
             y_data = trace.data
             line_width = trace.line_width
-            format = trace.format
+            label_format = trace.label_format
             for i in range(len(y_data) - 1):
                 point = y_data[i]
                 x0, y0 = self._to_float(x_data[i]), self._to_float(point.y)
+                y0 *= trace.scale or 1.0
                 next_point = y_data[i + 1]
                 x1, y1 = self._to_float(x_data[i + 1]), self._to_float(next_point.y)
+                if y1 is not None:
+                    y1 *= trace.scale or 1.0
                 # Print y-value at each point
                 if y0 is None:
                     continue
                 bm.gfx.text_color = point.color or trace.color
                 rect = (x + self._sx(x0), ly - self._sy(y0), x + self._sx(x0), ly - self._sy(y0))
-                bm.text_box(rect, format.format(y0))
+                if label_format:
+                    bm.text_box(rect, label_format.format(y0))
                 if y1 is None:
                     continue # skip if data is missing
                 line = (x + self._sx(x0), y - self._sy(y0), x + self._sx(x1), y - self._sy(y1))
@@ -202,13 +211,14 @@ class PMPlotComponent(PMComponent):
             if sy0 is None or sx0 is None:
                 return
             rect =(x + sx0, ly - sy0, x + sx0, ly - sy0)
-            print(199, format)
-            bm.text_box(rect, format.format(last_point.y))
+            print(199, label_format)
+            if label_format:
+                bm.text_box(rect, label_format.format(last_point.y))
 
     def _render_bars(self, bm: PMBitmap, x, y, label_y, trace):                
             x_data = self.x_axis.data
             y_data = trace.data
-            format = trace.format
+            label_format = trace.label_format
             for i in range(len(y_data)):
                 point = y_data[i]
                 bar_width = point.width or trace.width
@@ -218,6 +228,7 @@ class PMPlotComponent(PMComponent):
                 # Print y-value at each point
                 if y0 is None:
                     continue
+                y0 *= trace.scale or 1.0
                 
                 bar_rect = PMRect(0,0,0,0)
                 bar_rect.x0 = x + self._sx(x0) + trace.x_offset
@@ -232,10 +243,11 @@ class PMPlotComponent(PMComponent):
 
                 bm.gfx.text_color = point.color or trace.color
                 label_rect = PMRect(bar_rect.x0, bar_rect.y0 - 30, bar_rect.x1, bar_rect.y0)
-                bm.text_box(label_rect, format.format(y0))
+                if label_format:
+                    bm.text_box(label_rect, label_format.format(y0))
 
                 bm.gfx.text_color = trace.label_color
-                bm.gfx.color = "black"
+                bm.gfx.color = trace.edge_color
                 bm.gfx.bg_color = point.color or trace.color
                 bm.rectangle(bar_rect)
                 bm.text_box(bar_rect, point.label or "")
@@ -265,15 +277,17 @@ class PMPlotComponent(PMComponent):
     def _render_title(self, bm: PMBitmap):
         gfx = bm.gfx_push()
         gfx.text_bg_color = None
-        gfx.set_font("DejaVuSans", 2.0)
         bm.gfx.text_color = None
         if self._plot.title:
+            gfx.set_font(self.font_name, self.font_size)
             bm.gfx.text_color = self.x_axis.color
             bm.text_box((0,0,self.rect.width, self.rect.height), self._plot.title, halign="center", valign="top")
         if self._plot.x_axis.title and self._plot.y_axis.title:
+            gfx.set_font(self.x_axis.font_name, self.x_axis.font_size)
             bm.gfx.text_color = self.x_axis.color
             bm.text_box((0,0,self.rect.width, self.rect.height), self.x_axis.title, halign="center", valign="bottom")
         if self._plot.y_axis.title:
+            gfx.set_font(self.y_axis.font_name, self.y_axis.font_size)
             gfx.text_bg_color="gray"
             bm.gfx.text_color = self.y_axis.color
             x, y, w, h = bm.gfx.font.getbbox(self.y_axis.title)

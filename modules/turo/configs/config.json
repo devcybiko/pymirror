@@ -30,7 +30,8 @@
   },
   modules: [
     // "./modules/turo/configs/turo_depreciation.json",
-    // "./modules/turo/configs/turo_plot.json",
+    // "./modules/turo/configs/turo_earnings.json",
+    // "./modules/turo/configs/turo_distance.json",
     // "./modules/turo/configs/fps.json",
     // "./modules/turo/configs/status.json",
     "./modules/turo/configs/time.json",
