@@ -2,4 +2,4 @@
 
 set -e
 
-tail $@ -f ./apps/pymirror/pmserver/static/output.log
+tail -n 100 -f ./apps/pymirror/pmserver/static/output.log
