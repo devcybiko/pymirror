@@ -3,4 +3,4 @@
 set -e
 
 OPTS="$@"
-tail "$OPTS" -f apps/pymirror/pmserver/static/output.log
+tail -f ./apps/pymirror/pmserver/static/output.log "$OPTS" 
