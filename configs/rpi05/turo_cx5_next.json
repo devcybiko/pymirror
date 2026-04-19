@@ -24,7 +24,7 @@
             "font_name": "Roboto-Regular",
             "font_size": 32,
             "text_color": "#ccc",
-            "text_bg_color": "#222",
+            "text_bg_color": "#444",
             "valign": "top",
             "halign": "left",
             "wrap": "none"
