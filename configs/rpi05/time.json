@@ -6,7 +6,7 @@
         "text_bg_color": null,
         "position": "0.67,0.00,1.00,0.15",
         "font_name": "7segment.ttf",
-        "font_size": 128
+        "font_size": 64
     },
     "clock": {
         "date_format": "%I:%M:%S"
