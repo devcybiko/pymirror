@@ -9,3 +9,12 @@ python3-vobject
 ir-keytable
 lirc
 sqlite3
+ffmpeg
+libavcodec-dev
+libavformat-dev 
+libavdevice-dev 
+libavutil-dev 
+libavfilter-dev 
+libswscale-dev 
+libswresample-dev 
+pkg-config
