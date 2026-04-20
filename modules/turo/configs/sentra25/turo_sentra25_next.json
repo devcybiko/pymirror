@@ -1,11 +1,11 @@
 {
     "module": {
         "class": "turo_next",
-        "name": "turo_cx5_next",
-        "position": "turo_cx5_next",
+        "name": "turo_sentra25_next",
+        "position": "0.67,0.33,1.00,0.67",
     },
     "turo_next": {
-        "vehicle_nickname": "cx5",
+        "vehicle_nickname": "sentra",
         "database_url": "sqlite:///$HOME/turo.db",
         "refresh_time": "15m",
         "date_format": "1776-07-04 (Tue)",
@@ -22,7 +22,7 @@
         },
         "body": {
             "font_name": "Roboto-Regular",
-            "font_size": 40,
+            "font_size": 32,
             "text_color": "#ccc",
             "text_bg_color": "#222",
             "valign": "top",

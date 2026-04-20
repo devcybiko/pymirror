@@ -5,7 +5,7 @@
     "start_date": "2025-12-23",
     "text_color": "#fff",
     "text_bg_color": null,
-    "position": "0.01,0.65,0.99,0.94",
+    "position": "0.25,0.21,0.75,0.40",
     "font_size": 16,
     "color": "#fff",
     "bg_color": "#000",
@@ -39,16 +39,16 @@
       "color": "black",
       "tic_interval": 604800, // 1 week in seconds
       "tic_height": 10,
-      "label_format": "Jul 04",
+      "label_format": "Jul",
       "font_size": 24
     },
     "y_axis": {
-      "title": "Earnings",
+      "title": "$$/day",
       "min": 0,
-      "max": 50,
+      "max": 80,
       "margin": 40,
       "color": "green",
-      "tic_interval": 10,
+      "tic_interval": 20,
       "tic_height": 10,
       "label_format": "${:.2f}",
       "font_size": 24

@@ -4,7 +4,7 @@
     "name": "turo_trends",
     "text_color": "#fff",
     "text_bg_color": null,
-    "position": "0.01,0.35,0.99,0.65",
+    "position": "0.25,0.40,0.75,0.60",
     "font_size": 16,
     "color": "#fff",
     "bg_color": "#000",
@@ -53,11 +53,11 @@
       "color": "black",
       "tic_interval": 604800, // 1 week in seconds
       "tic_height": 10,
-      "label_format": "Jul 04",
+      "label_format": "Jul",
       "font_size": 24
     },
     "y_axis": {
-      "title": "miles / day",
+      "title": "mi/day",
       "min": 0,
       "max": 200,
       "margin": 40,
