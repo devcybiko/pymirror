@@ -1,1 +1,1 @@
-./run.debug ./modules/turo/configs/config.json
+./run.debug ./configs/rpi02/config.json

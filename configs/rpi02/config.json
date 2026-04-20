@@ -1,54 +1,63 @@
 {
-  "debug": true,
-  "secrets": "$HOME/.secrets",
-  "force_render": false,
-  "screen": {
-    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
-    "frame_buffer": "/dev/fb0",
+  debug: false,
+  secrets: "$HOME/.secrets",
+  force_render: false,
+  imports: [
+    "./modules/rtsp",
+    "./modules/turo",
+  ],
+  screen: {
+    "output_file": null,
+    "frame_buffer": null,
     "font_name": "Roboto-Thin",
     "font_size": 64,
     "color": "#fff",
     "bg_color": "#000",
     "text_color": "#fff",
-    "text_bg_color": null
+    "text_bg_color": null,
+    "rotate": 0,
   },
-  "pmdb": {
+  pmdb: {
     "url": "sqlite:///$HOME/pymirror.db"
   },
-  "positions": {
+  positions: {
     "None": "0.0,0.0,0.0,0.0",
-    "top_strip": "0.00,0.0,1.0,0.15",
-    "alert_strip": "0.30,0.30,0.7,0.7",
-    "fps_strip": "0.0,0.95,0.33,1.00",
-    "top_left": "0.0,0.15,0.33,0.33",
-    "top_center": "0.33,0.15,0.66,0.33",
-    "top_center_left": "0.33,0.15,0.55,0.33",
-    "top_center_right": "0.55,0.15,0.66,0.33",
-    "top_right": "0.66,0.15,1.00,0.33",
-    "middle_left": "0.0,0.33,0.33,0.66",
-    "middle_center": "0.33,0.33,0.66,1.00",
-    "middle_right": "0.66,0.33,1.00,1.00",
-    "bottom_left": "0.0,0.66,0.33,0.95",
-    "bottom_center": "0.33,0.85,0.66,1.00",
-    "bottom_right_center": "0.7,0.66,1.00,0.90",
-    "bottom_right": "0.66,0.66,1.00,1.00"
+    "turo_sentra_trips": "0.00,0.15,1.00,0.25",
+    "turo_sentra_next": "0.00,0.31,0.25,1.00",
+    "turo_sentra_table": "0.255,0.31,0.745,0.65",
+    "turo_cx5_trips": "0.00,0.24,1.00,0.305",
+    "turo_cx5_next": "0.75,0.31,1.00,1.0",
+    "turo_cx5_table": "0.255,0.65,0.745,1.00",
   },
-  "modules": [
-    "./configs/rpi02/alert.json",
-    "./configs/rpi02/sound.json",
-    "./configs/rpi02/time.json",
-    "./configs/rpi02/date.json",
-    "./configs/rpi02/day_of_week.json",
-    "./configs/rpi02/slideshow.json",
-    "./configs/rpi02/fortune.json",
-    "./configs/rpi02/news.json",
-    "./configs/rpi02/weather.json",
-    "./configs/rpi02/weather_alert.json",
-    "./configs/rpi02/forecast.json",
+  modules: [
+    // DATE TIME
+    "./configs/rpi02/date_time/time.json",
+    "./configs/rpi02/date_time/date.json",
+    "./configs/rpi02/date_time/day_of_week.json",
+
+    // SENTRA
+    "./configs/rpi02/sentra/turo_sentra_trips.json",
+    "./configs/rpi02/sentra/turo_sentra_next.json",
+    // "./configs/rpi02/sentra/turo_sentra_table.json",
+
+    // CX5
+    "./configs/rpi02/cx5/turo_cx5_trips.json",
+    "./configs/rpi02/cx5/turo_cx5_next.json",
+    // "./configs/rpi02/cx5/turo_cx5_table.json",
+
+    // SENTRA25
+    // "./configs/rpi02/sentra25/turo_sentra25_next.json",
+
+    // PLOTS
+    // "./configs/rpi02/plots/turo_depreciation.json",
+    "./configs/rpi02/plots/turo_earnings.json",
+    "./configs/rpi02/plots/turo_distance.json",
+    "./configs/rpi02/plots/rtsp.json",
+
+    // SYSTEM
+    // "./configs/rpi02/fps.json",
+    // "./configs/rpi02/status.json",
     "./configs/rpi02/pymirror_controller.json",
-    // "./configs/rpi02/ir.json",
-    // "./configs/rpi02/keyboard.json",
-    "./configs/rpi02/cron_test.json",
-    "./configs/rpi02/window_manager.json"
+    "./configs/rpi02/window_manager.json",
   ]
 }
