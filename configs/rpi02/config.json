@@ -3,7 +3,7 @@
   "secrets": "$HOME/.secrets",
   "force_render": false,
   "screen": {
-    "output_file": null,
+    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
     "frame_buffer": "/dev/fb0",
     "font_name": "Roboto-Thin",
     "font_size": 64,

@@ -6,7 +6,7 @@
     "url": "sqlite:///$HOME/pymirror.db"
   },
   "screen": {
-    "output_file": null,
+    "output_file": "./apps/pymirror/pmserver/static/output.jpg",
     "frame_buffer": "/dev/fb0",
     "rotate": 180,
     "font_name": "Roboto-Thin",
