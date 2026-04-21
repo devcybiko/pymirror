@@ -1,4 +1,4 @@
-{    "module": {
+{    "tile": {
         "class": "cron",
         "name": "example_cron",
     },

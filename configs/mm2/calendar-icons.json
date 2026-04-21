@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "cli",
         "name": "calendar0",
         "position": "calendar_strip0",

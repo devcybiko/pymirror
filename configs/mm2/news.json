@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "web_db",
         "name": "news",
         "position": "0.68,0.15,0.99,0.95",

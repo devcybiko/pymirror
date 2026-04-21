@@ -117,47 +117,47 @@ class PMConfig:
                         setattr(obj, field_name, nested_config)
             self._handle_lists(field_type, field_name, obj)
 
-    def _load_clazz_from_pmmodule(self, _module_name):
-        ## this is a hack until i figure out how to load the ModuleConfig more generically
-        config_name = snake_to_pascal(_module_name)
-        module_name = f"pymirror.pmmodule"
+    def _load_clazz_from_pmtile(self, _tile_name):
+        ## this is a hack until i figure out how to load the tileConfig more generically
+        config_name = snake_to_pascal(_tile_name)
+        tile_name = f"pymirror.pmtile"
         clazz_name = f"{config_name}Config"
-        print(f"Loading config class '{clazz_name}' from module '{module_name}'...")
-        module = importlib.import_module(module_name)
-        clazz = getattr(module, clazz_name, None) # get the class from the module
+        print(f"125 Loading config class '{clazz_name}' from tile '{_tile_name}'...")
+        tile = importlib.import_module(tile_name)
+        clazz = getattr(tile, clazz_name, None) # get the class from the tile
         _print(f"... loaded class: {clazz}")
         return clazz
 
-    def _load_clazz_from_config_folder(self, _module_name):
-        ## load the *Config module and get the clazz
-        config_name = snake_to_pascal(_module_name)
-        module_name = f"configs.{_module_name}_config"
+    def _load_clazz_from_config_folder(self, _tile_name):
+        ## load the *Config tile and get the clazz
+        config_name = snake_to_pascal(_tile_name)
+        tile_name = f"configs.{_tile_name}_config"
         clazz_name = f"{config_name}Config"
-        print(f"Loading config class '{clazz_name}' from module '{module_name}'...")
-        module = importlib.import_module(module_name)
-        clazz = getattr(module, clazz_name, None) # get the class from the module
+        print(f"136 Loading config class '{clazz_name}' from tile '{tile_name}'...")
+        tile = importlib.import_module(tile_name)
+        clazz = getattr(tile, clazz_name, None) # get the class from the tile
         _print(f"... loaded class: {clazz}")
         return clazz
 
-    def _load_clazz_from_modules_folder(self, _module_name):
-        ## load the module and get the clazz
-        config_name = snake_to_pascal(_module_name)
-        module_name = f"modules.{_module_name}_module"
+    def _load_clazz_from_tiles_folder(self, _tile_name):
+        ## load the tile and get the clazz
+        config_name = snake_to_pascal(_tile_name)
+        tile_name = f"tiles.{_tile_name}_tile"
         clazz_name = f"{config_name}Config"
-        print(f"Loading module class '{clazz_name}' from module '{module_name}'...")
-        module = importlib.import_module(module_name)
-        clazz = getattr(module, clazz_name, None) # get the class from the module
+        print(f"147 Loading tile class '{clazz_name}' from module '{tile_name}'...")
+        tile = importlib.import_module(tile_name)
+        clazz = getattr(tile, clazz_name, None) # get the class from the tile
         _print(f"... loaded class: {clazz}")
         return clazz
 
-    def _load_clazz(self, _module_name):
+    def _load_clazz(self, _tile_name):
         try:
-            return self._load_clazz_from_modules_folder(_module_name)
+            return self._load_clazz_from_tiles_folder(_tile_name)
         except:
             try:
-                return self._load_clazz_from_config_folder(_module_name)
+                return self._load_clazz_from_config_folder(_tile_name)
             except:
-                return self._load_clazz_from_pmmodule(_module_name)
+                return self._load_clazz_from_pmtile(_tile_name)
 
 
     def _load_config(self, config_clazz, values: dict):
@@ -222,10 +222,10 @@ if __name__ == "__main__":
         if d != {}:
             raise Exception("test_01_simple failed")
 
-    def test_02_pmmodule_1():
+    def test_02_pmtile_1():
         test = \
 """{
-  module: {
+  tile: {
     name: null,
     position: "None",
     subscriptions: null,
@@ -242,7 +242,7 @@ if __name__ == "__main__":
     font_y_offset: 0,
   },
 }"""
-        foo = "{module: {}}"
+        foo = "{tile: {}}"
         obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
@@ -250,10 +250,10 @@ if __name__ == "__main__":
         if result != test:
             raise Exception("test_02_pmconfig_1 failed")
 
-    def test_02_pmmodule_2():
+    def test_02_pmtile_2():
         test = \
 """{
-  module: {
+  tile: {
     name: "weather",
     position: "None",
     subscriptions: null,
@@ -270,18 +270,18 @@ if __name__ == "__main__":
     font_y_offset: 0,
   },
 }"""
-        foo = "{module: {name: 'weather', color: '#999'}}"
+        foo = "{tile: {name: 'weather', color: '#999'}}"
         obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
         _print(f"'\n{result}\n'")
         if result != test:
-            raise Exception("test_02_pmmodule_2 failed")
+            raise Exception("test_02_pmtile_2 failed")
 
-    def test_02_pmmodule_3():
+    def test_02_pmtile_3():
         test = \
 """{
-  module: {
+  tile: {
     name: "weather",
     position: "None",
     subscriptions: null,
@@ -299,13 +299,13 @@ if __name__ == "__main__":
     other: "Other",
   },
 }"""
-        foo = "{module: {name: 'weather', color: '#999', 'other': 'Other'}}"
+        foo = "{tile: {name: 'weather', color: '#999', 'other': 'Other'}}"
         obj = pmconfig.from_string(foo, "moddef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
         _print(f"'\n{result}\n'")
         if result != test:
-            raise Exception("test_02_pmmodule_3 failed")
+            raise Exception("test_02_pmtile_3 failed")
 
     def test_03_config_1():
         obj = pmconfig.from_file("./src/configs/test_data/config.json", with_config="pymirror")
@@ -322,9 +322,9 @@ if __name__ == "__main__":
         args = arg_parser()
         _print(args)
         # test_01_simple()
-        # test_02_pmmodule_1()
-        # test_02_pmmodule_2()
-        # test_02_pmmodule_3()
+        # test_02_pmtile_1()
+        # test_02_pmtile_2()
+        # test_02_pmtile_3()
         # test_03_config_1()
         if args.file:
             obj = pmconfig.from_file(args.file)

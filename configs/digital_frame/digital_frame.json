@@ -1,5 +1,5 @@
     {
-      "module": "slideshow",
+      "tile": "slideshow",
       "moddef": {
         "name": "digital frame",
         "position": "full_screen"

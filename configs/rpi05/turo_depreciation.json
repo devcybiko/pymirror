@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "turo_plot",
     "name": "turo_depreciation",
     "text_bg_color": null,

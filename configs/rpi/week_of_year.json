@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "clock",
     "name": "week_of_year",
     "position": "top_center_right",

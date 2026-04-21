@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "analog_clock",
         "name": "analog_clock",
         "color": "#c0c000",

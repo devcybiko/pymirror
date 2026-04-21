@@ -1,1 +1,6 @@
+#!/bin/bash
+set -e 
+
+rm -f ~/trips.db
+sqlite3 ~/trips.db < ~/trips.sql
 ./run.debug ./configs/rpi02/config.json

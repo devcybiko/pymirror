@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "table",
         "name": "table",
         "text_color": "#fff",

@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "status",
         "name": "status",
         "disabled": false,

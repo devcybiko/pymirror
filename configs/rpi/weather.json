@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "weather",
         "name": "weather",
         "position": "middle_left",

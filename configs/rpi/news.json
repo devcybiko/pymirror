@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "web_db",
     "name": "news",
     "position": "middle_right",

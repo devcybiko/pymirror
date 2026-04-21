@@ -12,7 +12,7 @@
 
 - Adding a new module requires that you add a new Config class
 - The file naming convention is <module>config.py
-- The class naming convention is <Module>Config
+- The class naming convention is <Tile>Config
 - The config class is an @dataclass
 - Each field should be specified with a type specifier and optional default value
     - `field: str = None`
@@ -24,14 +24,14 @@
 - There are some fields (attributes) that seem to recur quite a bit
 - Like Font styles, Text styles, and Graphics elements
 - These reusable sets of fields are stored in the `mixins` folder
-- Using Python's multiple inheritance model, you can subclass the new Module with these other mixins
+- Using Python's multiple inheritance model, you can subclass the new Tile with these other mixins
 
 ## Loading Config Files
 
 - When a config file is loaded, 
-- PyMirror assumes each key in the dict is the name of a Module.
-- So, the dict is then read and mapped to the `<Module>Config` class
+- PyMirror assumes each key in the dict is the name of a Tile.
+- So, the dict is then read and mapped to the `<Tile>Config` class
 - Any extraneous fields are considered erroneous
-- Any missing fields are given the default value specified in `<Module>Config`
+- Any missing fields are given the default value specified in `<Tile>Config`
 - And if a fieild is missing and has no default, an exception is thrown
 

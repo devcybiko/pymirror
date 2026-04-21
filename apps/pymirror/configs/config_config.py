@@ -10,7 +10,7 @@ from dataclasses import dataclass
 # from configs.forecast_config import ForecastConfig
 # from configs.ical_config import IcalConfig
 # from configs.image_config import ImageConfig
-from pymirror.pmmodule import ModuleConfig
+from pymirror.pmtile import TileConfig
 # from configs.openweathermap_config import OpenweathermapConfig
 # from configs.plot_config import PlotConfig
 # from configs.pmdb_config import PmdbConfig
@@ -24,7 +24,7 @@ from pymirror.pmmodule import ModuleConfig
 
 @dataclass
 class ConfigConfig:
-    module: ModuleConfig
+    tile: TileConfig
 #     # alert: AlertConfig = None
 #     # analog_clock: AnalogClockConfig = None
 #     # card: CardConfig = None

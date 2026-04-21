@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "csv_table",
         "name": "csv_table",
         "text_color": "#fff",

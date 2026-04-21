@@ -1,5 +1,5 @@
 {
-    "module": "text",
+    "tile": "text",
     "moddef": {
         "name": "week_text",
         "position": "top_center_left",

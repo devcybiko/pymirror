@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "pymirror_controller",
         "name": "pymirror_controller",
         "position": "0.0,0.0,1.0,1.0",

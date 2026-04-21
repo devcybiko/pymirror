@@ -98,7 +98,7 @@ class PMTaskMgr:
 
             ## create an instance of the class (module)
             ## and pass the PyMirror instance and the module config to it
-            ## See pymirror.PMModule for the expected constructor
+            ## See pymirror.PMTile for the expected constructor
             obj = clazz(self, task_config)
 
             ## add the module to the list of modules

@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "fps",
         "disabled": false,
         "name": "fps",

@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "alert",
         "name": "Weather Alert",
         "position": "bottom_left",

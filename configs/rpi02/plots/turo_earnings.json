@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "turo_trends",
     "name": "turo_trends",
     "start_date": "2025-12-23",

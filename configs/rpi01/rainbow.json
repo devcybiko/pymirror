@@ -1,5 +1,5 @@
 {
-  "module": "rainbow",
+  "tile": "rainbow",
   "moddef": {
     "name": "rainbow",
     "position": "bottom_left"

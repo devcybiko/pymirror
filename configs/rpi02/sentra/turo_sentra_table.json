@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "sql_table",
         "name": "turo_sentra_table",
         "text_color": "#fff",

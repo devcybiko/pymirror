@@ -14,13 +14,13 @@ from configs.pmconfig import PMConfig
 from glslib.logger import _debug, _print, _die
 from glslib.strftime import exemplar_date_time
 from pymirror.pmscreen import PMScreen
-from glslib.module_manager import ModuleManager
+from glslib.module_manager import TileManager
 from glslib.strings import expand_dataclass, snake_to_pascal
 from glslib.to_types import to_munch
 from pmserver.pmserver import PMServer
 from glslib.glsdb import GLSDb
 from glslib.pstat import get_pstat_delta, get_pids_by_cli
-import modules ## import all modules so that they get registered with the ModuleManager
+import tiles ## import all tiles so that they get registered with the tileManager
 
 from events import * # get all events 
 
@@ -56,22 +56,22 @@ class PyMirror:
         self.screen = PMScreen(self._config.screen)
         self.force_render = False
         self.debug = self._config.debug
-        self.modules = []
+        self.tiles = []
         self.events = []
         self.start_time = datetime.now()
         self.status = None
         self.get_status()
         self._clear_screen = True  # Flag to clear the screen on each loop
         self.server_queue = queue.Queue()  # Use a queue to manage events
-        self._load_modules()
+        self._load_tiles()
         self.server = PMServer(self._config, self.server_queue)
         self.server.start()  # Start the server to handle incoming events
 
     def _import_modules_from_config(self):
-        """ Import any modules specified in the config file """
+        """ Import any tiles specified in the config file """
         for folder in self._config.imports:
-            for package_name in ["configs", "tables", "modules"]:
-                ModuleManager.load_modules(folder, package_name)
+            for package_name in ["configs", "tables", "tiles"]:
+                TileManager.load_modules(folder, package_name)
     
     def get_status(self) -> PMStatus:
         if not self.status:
@@ -105,45 +105,45 @@ class PyMirror:
         expand_dataclass(config, os.environ)
         return config
 
-    def _load_modules(self):
+    def _load_tiles(self):
         pmconfig = self.configurator
-        for module_config in self._config.modules:
-            ## load the module dynamically
-            print(110, f"Loading module from config: {module_config}")
-            if type(module_config) is str:
-                ## if moddef is a string, it is the name of a module config file
-                ## load the module definition from the file
+        for tile_config in self._config.tiles:
+            ## load the tile dynamically
+            print(110, f"Loading tile from config: {tile_config}")
+            if type(tile_config) is str:
+                ## if moddef is a string, it is the name of a tile config file
+                ## load the tile definition from the file
                 ## the file should be in JSON format
-                module_config = pmconfig.from_file(module_config)
-                expand_dataclass(module_config, {})  # Expand environment variables in the config
-            ## import the module using its name
-            ## all modules should be in the "modules" directory
-            print(120, f"Loading module from config: {module_config}")
-            clazz_name = module_config.module.clazz
+                tile_config = pmconfig.from_file(tile_config)
+                expand_dataclass(tile_config, {})  # Expand environment variables in the config
+            ## import the tile using its name
+            ## all tiles should be in the "tiles" directory
+            print(120, f"Loading tile from config: {tile_config}")
+            clazz_name = tile_config.tile.clazz
             try:
-                mod = importlib.import_module(f"modules.{clazz_name}_module")
+                mod = importlib.import_module(f"tiles.{clazz_name}_tile")
             except ModuleNotFoundError as e:
-                msg = f"Error importing module 'modules.{clazz_name}_module': {e}"
-                raise ImportError(f"{msg}\nBe sure to add the module to your __init__.py file in the modules directory.")
-            ## get the class from inside the module
-            ## convert the file name to class name inside the module
+                msg = f"Error importing tile 'tiles.{clazz_name}_tile': {e}"
+                raise ImportError(f"{msg}\nBe sure to add the tile to your __init__.py file in the tiles directory.")
+            ## get the class from inside the tile
+            ## convert the file name to class name inside the tile
             ## by convention the filename is snake_case and the class name is PascalCase
             clazz_name = snake_to_pascal(clazz_name)
-            _print(f"Loading '{module_config.module.name}' module, class {clazz_name} from {mod.__name__}")
-            clazz = getattr(mod, clazz_name + "Module", None)
+            _print(f"Loading '{tile_config.tile.name}' tile, class {clazz_name} from {mod.__name__}")
+            clazz = getattr(mod, clazz_name + "Tile", None)
             if clazz is None:
-                raise ImportError(f"Class '{clazz_name}Module' not found in module '{mod.__name__}'")
+                raise ImportError(f"Class '{clazz_name}tile' not found in tile '{mod.__name__}'")
 
-            ## create an instance of the class (module)
-            ## and pass the PyMirror instance and the module config to it
-            ## See pymirror.PMModule for the expected constructor
-            obj = clazz(self, module_config)
+            ## create an instance of the class (tile)
+            ## and pass the PyMirror instance and the tile config to it
+            ## See pymirror.PMtile for the expected constructor
+            obj = clazz(self, tile_config)
 
-            ## update the module with its position in the pm.modules list
-            obj.module_n = len(self.modules)
+            ## update the tile with its position in the pm.tiles list
+            obj.tile_n = len(self.tiles)
 
-            ## add the module to the list of modules
-            self.modules.append(obj)
+            ## add the tile to the list of tiles
+            self.tiles.append(obj)
 
     def _read_server_queue(self):
         ## add any messages that have come from the web server
@@ -157,30 +157,30 @@ class PyMirror:
             # No new events in the queue
             pass
 
-    def _send_events_to_module(self, module, events):
-        if not module.subscriptions: 
+    def _send_events_to_tile(self, tile, events):
+        if not tile.subscriptions: 
             return
         for event in events:
-            if event.event in module.subscriptions:
-                if not event.module or event.module == module.name:
-                    _debug(f"_send_events_to_module: _send_events_to_module to {module.name} event:", event)
-                    module.onEvent(event)
+            if event.event in tile.subscriptions:
+                if not event.tile or event.tile == tile.name:
+                    _debug(f"_send_events_to_tile: _send_events_to_tile to {tile.name} event:", event)
+                    tile.onEvent(event)
 
     def _convert_events_to_namespace(self):
         """ Convert a list of events to DefaultMunch objects """
         return [DefaultMunch(**event) if isinstance(event, dict) else event for event in self.events]
 
-    def _send_events_to_modules(self):
+    def _send_events_to_tiles(self):
         if not self.events: return
         self.events = self._convert_events_to_namespace()  # Convert events to DefaultMunch if needed
-        for module in self.modules:
-            self._send_events_to_module(module, self.events)  # Send all events to the module
+        for tile in self.tiles:
+            self._send_events_to_tile(tile, self.events)  # Send all events to the tile
         self.events.clear()  # Clear the events after sending them
 
     def publish_event(self, event: dict):
         _debug("publish_event", event)
         ## should this go on a seperate event list?
-        ## if a module sends an event from inside an event dispatcher
+        ## if a tile sends an event from inside an event dispatcher
         ## then it may not get processed
         ## GLS - so for now we put it on the "server_queue"
         self.server_queue.put(to_munch(event))
@@ -192,71 +192,71 @@ class PyMirror:
         # else:
         #     raise TypeError(f"Event must be a dict or DefaultMunch, got {type(event)}")
 
-    def _stats_for_nerds(self, module):
-        if not module.bitmap: 
-            ## non-rendering modules will not have a bitmap (eg: cron)
+    def _stats_for_nerds(self, tile):
+        if not tile.bitmap: 
+            ## non-rendering tiles will not have a bitmap (eg: cron)
             return
         sbm = self.screen.bitmap
-        mbm = module.bitmap
+        mbm = tile.bitmap
         sgfx = sbm.gfx_push()
         sgfx.font.set_font("DejaVuSans", 24)
         sbm.rectangle(mbm.rect, fill=None)
-        _time = module._time or 0.0
-        sbm.text(f"{module._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
-        sbm.text_box(mbm.rect, f"{module._moddef.position}", halign="right", valign="top")
+        _time = tile._time or 0.0
+        sbm.text(f"{tile._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
+        sbm.text_box(mbm.rect, f"{tile._moddef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
     def full_render(self):
         self.screen.bitmap.clear()
-        for module in reversed(self.modules):
-            if module.disabled or not module.bitmap: continue
-            module.render(force=True)
-            self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
-        if self.debug: self._stats_for_nerds(module)
-        self.screen.flush()  # Flush the screen to show all modules at once
+        for tile in reversed(self.tiles):
+            if tile.disabled or not tile.bitmap: continue
+            tile.render(force=True)
+            self.screen.bitmap.paste(tile.bitmap, tile.bitmap.x0, tile.bitmap.y0, mask=tile.bitmap)
+        if self.debug: self._stats_for_nerds(tile)
+        self.screen.flush()  # Flush the screen to show all tiles at once
 
-    def _exec_modules(self):
-        modules_changed = []
+    def _exec_tiles(self):
+        tiles_changed = []
         
-        for module in self.modules:
-            if not module.disabled:
-                module._time = 0.0  # Reset the time for each module
-                start_time = time.time()  # Start timing the module execution
-                state_changed = module.exec() # update module state (returns True if the state has changed)
-                end_time = time.time()  # End timing the module execution
-                if state_changed or module.force_render: 
-                    modules_changed.append(module)
-                    module._time += end_time - start_time  # Calculate the time taken for module execution
-        return modules_changed
+        for tile in self.tiles:
+            if not tile.disabled:
+                tile._time = 0.0  # Reset the time for each tile
+                start_time = time.time()  # Start timing the tile execution
+                state_changed = tile.exec() # update tile state (returns True if the state has changed)
+                end_time = time.time()  # End timing the tile execution
+                if state_changed or tile.force_render: 
+                    tiles_changed.append(tile)
+                    tile._time += end_time - start_time  # Calculate the time taken for tile execution
+        return tiles_changed
 
-    def _render_modules(self, modules_changed):
-        """ Render all modules that have changed state """
+    def _render_tiles(self, tiles_changed):
+        """ Render all tiles that have changed state """
         if self._clear_screen:
             _debug("self._clear_screen", self._clear_screen)
             self.full_render()
             self._clear_screen = False
             return
 
-        for module in modules_changed:
-            if (not module.disabled) and module.bitmap:
-                start_time = time.time()  # Start timing the module rendering
-                if module._moddef.clear:
-                    gfx = self.bitmap.gfx.push(module.bitmap.gfx)
-                    self.bitmap.rectangle(self.module.bitmap.erect)
-                module.render(force=self.force_render)
-                end_time = time.time()  # End timing the module rendering
-                if module._time:
-                    module._time += end_time - start_time  # add on the time taken for module rendering
+        for tile in tiles_changed:
+            if (not tile.disabled) and tile.bitmap:
+                start_time = time.time()  # Start timing the tile rendering
+                if tile._moddef.clear:
+                    gfx = self.bitmap.gfx.push(tile.bitmap.gfx)
+                    self.bitmap.rectangle(self.tile.bitmap.erect)
+                tile.render(force=self.force_render)
+                end_time = time.time()  # End timing the tile rendering
+                if tile._time:
+                    tile._time += end_time - start_time  # add on the time taken for tile rendering
 
-    def _update_screen(self, modules_changed):
+    def _update_screen(self, tiles_changed):
         updated = False
-        for module in reversed(self.modules):
-            if (not module.disabled) and module.bitmap and module in modules_changed:
-                start_time = time.time()  # Start timing the module rendering
-                self.screen.bitmap.paste(module.bitmap, module.bitmap.x0, module.bitmap.y0, mask=module.bitmap)
-                end_time = time.time()  # End timing the module rendering
-                module._time += end_time - start_time  # add on the time taken for module rendering
-                if self.debug: self._stats_for_nerds(module) # draw boxes around each module if debug is enabled
+        for tile in reversed(self.tiles):
+            if (not tile.disabled) and tile.bitmap and tile in tiles_changed:
+                start_time = time.time()  # Start timing the tile rendering
+                self.screen.bitmap.paste(tile.bitmap, tile.bitmap.x0, tile.bitmap.y0, mask=tile.bitmap)
+                end_time = time.time()  # End timing the tile rendering
+                tile._time += end_time - start_time  # add on the time taken for tile rendering
+                if self.debug: self._stats_for_nerds(tile) # draw boxes around each tile if debug is enabled
                 updated = True
         if updated:
             self.screen.flush()
@@ -272,10 +272,10 @@ class PyMirror:
         try:
             while True:
                 self._time(self._read_server_queue)
-                self._time(self._send_events_to_modules)
-                modules_changed = self._time(self._exec_modules)
-                self._time(self._render_modules, modules_changed)
-                self._time(self._update_screen, modules_changed)
+                self._time(self._send_events_to_tiles)
+                tiles_changed = self._time(self._exec_tiles)
+                self._time(self._render_tiles, tiles_changed)
+                self._time(self._update_screen, tiles_changed)
                 # _debug("---")
                 time.sleep(0.01) # Sleep for a short time to give pmserver a chance to process web requests
                 _debug("...")

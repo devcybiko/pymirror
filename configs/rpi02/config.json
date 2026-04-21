@@ -3,8 +3,8 @@
   secrets: "$HOME/.secrets",
   force_render: false,
   imports: [
-    "./modules/rtsp",
-    "./modules/turo",
+    "./extensions/rtsp",
+    "./extensions/turo",
   ],
   screen: {
     "output_file": null,
@@ -29,7 +29,7 @@
     "turo_cx5_next": "0.75,0.31,1.00,1.0",
     "turo_cx5_table": "0.255,0.65,0.745,1.00",
   },
-  modules: [
+  "tiles": [
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
     "./configs/rpi02/date_time/date.json",

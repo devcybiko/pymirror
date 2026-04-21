@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "fonts",
         "name": "Fonts",
         "position": "bottom_left",

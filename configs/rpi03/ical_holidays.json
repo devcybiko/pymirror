@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "ical",
         "name": "holidays",
         "position": "0.75,0.67,1.00,0.97",

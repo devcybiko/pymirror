@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "cron",
     "name": "cron"
   },
