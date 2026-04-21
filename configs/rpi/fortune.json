@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "cli",
     "name": "FORTUNE COOKIES",
     "position": "top_strip"

@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "turo_plot",
     "name": "turo_plot",
     "text_color": "#fff",

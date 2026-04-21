@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "slideshow",
         "name": "test_slideshow",
         "position": "middle_center"

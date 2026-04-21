@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "alert",
         "name": "Alert",
         "position": "0.30,0.30,0.7,0.7",

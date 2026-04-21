@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "clock",
     "name": "day_of_week",
     "position": "top_center",

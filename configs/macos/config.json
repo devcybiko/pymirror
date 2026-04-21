@@ -33,7 +33,7 @@
     "bottom_right_center": "0.7,0.66,1.00,0.90",
     "bottom_right": "0.66,0.66,1.00,1.00"
     },
-  "modules": [
+  "tiles": [
     "./configs/rpi/alert.json",
     "./configs/rpi/time.json",
     "./configs/rpi/date.json",

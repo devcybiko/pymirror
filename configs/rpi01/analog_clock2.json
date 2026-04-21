@@ -1,5 +1,5 @@
 {
-    "module": "analog_clock",
+    "tile": "analog_clock",
     "moddef": {
         "name": "analog_clock",
         "color": "#c0c000",

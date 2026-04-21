@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "rainbow",
     "name": "rainbow",
     "position": "bottom_left"

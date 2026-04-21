@@ -1,5 +1,5 @@
 {
-  "module": {
+  "tile": {
     "class": "turo_trends",
     "name": "turo_trends",
     "text_color": "#fff",

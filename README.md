@@ -292,14 +292,14 @@ Do you want me to do that?
 - secrets - sample .secrets file
 - TODO.md - wish list of things to add to PyMirror
 
-## Modules
+## Tiles
 
-- Modules are stored in the `./src/modules` folder
+- Tiles are stored in the `./src/modules` folder
 - The name of the Python file must be the snake-case version of the camel-case name of the module class and end in _module.
-  - example: `analog_clock_module.py` -> `AnalogClockModule` (class name for the module)
+  - example: `analog_clock_module.py` -> `AnalogClockTile` (class name for the module)
 - In the `config.json` you can call up a module multiple times with different instances
   - but not using the `_module` part of the filename
-  - example: `"module": "analog_clock"`
+  - example: `"tile": "analog_clock"`
 
 - weather_apis/ - folder holding interfaces to weather apis (accuweather, openwathermap)
 - alert_module.py
@@ -376,7 +376,7 @@ Do you want me to do that?
     "bottom_right_center": "0.7,0.66,1.00,0.90",
     "bottom_right": "0.66,0.90,1.00,1.00"
     },
-  "modules": [
+  "tiles": [
     "moddefs/alert.json", // an alert displayed by way of an AlertEvent
     "moddefs/pymirror_controller.json", // the controller for external events
     "moddefs/weather.json", // displays current temperature and weather alerts (OpenWeatherMap API)
@@ -392,7 +392,7 @@ Do you want me to do that?
     "moddefs/fps.json", // displays the Frames Per Second calculation
     // NOTE: you may also put full module definitions right here as a json dictionary
     {
-      "module": "fps",
+      "tile": "fps",
       "moddef": {
         "disabled": false,
         "name": "fps",
@@ -409,13 +409,13 @@ Do you want me to do that?
 
 ```
 
-## Module Definition Files (./configs/rpi/*.json)
-- Module Definitions identify the module class and the parameters to display the module
+## Tile Definition Files (./configs/rpi/*.json)
+- Tile Definitions identify the module class and the parameters to display the module
 - Not that that a module (like Date) may be instantiated many times.
 - Each with a different ModDef (see date.json, day_of_week.json, time.json, week_of_year.json) 
 ```json
 {
-    "module": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
+    "tile": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
     "moddef": { // all modules have a required generic module definition or 'moddef'
         "name": "Alert", // a unique name
         "position": "alert_strip", // a position defined in config.json, the 'positions' section

@@ -8,7 +8,7 @@
 ## iCalendar
 
 1. Handle multiple calendars
-1. Add Alerts to ICal_Module
+1. Add Alerts to ICal_Tile
 
 ## Alerts
 
@@ -54,7 +54,7 @@ setterm -cursor off
 cd git/pymirror
 ./run.sh
 
-## Running Module Tests
+## Running Tile Tests
 
 - `PYTHONPATH=./src python -m pymirror.pmwebapi`
 

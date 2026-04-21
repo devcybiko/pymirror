@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "alert",
         "name": "Alert",
         "position": "alert_strip",

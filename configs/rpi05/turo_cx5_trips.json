@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "turo_trip",
         "name": "turo_cx5_trips",
         "position": "0.00,0.076,1.00,0.12",

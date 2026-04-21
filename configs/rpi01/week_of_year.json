@@ -1,5 +1,5 @@
 {
-    "module": "clock",
+    "tile": "clock",
     "moddef": {
         "name": "week_of_year",
         "position": "top_center_right",

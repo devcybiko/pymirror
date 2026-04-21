@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "text",
         "name": "week_text",
         "position": "top_center_left",

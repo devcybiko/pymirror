@@ -34,7 +34,7 @@
     "calendar_strip2": "0.26,0.25,0.33,0.60",
     "slideshow_strip":  "0.35,0.25,0.66,0.60"
     },
-  "modules": [
+  "tiles": [
     "configs/mm2/date.json",
     "configs/mm2/time.json",
     "configs/mm2/seconds.json",

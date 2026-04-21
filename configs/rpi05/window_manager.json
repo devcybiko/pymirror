@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "window_manager",
         "name": "window_manager"
     }

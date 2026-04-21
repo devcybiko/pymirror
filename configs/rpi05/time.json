@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "clock",
         "name": "time",
         "text_color": "#fff",

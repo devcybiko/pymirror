@@ -1,5 +1,5 @@
 {
-  "module": "text",
+  "tile": "text",
   "moddef": {
     "name": "week_text",
     "position": "0.00,0.00,0.33,0.026",

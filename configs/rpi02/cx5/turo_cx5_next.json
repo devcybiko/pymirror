@@ -1,5 +1,5 @@
 {
-    "module": {
+    "tile": {
         "class": "turo_next",
         "name": "turo_cx5_next",
         "position": "0.75,0.21,1.00,1.00",

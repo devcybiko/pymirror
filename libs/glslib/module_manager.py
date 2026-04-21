@@ -6,7 +6,7 @@ import os
 from glslib.logger import _die, _debug, _error
 
 # Custom loader for loading code from bytes (from zip)
-class ZipModuleLoader(importlib.abc.Loader):
+class ZipTileLoader(importlib.abc.Loader):
     def __init__(self, name, code_bytes):
         self.name = name
         self.code_bytes = code_bytes
@@ -33,7 +33,7 @@ def _extract_imports(code):
             imports.append(from_import_match.group(1))
     return list(imports)
 
-class ModuleManager:
+class TileManager:
     def __init__(self):
         pass
     
@@ -69,4 +69,4 @@ class ModuleManager:
                 lines = f.read().splitlines()
                 imports = _extract_imports("\n".join(lines))
             for module in imports:
-                ModuleManager.append_module(package_path, package_name, module)
+                TileManager.append_module(package_path, package_name, module)

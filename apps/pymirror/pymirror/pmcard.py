@@ -1,7 +1,7 @@
-from pymirror.pmmodule import ModuleConfig
-from modules.text_module import TextConfig
+from pymirror.pmtile import TileConfig
+from tiles.text_tile import TextConfig
 from components.pm_text_component import PMTextComponent
-from pymirror.pmmodule import PMModule
+from pymirror.pmtile import PMTile
 from pmutils import non_null
 
 from dataclasses import dataclass
@@ -13,8 +13,8 @@ class CardConfig:
     footer: TextConfig = None
     timeout: int = 1
 
-class PMCard(PMModule):
-    def __init__(self, pm, config: ModuleConfig):
+class PMCard(PMTile):
+    def __init__(self, pm, config: TileConfig):
         super().__init__(pm, config)
         if getattr(self._config, "card", None) is None:
             self._config.card = {}
