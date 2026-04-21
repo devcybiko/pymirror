@@ -3,8 +3,8 @@
   secrets: "$HOME/.secrets",
   force_render: false,
   imports: [
-    "./tiles/rtsp",
-    "./tiles/turo",
+    "./extensions/rtsp",
+    "./extensions/turo",
   ],
   screen: {
     "output_file": null,
