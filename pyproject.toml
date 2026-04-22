@@ -22,7 +22,7 @@ dependencies = [
 	"psutil",
 	"json5",
 	"staticmap",
-	"av",
+	"av==10.0.0",
 ]
 
 [tool.uv]
