@@ -63,8 +63,8 @@ static PyMethodDef clib_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static struct PyTileDef clib_module = {
-    PyTileDef_HEAD_INIT,
+static struct PyModuleDef clib_module = {
+    PyModuleDef_HEAD_INIT,
     "clib",
     "C library for image conversion",
     -1,
@@ -73,5 +73,5 @@ static struct PyTileDef clib_module = {
 
 // This is the required function name for Python 3
 PyMODINIT_FUNC PyInit_clib(void) {
-    return PyTile_Create(&clib_module);
+    return PyModule_Create(&clib_module);
 }
