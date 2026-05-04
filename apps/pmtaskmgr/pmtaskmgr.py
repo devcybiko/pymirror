@@ -74,7 +74,7 @@ class PMTaskMgr:
         for task_config in self._config.tasks:
             ## load the module dynamically
             if type(task_config) is str:
-                ## if moddef is a string, it is the name of a module config file
+                ## if tiledef is a string, it is the name of a module config file
                 ## load the module definition from the file
                 ## the file should be in JSON format
                 config = to_munch(json_read(task_config))

@@ -21,8 +21,8 @@ class ClockTile(PMTile):
 		self.bitmap.clear()
 		self.bitmap.text_box((0, 0, self.bitmap.rect.width-1, self.bitmap.rect.height-1),
 			self.curr_time,
-			halign=self._moddef.halign,
-			valign=self._moddef.valign)
+			halign=self._tiledef.halign,
+			valign=self._tiledef.valign)
 		self.last_time = self.curr_time
 		return True
 

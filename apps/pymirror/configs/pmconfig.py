@@ -243,7 +243,7 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{tile: {}}"
-        obj = pmconfig.from_string(foo, "moddef")
+        obj = pmconfig.from_string(foo, "tiledef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
         _print(f"'\n{result}\n'")
@@ -271,7 +271,7 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{tile: {name: 'weather', color: '#999'}}"
-        obj = pmconfig.from_string(foo, "moddef")
+        obj = pmconfig.from_string(foo, "tiledef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
         _print(f"'\n{result}\n'")
@@ -300,7 +300,7 @@ if __name__ == "__main__":
   },
 }"""
         foo = "{tile: {name: 'weather', color: '#999', 'other': 'Other'}}"
-        obj = pmconfig.from_string(foo, "moddef")
+        obj = pmconfig.from_string(foo, "tiledef")
         result = json_dumps(obj)
         _print(f"'\n{test}\n'")
         _print(f"'\n{result}\n'")

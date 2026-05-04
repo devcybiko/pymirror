@@ -1,6 +1,6 @@
 {
     "tile": "text",
-    "moddef": {
+    "tiledef": {
         "name": "week_text",
         "position": "top_center_left",
         "font_name": "DejaVuSans",

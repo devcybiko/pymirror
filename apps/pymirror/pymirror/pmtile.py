@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import ast
 
 # from configs.config_config import ConfigConfig
 from glslib.glsdb import GLSDb
@@ -17,7 +18,7 @@ from mixins.text_mixin import TextMixin
 
 @dataclass
 class TileConfig(GfxMixin, FontMixin, TextMixin):
-    ## moddef
+    ## tiledef
     clazz: str = field(default=None, metadata={"json_key": "class"})
     name: str = None
     position: str = "None"
@@ -32,20 +33,22 @@ class TileConfig(GfxMixin, FontMixin, TextMixin):
 
 class PMTile(ABC):
     def __init__(self, pm: PyMirror, config):
+        from glslib.gson import json_print
         self._config = config
         # GLS - need to remove this dependency on pm
         self.pm = pm
         self.pmdb: GLSDb = pm.pmdb
-        self._moddef: TileConfig = config.tile
-        _moddef: TileConfig = self._moddef
+        json_print(config)
+        self._tiledef: TileConfig = config.tile
+        _tiledef: TileConfig = self._tiledef
         self.screen = pm.screen
         self.tile_n = 0 ## PyMirror sets this to the index in the pm.tiles list
-        self.name = _moddef.name or self.__class__.__name__
-        self.position = _moddef.position
-        self.disabled = _moddef.disabled
-        self.force_render = _moddef.force_render
-        self.force_update = _moddef.force_update
-        self.timer = PMTimer(self._moddef.refresh_time, 1)
+        self.name = _tiledef.name or self.__class__.__name__
+        self.position = _tiledef.position
+        self.disabled = _tiledef.disabled
+        self.force_render = _tiledef.force_render
+        self.force_update = _tiledef.force_update
+        self.timer = PMTimer(_tiledef.refresh_time, 1)
         self.subscriptions = []
         self.dirty = False
         self.focus = False
@@ -54,10 +57,10 @@ class PMTile(ABC):
         self.bitmap = None
         rect = self._compute_rect(self.position)
         if rect:
-            self.bitmap = PMBitmap(rect.width, rect.height, _moddef)
+            self.bitmap = PMBitmap(rect.width, rect.height, _tiledef)
             self.bitmap.rect = rect
-            self.bitmap.gfx.set_font(_moddef.font_name, _moddef.font_size)
-        self.subscribe(_moddef.subscriptions or [])
+            self.bitmap.gfx.set_font(_tiledef.font_name, _tiledef.font_size)
+        self.subscribe(_tiledef.subscriptions or [])
 
     def _gfx_push(self):
         gfx = self.bitmap.gfx_push()
@@ -72,21 +75,23 @@ class PMTile(ABC):
         if not position or position == "None": return None
         if "," in position:
             # position is a string with comma-separated values
-            # e.g. "0.25,0.15,0.75,0.85"
-            dims = [float(x) for x in position.split(",")]
+            # e.g. "0.25,0.15,0.75,0.85" - using percentages of the screen size
+            # e.g. "100,100,300,300" - using absolute pixel values
+            dims = [ast.literal_eval(x) for x in position.split(",")]
             if len(dims) != 4:
                 raise ValueError(f"Invalid position format: {position}. Expected 4 comma-separated values.")
-            rect = PMRect(
-                int((self.pm.screen.bitmap.width - 1) * dims[0]),
-                int((self.pm.screen.bitmap.height - 1) * dims[1]),
-                int((self.pm.screen.bitmap.width - 1) * dims[2]),
-                int((self.pm.screen.bitmap.height - 1) * dims[3])
-            )
+            rect = PMRect(dims[0], dims[1], dims[2], dims[3], self.pm.screen.rect)
+            # rect = PMRect(
+            #     int((self.pm.screen.bitmap.width - 1) * dims[0]),
+            #     int((self.pm.screen.bitmap.height - 1) * dims[1]),
+            #     int((self.pm.screen.bitmap.width - 1) * dims[2]),
+            #     int((self.pm.screen.bitmap.height - 1) * dims[3])
+            # )
             return rect
         dim_str = self.pm._config.positions[position]
-        _trace(f"Tile {self._moddef.name} position: {position}, dimensions: {dim_str}")
+        _trace(f"Tile {self._tiledef.name} position: {position}, dimensions: {dim_str}")
         if dim_str:
-            _debug(f"Tile {self._moddef.name} position: {position}, dimensions: {dim_str}")
+            _debug(f"Tile {self._tiledef.name} position: {position}, dimensions: {dim_str}")
             dims = [float(x) for x in dim_str.split(",")]
             ## this is the bounding box for the tile on-screen
             ## x0, y0 is the top-left corner, x1, y1 is the bottom-right corner
@@ -102,11 +107,11 @@ class PMTile(ABC):
     
     def _allocate_bitmap(self):
         if not self.gfx.rect:
-            _debug(f"Tile {self._moddef.name} has no rect defined, cannot allocate bitmap.")
+            _debug(f"Tile {self._tiledef.name} has no rect defined, cannot allocate bitmap.")
             return None
         width = self.gfx.x1 - self.gfx.x0 + 1
         height = self.gfx.y1 - self.gfx.y0 + 1
-        _debug(f"Allocating bitmap for tile {self._moddef.name} at {self.gfx.rect} with size {width}x{height}")
+        _debug(f"Allocating bitmap for tile {self._tiledef.name} at {self.gfx.rect} with size {width}x{height}")
         return PMBitmap(width, height)
 
     @abstractmethod
@@ -164,7 +169,7 @@ class PMTile(ABC):
         if method:
             method(event)
         else:
-            _debug(f"No handler for event {event.event} in tile {self._moddef.name}")
+            _debug(f"No handler for event {event.event} in tile {self._tiledef.name}")
 
     def publish_event(self, event) -> None:
         """ Publish an event to the PM.

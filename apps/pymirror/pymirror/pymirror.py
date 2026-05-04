@@ -109,16 +109,14 @@ class PyMirror:
         pmconfig = self.configurator
         for tile_config in self._config.tiles:
             ## load the tile dynamically
-            print(110, f"Loading tile from config: {tile_config}")
             if type(tile_config) is str:
-                ## if moddef is a string, it is the name of a tile config file
+                ## if tiledef is a string, it is the name of a tile config file
                 ## load the tile definition from the file
                 ## the file should be in JSON format
                 tile_config = pmconfig.from_file(tile_config)
                 expand_dataclass(tile_config, {})  # Expand environment variables in the config
             ## import the tile using its name
             ## all tiles should be in the "tiles" directory
-            print(120, f"Loading tile from config: {tile_config}")
             clazz_name = tile_config.tile.clazz
             try:
                 mod = importlib.import_module(f"tiles.{clazz_name}_tile")
@@ -202,8 +200,8 @@ class PyMirror:
         sgfx.font.set_font("DejaVuSans", 24)
         sbm.rectangle(mbm.rect, fill=None)
         _time = tile._time or 0.0
-        sbm.text(f"{tile._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
-        sbm.text_box(mbm.rect, f"{tile._moddef.position}", halign="right", valign="top")
+        sbm.text(f"{tile._tiledef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
+        sbm.text_box(mbm.rect, f"{tile._tiledef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
     def full_render(self):
@@ -240,7 +238,7 @@ class PyMirror:
         for tile in tiles_changed:
             if (not tile.disabled) and tile.bitmap:
                 start_time = time.time()  # Start timing the tile rendering
-                if tile._moddef.clear:
+                if tile._tiledef.clear:
                     gfx = self.bitmap.gfx.push(tile.bitmap.gfx)
                     self.bitmap.rectangle(self.tile.bitmap.erect)
                 tile.render(force=self.force_render)

@@ -14,7 +14,7 @@ class FpsTile(PMTile):
 		self.last_time = now
 		fps = 1 / delta.total_seconds() if delta.total_seconds() > 0 else 0
 		self.bitmap.clear()
-		self.bitmap.text_box((0, 0, self.bitmap.width-1, self.bitmap.height-1), f"FPS: {fps:.2f}", valign=self._moddef.valign, halign=self._moddef.halign)
+		self.bitmap.text_box((0, 0, self.bitmap.width-1, self.bitmap.height-1), f"FPS: {fps:.2f}", valign=self._tiledef.valign, halign=self._tiledef.halign)
 		return True
 
 	def exec(self):

@@ -211,7 +211,6 @@ class PMPlotComponent(PMComponent):
             if sy0 is None or sx0 is None:
                 return
             rect =(x + sx0, ly - sy0, x + sx0, ly - sy0)
-            print(199, label_format)
             if label_format:
                 bm.text_box(rect, label_format.format(last_point.y))
 
@@ -291,7 +290,6 @@ class PMPlotComponent(PMComponent):
             gfx.text_bg_color="gray"
             bm.gfx.text_color = self.y_axis.color
             x, y, w, h = bm.gfx.font.getbbox(self.y_axis.title)
-            print(280, x, y, w, h)
             bm.text(self.y_axis.title, 0, (self.rect.height - w)/2, angle=-90)
         bm.gfx_pop()
 
