@@ -4,6 +4,7 @@ from PIL import Image
 from pmgfxlib import PMBitmap
 from glslib.dicts import from_dict
 from glslib.logger import _debug
+from pymirror.pmrect import PMRect
 
 @from_dict
 @dataclass
@@ -33,6 +34,7 @@ class PMScreen:
                 self._screen.width, self._screen.height = self._screen.height, self._screen.width
         # Initialize the bitmap with the screen dimensions
         self.bitmap = PMBitmap(_screen.width, _screen.height)
+        self.rect = PMRect(0, 0, _screen.width-1, _screen.height-1)
         gfx = self.bitmap.gfx
         gfx.rect = (0, 0, _screen.width-1, _screen.height-1)
         gfx.color = _screen.color or gfx.color

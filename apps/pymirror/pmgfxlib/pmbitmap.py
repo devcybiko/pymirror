@@ -28,7 +28,9 @@ class PMBitmap:
     def __init__(self, width: int = None, height: int = None, config: dataclass = None):
         self.gfx = PMGfx().merge(config)
         self._gfx_stack = []
+        print(31, width, height)
         self._rect = PMRect(0, 0, non_null(width, 1) - 1, non_null(height, 1) - 1)
+        print(33, self._rect)
         self._img = Image.new("RGBA", (self._rect.width, self._rect.height), 0)
         self._draw = ImageDraw.Draw(self._img)
 
@@ -47,19 +49,19 @@ class PMBitmap:
 
     @property
     def x0(self):
-        return self.rect[0]
+        return self.rect.x0
 
     @property
     def y0(self):
-        return self.rect[1]
+        return self.rect.y0
 
     @property
     def x1(self):
-        return self.rect[2]
+        return self.rect.x1
 
     @property
     def y1(self):
-        return self.rect[3]
+        return self.rect.y1
 
     @property
     def width(self):
@@ -271,9 +273,10 @@ class PMBitmap:
 
     def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
         if x0 == None:
-            x0 = src.gfx.rect.x0
+            x0 = src.rect.x0
         if y0 == None:
-            y0 = src.gfx.rect.y0
+            y0 = src.rect.y0
+        print(279, src._img.size, (x0, y0))
         self._img.paste(src._img, (x0, y0), mask and mask._img)
 
     def scale_to_fit(self, target_width, target_height):

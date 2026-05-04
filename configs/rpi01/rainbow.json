@@ -1,6 +1,6 @@
 {
   "tile": "rainbow",
-  "moddef": {
+  "tiledef": {
     "name": "rainbow",
     "position": "bottom_left"
   }

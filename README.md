@@ -377,23 +377,23 @@ Do you want me to do that?
     "bottom_right": "0.66,0.90,1.00,1.00"
     },
   "tiles": [
-    "moddefs/alert.json", // an alert displayed by way of an AlertEvent
-    "moddefs/pymirror_controller.json", // the controller for external events
-    "moddefs/weather.json", // displays current temperature and weather alerts (OpenWeatherMap API)
-    "moddefs/fortune.json", // runs linux 'fortune' command every 15 secs
-    "moddefs/news.json", // displays news using web_api module
-    "moddefs/date.json", // displays the current date in 7-segment display font
-    "moddefs/time.json", // displays the current time in 7-segment display font
-    "moddefs/week.json", // displays the word "Week:" - static text
-    "moddefs/day_of_week.json", // displays the current day of the week
-    "moddefs/week_of_year.json", // displays the week number (1-52)
-    "moddefs/analog_clock.json", // analog clock
-    "moddefs/weather_alert.json", // an alert box for any weather alerts that are received by the alert module
-    "moddefs/fps.json", // displays the Frames Per Second calculation
+    "tiledefs/alert.json", // an alert displayed by way of an AlertEvent
+    "tiledefs/pymirror_controller.json", // the controller for external events
+    "tiledefs/weather.json", // displays current temperature and weather alerts (OpenWeatherMap API)
+    "tiledefs/fortune.json", // runs linux 'fortune' command every 15 secs
+    "tiledefs/news.json", // displays news using web_api module
+    "tiledefs/date.json", // displays the current date in 7-segment display font
+    "tiledefs/time.json", // displays the current time in 7-segment display font
+    "tiledefs/week.json", // displays the word "Week:" - static text
+    "tiledefs/day_of_week.json", // displays the current day of the week
+    "tiledefs/week_of_year.json", // displays the week number (1-52)
+    "tiledefs/analog_clock.json", // analog clock
+    "tiledefs/weather_alert.json", // an alert box for any weather alerts that are received by the alert module
+    "tiledefs/fps.json", // displays the Frames Per Second calculation
     // NOTE: you may also put full module definitions right here as a json dictionary
     {
       "tile": "fps",
-      "moddef": {
+      "tiledef": {
         "disabled": false,
         "name": "fps",
         "position": "fps_strip",
@@ -412,11 +412,11 @@ Do you want me to do that?
 ## Tile Definition Files (./configs/rpi/*.json)
 - Tile Definitions identify the module class and the parameters to display the module
 - Not that that a module (like Date) may be instantiated many times.
-- Each with a different ModDef (see date.json, day_of_week.json, time.json, week_of_year.json) 
+- Each with a different tiledef (see date.json, day_of_week.json, time.json, week_of_year.json) 
 ```json
 {
     "tile": "alert", // module name. must be lowercase and reside in src/modules/alert_module.py
-    "moddef": { // all modules have a required generic module definition or 'moddef'
+    "tiledef": { // all modules have a required generic module definition or 'tiledef'
         "name": "Alert", // a unique name
         "position": "alert_strip", // a position defined in config.json, the 'positions' section
         "text_color": null, // default text color - overrides config.json if non-null

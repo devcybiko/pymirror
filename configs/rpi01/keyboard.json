@@ -1,6 +1,6 @@
 {
     "tile": "keyboard",
-    "moddef": {
+    "tiledef": {
         "name": "keyboard"
     }
 }

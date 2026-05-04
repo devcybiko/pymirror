@@ -141,7 +141,6 @@ class TuroTrendsTile(PMTile):
             trace = TuroTrendsTraceConfig(**trace_cfg)
             points = []
             for record in records:
-                print(137, self._trends.column, record)
                 self.x_axis_config.data.append(self._date_to_datetime(record.date))
                 point = PMPointConfig(
                     y=record[trace_cfg.column],

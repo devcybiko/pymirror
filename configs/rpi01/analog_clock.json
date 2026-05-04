@@ -1,6 +1,6 @@
 {
     "tile": "analog_clock",
-    "moddef": {
+    "tiledef": {
         "name": "analog_clock",
         "color": "#c0c000",
         "bg_color": "#000000",

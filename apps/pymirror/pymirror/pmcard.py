@@ -41,6 +41,7 @@ class PMCard(PMTile):
         y0 = self._header.height
         height = self.bitmap.height - self._header.height - self._footer.height
         width = self.bitmap.width
+        print(44, y0, self.bitmap.height, self._header.height, self._footer.height, height)
         return PMTextComponent(self.bitmap.gfx, self._card.body, y0=y0, width=width, height=height)
 
     def set_header(self, text: str) -> None:

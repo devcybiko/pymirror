@@ -1,6 +1,6 @@
     {
       "tile": "slideshow",
-      "moddef": {
+      "tiledef": {
         "name": "slideshow",
         "position": "slideshow_strip"
       },

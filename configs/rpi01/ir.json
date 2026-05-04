@@ -1,6 +1,6 @@
 {
     "tile": "ir",
-    "moddef": {
+    "tiledef": {
         "name": "ir"
     }
 }

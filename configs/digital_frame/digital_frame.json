@@ -1,6 +1,6 @@
     {
       "tile": "slideshow",
-      "moddef": {
+      "tiledef": {
         "name": "digital frame",
         "position": "full_screen"
       },

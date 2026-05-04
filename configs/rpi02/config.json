@@ -30,6 +30,12 @@
     "turo_cx5_table": "0.255,0.65,0.745,1.00",
   },
   "tiles": [
+    // PLOTS
+    // "./configs/rpi02/plots/turo_depreciation.json",
+    "./configs/rpi02/plots/turo_earnings.json",
+    "./configs/rpi02/plots/turo_distance.json",
+    "./configs/rpi02/plots/rtsp.json",
+
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
     "./configs/rpi02/date_time/date.json",
@@ -47,12 +53,6 @@
 
     // SENTRA25
     // "./configs/rpi02/sentra25/turo_sentra25_next.json",
-
-    // PLOTS
-    // "./configs/rpi02/plots/turo_depreciation.json",
-    "./configs/rpi02/plots/turo_earnings.json",
-    "./configs/rpi02/plots/turo_distance.json",
-    "./configs/rpi02/plots/rtsp.json",
 
     // SYSTEM
     // "./configs/rpi02/fps.json",

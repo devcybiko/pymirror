@@ -111,7 +111,7 @@ class PyMirror:
             ## load the tile dynamically
             print(110, f"Loading tile from config: {tile_config}")
             if type(tile_config) is str:
-                ## if moddef is a string, it is the name of a tile config file
+                ## if tiledef is a string, it is the name of a tile config file
                 ## load the tile definition from the file
                 ## the file should be in JSON format
                 tile_config = pmconfig.from_file(tile_config)
@@ -202,8 +202,8 @@ class PyMirror:
         sgfx.font.set_font("DejaVuSans", 24)
         sbm.rectangle(mbm.rect, fill=None)
         _time = tile._time or 0.0
-        sbm.text(f"{tile._moddef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
-        sbm.text_box(mbm.rect, f"{tile._moddef.position}", halign="right", valign="top")
+        sbm.text(f"{tile._tiledef.name} ({_time:.2f}s)", mbm.x0 + sgfx.line_width, mbm.y0 + sgfx.line_width)
+        sbm.text_box(mbm.rect, f"{tile._tiledef.position}", halign="right", valign="top")
         self.screen.bitmap.gfx_pop()
 
     def full_render(self):
@@ -211,6 +211,7 @@ class PyMirror:
         for tile in reversed(self.tiles):
             if tile.disabled or not tile.bitmap: continue
             tile.render(force=True)
+            print(214, tile.name, tile.bitmap.x0, tile.bitmap.y0)
             self.screen.bitmap.paste(tile.bitmap, tile.bitmap.x0, tile.bitmap.y0, mask=tile.bitmap)
         if self.debug: self._stats_for_nerds(tile)
         self.screen.flush()  # Flush the screen to show all tiles at once
@@ -240,7 +241,7 @@ class PyMirror:
         for tile in tiles_changed:
             if (not tile.disabled) and tile.bitmap:
                 start_time = time.time()  # Start timing the tile rendering
-                if tile._moddef.clear:
+                if tile._tiledef.clear:
                     gfx = self.bitmap.gfx.push(tile.bitmap.gfx)
                     self.bitmap.rectangle(self.tile.bitmap.erect)
                 tile.render(force=self.force_render)

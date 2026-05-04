@@ -1,6 +1,6 @@
 {
     "tile": "cli",
-    "moddef": {
+    "tiledef": {
         "name": "FORTUNE COOKIES",
         "position": "top_strip"
     },
