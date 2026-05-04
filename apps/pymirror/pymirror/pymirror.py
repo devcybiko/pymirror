@@ -109,7 +109,6 @@ class PyMirror:
         pmconfig = self.configurator
         for tile_config in self._config.tiles:
             ## load the tile dynamically
-            print(110, f"Loading tile from config: {tile_config}")
             if type(tile_config) is str:
                 ## if tiledef is a string, it is the name of a tile config file
                 ## load the tile definition from the file
@@ -118,7 +117,6 @@ class PyMirror:
                 expand_dataclass(tile_config, {})  # Expand environment variables in the config
             ## import the tile using its name
             ## all tiles should be in the "tiles" directory
-            print(120, f"Loading tile from config: {tile_config}")
             clazz_name = tile_config.tile.clazz
             try:
                 mod = importlib.import_module(f"tiles.{clazz_name}_tile")
@@ -211,7 +209,6 @@ class PyMirror:
         for tile in reversed(self.tiles):
             if tile.disabled or not tile.bitmap: continue
             tile.render(force=True)
-            print(214, tile.name, tile.bitmap.x0, tile.bitmap.y0)
             self.screen.bitmap.paste(tile.bitmap, tile.bitmap.x0, tile.bitmap.y0, mask=tile.bitmap)
         if self.debug: self._stats_for_nerds(tile)
         self.screen.flush()  # Flush the screen to show all tiles at once

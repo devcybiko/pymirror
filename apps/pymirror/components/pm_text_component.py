@@ -17,9 +17,7 @@ class PMTextComponent(PMComponent):
         self.wrap = config.wrap or "words"
         self.wrap = self.wrap.lower()
         self.rect = PMRect(x0, y0, 0, 0)
-        print(20, self.rect)
         self.rect.width = non_null(width, 1)
-        print(22, config.height, height)
         self.rect.height = non_null(config.height, height, 1)
         self.clip = non_null(self._comp.clip, False)
         self.use_baseline = non_null(self._comp.font_baseline, False)

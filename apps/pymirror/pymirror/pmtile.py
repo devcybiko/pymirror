@@ -56,7 +56,6 @@ class PMTile(ABC):
         self._time = 0.0  # time taken for tile execution
         self.bitmap = None
         rect = self._compute_rect(self.position)
-        print(58, rect, self.position)
         if rect:
             self.bitmap = PMBitmap(rect.width, rect.height, _tiledef)
             self.bitmap.rect = rect
@@ -81,10 +80,7 @@ class PMTile(ABC):
             dims = [ast.literal_eval(x) for x in position.split(",")]
             if len(dims) != 4:
                 raise ValueError(f"Invalid position format: {position}. Expected 4 comma-separated values.")
-            print(83, dims)
-            print(84, self.pm.screen.rect, self.pm.screen.rect.width, self.pm.screen.rect.height)
             rect = PMRect(dims[0], dims[1], dims[2], dims[3], self.pm.screen.rect)
-            print(86, rect, rect.width, rect.height)
             # rect = PMRect(
             #     int((self.pm.screen.bitmap.width - 1) * dims[0]),
             #     int((self.pm.screen.bitmap.height - 1) * dims[1]),
