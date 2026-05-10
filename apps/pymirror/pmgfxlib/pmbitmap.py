@@ -80,7 +80,7 @@ class PMBitmap:
     def from_image(self, img: Image.Image) -> "PMBitmap":
         self._img = img.convert("RGBA")
         self._draw = ImageDraw.Draw(self._img)
-        self.gfx.rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
+        self._rect = PMRect(0, 0, self._img.width - 1, self._img.height - 1)
         return self
 
     def load(self, photo_path, width=None, height=None, scale=None) -> "PMBitmap":
@@ -269,11 +269,19 @@ class PMBitmap:
             text_y0 += font_height + baseline
         return (x0, text_y0)
 
-    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None) -> None:
+    def paste(self, src: "PMBitmap", x0=None, y0=None, mask: "PMBitmap" = None, halign=None, valign=None) -> None:
         if x0 == None:
             x0 = src.rect.x0
         if y0 == None:
             y0 = src.rect.y0
+        if halign == "center":
+            x0 = x0 + int((self.rect.width - src.rect.width) / 2)
+        elif halign == "right":
+            x0 = x0 + int(self.rect.width - src.rect.width)
+        if valign == "center":
+            y0 = y0 + int((self.rect.height - src.rect.height) / 2)
+        elif valign == "bottom":
+            y0 = y0 + int(self.rect.height - src.rect.height)
         self._img.paste(src._img, (x0, y0), mask and mask._img)
 
     def scale_to_fit(self, target_width, target_height):
@@ -295,6 +303,7 @@ class PMBitmap:
         if new_height < 0:
             new_height = 1
         self._img = self._img.resize((new_width, new_height), Image.LANCZOS)
+        self._rect = PMRect(0, 0, new_width - 1, new_height - 1)
 
     def scale_to_fill(self, target_width, target_height):
         """Scale image to fill entire area, cropping excess"""
@@ -317,8 +326,9 @@ class PMBitmap:
         bottom = top + target_height
 
         self._img = new_image.crop((left, top, right, bottom))
+        self._rect = PMRect(0, 0, target_width - 1, target_height - 1)
 
-    def scale(self, width=None, height=None, scale=None):
+    def scale(self, width=None, height=None, scale="fit"):
         if width is not None and height is not None:
             if scale == "fit":
                 _debug(f"Scaling image to fit within {width}x{height}")
@@ -330,9 +340,4 @@ class PMBitmap:
                 # Default to resizing without aspect ratio preservation
                 _debug(f"...Stretching image to {width}x{height}")
                 self._img = self._img.resize((width, height), Image.LANCZOS)
-            self.rect = (
-                self.x0,
-                self.y0,
-                self.x0 + width,
-                self.y0 + height,
-            )
+                self._rect = PMRect(self.x0, self.y0, self.x0 + width - 1, self.y0 + height - 1)

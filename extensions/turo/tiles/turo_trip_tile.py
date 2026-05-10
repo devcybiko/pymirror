@@ -44,9 +44,9 @@ class TuroTripTile(PMTile):
         dims.padding = 4
         dims.title_font_size = title_font_size
         dims.month_font_size = 16
-        dims.earnings_font_size = 16
-        dims.stats_font_size = 12
-        dims.trip_box_font_size = 12
+        dims.earnings_font_size = 12
+        dims.stats_font_size = 10
+        dims.trip_box_font_size = 10
         dims.trip_box_h = dims.trip_box_font_size + dims.padding * 2
         dims.month_h = \
             dims.padding + dims.month_font_size + \
@@ -135,7 +135,7 @@ class TuroTripTile(PMTile):
         y += self.dims.padding * 2
         earnings = "\u2800" # Braille Pattern Blank
         if trip.total_earnings is not None:
-            earnings = f"${round(trip.total_earnings)}"
+            earnings = f"{round(trip.total_earnings)}"
             x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), earnings)
         else:
             distance_traveled = f"{trip.distance_traveled}"
@@ -224,7 +224,7 @@ class TuroTripTile(PMTile):
         bm.clear()
         gfx.set_font(None, self.dims.title_font_size)
         if not self.trips:
-            bm.text("No trips found", 0, 0)
+            bm.text(f"No {self._trip.vehicle_nickname} trips found", 0, 0)
             return True
         (x, y) = (0, 0)
         _y = y

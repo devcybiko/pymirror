@@ -1,0 +1,16 @@
+{
+    "tile": {
+        "class": "turo_trip",
+        "name": "turo_cx5_trips",
+        "position": "0.00,140,1.00,+60",
+    },
+    "turo_trip": {
+        "vehicle_nickname": "cx5",
+        "database_url": "sqlite:///$HOME/turo.db",
+        "refresh_time": "60s",
+        "nmonths": 3,
+        "start_date": "2026-04-01",
+        "hide_months": true,
+        "hide_vehicle_name": true,
+    }
+}

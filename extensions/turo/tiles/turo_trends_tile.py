@@ -86,8 +86,9 @@ class TuroTrendsTile(PMTile):
             ORDER BY date
         """
         trips = self.turo_db.query(sql)
+        if len(trips) == 0:
+            return records
         trips = to_munch(trips)
-
         trip_index = 0
         trip = trips[trip_index]
         the_date = start_date
@@ -136,7 +137,6 @@ class TuroTrendsTile(PMTile):
         self.plot_config = PMPlotComponentConfig(self.x_axis_config, self.y_axis_config, rect=self.bitmap.rect, title=self._trends.title)
         self.plot = PMPlotComponent(self.bitmap.gfx, self.plot_config)
         for trace_cfg in traces:
-            print(132, trace_cfg, self._trends.window_size)
             records = self._collect_averages(trace_cfg.nickname, start_date=start_date, window_size=self._trends.window_size or delta_days)
             trace = TuroTrendsTraceConfig(**trace_cfg)
             points = []

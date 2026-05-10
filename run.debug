@@ -10,6 +10,9 @@ mkdir -p ./src/pmserver/static
 mkdir -p ./caches/
 source .venv/bin/activate
 
+rm -f ~/turo.db
+sqlite3 ~/turo.db < ~/turo.sql
+
 PYTHONPATH="libs:apps/pymirror" \
         uv run python3 -u -m pymirror.pymirror\
         --config "$CONFIG" \

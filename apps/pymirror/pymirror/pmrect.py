@@ -1,4 +1,6 @@
 
+import ast
+
 from attr import dataclass
 
 
@@ -200,12 +202,24 @@ class PMRect:
         return PMRect(*rect)
 
     @staticmethod
-    def from_string(position: str) -> 'PMRect':
+    def from_string(position: str, parent: 'PMRect' = None) -> 'PMRect':
         """Create a PMRect from a position string."""
-        x0, y0, x1, y1 = position.split(",")
-        return PMRect(
-            int(x0),
-            int(y0),
-            int(x1),
-            int(y1)
-        )
+        # x0, y0, x1, y1 = [ast.literal_eval(x) for x in position.split(",")]
+        x0, y0, x1, y1 = [s.strip() for s in position.split(",")]
+        x0 = ast.literal_eval(x0)
+        y0 = ast.literal_eval(y0)
+        if x1 and (x1[0] == "+" or x1[0] == "-"):
+            x1 = x0 + ast.literal_eval(x1[1:])
+            if type(x1) is int:
+                x1 -= 1
+        else:
+            x1 = ast.literal_eval(x1)
+            print(211, x1)
+        if y1 and (y1[0] == "+" or y1[0] == "-"):
+            y1 = y0 + ast.literal_eval(y1[1:])
+            if type(y1) is int:
+                y1 -= 1
+        else:
+            y1 = ast.literal_eval(y1)
+            print(220, y1)
+        return PMRect(x0, y0, x1, y1, parent)

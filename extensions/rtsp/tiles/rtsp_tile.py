@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from pmgfxlib.pmbitmap import PMBitmap
 from pyav_rtsp_grabber import PyAVRTSPGrabber
 import pymirror.pmtile
 
@@ -8,6 +9,7 @@ import pymirror.pmtile
 class RtspConfig:
     url: str
     refresh_time: str = "5s"
+    scale: str = "fit"
 
 class RtspTile(pymirror.pmtile.PMTile):
     url: str
@@ -24,8 +26,9 @@ class RtspTile(pymirror.pmtile.PMTile):
        if self.frame is None:
            return False
        self.bitmap.clear()
-       frame_bitmap = self.bitmap.from_image(self.frame)
-       self.bitmap.paste(frame_bitmap)
+       frame_bitmap = PMBitmap().from_image(self.frame)
+       frame_bitmap.scale(self.bitmap.width, self.bitmap.height, scale=self._rtsp.scale)
+       self.bitmap.paste(frame_bitmap, halign="center", valign="center")
        return True
 
     def exec(self) -> bool:
@@ -39,10 +42,6 @@ class RtspTile(pymirror.pmtile.PMTile):
         self.frame = self.grabber.get_frame_pil()
         if self.frame is None:
             return False
-        # Resize if needed (PIL Image.size is (width, height))
-        if self.frame.size[0] != self.bitmap.width or self.frame.size[1] != self.bitmap.height:
-            self.frame = self.frame.resize((self.bitmap.width, self.bitmap.height))
-
         return True
     
     def cleanup(self):

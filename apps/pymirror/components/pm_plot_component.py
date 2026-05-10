@@ -202,6 +202,8 @@ class PMPlotComponent(PMComponent):
                 bm.line(line, color=point.color or trace.color, width=line_width)
 
             # Print last y-value
+            if not y_data:
+                return
             last_point = y_data[-1]
             if last_point is None:
                 return

@@ -30,22 +30,29 @@
     "turo_cx5_table": "0.255,0.65,0.745,1.00",
   },
   tiles: [
-    "./configs/rpi05/turo_sentra_trips.json",
-    "./configs/rpi05/turo_cx5_trips.json",
+    "./configs/rpi05/plots/turo_earnings.json",
+    "./configs/rpi05/plots/turo_distance.json",
+    // "./configs/rpi05/plots/turo_depreciation.json",
+
+    "./configs/rpi05/sentra/turo_sentra_trips.json",
+    "./configs/rpi05/sentra/turo_sentra_next.json",
+    // "./configs/rpi05/sentra/turo_sentra_table.json",
+
+    "./configs/rpi05/cx5/turo_cx5_trips.json",
+    "./configs/rpi05/cx5/turo_cx5_next.json",
+    // "./configs/rpi05/cx5/turo_cx5_table.json",
+
+    "./configs/rpi05/sentra25/turo_sentra25_trips.json",
+    "./configs/rpi05/sentra25/turo_sentra25_next.json",
+
+
     "./configs/rpi05/rtsp.json",
     "./configs/rpi05/time.json",
     "./configs/rpi05/date.json",
     "./configs/rpi05/day_of_week.json",
-    "./configs/rpi05/turo_sentra_next.json",
-    // "./configs/rpi05/turo_sentra25_next.json",
-    "./configs/rpi05/turo_cx5_next.json",
-    // "./configs/rpi05/turo_depreciation.json",
-    "./configs/rpi05/turo_earnings.json",
-    "./configs/rpi05/turo_distance.json",
     // "./configs/rpi05/fps.json",
     // "./configs/rpi05/status.json",
     // "./configs/rpi05/turo_sentra_table.json",
-    // "./configs/rpi05/turo_cx5_table.json",
     "./configs/rpi05/pymirror_controller.json",
     "./configs/rpi05/window_manager.json",
   ]
