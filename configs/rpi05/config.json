@@ -37,7 +37,7 @@
     "./configs/rpi05/date.json",
     "./configs/rpi05/day_of_week.json",
     "./configs/rpi05/turo_sentra_next.json",
-    "./configs/rpi05/turo_sentra25_next.json",
+    // "./configs/rpi05/turo_sentra25_next.json",
     "./configs/rpi05/turo_cx5_next.json",
     // "./configs/rpi05/turo_depreciation.json",
     "./configs/rpi05/turo_earnings.json",

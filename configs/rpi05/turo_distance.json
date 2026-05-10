@@ -57,7 +57,7 @@
       "font_size": 24
     },
     "y_axis": {
-      "title": "miles / day",
+      "title": "mi/day",
       "min": 0,
       "max": 200,
       "margin": 40,
