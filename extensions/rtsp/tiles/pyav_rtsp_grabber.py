@@ -5,9 +5,8 @@ Returns PIL Images for real-time use in applications
 """
 from pathlib import Path
 import threading
+import time
 import av
-from av import container
-from httpx import stream
 from urllib.parse import quote
 
 class PyAVRTSPGrabber:
@@ -20,13 +19,16 @@ class PyAVRTSPGrabber:
         # URL-encode credentials to handle special characters
         self.rtsp_url = self._encode_url(rtsp_url)
         self.latest_frame = None
+        self.latest_frame_ts = 0.0
         self.stopped = False
         self.thread = None
+        self._lock = threading.RLock()
         self.codec = None
         # Parse timeout - can be string like "5s" or int
         if isinstance(timeout, str):
             timeout = int(timeout.rstrip('s'))
-        self.timeout = timeout
+        self.timeout = max(1, int(timeout))
+        self.max_frame_age_seconds = max(1.0, float(self.timeout) * 2.0)
         
         self.container = None
         # FFmpeg options for RTSP
@@ -35,7 +37,8 @@ class PyAVRTSPGrabber:
             'probesize': '32',
             'analyzeduration': '0',
             'fflags': 'nobuffer',
-            # 'rw_timeout': str(self.timeout * 1000000),
+            'rw_timeout': str(self.timeout * 1000000),
+            'stimeout': str(self.timeout * 1000000),
         }
     
     def _encode_url(self, url: str) -> str:
@@ -58,16 +61,22 @@ class PyAVRTSPGrabber:
     
     def _connect(self) -> bool:
         try:
-            if self.container is None:
-                print(f"Opening RTSP stream: {self.rtsp_url}")
-                self.container = av.open(self.rtsp_url, options=self.open_options)
-                stream = self.container.streams.video[0]
-                self.codec = av.CodecContext.create(stream.codec_context.name, "r")
-                print("RTSP stream opened")
+            with self._lock:
+                if self.container is None:
+                    print(f"Opening RTSP stream: {self.rtsp_url}")
+                    self.container = av.open(
+                        self.rtsp_url,
+                        options=self.open_options,
+                        timeout=(self.timeout, self.timeout),
+                    )
+                    stream = self.container.streams.video[0]
+                    self.codec = av.CodecContext.create(stream.codec_context.name, "r")
+                    print("RTSP stream opened")
             return True
         except Exception as e:
             print(f"Error connecting to RTSP: {e}")
-            self.container = None
+            with self._lock:
+                self.container = None
             return False
 
     def _reader(self):
@@ -123,17 +132,42 @@ class PyAVRTSPGrabber:
         """
         Background thread to constantly read and decode frames.
         This is more CPU intensive but ensures you get the latest frame."""
+        container_ref = None
         try:
-            # container = av.open(self.rtsp_url, options=self.options)
-            stream = self.container.streams.video[0]
-            for frame in self.container.decode(stream):
+            with self._lock:
+                container_ref = self.container
+            if container_ref is None:
+                return
+
+            stream = container_ref.streams.video[0]
+            for frame in container_ref.decode(stream):
                 if self.stopped:
                     break
-                self.latest_frame = frame
+                with self._lock:
+                    self.latest_frame = frame
+                    self.latest_frame_ts = time.monotonic()
         except Exception as e:
             print(f"Stream interrupted: {e}. Retrying in 2s...")
-            import time
+            with self._lock:
+                # Clear stale frame so callers can trigger reconnect behavior.
+                self.latest_frame = None
+                self.latest_frame_ts = 0.0
             time.sleep(2)
+        finally:
+            self.stopped = True
+
+    def _get_fresh_frame(self):
+        with self._lock:
+            if self.latest_frame is None:
+                return None
+
+            age_seconds = time.monotonic() - self.latest_frame_ts
+            if age_seconds > self.max_frame_age_seconds:
+                self.latest_frame = None
+                self.latest_frame_ts = 0.0
+                return None
+
+            return self.latest_frame
 
     def start(self):
         self.stopped = False
@@ -148,15 +182,19 @@ class PyAVRTSPGrabber:
 
         if not self.thread or not self.thread.is_alive():
             self.start()
-            
-        if self.latest_frame:
+
+        frame = self._get_fresh_frame()
+        if frame is not None:
             # Optional: Clear the frame after reading to ensure 
             # you don't process the same frame twice if the stream lags
-            return self.latest_frame.to_image()
+            return frame.to_image()
         return None
 
     def stop(self):
         self.stopped = True
+        if self.thread and self.thread.is_alive():
+            self.thread.join(timeout=1.0)
+        self.thread = None
 
     def save_frame(self, output_path: str) -> bool:
         try:
@@ -173,9 +211,14 @@ class PyAVRTSPGrabber:
             return False
     
     def disconnect(self):
-        if self.container is not None:
-            self.container.close()
-            self.container = None
+        self.stop()
+        with self._lock:
+            if self.container is not None:
+                self.container.close()
+                self.container = None
+            self.codec = None
+            self.latest_frame = None
+            self.latest_frame_ts = 0.0
     
     def __del__(self):
         self.disconnect()

@@ -11,6 +11,7 @@
 from ast import Tuple
 from dataclasses import dataclass
 from PIL import Image, ImageDraw
+from pygame.gfxdraw import line
 
 from pymirror.pmrect import PMRect
 from glslib.logger import _trace, _debug
@@ -151,22 +152,21 @@ class PMBitmap:
 
     def text(self, msg: str, x0: int, y0: int, fill=-1, angle=None) -> None:
         if fill == -1:
-            # Use the gfx text color for the text itself
+            fill = self.gfx._text_color
+        if angle is not None and angle != 0:
             self._draw_rotated_text(
-                (x0, y0+self.gfx.font_y_offset),
-                msg,
-                font=self.gfx.font._font,
-                fill=self.gfx._text_color,
-                angle=angle or 0,
-            )
-        else:
-            # Use the specified fill color
-            self._draw_rotated_text(
-                (x0, y0+self.gfx.font_y_offset),
+                (x0, y0-self.gfx.font_y_offset),
                 msg,
                 font=self.gfx.font._font,
                 fill=fill,
                 angle=angle or 0,
+            )
+        else:
+            self._draw.text(
+                (x0, y0-self.gfx.font_y_offset),
+                msg,
+                fill=fill,
+                font=self.gfx.font._font,
             )
         return self.gfx.font.height
 
