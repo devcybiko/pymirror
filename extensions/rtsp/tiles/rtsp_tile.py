@@ -67,9 +67,12 @@ class RtspTile(pymirror.pmtile.PMTile):
             return 5.0
 
     def render(self, force=False):
+        bm = self.bitmap
         if self.frame is None:
-            self.bitmap.clear()
-            self.bitmap.text("No video feed", 0, 0)
+            bm.clear()
+            bm.gfx.set_font("Roboto-Bold", 48)
+            bm.gfx.text_color = "#ff0"
+            bm.text_box((0,0,bm.width, bm.height), "No video feed", halign="center", valign="center")
             return False
         self.bitmap.clear()
         frame_bitmap = PMBitmap().from_image(self.frame)
@@ -79,7 +82,9 @@ class RtspTile(pymirror.pmtile.PMTile):
             # compare self.fram and self.last_frame as PIL images, if they are the same return False
             if self.frame.tobytes() == self.last_frame.tobytes():
                 print(f"Video feed frozen for {self.url}")
-                self.bitmap.text("Video Frozen", 0, 0)
+                bm.gfx.set_font("Roboto-Bold", 48)
+                bm.gfx.text_color = "#ff0"
+                bm.text_box((0,0,bm.width, bm.height), "Video Frozen", halign="center", valign="center")
                 self._reconnect()
                 return False
         self.last_frame = self.frame
