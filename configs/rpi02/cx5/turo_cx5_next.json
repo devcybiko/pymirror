@@ -2,7 +2,7 @@
     "tile": {
         "class": "turo_next",
         "name": "turo_cx5_next",
-        "position": "0.75,0.21,1.00,1.00",
+        "position": "0.25,0.275,0.50,1.00",
     },
     "turo_next": {
         "vehicle_nickname": "cx5",
@@ -16,7 +16,7 @@
             "font_name": "Roboto-Bold",
             "font_size": 40,
             "text_color": "#fff",
-            "text_bg_color": "#066",
+            "text_bg_color": "#0cc",
             "valign": "center",
             "height": 80,
         },
@@ -24,7 +24,7 @@
             "font_name": "Roboto-Regular",
             "font_size": 40,
             "text_color": "#ccc",
-            "text_bg_color": "#222",
+            "text_bg_color": "#444",
             "valign": "top",
             "halign": "left",
             "wrap": "none"
@@ -33,7 +33,7 @@
             "font_name": "Roboto-Regular",
             "font_size": 32,
             "text_color": "#000",
-            "text_bg_color": "#088",
+            "text_bg_color": "#0cc",
             "valign": "bottom",
             "height": 64
         }

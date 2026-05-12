@@ -4,7 +4,7 @@
     "name": "webcam",
     "text_color": "#fff",
     "text_bg_color": null,
-    "position": "0.25,0.60,0.75,1.00",
+    "position": "0.75,0.60,1.00,1.00",
     "font_size": 16,
     "color": "#fff",
     "bg_color": "#000",

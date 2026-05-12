@@ -2,10 +2,10 @@
     "tile": {
         "class": "turo_next",
         "name": "turo_sentra25_next",
-        "position": "0.67,0.33,1.00,0.67",
+        "position": "0.50,0.275,0.75,1.0",
     },
     "turo_next": {
-        "vehicle_nickname": "sentra",
+        "vehicle_nickname": "sentra25",
         "database_url": "sqlite:///$HOME/turo.db",
         "refresh_time": "15m",
         "date_format": "1776-07-04 (Tue)",

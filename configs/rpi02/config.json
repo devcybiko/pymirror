@@ -32,8 +32,8 @@
   "tiles": [
     // PLOTS
     // "./configs/rpi02/plots/turo_depreciation.json",
-    "./configs/rpi02/plots/turo_earnings.json",
-    "./configs/rpi02/plots/turo_distance.json",
+    // "./configs/rpi02/plots/turo_earnings.json",
+    // "./configs/rpi02/plots/turo_distance.json",
     "./configs/rpi02/plots/rtsp.json",
 
     // DATE TIME
@@ -52,7 +52,9 @@
     // "./configs/rpi02/cx5/turo_cx5_table.json",
 
     // SENTRA25
-    // "./configs/rpi02/sentra25/turo_sentra25_next.json",
+    "./configs/rpi02/sentra25/turo_sentra25_trips.json",
+    "./configs/rpi02/sentra25/turo_sentra25_next.json",
+    // "./configs/rpi02/sentra/turo_sentra_table.json",
 
     // SYSTEM
     // "./configs/rpi02/fps.json",
