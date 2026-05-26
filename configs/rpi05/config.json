@@ -47,6 +47,8 @@
 
 
     "./configs/rpi05/rtsp.json",
+    "./configs/rpi05/rtsp2.json",
+
     "./configs/rpi05/time.json",
     "./configs/rpi05/date.json",
     "./configs/rpi05/day_of_week.json",
