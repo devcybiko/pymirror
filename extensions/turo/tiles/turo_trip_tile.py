@@ -139,7 +139,7 @@ class TuroTripTile(PMTile):
         y += self.dims.padding * 2
         earnings = "\u2800" # Braille Pattern Blank
         if trip.total_earnings is not None:
-            earnings = f"{round(trip.total_earnings)}"
+            earnings = f"${round(trip.total_earnings)}"
             x, y = self.bitmap.text_box((bar.x, y, bar.x + bar.w, y + bar.h - 1), earnings)
         else:
             distance_traveled = f"{trip.distance_traveled}"
