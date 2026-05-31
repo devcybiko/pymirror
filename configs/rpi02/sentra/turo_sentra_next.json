@@ -22,7 +22,7 @@
         },
         "body": {
             "font_name": "Roboto-Regular",
-            "font_size": 40,
+            "font_size": 32,
             "text_color": "#ccc",
             "text_bg_color": "#222",
             "valign": "top",
