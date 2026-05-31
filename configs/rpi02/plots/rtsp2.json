@@ -1,18 +1,18 @@
 {
   "tile": {
     "class": "rtsp",
-    "name": "webcam",
+    "name": "webcam2",
     "text_color": "#fff",
     "text_bg_color": null,
-    "position": "0.75,0.6375,1.00,1.00",
+    "position": "0.75,0.275,1.00,0.6375",
     "font_size": 16,
     "color": "#fff",
-    "bg_color": "#000",
+    "bg_color": "#444",
     "text_color": "#fff",
     "text_bg_color": "#333"
   },
   "rtsp": {
-    "url": "rtsp://admin:${REO_PASSWORD}@192.168.1.18:554/h264Preview_01_sub",
+    "url": "rtsp://admin:${REO_PASSWORD}@192.168.1.96:554/h264Preview_01_sub",
     "refresh_time": "1s",
     "scale": "stretch",
   }

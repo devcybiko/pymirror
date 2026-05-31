@@ -39,7 +39,7 @@
         "column": "booked",
         "nickname": "sentra25",
         "color": "white",
-        "scale": 50,
+        "scale": 150,
         "type": "bar",
         "edge_color": "green",
         "label_format": null,
@@ -76,7 +76,7 @@
     "y_axis": {
       "title": "mi/day",
       "min": 0,
-      "max": 200,
+      "max": 300,
       "margin": 40,
       "color": "green",
       "tic_interval": 50,

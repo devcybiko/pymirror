@@ -37,7 +37,7 @@ class TuroNextTile(PMCard):
         msg += f"{call_to_action} ({returning_in})\n"
         msg += f"{tab}{trip_date.strftime(self.date_format)}\n"
         msg += f"{tab}{trip_date.strftime(self.time_format)} ({trip.trip_days} days)\n"
-        msg += f"{tab}{trip.guest}: (${trip.total_earnings})\n"
+        msg += f"{tab}{trip.guest}: (${round(trip.total_earnings)})\n"
         return msg
     
     def exec(self) -> bool:

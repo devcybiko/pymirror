@@ -49,6 +49,7 @@ class TuroTrendsTile(PMTile):
             FROM qtrips 
             WHERE TRUE 
             AND vehicle_nickname = '{vehicle_nickname}'
+            AND trip_status in ('Completed')
             ORDER BY date
         """
         return sql
@@ -83,6 +84,7 @@ class TuroTrendsTile(PMTile):
             FROM qtrips 
             WHERE TRUE 
             AND vehicle_nickname = '{vehicle_nickname}'
+            AND trip_status in ('Completed')
             ORDER BY date
         """
         trips = self.turo_db.query(sql)
