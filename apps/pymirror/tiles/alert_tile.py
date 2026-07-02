@@ -32,7 +32,7 @@ class AlertTile(PMCard):
 			self.update(None, None, None)
 			self.clean()  # mark the alert as clean
 			self.publish_event({"event": "PyMirrorEvent", "refresh": True})
-		return is_dirty
+		return True ## always redraw
 
 	def onEvent(self, event) -> None:
 		self.disabled = False
