@@ -8,7 +8,7 @@
         "font_name": "TNG_Title",
         "font_size": 24,
         "subscriptions": ["AlertEvent"],
-        "force_render": false
+        "force_render": true
     },
     "alert": {
         "header": "Alert",
