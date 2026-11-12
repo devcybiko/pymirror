@@ -34,8 +34,8 @@
     // "./configs/rpi02/plots/turo_depreciation.json",
     // "./configs/rpi02/plots/turo_earnings.json",
     // "./configs/rpi02/plots/turo_distance.json",
-    "./configs/rpi02/plots/rtsp.json",
-    "./configs/rpi02/plots/rtsp2.json",
+    // "./configs/rpi02/plots/rtsp.json",
+    // "./configs/rpi02/plots/rtsp2.json",
 
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
