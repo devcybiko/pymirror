@@ -132,6 +132,12 @@ class TuroTripTile(PMTile):
         bar_rect = (bar.x, y, bar.x + bar.w, y + bar.h)
         self.bitmap.rectangle(bar_rect, fill=bar.colors[the_trip.trip_status])
         x, y = self.bitmap.text_box(bar_rect, f"{the_trip.trip_days}d")
+        print(f"... {the_trip.total_earnings} {the_trip.trip_days}")
+        if the_trip.total_earnings and the_trip.trip_days:
+            earnings_per_day = round(the_trip.total_earnings / the_trip.trip_days)
+            new_rect = (bar.x, y+self.dims.padding, bar.x + bar.w, y + +self.dims.padding + bar.h)
+            print(f"... ... {new_rect} {earnings_per_day}")
+            self.bitmap.text_box(new_rect, f"${earnings_per_day}")
         return x, y
 
     def _render_trip_earnings(self, gfx, y, box, bar, trip):
