@@ -36,6 +36,7 @@
     // "./configs/rpi02/plots/turo_distance.json",
     // "./configs/rpi02/plots/rtsp.json",
     // "./configs/rpi02/plots/rtsp2.json",
+    "./configs/rpi02/slideshow.json",
 
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
