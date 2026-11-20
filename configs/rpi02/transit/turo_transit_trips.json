@@ -1,0 +1,15 @@
+{
+    "tile": {
+        "class": "turo_trip",
+        "name": "turo_transit_trips",
+        "position": "0.00,0.205,1.00,0.275",
+    },
+    "turo_trip": {
+        "vehicle_nickname": "transit",
+        "database_url": "sqlite:///$HOME/turo.db",
+        "refresh_time": "60s",
+        "nmonths": 3,
+        "hide_months": true,
+        "hide_vehicle_name": true,
+    }
+}

@@ -20,6 +20,7 @@ class SlideshowConfig:
     randomize: bool = True
     frame: str = None
     rect: str = None
+    border: int = None
 
 class SlideshowTile(PMTile):
 	def __init__(self, pm, config):
@@ -61,6 +62,9 @@ class SlideshowTile(PMTile):
 		self.bitmap.paste(img_bm, new_x0, new_y0, img_bm)
 		if self.frame_bm:
 			self.bitmap.paste(self.frame_bm, 0, 0, self.frame_bm) ## overlay the frame
+		if self._slideshow.border:
+			self.bitmap.gfx.line_width = self._slideshow.border
+			self.bitmap.rectangle((new_x0, new_y0, new_x0 + img_bm.width - 1, new_y0 + img_bm.height - 1), fill=None)
 		self.render_focus()
 		self.dirty = False
 		return False

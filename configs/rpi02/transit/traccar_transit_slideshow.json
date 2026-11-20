@@ -1,0 +1,18 @@
+{
+      "tile": {
+        "class": "slideshow",
+        "name": "slideshow",
+        "position": "0.75,0.70,1.00,1.00",
+        "color": "black"
+      },
+      "slideshow": {
+        "folder": "$HOME/traccar_snapshots/transit",
+        "scale": "fill",
+        "valign": "center",
+        "halign": "center",
+        "interval_time": "10s",
+        "randomize": true,
+        "frame": null,
+        "border": 2
+      }
+    }

@@ -1,0 +1,18 @@
+{
+      "tile": {
+        "class": "slideshow",
+        "name": "slideshow",
+        "position": "0.25,0.70,0.50,1.00",
+        "color": "black",
+      },
+      "slideshow": {
+        "folder": "$HOME/traccar_snapshots/cx-5",
+        "scale": "fill",
+        "valign": "center",
+        "halign": "center",
+        "interval_time": "10s",
+        "randomize": true,
+        "frame": null,
+        "border": 2
+      }
+    }

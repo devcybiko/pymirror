@@ -36,7 +36,6 @@
     // "./configs/rpi02/plots/turo_distance.json",
     // "./configs/rpi02/plots/rtsp.json",
     // "./configs/rpi02/plots/rtsp2.json",
-    "./configs/rpi02/slideshow.json",
 
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
@@ -51,11 +50,19 @@
     // CX5
     "./configs/rpi02/cx5/turo_cx5_trips.json",
     "./configs/rpi02/cx5/turo_cx5_next.json",
+    "./configs/rpi02/cx5/traccar_cx5_slideshow.json",
     // "./configs/rpi02/cx5/turo_cx5_table.json",
 
     // SENTRA25
     "./configs/rpi02/sentra25/turo_sentra25_trips.json",
     "./configs/rpi02/sentra25/turo_sentra25_next.json",
+    "./configs/rpi02/sentra25/traccar_sentra25_slideshow.json",
+    // "./configs/rpi02/sentra/turo_sentra_table.json",
+
+    // TRANSIT
+    "./configs/rpi02/transit/turo_transit_trips.json",
+    "./configs/rpi02/transit/turo_transit_next.json",
+    "./configs/rpi02/transit/traccar_transit_slideshow.json",
     // "./configs/rpi02/sentra/turo_sentra_table.json",
 
     // SYSTEM

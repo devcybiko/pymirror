@@ -2,7 +2,7 @@
     "tile": {
         "class": "turo_next",
         "name": "turo_cx5_next",
-        "position": "0.25,0.275,0.50,1.00",
+        "position": "0.25,0.275,0.50,0.70",
     },
     "turo_next": {
         "vehicle_nickname": "cx5",

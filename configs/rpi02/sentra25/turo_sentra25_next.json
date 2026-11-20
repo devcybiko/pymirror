@@ -2,7 +2,7 @@
     "tile": {
         "class": "turo_next",
         "name": "turo_sentra25_next",
-        "position": "0.50,0.275,0.75,1.0",
+        "position": "0.50,0.275,0.75,0.70",
     },
     "turo_next": {
         "vehicle_nickname": "sentra25",

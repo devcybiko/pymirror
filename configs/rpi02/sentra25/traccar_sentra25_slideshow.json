@@ -1,0 +1,18 @@
+{
+      "tile": {
+        "class": "slideshow",
+        "name": "slideshow",
+        "position": "0.50,0.70,0.75,1.00",
+        "color": "black"
+      },
+      "slideshow": {
+        "folder": "$HOME/traccar_snapshots/sentra25",
+        "scale": "fill",
+        "valign": "center",
+        "halign": "center",
+        "interval_time": "10s",
+        "randomize": true,
+        "frame": null,
+        "border": 2
+      }
+    }
