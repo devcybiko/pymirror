@@ -45,6 +45,7 @@
     // SENTRA
     "./configs/rpi02/sentra/turo_sentra_trips.json",
     "./configs/rpi02/sentra/turo_sentra_next.json",
+    "./configs/rpi02/cx5/traccar_sentra_slideshow.json",
     // "./configs/rpi02/sentra/turo_sentra_table.json",
 
     // CX5
