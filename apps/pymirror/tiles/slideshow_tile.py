@@ -54,6 +54,8 @@ class SlideshowTile(PMTile):
 		return paths
 
 	def render(self, force: bool = False) -> bool:
+		if not self.photos:
+			return False
 		img_width, img_height = int(self.bitmap.width * _width(self.alt_rect)), int(self.bitmap.height * _height(self.alt_rect))
 		img_bm = PMBitmap().load(self.photos[self.photo_number], img_width, img_height, self._slideshow.scale)
 		new_x0 = (self.bitmap.width - img_bm.width) // 2
@@ -72,7 +74,8 @@ class SlideshowTile(PMTile):
 	def exec(self):
 		if self.timer.is_timedout():
 			self.timer.reset()
-			self.photo_number = (self.photo_number + 1) % len(self.photos)
+			if self.photos:
+				self.photo_number = (self.photo_number + 1) % len(self.photos)
 			self.dirty = True
 		return self.dirty
 

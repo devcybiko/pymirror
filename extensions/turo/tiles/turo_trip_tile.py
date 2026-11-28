@@ -132,11 +132,11 @@ class TuroTripTile(PMTile):
         bar_rect = (bar.x, y, bar.x + bar.w, y + bar.h)
         self.bitmap.rectangle(bar_rect, fill=bar.colors[the_trip.trip_status])
         x, y = self.bitmap.text_box(bar_rect, f"{the_trip.trip_days}d")
-        print(f"... {the_trip.total_earnings} {the_trip.trip_days}")
+        # print(f"... {the_trip.total_earnings} {the_trip.trip_days}")
         if the_trip.total_earnings and the_trip.trip_days:
             earnings_per_day = round(the_trip.total_earnings / the_trip.trip_days)
             new_rect = (bar.x, y+self.dims.padding, bar.x + bar.w, y + +self.dims.padding + bar.h)
-            print(f"... ... {new_rect} {earnings_per_day}")
+            # print(f"... ... {new_rect} {earnings_per_day}")
             self.bitmap.text_box(new_rect, f"${earnings_per_day}")
         return x, y
 
@@ -164,9 +164,14 @@ class TuroTripTile(PMTile):
         for trip in vehicle_trips:
             trip_start = trip.trip_start
             trip_end = trip.trip_end
-            if trip.trip_status not in (status_list + ["Dummy"]): continue # its not an interesting trip
+            if trip.trip_status not in (status_list + ["Dummy"]): 
+                print("...Skipping trip ", trip.trip_status)
+                continue # its not an interesting trip
             if trip_end <= trip_start: continue # might happen if we use the min/max values
-            if (trip_start > box.end) or (trip_end < box.start): continue # if the trip is not within the month boundary
+            if (trip_start > box.end): continue # if the trip is not within the month boundary
+            if (trip_end < box.start): continue # if the trip is not within the month boundary
+            # if trip.trip_status == "Booked":
+            #     print(f"{x},{y},{month_n},{status_list},{trip.trip_status},{trip.trip_start},{trip.trip_end}")
             bar = self._compute_trip_bar(y, box, trip_start, trip_end, trip.trip_days)
             if trip.trip_status == "Personal":
                 trip.total_earnings = None # we dont want to show earnings for personal trips
