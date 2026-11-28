@@ -40,7 +40,6 @@
     // DATE TIME
     "./configs/rpi02/date_time/time.json",
     "./configs/rpi02/date_time/date.json",
-    "./configs/rpi02/date_time/day_of_week.json",
 
     // SENTRA
     "./configs/rpi02/sentra/turo_sentra_trips.json",

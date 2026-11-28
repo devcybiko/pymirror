@@ -4,9 +4,10 @@
         "name": "time",
         "text_color": "#fff",
         "text_bg_color": null,
-        "position": "0.67,0.00,1.00,0.05",
+        "position": "1800,0,1919,26",
         "font_name": "7segment.ttf",
-        "font_size": 32
+        "font_size": 24,
+        "halign": "right"
     },
     "clock": {
         "date_format": "%I:%M:%S"

@@ -2,11 +2,12 @@
     "tile": {
         "class": "clock",
         "name": "date",
-        "position": "0.00,0.00,0.33,0.05",
+        "position": "0,0,200,26",
         "font_name": "7segment.ttf",
-        "font_size": 32
+        "font_size": 24,
+        "halign": "left"
     },
     "clock": {
-        "date_format": "%Y-%m-%d"
+        "date_format": "%a %Y-%m-%d"
     }
 }

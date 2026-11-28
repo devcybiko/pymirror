@@ -2,7 +2,7 @@
     "tile": {
         "class": "turo_trip",
         "name": "turo_cx5_trips",
-        "position": "0.00,0.14,1.00,0.205",
+        "position": "0,90,1.00,+60",
     },
     "turo_trip": {
         "vehicle_nickname": "cx5",

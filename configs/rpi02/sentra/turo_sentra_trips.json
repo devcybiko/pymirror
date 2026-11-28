@@ -2,7 +2,7 @@
     "tile": {
         "class": "turo_trip",
         "name": "turo_sentra_trips",
-        "position": "0.00,0.05,1.00,0.14",
+        "position": "0,0,1.00,+95",
     },
     "turo_trip": {
         "vehicle_nickname": "sentra",
