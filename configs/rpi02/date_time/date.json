@@ -5,7 +5,8 @@
         "position": "0,0,200,26",
         "font_name": "7segment.ttf",
         "font_size": 24,
-        "halign": "left"
+        "halign": "left",
+        "force": true
     },
     "clock": {
         "date_format": "%a %Y-%m-%d"
